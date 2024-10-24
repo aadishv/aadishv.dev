@@ -4,9 +4,13 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-import {LitElement, html, css} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {LitElement, css, html, /*css*/} from 'lit';
+import {customElement, /*property*/} from 'lit/decorators.js';
+import './block-editor.js';
+import siteData from './data.js';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
+// Generate a color scheme based on #0061a4 and set the <html> element to that color scheme
 /**
  * An example element.
  *
@@ -17,47 +21,26 @@ import {customElement, property} from 'lit/decorators.js';
 @customElement('my-element')
 export class MyElement extends LitElement {
   static override styles = css`
-    :host {
-      display: block;
-      border: solid 1px gray;
-      padding: 16px;
-      max-width: 800px;
+    h1.top-text {
+      font-size: 100px;
+    }
+    .top-text {
+      justify-self: center;
+    }
+    .main-text {
+      justify-self: center;
     }
   `;
 
-  /**
-   * The name to say "Hello" to.
-   */
-  @property()
-  name = 'World';
-
-  /**
-   * The number of times the button has been clicked.
-   */
-  @property({type: Number})
-  count = 0;
-
   override render() {
+    let topText = siteData.main_page.top_text;
     return html`
-      <h1>${this.sayHello(this.name)}!</h1>
-      <button @click=${this._onClick} part="button">
-        Click Count: ${this.count}
-      </button>
-      <slot></slot>
+    <div style="display: inline; width: 50px"></div>
+    <h1 class="top-text">👋 Hi, I'm Aadish</h1>
+    <p class="main-text">
+      ${unsafeHTML(topText)}
+    </p>
     `;
-  }
-
-  private _onClick() {
-    this.count++;
-    this.dispatchEvent(new CustomEvent('count-changed'));
-  }
-
-  /**
-   * Formats a greeting
-   * @param name The name to say "Hello" to
-   */
-  sayHello(name: string): string {
-    return `Hello, ${name}`;
   }
 }
 
