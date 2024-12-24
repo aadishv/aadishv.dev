@@ -2,130 +2,130 @@
 const persons = {
   PB: {
     checked: true,
-    name: "Prakhar Bhai",
-    colors: ["#4DA5F3", "#065FAE"],
-    emojis: Array.from("📱🎮💻🧑‍💻"),
+    name: 'Prakhar Bhai',
+    colors: ['#4DA5F3', '#065FAE'],
+    emojis: Array.from('📱🎮💻🧑‍💻'),
     awards: [
       "World's Best Java Coder",
       "World's Best Gamer",
       "World's Most Independent Man",
     ],
-    font: "Fragment Mono",
+    font: 'Fragment Mono',
   },
   PD: {
     checked: true,
-    name: "Priyanshi Didi",
-    colors: ["#BE88EC", "#7E53E6"],
-    emojis: Array.from("🎨💃👗👛👠"),
+    name: 'Priyanshi Didi',
+    colors: ['#BE88EC', '#7E53E6'],
+    emojis: Array.from('🎨💃👗👛👠'),
     awards: [
       "World's Best Indian Dancer",
       "World's Best Tennis Player",
       "World's Coolest Vegetarian",
     ],
-    font: "Lobster",
+    font: 'Lobster',
   },
   MG: {
     checked: true,
-    name: "Mausagi",
-    colors: ["#03D92D", "#01881C"],
-    emojis: Array.from("✈️🥐🍴🍽️😋"),
+    name: 'Mausagi',
+    colors: ['#03D92D', '#01881C'],
+    emojis: Array.from('✈️🥐🍴🍽️😋'),
     awards: [
       "World's Best Meta Employee",
       "World's Most Enthusiastic Traveler",
       "World's Best Uncle",
     ],
-    font: "Fragment Mono",
+    font: 'Fragment Mono',
   },
   RM: {
     checked: true,
-    name: "Rupal Mausi",
-    colors: ["#4DA5F3", "#065FAE"],
-    emojis: Array.from("✈️🥐🍴🍽️😋"),
+    name: 'Rupal Mausi',
+    colors: ['#4DA5F3', '#065FAE'],
+    emojis: Array.from('✈️🥐🍴🍽️😋'),
     awards: [
       "World's Most Spicy Cook",
       "World's Best Auntie",
-      "Most Hardcore Food Enthusiast",
+      'Most Hardcore Food Enthusiast',
     ],
-    font: "Lobster",
+    font: 'Lobster',
   },
   MM: {
     checked: true,
-    name: "Minnie Mausi",
-    colors: ["#7a1c34", "#6e011d"],
-    emojis: Array.from("👗👛👠🪞"),
+    name: 'Minnie Mausi',
+    colors: ['#7a1c34', '#6e011d'],
+    emojis: Array.from('👗👛👠🪞'),
     awards: [
       // TODO
       "World's Best Auntie",
       "World's Best Phone Partner",
       "World's Most Photogenic Person",
     ],
-    font: "Lobster",
+    font: 'Lobster',
   },
   SM: {
     checked: true,
-    name: "Sunil Mausa",
-    colors: ["#4DA5F3", "#065FAE"],
-    emojis: Array.from("🎂🎈💻🧑‍💻🎁"),
+    name: 'Sunil Mausa',
+    colors: ['#4DA5F3', '#065FAE'],
+    emojis: Array.from('🎂🎈💻🧑‍💻🎁'),
     awards: [
       "Owner of the World's Coolest Birthday",
       "World's Best Macy's Employee",
       "World's Most Hospitable Man",
     ],
-    font: "Fragment Mono",
+    font: 'Fragment Mono',
   },
   MA: {
     // TODO: photos
-    checked: false,
-    name: "Mommy",
-    colors: ["#7a1c34", "#6e011d"],
-    emojis: Array.from("🧑‍🍳☕🤶♈♋♌♍"),
+    checked: true,
+    name: 'Mommy',
+    colors: ['#7a1c34', '#6e011d'],
+    emojis: Array.from('🧑‍🍳☕🤶♈♋♌♍'),
     awards: [
       "World's Best Chai Maker",
       "World's Best Stay-at-Home Mother",
       "World's Best Homeschool Parent",
     ],
-    font: "Lobster",
+    font: 'Lobster',
   },
   DA: {
     // TODO: photos
     checked: false,
-    name: "Daddy",
-    colors: ["#7a1c34", "#6e011d"],
-    emojis: Array.from("💻🧑‍💻☕🚗🔊"),
+    name: 'Daddy',
+    colors: ['#7a1c34', '#6e011d'],
+    emojis: Array.from('💻🧑‍💻☕🚗🔊'),
     awards: [
       "World's Best Dad",
       "World's Best Money Saver",
       "World's Best Hot Chocolate Maker",
     ],
-    font: "Fragment Mono",
+    font: 'Fragment Mono',
   },
 };
 
-const myperson = new URLSearchParams(window.location.search).get("p") || "PB";
+const myperson = new URLSearchParams(window.location.search).get('p') || 'PB';
 const person = persons[myperson];
 
 var nnn = 0;
 const bdaytoxmas = () => {
   nnn += 1;
   if (nnn % 2 == 0) {
-    document.querySelector("#holiday").innerHTML = "Merry Christmas, ";
+    document.querySelector('#holiday').innerHTML = 'Merry Christmas, ';
   } else {
-    document.querySelector("#holiday").innerHTML = "Happy Birthday, ";
+    document.querySelector('#holiday').innerHTML = 'Happy Birthday, ';
   }
   setTimeout(bdaytoxmas, 1000);
 };
-if (myperson == "SM") {
+if (myperson == 'SM') {
   bdaytoxmas();
 }
 
-document.documentElement.style.setProperty("--name-font", person.font);
+document.documentElement.style.setProperty('--name-font', person.font);
 
 //
 
 class Snowflake extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
+    this.attachShadow({mode: 'open'});
 
     const randomTransform = () => {
       const x = Math.floor(Math.random() * 100);
@@ -175,20 +175,20 @@ class Snowflake extends HTMLElement {
     `;
   }
 }
-customElements.define("snowflake-element", Snowflake);
+customElements.define('snowflake-element', Snowflake);
 
 // other stuff
 
 document.title = `Merry Christmas ${person.name}!`;
 
 // Set gradient colors
-document.documentElement.style.setProperty("--gradient-1", person.colors[0]);
-document.documentElement.style.setProperty("--gradient-2", person.colors[1]);
+document.documentElement.style.setProperty('--gradient-1', person.colors[0]);
+document.documentElement.style.setProperty('--gradient-2', person.colors[1]);
 
 // Typing animation
 const nextTypingStage = (i) => {
-  document.querySelector("#name").innerHTML = person.name.slice(0, i);
-  const wait = person.name[i] === " " ? 0 : 100;
+  document.querySelector('#name').innerHTML = person.name.slice(0, i);
+  const wait = person.name[i] === ' ' ? 0 : 100;
   if (i < person.name.length) {
     setTimeout(() => nextTypingStage(i + 1), wait);
   }
@@ -198,14 +198,14 @@ nextTypingStage(0);
 
 // Animation cycle
 const flakeStarCycle = async () => {
-  const cont = document.querySelector("#background");
-  const faceimg = document.getElementById("faceimg");
+  const cont = document.querySelector('#background');
+  const faceimg = document.getElementById('faceimg');
   const createStar = (i) => {
-    const star = document.createElement("div");
-    star.style.width = "0.5vw";
-    star.style.height = "0.5vw";
-    star.style.backgroundColor = "white";
-    star.className = "bg-stars";
+    const star = document.createElement('div');
+    star.style.width = '0.5vw';
+    star.style.height = '0.5vw';
+    star.style.backgroundColor = 'white';
+    star.className = 'bg-stars';
     star.id = `flake${i}`;
     const y = Math.random();
     star.style.left = `${Math.random() * 90 + 5}vw`;
@@ -216,7 +216,7 @@ const flakeStarCycle = async () => {
 
   const removeElement = (el, delay) => {
     setTimeout(() => {
-      el.style.transition = "opacity 2s";
+      el.style.transition = 'opacity 2s';
       el.style.opacity = 0;
       setTimeout(() => cont.removeChild(el), 2000);
     }, delay);
@@ -234,13 +234,13 @@ const flakeStarCycle = async () => {
     removeElement(star, 2000);
 
     if (i % 7 === 0) {
-      const flake = document.createElement("snowflake-element");
-      flake.className = "flake";
+      const flake = document.createElement('snowflake-element');
+      flake.className = 'flake';
       cont.appendChild(flake);
       removeElement(flake, 10000);
     }
 
-    document.documentElement.style.setProperty("--rand", Math.random());
+    document.documentElement.style.setProperty('--rand', Math.random());
     await new Promise((resolve) => setTimeout(resolve, 50));
   }
 };
@@ -248,25 +248,25 @@ const flakeStarCycle = async () => {
 flakeStarCycle();
 
 // Scroll handler
-window.addEventListener("scroll", () => {
-  document.documentElement.style.setProperty("--scroll", window.scrollY);
+window.addEventListener('scroll', () => {
+  document.documentElement.style.setProperty('--scroll', window.scrollY);
 });
 //
 async function removeImageBackground(image) {
-  const backgroundColor = { red: 253, green: 248, blue: 229 };
+  const backgroundColor = {red: 253, green: 248, blue: 229};
   const threshold = 10;
 
   const imageElement = new Image();
   imageElement.src = image;
   await new Promise(function (resolve) {
-    imageElement.addEventListener("load", resolve);
+    imageElement.addEventListener('load', resolve);
   });
 
-  var canvas = document.createElement("canvas");
+  var canvas = document.createElement('canvas');
   canvas.width = imageElement.naturalWidth;
   canvas.height = imageElement.naturalHeight;
 
-  var ctx = canvas.getContext("2d");
+  var ctx = canvas.getContext('2d');
   ctx.drawImage(imageElement, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   for (var i = 0; i < imageData.data.length; i += 4) {
@@ -295,23 +295,23 @@ for (let i = 1; i <= 3; i++) {
   if (tope) {
     console.log(tope);
     tope.addEventListener(
-      "click",
+      'click',
       (function (i_copy) {
         return function () {
           if (!running) {
-            this.style.animation = "topdissapear 1s forwards";
+            this.style.animation = 'topdissapear 1s forwards';
             // get time
             running = true;
             setTimeout(() => {
               const award = document.querySelector(`.award-element.box${i}`);
               const seconds = new Date().getTime();
               console.log(seconds);
-              award.style.animation = "awardappear 10s forwards";
+              award.style.animation = 'awardappear 10s forwards';
 
               this.opacity = 0;
               const bottom = document.querySelector(`.bottomimg.box${i}`);
-              bottom.style.pointerEvents = "none";
-              bottom.className = bottom.className.replace(/hover/g, "");
+              bottom.style.pointerEvents = 'none';
+              bottom.className = bottom.className.replace(/hover/g, '');
               bottom.style.opacity = 1;
 
               setTimeout(() => {
@@ -321,7 +321,7 @@ for (let i = 1; i <= 3; i++) {
             }, 1000);
           }
         };
-      })(i),
+      })(i)
     );
   }
 }
