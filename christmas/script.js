@@ -302,12 +302,15 @@ for (let i = 1; i <= 3; i++) {
             this.style.animation = 'topdissapear 1s forwards';
             // get time
             running = true;
+
             setTimeout(() => {
               const award = document.querySelector(`.award-element.box${i}`);
               const seconds = new Date().getTime();
               console.log(seconds);
               award.style.animation = 'awardappear 10s forwards';
-
+              setTimeout(() => {
+                running = false;
+              }, 10 * 1000);
               this.opacity = 0;
               const bottom = document.querySelector(`.bottomimg.box${i}`);
               bottom.style.pointerEvents = 'none';
@@ -316,7 +319,6 @@ for (let i = 1; i <= 3; i++) {
 
               setTimeout(() => {
                 bottom.style.opacity = 0;
-                running = false;
               }, 1000);
             }, 1000);
           }
