@@ -1,1 +1,0 @@
-{"version":3,"file":"data_parser.d.ts","sourceRoot":"","sources":["src/data_parser.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,SAAS,EAAE;QACP,QAAQ,EAAE,MAAM,CAAE;KACrB,CAAA;CACJ;AACD,iBAAe,QAAQ,IAAI,OAAO,CAAC,QAAQ,GAAG,IAAI,CAAC,CAYlD;AACD,eAAe,QAAQ,CAAC;AACxB,OAAO,EAAE,QAAQ,EAAE,CAAC"}

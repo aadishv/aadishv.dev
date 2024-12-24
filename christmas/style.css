@@ -1,0 +1,200 @@
+@import url("https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&family=Lobster&display=swap");
+
+:root {
+    --gradient-1: black;
+    --gradient-2: white;
+    --scroll: 0;
+}
+
+* {
+    font-family: "Helvetica Neue", HelveticaNeue, "TeX Gyre Heros", TeXGyreHeros,
+        FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial,
+        sans-serif;
+}
+
+#name {
+    background: linear-gradient(90deg, var(--gradient-1), var(--gradient-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    font-family: var(--name-font);
+    font-size: 5rem;
+}
+
+h1 {
+    display: inline-block;
+    color: white;
+    font-size: 5rem;
+    margin: 0;
+}
+
+.bg-stars {
+    position: absolute;
+    width: 3vw;
+    height: 3vw;
+    opacity: calc(100vh - var(--scroll) * 1px);
+}
+
+body {
+    background: linear-gradient(to left top, #432052, #0e1036) fixed;
+    background-size: 200%;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.parallax-wrapper {
+    position: fixed;
+    inset: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.title {
+    position: absolute;
+    width: 100%;
+    top: 10vh;
+    text-align: center;
+    z-index: -10;
+}
+
+#background {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.image-cropper {
+    width: min(15vw, 15vh);
+    height: min(15vw, 15vh);
+    left: calc(50% - min(7.5vw, 7.5vh));
+    top: calc(min(90vw, 60vh) * 662 / 416 * 0.2);
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    z-index: 24;
+}
+
+#faceimg {
+    display: inline;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+}
+
+.tree-wrapper {
+    z-index: 1;
+    justify-content: center;
+    align-items: center;
+    display: block;
+    position: relative;
+    width: 100%;
+    height: calc(min(90vw, 60vh) * 662 / 416);
+}
+
+#treeimg {
+    height: calc(min(90vw, 60vh) * 662 / 416);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    mix-blend-mode: saturation; /* Move this here from general img selector */
+}
+
+/* Remove the general img mix-blend-mode */
+/* img {
+    mix-blend-mode: saturation;
+} */
+@keyframes wiggle {
+    0% {
+        transform: translateX(-50%) rotate(0deg);
+    }
+    25% {
+        transform: translateX(-50%) rotate(6deg);
+    }
+    50% {
+        transform: translateX(-50%) rotate(0deg);
+    }
+    75% {
+        transform: translateX(-50%) rotate(-6deg);
+    }
+    100% {
+        transform: translateX(-50%) rotate(0deg);
+    }
+}
+@keyframes topdissapear {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-300%) translateX(-50%) rotate3d(1, 1, 1, 90deg);
+    }
+}
+@keyframes awardappear {
+    0% {
+        top: 100%; /* Start from bottom */
+        height: 5vh;
+        transform: translate(-50%, 0);
+    }
+    10% {
+        opacity: 2;
+        top: 50%;
+        left: 50%;
+        height: 50vh;
+        transform: translate(-50%, -50%);
+    }
+    20%,
+    50% {
+        opacity: 1;
+        top: 50%;
+        left: 50%;
+        height: 50vh;
+        transform: translate(-50%, -50%) rotate3d(0, 1, 0, 360deg);
+    }
+    80%,
+    100% {
+        opacity: 0;
+        top: 50%;
+        left: 50%;
+        height: 50vh;
+        transform: translate(-50%, -50%) rotate3d(0, 1, 0, 360deg);
+    }
+}
+
+.presentimg {
+    height: 7vh;
+    position: absolute;
+    bottom: -15vh;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+.presentimg:hover {
+    animation: wiggle 0.3s linear;
+}
+.topimg {
+    height: 4.5vh;
+    bottom: -9.5vh !important;
+    z-index: 28;
+}
+.box1 {
+    left: calc(50vw - 12.5vh);
+}
+.box2 {
+    left: calc(50vw);
+}
+.box3 {
+    left: calc(50vw + 12.5vh);
+}
+.bottomimg {
+    transition: opacity 1s;
+    z-index: 26;
+}
+.award-element {
+    z-index: 25;
+    position: absolute;
+    opacity: 0;
+    top: 106.5%; /* Start from bottom */
+    height: 5vh;
+    transform: translate(-50%, 0);
+}
