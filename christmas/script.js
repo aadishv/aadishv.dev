@@ -310,7 +310,7 @@ for (let i = 1; i <= 3; i++) {
               award.style.animation = 'awardappear 10s forwards';
               setTimeout(() => {
                 running = false;
-              }, 10 * 1000);
+              }, 7500);
               this.opacity = 0;
               const bottom = document.querySelector(`.bottomimg.box${i}`);
               bottom.style.pointerEvents = 'none';
