@@ -2,7 +2,7 @@
 const persons = {
   PB: {
     checked: true,
-    name: 'Prakhar Bhai',
+    name: 'Prakhar Bhaiya',
     colors: ['#4DA5F3', '#065FAE'],
     emojis: Array.from('📱🎮💻🧑‍💻'),
     awards: [
@@ -26,7 +26,7 @@ const persons = {
   },
   MG: {
     checked: true,
-    name: 'Mausagi',
+    name: 'Mausaji',
     colors: ['#03D92D', '#01881C'],
     emojis: Array.from('✈️🥐🍴🍽️😋'),
     awards: [
@@ -50,7 +50,7 @@ const persons = {
   },
   MM: {
     checked: true,
-    name: 'Minnie Mausi',
+    name: 'Minnie Maasi',
     colors: ['#7a1c34', '#6e011d'],
     emojis: Array.from('👗👛👠🪞'),
     awards: [
