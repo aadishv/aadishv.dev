@@ -15,7 +15,7 @@ Over the recent holiday season, I decided that gifts were not in vogue anymore, 
 This is what the overall project ended up looking lie
 ```
 ├── assets
-│   └── [...]
+│     └── [...]
 ├── card.html
 ├── script.js
 └── style.css
@@ -228,7 +228,7 @@ Now we get a beautiful animation.
 
 ### Personalization
 
-The person code of the person whose card will be shown is encoded as a URL parameter, e.g. "https://aadishv.github.io/christmas/card.html?p=MA". Let's use some basic JavaScript to capture the parameter and update CSS values.
+The person code of the person whose card will be shown is encoded as a URL parameter, e.g. https://aadishv.github.io/christmas/card.html?p=MA. Let's use some basic JavaScript to capture the parameter and update CSS values.
 ```js
 const myperson = new URLSearchParams(window.location.search).get("p") || "PB";
 const people = {/* [...] */};

@@ -10,6 +10,11 @@ pygmentscodefencesguesssyntax = true
 
 [params]
 subtitle = """
+**Chemistry quick links:**
+[aufbau](/chemutils/aufbau.jpg)・
+[bonding shapes](/chemutils/bonding.avif)・
+[solubility](/chemutils/solubility.webp)
+
 Student at Stanford Online High School, passionate about really anything [but especially STEM]. A few notable things I've done:
 
 Won the OHS 2024 Labor Day Hackathon. I might write a blog post about it later :) [[code](https://github.com/aadishv/doleofdoves)]
