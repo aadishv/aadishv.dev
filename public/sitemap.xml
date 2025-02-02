@@ -2,30 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:60870/</loc>
+    <loc>http://localhost:63375/</loc>
     <lastmod>2025-01-31T10:56:02-08:00</lastmod>
   </url><url>
-    <loc>http://localhost:60870/posts/christmas-cards/christmas-cards/</loc>
+    <loc>http://localhost:63375/posts/christmas-cards/christmas-cards/</loc>
     <lastmod>2025-01-31T10:56:02-08:00</lastmod>
   </url><url>
-    <loc>http://localhost:60870/tags/css/</loc>
+    <loc>http://localhost:63375/tags/css/</loc>
     <lastmod>2025-01-31T10:56:02-08:00</lastmod>
   </url><url>
-    <loc>http://localhost:60870/tags/html/</loc>
+    <loc>http://localhost:63375/tags/html/</loc>
     <lastmod>2025-01-31T10:56:02-08:00</lastmod>
   </url><url>
-    <loc>http://localhost:60870/tags/javascript/</loc>
+    <loc>http://localhost:63375/tags/javascript/</loc>
     <lastmod>2025-01-31T10:56:02-08:00</lastmod>
   </url><url>
-    <loc>http://localhost:60870/posts/</loc>
+    <loc>http://localhost:63375/posts/</loc>
     <lastmod>2025-01-31T10:56:02-08:00</lastmod>
   </url><url>
-    <loc>http://localhost:60870/tags/programming/</loc>
+    <loc>http://localhost:63375/tags/programming/</loc>
     <lastmod>2025-01-31T10:56:02-08:00</lastmod>
   </url><url>
-    <loc>http://localhost:60870/tags/</loc>
+    <loc>http://localhost:63375/tags/</loc>
     <lastmod>2025-01-31T10:56:02-08:00</lastmod>
   </url><url>
-    <loc>http://localhost:60870/categories/</loc>
+    <loc>http://localhost:63375/categories/</loc>
   </url>
 </urlset>
