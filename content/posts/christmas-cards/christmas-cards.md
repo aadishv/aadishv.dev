@@ -1,6 +1,6 @@
 +++
 date = '2025-01-31T10:56:02-08:00'
-draft = false
+draft = true
 title = 'Christmas Cards'
 description = 'Making animated Christmas cards for my family'
 tags = ["programming", "javascript", "html", "css"]
