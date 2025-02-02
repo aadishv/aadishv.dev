@@ -47,7 +47,6 @@ const newStar = (i) => {
       }, x * 1000);
     },
     updateTimeout: function (x) {
-      console.log(`updating star ${this.id}`);
       var element = document.getElementById(`star${this.id}`);
       element.style.left = `${x * 100}vw`;
       element.style.top = `${Math.random() * 200}vh`;
@@ -84,7 +83,7 @@ body {
     height: 150vh;
     pointer-events: none;
 }
-/* star styles */
+/* Animations */
 @keyframes twinkle {
     0% {
         opacity: 0;
@@ -95,6 +94,15 @@ body {
     100% {
         opacity: 0;
     }
+}
+/* Stars */
+#background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 150vh;
+    pointer-events: none;
 }
 
 .star {
@@ -119,29 +127,74 @@ There we go!
 
 ![Stars background animation](/stars1.gif)
 
-### Holiday greeting
+### Personalization
 
-I'd like the card to introduce a bit of cheer by saying, "Happy Christmas, [name]!" Furthermore, I'd like the name to be personalized with a color gradient and font (I'm only using two fonts: one for the cursive-loving, and one for the programming type). In order to do this personalization, I have a variable in my JavaScript file which contains the name, colors, and font of each person, correspending to a "code" I assign to each person (this code will come in later). I'll be adding more fields to each person later.
+This card would be pretty boring if it was the exact same for each person. In order to customize it for each family member dynamically withouth having to create entirely new code for each of them, I have a `people` constant in my script which stores information about each person.
+
 ```js
 const people = {
-  // [... many other family members ...]
-  MA: {
-    name: "Mommy",
-    colors: ["#7a1c34", "#6e011d"],
-    font: "Lobster",
-  },
+  /// [... many other family members ...]
   DA: {
-    checked: false,
     name: "Daddy",
     colors: ["#7a1c34", "#6e011d"],
+    emojis: ["💻", "🧑‍💻", "☕", "🚗", "🔊"],
+    awards: [
+      "World's Best Dad",
+      "World's Best Money Saver",
+      "World's Best Hot Chocolate Maker",
+    ],
     font: "Fragment Mono",
-  }
+  },
 };
 ```
 
-Finally, I'd love each person's name to come in with a writing sort of effect.
+Each person has an associated name (of course), colors (to form a gradient text color when I show their names), font (also to style their names), relevant emojis, and a list of "awards" (which we'll find a use for soon). The object itself is stored as a dictionary where each person is assigned a unique "person code" (e.g. my dad, who will be the test subject today, has the code "DA").
 
-Let's start with the basic name. I'll update the HTML to add a div to store the actual page content, and do basic styling.
+
+The person code of the person whose card will be shown is encoded as a URL parameter, e.g. https://aadishv.github.io/christmas/?p=MA. Let's use some basic JS to capture the parameter and update CSS values.
+```js
+const myperson = new URLSearchParams(window.location.search).get("p");
+const people = {/* [...] */};
+const person = people[myperson.toUpperCase()];
+const personalize = () => {
+  document.documentElement.style.setProperty(
+    "--gradient",
+    `linear-gradient(90deg, ${person.colors[0]} 0%, white 50%, ${person.colors[1]} 100%)`,
+  );
+  document.documentElement.style.setProperty(
+    "--font",
+    `"${person.font}", sans-serif`,
+  );
+};
+if (person !== null) personalize();
+```
+All of the other properties of our person need not be used by CSS and thus can just be referenced directly in other JS code.
+
+Let's also set some suitable defaults, and while we're at it, might as well set a default font for non-personalized stuff:
+```css
+/* Import the personalized font */
+@import url("https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&family=Lobster&display=swap");
+
+/* General Styles */
+* {
+    font-family: "Helvetica Neue", HelveticaNeue, "TeX Gyre Heros",
+        TeXGyreHeros, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo,
+        Helvetica, Arial, sans-serif;
+}
+
+:root {
+    --gradient: linear-gradient(90deg, lightblue 0%, white 50%, lightblue 100%);
+    --font: sans-serif;
+}
+```
+
+There we go, personalization done!
+
+### Holiday greeting
+
+I'd like the card to introduce a bit of cheer by saying, "Happy Christmas, [name]!" As noted above, I'd like the name to be personalized with a color gradient and font (I'm only using two fonts: one for the cursive-loving, and one for the programming type).
+
+Let's start by updating the HTML to add a div to store the actual page content, and do basic styling.
 ```html
 <!doctype html>
 <html lang="en">
@@ -153,61 +206,18 @@ Let's start with the basic name. I'll update the HTML to add a div to store the 
         <div id="content">
             <h1 class="greeting">
                 Merry Christmas,
-                <span class="name"> Aadish </span>
+                <span class="name"></span>
             </h1>
         </div>
     </body>
 </html>
-
 ```
-Notice that the name is hard-coded. We'll be fixing that in a little bit.
+Notice that the name is empty. We'll be fixing that in a little bit.
 
 Now for the CSS!
 
 ```css
-/* Important fonts and do basic styling for the page */
-@import url("https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&family=Lobster&display=swap");
-
-* {
-    font-family: "Helvetica Neue", HelveticaNeue, "TeX Gyre Heros",
-        TeXGyreHeros, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo,
-        Helvetica, Arial, sans-serif;
-}
-
-
-/* [...] */
-
-/* Now for the actual greeting */
-#content {
-    /* To center children horizontally */
-    display: flex;
-    justify-content: center;
-}
-
-.greeting {
-    padding: 10px;
-    color: white;
-    font-size: 10vw;
-}
-
-.name {
-    overflow: hidden;
-    display: block;
-
-    /* The next few lines will eventually be dynamically personalized */
-    font-family: "Fragment Mono", monospace;
-    background: linear-gradient(90deg, #4da5f3 0%, white 50%, #4da5f3 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-```
-Looks good so far:
-![Initial name code result](/name1.png)
-
-Now let's get the writing effect working. It will be pretty simple. We'll just increase the width from 0 to 100% over 2 seconds (the overflow will be hidden thanks to the previous CSS). I'll also change the gradient a bit by putting white in between the two values - as the width expands, the white color will move to the right, giving it a shimmering effect.
-
-```css
-/* [...] */
+/* Animation */
 @keyframes typing {
     from {
         width: 0%;
@@ -216,44 +226,43 @@ Now let's get the writing effect working. It will be pretty simple. We'll just i
         width: 100%;
     }
 }
-
-.name {
-    /* [...] */
-    animation: typing 2s forwards;
-    /* [...] */
+/* Greetings */
+#content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    width: 100vw;
 }
-```
-Now we get a beautiful animation.
-![Final card greeting](/name2.gif)
 
-### Personalization
+.greeting {
+    position: fixed;
+    color: white;
+    font-size: 10vw;
+}
 
-The person code of the person whose card will be shown is encoded as a URL parameter, e.g. https://aadishv.github.io/christmas/card.html?p=MA. Let's use some basic JavaScript to capture the parameter and update CSS values.
-```js
-const myperson = new URLSearchParams(window.location.search).get("p") || "PB";
-const people = {/* [...] */};
-const person = people[myperson.toUpperCase()];
-const updateCssValues = () => {
-  document.documentElement.style.setProperty(
-    "--gradient",
-    `linear-gradient(90deg, ${person.colors[0]} 0%, white 50%, ${person.colors[1]} 100%)`,
-  );
-  document.documentElement.style.setProperty(
-    "--font",
-    `"${person.font}", sans-serif`,
-  );
-};
-if (person !== null) updateCssValues();
-```
-
-And update the CSS accordingly:
-```css
 .name {
-    /* [...] */
+    overflow: hidden;
+    display: block;
+    animation: typing 2s forwards;
     font-family: var(--font);
     background: var(--gradient);
-    /* [...] */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 12vw;
 }
 ```
+This also adds a simple writing effect with a shimmer (sort of). It's very simple - we just slowly widen the span with the name in it from 0 to 100%, ensuring that the text overflows. We also add white in the middle of each person's gradient so that, as the text widens, the white area will move to the right, creating the shimmer.
 
-Now we can have personalization. The `updateCssValues` function and `people` constant will continue to change as we add more features.
+Finally, let's ensure that the span tag containing the name doesn't end up empty. Let's fill it in the `personalize` function:
+```js
+const personalize = () => {
+  // [...]
+  document.querySelector(".name").innerHTML = person.name;
+};
+```
+
+That looks awesome!
+
+![Final card greeting](/name2.gif)
+ddfsd
