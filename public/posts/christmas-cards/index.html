@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html><head lang="en"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Christmas Cards - Aadish Verma</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Making animated Christmas cards for my family" />
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content="http://localhost:1313/posts/christmas-cards/">
+  <meta property="og:site_name" content="Aadish Verma">
+  <meta property="og:title" content="Christmas Cards">
+  <meta property="og:description" content="Making animated Christmas cards for my family">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-01-31T10:56:02-08:00">
+    <meta property="article:modified_time" content="2025-01-31T10:56:02-08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Christmas Cards">
+  <meta name="twitter:description" content="Making animated Christmas cards for my family">
+
+        <link href="http://localhost:1313/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="http://localhost:1313/css/main.e5be0b244cfea0385bf04425148e0847f227ebc587eb7cf8ce8e2532d66a9248.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="http://localhost:1313/css/dark.57516b936b2e3a913635b11457744cbf352cddb206bb679c40ea2bba485930e4.css" media="(prefers-color-scheme: dark)"  /><link rel="stylesheet" href="http://localhost:1313/katex/katex.min.css ">
+		<script defer src="http://localhost:1313/katex/katex.min.js"></script>
+		<script defer src="http://localhost:1313/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+		</script>
+		
+		
+		<link rel="stylesheet" type="text/css" href="http://localhost:1313/css/code.09491a47272acee3acc44989f67c5bd33dbf8de24883acd9e54ee5d179cad4f0.css">
+		
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="http://localhost:1313/">Aadish Verma</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/tags">Tags</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+  <article>
+    <div class="post-container">
+      
+      <div class="post-content">
+        <div class="title">
+          <h1 class="title">Christmas Cards</h1>
+          <div class="meta">Posted on Jan 31, 2025 <span class="draft-label">DRAFT</span> </div>
+        </div>
+        
+        <section class="body">
+          <h2 id="introduction">Introduction</h2>
+<p>Over the recent holiday season, I decided that gifts were not in vogue anymore, and that virtual gifts would be cheaper, easier to make, and less useful!</p>
+<p>[spoiler: they were a nightmare. do not try this at home.]</p>
+<h2 id="overall">Overall</h2>
+<p>This is what the overall project ended up looking lie</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>├── assets
+</span></span><span style="display:flex;"><span>│   └── [...]
+</span></span><span style="display:flex;"><span>├── card.html
+</span></span><span style="display:flex;"><span>├── script.js
+</span></span><span style="display:flex;"><span>└── style.css
+</span></span></code></pre></div><p>The final website also had an <code>index.html</code> file, but that was just a mirror of <code>card.html</code> to make the QR code stuff easier.</p>
+<h2 id="anatomy-of-an-animated-christmas-card-and-overview-of-the-coding-process">Anatomy of an animated Christmas card [and overview of the coding process]</h2>
+<h3 id="stars">Stars</h3>
+<p>As any winter-themed card does, this card will have twinkling stars in the background. This is not supposed to be super fancy or anything, so I&rsquo;ll just have a small orange square (with a shadow) that fades in and out and changes position between opacity cycles.</p>
+<p>This project is mainly just an exercise in learning to code in Javascript a bit more efficiently, so I&rsquo;ll use objects to structure the stars.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">newStar</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">i</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">i</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">time</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1000</span> <span style="color:#f92672">*</span> Math.<span style="color:#a6e22e">random</span>() <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1000</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">init</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> () {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">random</span>();
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">setTimeout</span>(() =&gt; {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">element</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#34;div&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">element</span>.<span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`star</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">id</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">element</span>.<span style="color:#a6e22e">className</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;star&#34;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">element</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">animation</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`twinkle </span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">time</span><span style="color:#e6db74">}</span><span style="color:#e6db74">ms infinite`</span>;
+</span></span><span style="display:flex;"><span>        document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#34;background&#34;</span>).<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">element</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">updateTimeout</span>(<span style="color:#a6e22e">x</span>);
+</span></span><span style="display:flex;"><span>      }, <span style="color:#a6e22e">x</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">1000</span>);
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">updateTimeout</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">x</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`updating star </span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">id</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">element</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">`star</span><span style="color:#e6db74">${</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">id</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">element</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">left</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">x</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span><span style="color:#e6db74">}</span><span style="color:#e6db74">vw`</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">element</span>.<span style="color:#a6e22e">style</span>.<span style="color:#a6e22e">top</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">`</span><span style="color:#e6db74">${</span>Math.<span style="color:#a6e22e">random</span>() <span style="color:#f92672">*</span> <span style="color:#ae81ff">200</span><span style="color:#e6db74">}</span><span style="color:#e6db74">vh`</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">setTimeout</span>(() =&gt; <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">updateTimeout</span>(<span style="color:#a6e22e">x</span>), <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">time</span>);
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>Each star has an <code>id</code> value, which is used to identify the DOM element to update in the animation, and a <code>time</code> value, which represents the length of the opacity cycle (which is different for each star). Notice that each star is initialized at a time that increases with its initial x-value, so that the stars will initially fade in from left to right. Every refresh of the opacity cycle, the only thing changed is the element&rsquo;s position (which we use <code>element.style.left</code> and <code>element.style.top</code> to do).</p>
+<p>The stars are initialized in a div of the website&rsquo;s body:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!doctype html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span> <span style="color:#a6e22e">lang</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">&lt;!-- [...] --&gt;</span>
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;background&#34;</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">&lt;!-- [...] --&gt;</span>
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><p>Now let&rsquo;s do some basic styling.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span><span style="color:#75715e">/* To add contrast for the stars, and a holiday feel */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">body</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">background</span>: linear-gradient(<span style="color:#66d9ef">to</span> <span style="color:#66d9ef">left</span> <span style="color:#66d9ef">top</span>, <span style="color:#ae81ff">#432052</span>, <span style="color:#ae81ff">#0e1036</span>) <span style="color:#66d9ef">fixed</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* To make a tall background (will be used later) */</span>
+</span></span><span style="display:flex;"><span>#background {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">top</span>: <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">left</span>: <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">100</span><span style="color:#66d9ef">vw</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">150</span><span style="color:#66d9ef">vh</span>;
+</span></span><span style="display:flex;"><span>    pointer-events: <span style="color:#66d9ef">none</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/* star styles */</span>
+</span></span><span style="display:flex;"><span>@<span style="color:#66d9ef">keyframes</span> <span style="color:#f92672">twinkle</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">0</span><span style="color:#f92672">%</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">opacity</span>: <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">50</span><span style="color:#f92672">%</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">opacity</span>: <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">100</span><span style="color:#f92672">%</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">opacity</span>: <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">star</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">position</span>: <span style="color:#66d9ef">absolute</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">width</span>: <span style="color:#ae81ff">0.5</span><span style="color:#66d9ef">vw</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">height</span>: <span style="color:#ae81ff">0.5</span><span style="color:#66d9ef">vw</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">background-color</span>: <span style="color:#66d9ef">orange</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">border-radius</span>: <span style="color:#ae81ff">20</span><span style="color:#66d9ef">%</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">box-shadow</span>: <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> <span style="color:#66d9ef">orange</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>And, finally, to spawn in the stars:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">spawnStars</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">n</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  Array.<span style="color:#a6e22e">from</span>({ <span style="color:#a6e22e">length</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">n</span> }, (<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">i</span>) =&gt; <span style="color:#a6e22e">newStar</span>(<span style="color:#a6e22e">i</span>).<span style="color:#a6e22e">init</span>());
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">spawnStars</span>(<span style="color:#ae81ff">300</span>);
+</span></span></code></pre></div><p>There we go!</p>
+<p><img src="/img/christmas-cards/stars1.gif" alt="Stars background animation"></p>
+
+        </section>
+        <div class="post-tags">
+          
+          
+          
+        </div>
+      </div>
+
+      
+      
+    </div>
+
+    </article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/aadishv" rel="me" title="GitHub"><svg class="feather">
+   <use href="/svg/feather-sprite.51cf5647cb1987f769b616558f2620fd9423d72058490231b391bf6aa3744b55.svg#github" />
+</svg></a><a class="border"></a></div>
+  <div class="footer-info">
+    2025  © Aadish Verma |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+</div>
+    </body>
+</html>
