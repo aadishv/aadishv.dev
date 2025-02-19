@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Aadish's Periodic Table</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+      }
+      :root {
+        --aadish-name: hidden;
+      }
+      .aadish-name {
+        visibility: var(--aadish-name);
+      }
+      .text-xxs {
+        font-size: 0.6rem;
+      }
+    </style>
+  </head>
+  <script src="script.js"></script>
+  <body>
+    <div class="elements flex flex-col"></div>
+  </body>
+</html>
