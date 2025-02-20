@@ -5,6 +5,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css"
+    />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"
+    ></script>
+
     <style type="text/tailwindcss">
       @theme {
         --color-clifford: #da373d;
@@ -18,10 +33,43 @@
       .text-xxs {
         font-size: 0.6rem;
       }
+      .text-condensed {
+        font-family: 'Roboto Flex', serif;
+        font-optical-sizing: auto;
+        font-variation-settings:
+          'slnt' 0,
+          'wdth' 60,
+          'GRAD' 0,
+          'XOPQ' 60,
+          'XTRA' 468,
+          'YOPQ' 79,
+          'YTAS' 750,
+          'YTDE' -203,
+          'YTFI' 738,
+          'YTLC' 514,
+          'YTUC' 712;
+      }
     </style>
   </head>
   <script src="script.js"></script>
   <body>
-    <div class="elements flex flex-col"></div>
+    <div class="flex flex-row">
+      <div class="table flex flex-grow flex-col">
+        <!-- Add right padding to make space for sidebar -->
+        <div class="controls flex flex-row">
+          <sl-select
+            class="p-4 w-60"
+            label="Value to show with elements"
+            pill
+            value="name"
+            id="table-show-value"
+          >
+            <sl-option value="name">Name</sl-option>
+            <sl-option value="mass">Atomic mass</sl-option>
+          </sl-select>
+        </div>
+        <div class="elements"></div>
+      </div>
+    </div>
   </body>
 </html>
