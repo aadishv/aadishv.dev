@@ -74,8 +74,11 @@ const createDetailView = (element) => {
               z-index: 10000000;
               transform: translateY(${element.ypos < 3 ? '0%' : element.ypos > 7 ? '-100%' : '-50%'});
               ">
+    <div class="flex flex-row">
     <div class="flex justify-center">
       <h1 class="p-4 text-3xl bold">${element.name} (${element.number}, ${element.symbol})</h1>
+    </div>
+    <sl-icon-button name="x" label="Close" class="text-3xl"></sl-icon-button>
     </div>
     <div class="flex flex-col justify-center">
         ${generateDetail('Electron config', element.electron_configuration_semantic)}
@@ -116,6 +119,7 @@ const backgroundColors = {
 };
 
 const clearDetails = () => {
+  console.log('Clearing');
   for (var i = 1; i <= 118; i++) {
     var t = document.getElementById(`element-${i}`);
     t = t.children[1];
@@ -171,16 +175,23 @@ const attachElementClickListeners = () => {
       'click',
       ((el) => (e) => {
         var t = el.children[1];
-        console.log(t.className === 'invisible', Date());
         if (t.className == '') {
           t.className = 'invisible';
         } else {
           clearDetails();
           t.className = '';
-          t.parentElement.focus();
+          console.log(t.parentElement);
+          t.focus();
           // clear details when loses focus
-          t.parentElement.addEventListener('blur', () => clearDetails());
+          t.addEventListener('focusout', () => clearDetails());
         }
+      })(element)
+    );
+    element.children[1].addEventListener(
+      'click',
+      ((element) => (e) => {
+        // lose focus
+        clearDetails();
       })(element)
     );
   }
