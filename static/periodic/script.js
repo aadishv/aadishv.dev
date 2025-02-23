@@ -78,7 +78,7 @@ const createDetailView = (element) => {
     <div class="flex justify-center">
       <h1 class="p-4 text-3xl bold">${element.name} (${element.number}, ${element.symbol})</h1>
     </div>
-    <sl-icon-button name="x" label="Close" class="text-3xl"></sl-icon-button>
+    <sl-icon-button name="x" label="Close" class="text-3x l"></sl-icon-button>
     </div>
     <div class="flex flex-col justify-center">
         ${generateDetail('Electron config', element.electron_configuration_semantic)}

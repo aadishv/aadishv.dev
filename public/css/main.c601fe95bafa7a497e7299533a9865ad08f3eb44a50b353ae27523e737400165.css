@@ -1,4 +1,3 @@
-/* THIS FILE MODIFIED FROM OG THEME BY AADISHV */
 /* Markdown */
 :root {
   --maincolor: red;
@@ -26,11 +25,8 @@ body {
   color: #fff;
 }
 
-p,
-li {
-  font-family: 'Helvetica Neue', HelveticaNeue, 'TeX Gyre Heros', TeXGyreHeros,
-    FreeSans, 'Nimbus Sans L', 'Liberation Sans', Arimo, Helvetica, Arial,
-    sans-serif;
+p {
+  font-family: font-family: "Helvetica Neue", HelveticaNeue, "TeX Gyre Heros", TeXGyreHeros, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif;
   line-height: 1.5;
 }
 
