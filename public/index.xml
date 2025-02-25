@@ -7,6 +7,21 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>© Aadish Verma</copyright>
+    <lastBuildDate>Sat, 22 Feb 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Takeaways from Advent of Code 2024</title>
+      <link>http://localhost:1313/posts/aoc-24/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/aoc-24/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;[please ignore how late this is]&lt;/p&gt;&#xA;&lt;p&gt;This (last? 2024&amp;rsquo;s) winter, I completed the Advent of Code (AoC) 2024 puzzles every night from December 1 through December 25. It was a bit easier for me than for the poor chaps on the East Coast as the puzzles were released at 9:00 pm PT (midnight Eastern time) and I could often have them solved and go to sleep by 10:00 pm. Anyways, here are a few scattered thoughts on what I learned and gained.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Christmas Cards</title>
+      <link>http://localhost:1313/posts/christmas-cards/christmas-cards/</link>
+      <pubDate>Fri, 31 Jan 2025 10:56:02 -0800</pubDate>
+      <guid>http://localhost:1313/posts/christmas-cards/christmas-cards/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;Over the recent holiday season, I decided that gifts were not in vogue anymore, and that virtual gifts would be cheaper, easier to make, and less useful!&lt;/p&gt;&#xA;&lt;p&gt;[spoiler: they were a nightmare. do not try this at home.]&lt;/p&gt;&#xA;&lt;h2 id=&#34;overall&#34;&gt;Overall&lt;/h2&gt;&#xA;&lt;p&gt;This is what the overall project ended up looking lie&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── assets&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│     └── [...]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── card.html&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── script.js&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└── style.css&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The final website also had an &lt;code&gt;index.html&lt;/code&gt; file, but that was just a mirror of &lt;code&gt;card.html&lt;/code&gt; to make the QR code stuff easier.&lt;/p&gt;</description>
+    </item>
   </channel>
 </rss>
