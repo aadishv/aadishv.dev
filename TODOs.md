@@ -3,6 +3,7 @@
  - [x] Fix link to private GH repo for 315P code
 
 **Periodic table**
+ - [x] App-like details view
  - [ ] Search
  - [ ] Add electronegativity view
  - [ ] By this to-do you are at feature parity with the SwiftUI app!

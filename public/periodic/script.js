@@ -1,97 +1,3 @@
-function truncateString(str, maxLength) {
-  return str.length <= maxLength ? str : str.slice(0, maxLength - 3) + '...';
-}
-
-const createElementDisplay = (element, large) => {
-  if (!element) {
-    return '<div class="w-16 h-16 text-2xl invisible rounded-lg font-mono border"></div>';
-  }
-
-  return `
-    <div
-      class="${large ? 'w-32 h-32 text-6xl rounded-2xl' : 'w-16 h-16 text-xl rounded-xl'} font-mono border${large ? '-2' : ''}"
-      style="background-color: ${backgroundColors[element.type]}; color: ${textColors[element.type]}; border-color: ${textColors[element.type]}"
-    >
-      <div class="flex justify-start pl-1 pr-1"><h1>${element.number}</h1></div>
-      <div class="flex justify-end pl-1 pr-1"><h1>${element.symbol}</h1></div>
-    </div>
-  `;
-};
-
-const createElementName = (element) => {
-  if (!element) return '';
-
-  const textSize = element.name.length <= 7 ? 'text-sm' : 'text-sm';
-
-  return `
-    <div class="flex justify-center text-condensed font-mono ${textSize} w-16">
-      <h1>${element.name + '&nbsp;'}</h1>
-    </div>
-  `;
-};
-
-const createElement = (x, y, data) => {
-  const element = data.find((item) => item.xpos === x && item.ypos === y);
-  const elementType = element?.type || '';
-
-  /* NOTE: We add "relative" to the container so the absolute detail view
-           positions relative to this element. */
-  return `
-  <div id="element-${element == null ? '' : element.number}" class="flex relative">
-    <div class="flex flex-row w-22 p-0 pb-5 pl-0 pt-0 pr-0 justify-center" style="color: ${textColors[elementType]}">
-      <div class="w-16 h-16 flex flex-col p-0 pb-4 pt-4 ml-3">
-        ${createElementDisplay(element, false)}
-        ${createElementName(element)}
-      </div>
-    </div>
-    <!-- The detail view container -->
-    <div tabindex="-1">
-      ${element == undefined ? '' : createDetailView(element)}
-    </div>
-  </div>
-`;
-};
-
-const createDetailView = (element) => {
-  const generateDetail = (name, value) => {
-    return `
-    <span class="inline-flex items-center p-1">
-      <span class="border font-bold rounded-md px-2 py-1 text-sm font-sans" style="border-color: ${textColors[element.type]}">${name}</span>
-      <span class="border rounded-md px-2 py-1 text-sm ml-1" style="border-color: rgba(0,0,0,0)">${value}</span>
-    </span>
-    `;
-  };
-
-  let bg = backgroundColors[element.type];
-  let textColor = textColors[element.type];
-  let reverseCSS = `top: 50%;
-  right: calc(100% + 10px);`;
-  console.log(element.ypos);
-  return `
-  <div class="absolute flex flex-col justify-center font-mono p-10 w-80 rounded-3xl"
-       style="background-color: ${bg}; color: ${textColor};
-       ${element.xpos > 9 ? reverseCSS : ''}
-              z-index: 10000000;
-              transform: translateY(${element.ypos < 3 ? '0%' : element.ypos > 7 ? '-100%' : '-50%'});
-              ">
-    <div class="flex flex-row">
-    <div class="flex justify-center">
-      <h1 class="p-4 text-3xl bold">${element.name} (${element.number}, ${element.symbol})</h1>
-    </div>
-    <sl-icon-button name="x" label="Close" class="text-3x l"></sl-icon-button>
-    </div>
-    <div class="flex flex-col justify-center">
-        ${generateDetail('Electron config', element.electron_configuration_semantic)}
-        ${generateDetail('Full config', element.electron_configuration)}
-        ${generateDetail('Group', element.type)}
-        ${generateDetail('Atomic mass', element.atomic_mass)}
-        ${generateDetail('Electronegativity', element.electronegativity_pauling)}
-        ${generateDetail('Fun fact', element.fun_fact)}
-    </div>
-  </div>
-  `;
-};
-
 const textColors = {
   'Alkali Metal': '#00768D',
   'Alkaline Earth Metal': '#D60024',
@@ -118,13 +24,38 @@ const backgroundColors = {
   'Unknown Chemical Properties': '#E7E7EA',
 };
 
-const clearDetails = () => {
-  console.log('Clearing');
-  for (var i = 1; i <= 118; i++) {
-    var t = document.getElementById(`element-${i}`);
-    t = t.children[1];
-    t.className = `invisible`;
-  }
+const setDetailsView = (n, pdata) => {
+  const element = pdata[n - 1];
+  document.getElementById(`element-${n}`).focus();
+  const generateDetail = (name, value) => {
+    return `
+    <span class="inline-flex items-center p-1">
+      <span class="border font-bold rounded-md px-2 py-1 text-sm font-sans" style="border-color: ${textColors[element.type]}">${name}</span>
+      <span class="border rounded-md px-2 py-1 text-sm ml-1" style="border-color: rgba(0,0,0,0)">${value}</span>
+    </span>
+    `;
+  };
+  let bg = backgroundColors[element.type];
+  let textColor = textColors[element.type];
+  const html = `
+    <div
+      id="details"
+      class="w-5/24 m-4 border-2 rounded-xl flex flex-col justify-center font-mono p-3 flex-grow"
+      style="
+      background-color: ${bg};
+      color: ${textColor};
+      "
+    >
+    <h1 class="text-3xl flex w-full bold">${element.name}<br>(${element.number}, ${element.symbol})</h1>
+    ${generateDetail('Electron config', element.electron_configuration_semantic)}
+    ${generateDetail('Full config', element.electron_configuration)}
+    ${generateDetail('Group', element.type)}
+    ${generateDetail('Atomic mass', element.atomic_mass)}
+    ${generateDetail('Electronegativity', element.electronegativity_pauling)}
+    ${generateDetail('Fun fact', element.fun_fact)}
+    </div>
+  `;
+  document.getElementById('details').outerHTML = html;
 };
 
 const fetchPeriodicData = async () => {
@@ -134,65 +65,30 @@ const fetchPeriodicData = async () => {
   return await response.json();
 };
 
-const getMaxPositions = (pdata) =>
-  pdata.reduce(
-    (acc, item) => ({
-      x: Math.max(acc.x, item.xpos),
-      y: Math.max(acc.y, item.ypos),
-    }),
-    {x: 1, y: 1}
-  );
-
-const renderPeriodicTable = (pdata) => {
-  const {x: maxX, y: maxY} = getMaxPositions(pdata);
-  const html = Array.from({length: maxY}, (_, y) => {
-    const row = Array.from({length: maxX}, (_, x) =>
-      createElement(x + 1, y + 1, pdata)
-    ).join('');
-    return `<div class="flex flex-row">${row}</div>`;
-  }).join('');
-  return html;
-};
-
-const setupValueChangeListener = (pdata) => {
-  document
-    .getElementById('table-show-value')
-    .addEventListener('sl-change', (e) => {
-      var targetv = e.target.value;
-      for (var i = 1; i <= 118; i++) {
-        var element = document.getElementById(`element-${i}`);
-        var item = pdata.find((item) => item.number === i);
-        var val = targetv == 'name' ? item.name : item.atomic_mass.toFixed(2);
-        element.children[0].children[0].children[1].innerHTML = `${val}&nbsp;`;
-      }
-    });
-};
-
-const attachElementClickListeners = () => {
-  for (var i = 1; i <= 118; i++) {
-    var element = document.getElementById(`element-${i}`);
-    element.addEventListener(
-      'click',
-      ((el) => (e) => {
-        var t = el.children[1];
-        if (t.className == '') {
-          t.className = 'invisible';
-        } else {
-          clearDetails();
-          t.className = '';
-          console.log(t.parentElement);
-          t.focus();
-          // clear details when loses focus
-          t.addEventListener('focusout', () => clearDetails());
-        }
-      })(element)
+const attachListeners = (pdata, fuse) => {
+  document.getElementById('search').addEventListener('sl-change', (e) => {
+    var targetv = e.target.value;
+    const trimmedQ = targetv.trim().toLowerCase();
+    const sortedElements = fuse.search(trimmedQ);
+    var element = sortedElements[0];
+    console.log(
+      element.item.name,
+      element.item.number,
+      Array.from(document.getElementsByClassName('aadish-element')).map(
+        (i) => i.parentElement.parentElement.parentElement.id
+      )
     );
-    element.children[1].addEventListener(
-      'click',
+    document.getElementById(`element-${element.item.number}`).focus();
+  });
+
+  const layout = document.getElementById('layout');
+  for (var i = 1; i <= 118; i++) {
+    var el = document.getElementById(`element-${i}`);
+    el.addEventListener(
+      'focusin',
       ((element) => (e) => {
-        // lose focus
-        clearDetails();
-      })(element)
+        setDetailsView(element, pdata);
+      })(i)
     );
   }
 };
@@ -200,10 +96,17 @@ const attachElementClickListeners = () => {
 const main = async () => {
   const pdata = await fetchPeriodicData();
   console.log(pdata[7]);
-  const tableHTML = renderPeriodicTable(pdata);
-  document.getElementsByClassName('elements')[0].innerHTML = tableHTML;
-  setupValueChangeListener(pdata);
-  clearDetails();
-  attachElementClickListeners();
+
+  const fuseOptions = {
+    keys: [
+      {name: 'name', weight: 0.7},
+      {name: 'symbol', weight: 0.3},
+      {name: 'number', weight: 0.1},
+    ],
+  };
+  const fuse = new Fuse(pdata, fuseOptions);
+  const randomElementIndex = 1 + Math.floor(Math.random() * pdata.length);
+  attachListeners(pdata, fuse);
+  setDetailsView(randomElementIndex + 1, pdata);
 };
 main();

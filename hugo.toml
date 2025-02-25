@@ -10,7 +10,11 @@ pygmentscodefencesguesssyntax = true
 
 [params]
 subtitle = """
-**Chemistry quick links:**
+**I built a thing:**
+[LaTeX to Markdown tool](/latex-img-tool)・
+[OC005 periodic table](/periodic)
+
+**Chem stuff**:
 [aufbau](/chemutils/aufbau.jpg)・
 [bonding shapes](/chemutils/bonding.avif)・
 [solubility](/chemutils/solubility.webp)
