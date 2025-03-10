@@ -53,13 +53,6 @@ const setDetailsView = (n, pdata) => {
     ${generateDetail('Atomic mass', element.atomic_mass)}
     ${generateDetail('Electronegativity', element.electronegativity_pauling)}
     ${generateDetail('Fun fact', element.fun_fact)}
-    <button 
-      onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(element.name + ' chemical element')}', '_blank')"
-      class="mt-4 px-4 py-2 rounded-md border font-bold font-sans cursor-pointer transition-all duration-200"
-      style="border-color: ${textColor}; color: ${textColor};"
-    >
-      Search on Google
-    </button>
     </div>
   `;
   document.getElementById('details').outerHTML = html;
