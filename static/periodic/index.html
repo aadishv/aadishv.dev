@@ -1,31 +1,3292 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Periodic Table - Web Components</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-    </style>
-    <!-- Load dependencies from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
-    <script type="module">
-        import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/all/lit-all.min.js';
-        window.LitElement = LitElement;
-        window.html = html;
-        window.css = css;
-    </script>
-    <!-- Load our components -->
-    <script type="module" src="components/element-tile.js"></script>
-    <script type="module" src="components/element-details.js"></script>
-    <script type="module" src="components/search-bar.js"></script>
-    <script type="module" src="components/periodic-table.js"></script>
-</head>
-<body>
-    <periodic-table></periodic-table>
-</body>
+<!doctype html>
+<html>
+  <head>
+    <title>Aadish's Periodic Table</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css"
+    />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"
+    ></script>
+  </head>
+  <script src="script.js"></script>
+  <body>
+    <div class="flex flex-col">
+      <sl-input
+        id="search"
+        class="m-3 pb-0"
+        label="Search for elements"
+        help-text="Tip: typing in the element's number also works!"
+        pill
+      ></sl-input>
+      <div class="flex flex-row">
+        <!-- The following periodic table HTML pregenerated -->
+        <div class="elements flex flex-col w-19/24">
+          <div class="flex flex-row">
+            <div
+              tabindex="1"
+              id="element-1"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">1</div>
+              <div class="flex flex-grow justify-end">H</div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="2"
+              id="element-2"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #cd1d5f;
+                background-color: #ffe6ea;
+                border-color: #cd1d5f;
+              "
+            >
+              <div class="flex flex-grow justify-start">2</div>
+              <div class="flex flex-grow justify-end">He</div>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <div
+              tabindex="3"
+              id="element-3"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #00768d;
+                background-color: #d7f8ff;
+                border-color: #00768d;
+              "
+            >
+              <div class="flex flex-grow justify-start">3</div>
+              <div class="flex flex-grow justify-end">Li</div>
+            </div>
+
+            <div
+              tabindex="4"
+              id="element-4"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #d60024;
+                background-color: #ffe6e5;
+                border-color: #d60024;
+              "
+            >
+              <div class="flex flex-grow justify-start">4</div>
+              <div class="flex flex-grow justify-end">Be</div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="5"
+              id="element-5"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #945801;
+                background-color: #fef8e2;
+                border-color: #945801;
+              "
+            >
+              <div class="flex flex-grow justify-start">5</div>
+              <div class="flex flex-grow justify-end">B</div>
+            </div>
+
+            <div
+              tabindex="6"
+              id="element-6"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">6</div>
+              <div class="flex flex-grow justify-end">C</div>
+            </div>
+
+            <div
+              tabindex="7"
+              id="element-7"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">7</div>
+              <div class="flex flex-grow justify-end">N</div>
+            </div>
+
+            <div
+              tabindex="8"
+              id="element-8"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">8</div>
+              <div class="flex flex-grow justify-end">O</div>
+            </div>
+
+            <div
+              tabindex="9"
+              id="element-9"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">9</div>
+              <div class="flex flex-grow justify-end">F</div>
+            </div>
+
+            <div
+              tabindex="10"
+              id="element-10"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #cd1d5f;
+                background-color: #ffe6ea;
+                border-color: #cd1d5f;
+              "
+            >
+              <div class="flex flex-grow justify-start">10</div>
+              <div class="flex flex-grow justify-end">Ne</div>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <div
+              tabindex="11"
+              id="element-11"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #00768d;
+                background-color: #d7f8ff;
+                border-color: #00768d;
+              "
+            >
+              <div class="flex flex-grow justify-start">11</div>
+              <div class="flex flex-grow justify-end">Na</div>
+            </div>
+
+            <div
+              tabindex="12"
+              id="element-12"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #d60024;
+                background-color: #ffe6e5;
+                border-color: #d60024;
+              "
+            >
+              <div class="flex flex-grow justify-start">12</div>
+              <div class="flex flex-grow justify-end">Mg</div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="13"
+              id="element-13"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #002c00;
+                background-color: #d8f9e9;
+                border-color: #002c00;
+              "
+            >
+              <div class="flex flex-grow justify-start">13</div>
+              <div class="flex flex-grow justify-end">Al</div>
+            </div>
+
+            <div
+              tabindex="14"
+              id="element-14"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #945801;
+                background-color: #fef8e2;
+                border-color: #945801;
+              "
+            >
+              <div class="flex flex-grow justify-start">14</div>
+              <div class="flex flex-grow justify-end">Si</div>
+            </div>
+
+            <div
+              tabindex="15"
+              id="element-15"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">15</div>
+              <div class="flex flex-grow justify-end">P</div>
+            </div>
+
+            <div
+              tabindex="16"
+              id="element-16"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">16</div>
+              <div class="flex flex-grow justify-end">S</div>
+            </div>
+
+            <div
+              tabindex="17"
+              id="element-17"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">17</div>
+              <div class="flex flex-grow justify-end">Cl</div>
+            </div>
+
+            <div
+              tabindex="18"
+              id="element-18"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #cd1d5f;
+                background-color: #ffe6ea;
+                border-color: #cd1d5f;
+              "
+            >
+              <div class="flex flex-grow justify-start">18</div>
+              <div class="flex flex-grow justify-end">Ar</div>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <div
+              tabindex="19"
+              id="element-19"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #00768d;
+                background-color: #d7f8ff;
+                border-color: #00768d;
+              "
+            >
+              <div class="flex flex-grow justify-start">19</div>
+              <div class="flex flex-grow justify-end">K</div>
+            </div>
+
+            <div
+              tabindex="20"
+              id="element-20"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #d60024;
+                background-color: #ffe6e5;
+                border-color: #d60024;
+              "
+            >
+              <div class="flex flex-grow justify-start">20</div>
+              <div class="flex flex-grow justify-end">Ca</div>
+            </div>
+
+            <div
+              tabindex="21"
+              id="element-21"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">21</div>
+              <div class="flex flex-grow justify-end">Sc</div>
+            </div>
+
+            <div
+              tabindex="22"
+              id="element-22"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">22</div>
+              <div class="flex flex-grow justify-end">Ti</div>
+            </div>
+
+            <div
+              tabindex="23"
+              id="element-23"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">23</div>
+              <div class="flex flex-grow justify-end">V</div>
+            </div>
+
+            <div
+              tabindex="24"
+              id="element-24"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">24</div>
+              <div class="flex flex-grow justify-end">Cr</div>
+            </div>
+
+            <div
+              tabindex="25"
+              id="element-25"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">25</div>
+              <div class="flex flex-grow justify-end">Mn</div>
+            </div>
+
+            <div
+              tabindex="26"
+              id="element-26"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">26</div>
+              <div class="flex flex-grow justify-end">Fe</div>
+            </div>
+
+            <div
+              tabindex="27"
+              id="element-27"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">27</div>
+              <div class="flex flex-grow justify-end">Co</div>
+            </div>
+
+            <div
+              tabindex="28"
+              id="element-28"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">28</div>
+              <div class="flex flex-grow justify-end">Ni</div>
+            </div>
+
+            <div
+              tabindex="29"
+              id="element-29"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">29</div>
+              <div class="flex flex-grow justify-end">Cu</div>
+            </div>
+
+            <div
+              tabindex="30"
+              id="element-30"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">30</div>
+              <div class="flex flex-grow justify-end">Zn</div>
+            </div>
+
+            <div
+              tabindex="31"
+              id="element-31"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #002c00;
+                background-color: #d8f9e9;
+                border-color: #002c00;
+              "
+            >
+              <div class="flex flex-grow justify-start">31</div>
+              <div class="flex flex-grow justify-end">Ga</div>
+            </div>
+
+            <div
+              tabindex="32"
+              id="element-32"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #945801;
+                background-color: #fef8e2;
+                border-color: #945801;
+              "
+            >
+              <div class="flex flex-grow justify-start">32</div>
+              <div class="flex flex-grow justify-end">Ge</div>
+            </div>
+
+            <div
+              tabindex="33"
+              id="element-33"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #945801;
+                background-color: #fef8e2;
+                border-color: #945801;
+              "
+            >
+              <div class="flex flex-grow justify-start">33</div>
+              <div class="flex flex-grow justify-end">As</div>
+            </div>
+
+            <div
+              tabindex="34"
+              id="element-34"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">34</div>
+              <div class="flex flex-grow justify-end">Se</div>
+            </div>
+
+            <div
+              tabindex="35"
+              id="element-35"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">35</div>
+              <div class="flex flex-grow justify-end">Br</div>
+            </div>
+
+            <div
+              tabindex="36"
+              id="element-36"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #cd1d5f;
+                background-color: #ffe6ea;
+                border-color: #cd1d5f;
+              "
+            >
+              <div class="flex flex-grow justify-start">36</div>
+              <div class="flex flex-grow justify-end">Kr</div>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <div
+              tabindex="37"
+              id="element-37"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #00768d;
+                background-color: #d7f8ff;
+                border-color: #00768d;
+              "
+            >
+              <div class="flex flex-grow justify-start">37</div>
+              <div class="flex flex-grow justify-end">Rb</div>
+            </div>
+
+            <div
+              tabindex="38"
+              id="element-38"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #d60024;
+                background-color: #ffe6e5;
+                border-color: #d60024;
+              "
+            >
+              <div class="flex flex-grow justify-start">38</div>
+              <div class="flex flex-grow justify-end">Sr</div>
+            </div>
+
+            <div
+              tabindex="39"
+              id="element-39"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">39</div>
+              <div class="flex flex-grow justify-end">Y</div>
+            </div>
+
+            <div
+              tabindex="40"
+              id="element-40"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">40</div>
+              <div class="flex flex-grow justify-end">Zr</div>
+            </div>
+
+            <div
+              tabindex="41"
+              id="element-41"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">41</div>
+              <div class="flex flex-grow justify-end">Nb</div>
+            </div>
+
+            <div
+              tabindex="42"
+              id="element-42"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">42</div>
+              <div class="flex flex-grow justify-end">Mo</div>
+            </div>
+
+            <div
+              tabindex="43"
+              id="element-43"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">43</div>
+              <div class="flex flex-grow justify-end">Tc</div>
+            </div>
+
+            <div
+              tabindex="44"
+              id="element-44"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">44</div>
+              <div class="flex flex-grow justify-end">Ru</div>
+            </div>
+
+            <div
+              tabindex="45"
+              id="element-45"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">45</div>
+              <div class="flex flex-grow justify-end">Rh</div>
+            </div>
+
+            <div
+              tabindex="46"
+              id="element-46"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">46</div>
+              <div class="flex flex-grow justify-end">Pd</div>
+            </div>
+
+            <div
+              tabindex="47"
+              id="element-47"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">47</div>
+              <div class="flex flex-grow justify-end">Ag</div>
+            </div>
+
+            <div
+              tabindex="48"
+              id="element-48"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">48</div>
+              <div class="flex flex-grow justify-end">Cd</div>
+            </div>
+
+            <div
+              tabindex="49"
+              id="element-49"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #002c00;
+                background-color: #d8f9e9;
+                border-color: #002c00;
+              "
+            >
+              <div class="flex flex-grow justify-start">49</div>
+              <div class="flex flex-grow justify-end">In</div>
+            </div>
+
+            <div
+              tabindex="50"
+              id="element-50"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #002c00;
+                background-color: #d8f9e9;
+                border-color: #002c00;
+              "
+            >
+              <div class="flex flex-grow justify-start">50</div>
+              <div class="flex flex-grow justify-end">Sn</div>
+            </div>
+
+            <div
+              tabindex="51"
+              id="element-51"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #945801;
+                background-color: #fef8e2;
+                border-color: #945801;
+              "
+            >
+              <div class="flex flex-grow justify-start">51</div>
+              <div class="flex flex-grow justify-end">Sb</div>
+            </div>
+
+            <div
+              tabindex="52"
+              id="element-52"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #945801;
+                background-color: #fef8e2;
+                border-color: #945801;
+              "
+            >
+              <div class="flex flex-grow justify-start">52</div>
+              <div class="flex flex-grow justify-end">Te</div>
+            </div>
+
+            <div
+              tabindex="53"
+              id="element-53"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #0060f1;
+                background-color: #e1edff;
+                border-color: #0060f1;
+              "
+            >
+              <div class="flex flex-grow justify-start">53</div>
+              <div class="flex flex-grow justify-end">I</div>
+            </div>
+
+            <div
+              tabindex="54"
+              id="element-54"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #cd1d5f;
+                background-color: #ffe6ea;
+                border-color: #cd1d5f;
+              "
+            >
+              <div class="flex flex-grow justify-start">54</div>
+              <div class="flex flex-grow justify-end">Xe</div>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <div
+              tabindex="55"
+              id="element-55"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #00768d;
+                background-color: #d7f8ff;
+                border-color: #00768d;
+              "
+            >
+              <div class="flex flex-grow justify-start">55</div>
+              <div class="flex flex-grow justify-end">Cs</div>
+            </div>
+
+            <div
+              tabindex="56"
+              id="element-56"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #d60024;
+                background-color: #ffe6e5;
+                border-color: #d60024;
+              "
+            >
+              <div class="flex flex-grow justify-start">56</div>
+              <div class="flex flex-grow justify-end">Ba</div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="72"
+              id="element-72"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">72</div>
+              <div class="flex flex-grow justify-end">Hf</div>
+            </div>
+
+            <div
+              tabindex="73"
+              id="element-73"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">73</div>
+              <div class="flex flex-grow justify-end">Ta</div>
+            </div>
+
+            <div
+              tabindex="74"
+              id="element-74"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">74</div>
+              <div class="flex flex-grow justify-end">W</div>
+            </div>
+
+            <div
+              tabindex="75"
+              id="element-75"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">75</div>
+              <div class="flex flex-grow justify-end">Re</div>
+            </div>
+
+            <div
+              tabindex="76"
+              id="element-76"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">76</div>
+              <div class="flex flex-grow justify-end">Os</div>
+            </div>
+
+            <div
+              tabindex="77"
+              id="element-77"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">77</div>
+              <div class="flex flex-grow justify-end">Ir</div>
+            </div>
+
+            <div
+              tabindex="78"
+              id="element-78"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">78</div>
+              <div class="flex flex-grow justify-end">Pt</div>
+            </div>
+
+            <div
+              tabindex="79"
+              id="element-79"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">79</div>
+              <div class="flex flex-grow justify-end">Au</div>
+            </div>
+
+            <div
+              tabindex="80"
+              id="element-80"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">80</div>
+              <div class="flex flex-grow justify-end">Hg</div>
+            </div>
+
+            <div
+              tabindex="81"
+              id="element-81"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #002c00;
+                background-color: #d8f9e9;
+                border-color: #002c00;
+              "
+            >
+              <div class="flex flex-grow justify-start">81</div>
+              <div class="flex flex-grow justify-end">Tl</div>
+            </div>
+
+            <div
+              tabindex="82"
+              id="element-82"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #002c00;
+                background-color: #d8f9e9;
+                border-color: #002c00;
+              "
+            >
+              <div class="flex flex-grow justify-start">82</div>
+              <div class="flex flex-grow justify-end">Pb</div>
+            </div>
+
+            <div
+              tabindex="83"
+              id="element-83"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #002c00;
+                background-color: #d8f9e9;
+                border-color: #002c00;
+              "
+            >
+              <div class="flex flex-grow justify-start">83</div>
+              <div class="flex flex-grow justify-end">Bi</div>
+            </div>
+
+            <div
+              tabindex="84"
+              id="element-84"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #002c00;
+                background-color: #d8f9e9;
+                border-color: #002c00;
+              "
+            >
+              <div class="flex flex-grow justify-start">84</div>
+              <div class="flex flex-grow justify-end">Po</div>
+            </div>
+
+            <div
+              tabindex="85"
+              id="element-85"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #002c00;
+                background-color: #d8f9e9;
+                border-color: #002c00;
+              "
+            >
+              <div class="flex flex-grow justify-start">85</div>
+              <div class="flex flex-grow justify-end">At</div>
+            </div>
+
+            <div
+              tabindex="86"
+              id="element-86"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #cd1d5f;
+                background-color: #ffe6ea;
+                border-color: #cd1d5f;
+              "
+            >
+              <div class="flex flex-grow justify-start">86</div>
+              <div class="flex flex-grow justify-end">Rn</div>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <div
+              tabindex="87"
+              id="element-87"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #00768d;
+                background-color: #d7f8ff;
+                border-color: #00768d;
+              "
+            >
+              <div class="flex flex-grow justify-start">87</div>
+              <div class="flex flex-grow justify-end">Fr</div>
+            </div>
+
+            <div
+              tabindex="88"
+              id="element-88"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #d60024;
+                background-color: #ffe6e5;
+                border-color: #d60024;
+              "
+            >
+              <div class="flex flex-grow justify-start">88</div>
+              <div class="flex flex-grow justify-end">Ra</div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="104"
+              id="element-104"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">104</div>
+              <div class="flex flex-grow justify-end">Rf</div>
+            </div>
+
+            <div
+              tabindex="105"
+              id="element-105"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">105</div>
+              <div class="flex flex-grow justify-end">Db</div>
+            </div>
+
+            <div
+              tabindex="106"
+              id="element-106"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">106</div>
+              <div class="flex flex-grow justify-end">Sg</div>
+            </div>
+
+            <div
+              tabindex="107"
+              id="element-107"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">107</div>
+              <div class="flex flex-grow justify-end">Bh</div>
+            </div>
+
+            <div
+              tabindex="108"
+              id="element-108"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #6232ec;
+                background-color: #f3e7fe;
+                border-color: #6232ec;
+              "
+            >
+              <div class="flex flex-grow justify-start">108</div>
+              <div class="flex flex-grow justify-end">Hs</div>
+            </div>
+
+            <div
+              tabindex="109"
+              id="element-109"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">109</div>
+              <div class="flex flex-grow justify-end">Mt</div>
+            </div>
+
+            <div
+              tabindex="110"
+              id="element-110"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">110</div>
+              <div class="flex flex-grow justify-end">Ds</div>
+            </div>
+
+            <div
+              tabindex="111"
+              id="element-111"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">111</div>
+              <div class="flex flex-grow justify-end">Rg</div>
+            </div>
+
+            <div
+              tabindex="112"
+              id="element-112"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">112</div>
+              <div class="flex flex-grow justify-end">Cn</div>
+            </div>
+
+            <div
+              tabindex="113"
+              id="element-113"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">113</div>
+              <div class="flex flex-grow justify-end">Nh</div>
+            </div>
+
+            <div
+              tabindex="114"
+              id="element-114"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">114</div>
+              <div class="flex flex-grow justify-end">Fl</div>
+            </div>
+
+            <div
+              tabindex="115"
+              id="element-115"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">115</div>
+              <div class="flex flex-grow justify-end">Mc</div>
+            </div>
+
+            <div
+              tabindex="116"
+              id="element-116"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">116</div>
+              <div class="flex flex-grow justify-end">Lv</div>
+            </div>
+
+            <div
+              tabindex="117"
+              id="element-117"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">117</div>
+              <div class="flex flex-grow justify-end">Ts</div>
+            </div>
+
+            <div
+              tabindex="118"
+              id="element-118"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #3f3750;
+                background-color: #e7e7ea;
+                border-color: #3f3750;
+              "
+            >
+              <div class="flex flex-grow justify-start">118</div>
+              <div class="flex flex-grow justify-end">Og</div>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="57"
+              id="element-57"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">57</div>
+              <div class="flex flex-grow justify-end">La</div>
+            </div>
+
+            <div
+              tabindex="58"
+              id="element-58"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">58</div>
+              <div class="flex flex-grow justify-end">Ce</div>
+            </div>
+
+            <div
+              tabindex="59"
+              id="element-59"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">59</div>
+              <div class="flex flex-grow justify-end">Pr</div>
+            </div>
+
+            <div
+              tabindex="60"
+              id="element-60"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">60</div>
+              <div class="flex flex-grow justify-end">Nd</div>
+            </div>
+
+            <div
+              tabindex="61"
+              id="element-61"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">61</div>
+              <div class="flex flex-grow justify-end">Pm</div>
+            </div>
+
+            <div
+              tabindex="62"
+              id="element-62"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">62</div>
+              <div class="flex flex-grow justify-end">Sm</div>
+            </div>
+
+            <div
+              tabindex="63"
+              id="element-63"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">63</div>
+              <div class="flex flex-grow justify-end">Eu</div>
+            </div>
+
+            <div
+              tabindex="64"
+              id="element-64"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">64</div>
+              <div class="flex flex-grow justify-end">Gd</div>
+            </div>
+
+            <div
+              tabindex="65"
+              id="element-65"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">65</div>
+              <div class="flex flex-grow justify-end">Tb</div>
+            </div>
+
+            <div
+              tabindex="66"
+              id="element-66"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">66</div>
+              <div class="flex flex-grow justify-end">Dy</div>
+            </div>
+
+            <div
+              tabindex="67"
+              id="element-67"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">67</div>
+              <div class="flex flex-grow justify-end">Ho</div>
+            </div>
+
+            <div
+              tabindex="68"
+              id="element-68"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">68</div>
+              <div class="flex flex-grow justify-end">Er</div>
+            </div>
+
+            <div
+              tabindex="69"
+              id="element-69"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">69</div>
+              <div class="flex flex-grow justify-end">Tm</div>
+            </div>
+
+            <div
+              tabindex="70"
+              id="element-70"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">70</div>
+              <div class="flex flex-grow justify-end">Yb</div>
+            </div>
+
+            <div
+              tabindex="71"
+              id="element-71"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #003356;
+                background-color: #e1f3ff;
+                border-color: #003356;
+              "
+            >
+              <div class="flex flex-grow justify-start">71</div>
+              <div class="flex flex-grow justify-end">Lu</div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+
+            <div
+              tabindex="89"
+              id="element-89"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">89</div>
+              <div class="flex flex-grow justify-end">Ac</div>
+            </div>
+
+            <div
+              tabindex="90"
+              id="element-90"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">90</div>
+              <div class="flex flex-grow justify-end">Th</div>
+            </div>
+
+            <div
+              tabindex="91"
+              id="element-91"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">91</div>
+              <div class="flex flex-grow justify-end">Pa</div>
+            </div>
+
+            <div
+              tabindex="92"
+              id="element-92"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">92</div>
+              <div class="flex flex-grow justify-end">U</div>
+            </div>
+
+            <div
+              tabindex="93"
+              id="element-93"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">93</div>
+              <div class="flex flex-grow justify-end">Np</div>
+            </div>
+
+            <div
+              tabindex="94"
+              id="element-94"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">94</div>
+              <div class="flex flex-grow justify-end">Pu</div>
+            </div>
+
+            <div
+              tabindex="95"
+              id="element-95"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">95</div>
+              <div class="flex flex-grow justify-end">Am</div>
+            </div>
+
+            <div
+              tabindex="96"
+              id="element-96"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">96</div>
+              <div class="flex flex-grow justify-end">Cm</div>
+            </div>
+
+            <div
+              tabindex="97"
+              id="element-97"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">97</div>
+              <div class="flex flex-grow justify-end">Bk</div>
+            </div>
+
+            <div
+              tabindex="98"
+              id="element-98"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">98</div>
+              <div class="flex flex-grow justify-end">Cf</div>
+            </div>
+
+            <div
+              tabindex="99"
+              id="element-99"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">99</div>
+              <div class="flex flex-grow justify-end">Es</div>
+            </div>
+
+            <div
+              tabindex="100"
+              id="element-100"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">100</div>
+              <div class="flex flex-grow justify-end">Fm</div>
+            </div>
+
+            <div
+              tabindex="101"
+              id="element-101"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">101</div>
+              <div class="flex flex-grow justify-end">Md</div>
+            </div>
+
+            <div
+              tabindex="102"
+              id="element-102"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">102</div>
+              <div class="flex flex-grow justify-end">No</div>
+            </div>
+
+            <div
+              tabindex="103"
+              id="element-103"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: #c73201;
+                background-color: #ffe7d7;
+                border-color: #c73201;
+              "
+            >
+              <div class="flex flex-grow justify-start">103</div>
+              <div class="flex flex-grow justify-end">Lr</div>
+            </div>
+
+            <div
+              tabindex="-1"
+              id="element-"
+              class="flex flex-col font-mono pl-1 pr-1 rounded-xl border focus:border-2"
+              style="
+                font-size: calc(0.27 * (19 / 24) * 100vw / 18);
+                width: calc(0.9 * (19 / 24) * 100vw / 18);
+                height: calc(0.8 * (19 / 24) * 100vw / 18);
+                margin: calc(0.1 * (19 / 24) * 100vw / 18);
+                color: undefined;
+                background-color: undefined;
+                border-color: rgba(0, 0, 0, 0);
+              "
+            >
+              <div class="flex flex-grow justify-start"></div>
+              <div class="flex flex-grow justify-end"></div>
+            </div>
+          </div>
+        </div>
+        <div id="details"></div>
+      </div>
+    </div>
+  </body>
 </html>
