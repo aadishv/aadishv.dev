@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Aadish Verma</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Aadish Verma</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>© Aadish Verma</copyright>
+    <lastBuildDate>Mon, 03 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I built a thing</title>
+      <link>http://localhost:1313/posts/i-built-a-thing/</link>
+      <pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/i-built-a-thing/</guid>
+      <description>&lt;p&gt;I recently made two new tools that improve my life, and hopefully a few other lives:&lt;/p&gt;&#xA;&lt;h2 id=&#34;aadishs-periodic-table&#34;&gt;Aadish&amp;rsquo;s Periodic Table&lt;/h2&gt;&#xA;&lt;p&gt;This is a very simple periodic table, similar to one to one I built using SwiftUI for Mac a few months ago, but this time with web technologies to make it more accessible.&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;periodic.png&#34; alt=&#34;Aadish&amp;rsquo;s Periodic Table&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;This was mainly designed for those in the OHS class OC005 (Principles of Chemistry), so it has things like (pretty!) colors to separate types of elements, electron configurations (both full and abbreviated), atomic masses, electronegativities, and fun facts.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Takeaways from Advent of Code 2024</title>
+      <link>http://localhost:1313/posts/aoc-24/</link>
+      <pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/aoc-24/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;[please ignore how late this is]&lt;/p&gt;&#xA;&lt;p&gt;This (last? 2024&amp;rsquo;s) winter, I completed the Advent of Code (AoC) 2024 puzzles every night from December 1 through December 25. It was a bit easier for me than for the poor chaps on the East Coast as the puzzles were released at 9:00 pm PT (midnight Eastern time) and I could often have them solved and go to sleep by 10:00 pm. Anyways, here are a few scattered thoughts on what I learned and gained.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Christmas Cards</title>
+      <link>http://localhost:1313/posts/christmas-cards/</link>
+      <pubDate>Fri, 31 Jan 2025 10:56:02 -0800</pubDate>
+      <guid>http://localhost:1313/posts/christmas-cards/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;Over the recent holiday season, I decided that gifts were not in vogue anymore, and that virtual gifts would be cheaper, easier to make, and less useful!&lt;/p&gt;&#xA;&lt;p&gt;[spoiler: they were a nightmare. do not try this at home.]&lt;/p&gt;&#xA;&lt;h2 id=&#34;overall&#34;&gt;Overall&lt;/h2&gt;&#xA;&lt;p&gt;This is what the overall project ended up looking lie&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── assets&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│     └── [...]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── card.html&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;├── script.js&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└── style.css&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The final website also had an &lt;code&gt;index.html&lt;/code&gt; file, but that was just a mirror of &lt;code&gt;card.html&lt;/code&gt; to make the QR code stuff easier.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
