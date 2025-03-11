@@ -3,11 +3,11 @@ const textColors = {
   'Alkaline Earth Metal': '#D60024',
   'Transition Metal': '#6232EC',
   'Post-transition Metal': '#002C00',
-  Metalloid: '#945801',
+  'Metalloid': '#945801',
   'Reactive Nonmetal': '#0060F1',
   'Noble Gas': '#CD1D5F',
-  Lanthanide: '#003356',
-  Actinide: '#C73201',
+  'Lanthanide': '#003356',
+  'Actinide': '#C73201',
   'Unknown Chemical Properties': '#3F3750',
 };
 
@@ -29,9 +29,18 @@ const setDetailsView = (n, pdata) => {
   document.getElementById(`element-${n}`).focus();
   const generateDetail = (name, value) => {
     return `
-    <span class="inline-flex items-center p-1">
+    <span class="inline-flex items-center p-1 group">
       <span class="border font-bold rounded-md px-2 py-1 text-sm font-sans" style="border-color: ${textColors[element.type]}">${name}</span>
-      <span class="border rounded-md px-2 py-1 text-sm ml-1" style="border-color: rgba(0,0,0,0)">${value}</span>
+      <span class="border rounded-md px-2 py-1 text-sm ml-1 relative flex items-center" style="border-color: rgba(0,0,0,0)">
+        ${value}
+        <sl-icon-button 
+          name="copy" 
+          label="Copy value"
+          class="opacity-0 group-hover:opacity-100 transition-opacity ml-1 !w-4 !h-4 !p-0 flex items-center"
+          data-copy-value="${value}"
+          style="color: ${textColors[element.type]}; --sl-input-height-small: 1rem;"
+        ></sl-icon-button>
+      </span>
     </span>
     `;
   };
@@ -63,6 +72,31 @@ const setDetailsView = (n, pdata) => {
     </div>
   `;
   document.getElementById('details').outerHTML = html;
+
+  // Add copy functionality to the new buttons
+  document.querySelectorAll('[data-copy-value]').forEach(button => {
+    button.addEventListener('click', async () => {
+      const value = button.getAttribute('data-copy-value');
+      await navigator.clipboard.writeText(value);
+      
+      // Change to check icon temporarily
+      const originalIcon = button.getAttribute('name');
+      button.setAttribute('name', 'check2');
+      
+      // Reset after 500ms
+      setTimeout(() => {
+        button.setAttribute('name', originalIcon);
+      }, 500);
+    });
+  });
+};
+
+const updateTable = async () => {
+  const response = await fetch(
+    'https://gist.githubusercontent.com/aadishv/c6cb2d008f2573a1c259726bba7bbfad/raw/a52ca4ae9ed817b38db267f36ac7c4511ea69092/created.html'
+  );
+  document.getElementsByClassName('elements')[0].outerHTML = await response.text();
+  console.log(document.getElementsByClassName('elements')[0].outerHTML);
 };
 
 const fetchPeriodicData = async () => {
@@ -80,6 +114,107 @@ const attachListeners = (pdata, fuse) => {
       e.preventDefault(); // Prevent default browser behavior
       document.getElementById('search').focus();
     }
+  });
+
+  // Formula Mass Calculator
+  const calculatorBtn = document.getElementById('calculator-btn');
+  const calculatorModal = document.getElementById('calculator-modal');
+  const formulaInput = document.getElementById('formula-input');
+  const resultDiv = document.getElementById('formula-result');
+  const randomBtn = document.getElementById('random-btn');
+
+  calculatorBtn.addEventListener('click', () => calculatorModal.show());
+  
+  // Random element selection
+  const selectRandomElement = () => {
+    const randomElementNumber = 1 + Math.floor(Math.random() * pdata.length);
+    document.getElementById(`element-${randomElementNumber}`).focus();
+  };
+
+  randomBtn.addEventListener('click', selectRandomElement);
+
+  const parseFormula = (formula) => {
+    const regex = /([A-Z][a-z]?)(\d*)/g;
+    const elements = {};
+    let match;
+
+    while ((match = regex.exec(formula)) !== null) {
+      const [, element, count] = match;
+      elements[element] = (elements[element] || 0) + (count ? parseInt(count) : 1);
+    }
+
+    return elements;
+  };
+
+  const calculateMass = (formula) => {
+    const elements = parseFormula(formula);
+    let totalMass = 0;
+
+    for (const [element, count] of Object.entries(elements)) {
+      const elementData = pdata.find(e => e.symbol === element);
+      if (!elementData) {
+        throw new Error(`Unknown element: ${element}`);
+      }
+      totalMass += elementData.atomic_mass * count;
+    }
+
+    return totalMass;
+  };
+
+  const updateResult = () => {
+    const formula = formulaInput.value.trim();
+    if (!formula) {
+      resultDiv.innerHTML = '';
+      return;
+    }
+
+    try {
+      const mass = calculateMass(formula);
+      const massText = `${mass.toFixed(2)} g/mol`;
+      resultDiv.innerHTML = `
+        <sl-alert variant="success" open class="relative group">
+          <div class="flex items-center">
+            Molar mass of ${formula}: ${massText}
+            <sl-icon-button 
+              name="copy" 
+              label="Copy value"
+              class="opacity-0 group-hover:opacity-100 transition-opacity ml-1 !w-4 !h-4 !p-0 flex items-center"
+              data-copy-value="${massText}"
+              style="--sl-input-height-small: 1rem;"
+            ></sl-icon-button>
+          </div>
+        </sl-alert>
+      `;
+
+      // Add copy functionality to the new button
+      const copyBtn = resultDiv.querySelector('[data-copy-value]');
+      copyBtn.addEventListener('click', async () => {
+        const value = copyBtn.getAttribute('data-copy-value');
+        await navigator.clipboard.writeText(value);
+        
+        // Change to check icon temporarily
+        copyBtn.setAttribute('name', 'check2');
+        
+        // Reset after 500ms
+        setTimeout(() => {
+          copyBtn.setAttribute('name', 'copy');
+        }, 500);
+      });
+    } catch (error) {
+      resultDiv.innerHTML = `
+        <sl-alert variant="danger" open>
+          ${error.message}
+        </sl-alert>
+      `;
+    }
+  };
+
+  formulaInput.addEventListener('sl-input', updateResult);
+
+  // Clear the input when modal is opened
+  calculatorModal.addEventListener('sl-show', () => {
+    formulaInput.value = '';
+    resultDiv.innerHTML = '';
   });
 
   document.getElementById('search').addEventListener('sl-change', (e) => {
@@ -110,6 +245,7 @@ const attachListeners = (pdata, fuse) => {
 };
 
 const main = async () => {
+  await updateTable();
   const pdata = await fetchPeriodicData();
   console.log(pdata[7]);
 
