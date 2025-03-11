@@ -245,6 +245,34 @@ const attachListeners = (pdata, fuse) => {
 };
 
 const main = async () => {
+  // Check if it's during OC005 midterms
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth(); // 0-based
+  const date = now.getDate();
+  
+  if (year === 2025 && month === 2 && (date === 12 || date === 13)) { // March is month 2
+    window.addEventListener('load', () => {
+
+    console.log(document.getElementById('container'));
+    document.getElementById('container').innerHTML = `
+      <div class="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
+        <div class="max-w-md text-center">
+          <h1 class="text-2xl font-bold mb-4 text-gray-800">Periodic Table Unavailable</h1>
+          <sl-alert variant="primary" open>
+            <sl-icon slot="icon" name="info-circle"></sl-icon>
+            This tool is temporarily disabled on March 12-13, 2025 to maintain academic integrity during the OC005 midterm examinations.
+          </sl-alert>
+          <p class="mt-4 text-gray-600">
+            The periodic table will be available again on March 14, 2025.
+          </p>
+        </div>
+      </div>
+    `;
+    });
+    return;
+  }
+
   await updateTable();
   const pdata = await fetchPeriodicData();
   console.log(pdata[7]);
