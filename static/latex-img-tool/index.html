@@ -1,77 +1,168 @@
 <!doctype html>
 <html>
-  <head>
-    <title>LaTeX to Image</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  </head>
-  <body>
-    <div class="flex flex-col items-center">
-      <h1 class="text-3xl font-bold p-3">LaTeX to Image</h1>
-      <input
-        id="inp"
-        type="text"
-        placeholder="Type LaTeX here"
-        class="w-200 m-10 p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      />
-      <a id="output" class="m-1 font-semibold py-2 px-4" href="">
-        Image URL goes here
-      </a>
-      <div class="p-3 flex flex-row">
-        <button
-          id="b1"
-          class="m-1 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
-        >
-          Copy image URL
-        </button>
-        <button
-          id="b2"
-          class="m-1 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
-        >
-          Copy image Markdown
-        </button>
-      </div>
-      <img id="image" class="h-20 m-4 p-4" />
-    </div>
+    <head>
+        <title>LaTeX to Image</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Add KaTeX CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+        />
+        <!-- Add KaTeX JS -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+        ></script>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/themes/light.css"
+        />
+        <script
+            type="module"
+            src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/shoelace-autoloader.js"
+        ></script>
+        <style>
+            .container {
+                width: 90vw;
+                padding: 5vw;
+                position: fixed;
+            }
+            sl-input,
+            sl-button {
+                margin: 0.5rem;
+            }
+            #preview {
+                min-height: 5rem;
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
+            /* Ensure KaTeX elements don't shrink */
+            #preview .katex-display {
+                display: flex !important;
+                margin: 0;
+                padding: 0 1rem;
+            }
+            #preview .katex {
+                white-space: nowrap;
+            }
+        </style>
+    </head>
+    <!-- Rest of the HTML remains the same -->
+    <body>
+        <div class="container">
+            <sl-card>
+                <h1 slot="header" style="margin: 0; font-family: sans-serif">
+                    LaTeX to Image
+                </h1>
 
-    <script>
-      var value = '\\text{Your equation here}';
-      console.log(value);
-      const url = `https://latex.codecogs.com/svg.image?${encodeURI(value)}`;
-      const output = document.getElementById('output');
-      output.href = url;
-      output.innerHTML = url;
-      const img = document.getElementById('image');
-      img.src = url;
+                <div
+                    style="
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    "
+                >
+                    <sl-input
+                        id="inp"
+                        placeholder="Type LaTeX here"
+                        size="large"
+                        style="width: 100%"
+                    ></sl-input>
 
-      const inputElement = document.getElementById('inp');
-      inputElement.addEventListener('input', (e) => {
-        var value = event.target.value;
-        console.log(value.trim().length === 0);
-        if (value.trim().length === 0) {
-          value = '\\text{Your equation here}';
-        }
-        console.log(value);
-        const url = `https://latex.codecogs.com/svg.image?${encodeURI(value)}`;
-        const output = document.getElementById('output');
-        output.href = url;
-        output.innerHTML = url;
-        const img = document.getElementById('image');
-        img.src = url;
-      });
-      const b1 = document.getElementById('b1');
-      const b2 = document.getElementById('b2');
-      b1.addEventListener('click', (e) => {
-        navigator.clipboard.writeText(document.getElementById('output').href);
-      });
-      b2.addEventListener('click', (e) => {
-        navigator.clipboard.writeText(
-          `![LaTeX image](${document.getElementById('output').href})`
-        );
-      });
-    </script>
-  </body>
+                    <sl-alert variant="primary" open>
+                        <sl-icon slot="icon" name="link"></sl-icon>
+                        <a id="output" href="" style="word-break: break-all">
+                            Image URL goes here
+                        </a>
+                    </sl-alert>
+
+                    <div style="display: flex; gap: 0.5rem">
+                        <sl-button id="b1" variant="primary">
+                            <sl-icon slot="prefix" name="clipboard"></sl-icon>
+                            Copy image URL
+                        </sl-button>
+                        <sl-button id="b2" variant="primary">
+                            <sl-icon slot="prefix" name="markdown"></sl-icon>
+                            Copy image Markdown
+                        </sl-button>
+                    </div>
+
+                    <sl-card style="width: 100%; max-width: 90vw">
+                        <div style="overflow: auto">
+                            <div id="preview" style="overflow: auto"></div>
+                        </div>
+                    </sl-card>
+                </div>
+            </sl-card>
+        </div>
+
+        <script>
+            function renderLatex(latex) {
+                const preview = document.getElementById("preview");
+                try {
+                    katex.render(latex, preview, {
+                        displayMode: true,
+                        throwOnError: false,
+                    });
+                } catch (e) {
+                    preview.textContent = e.message;
+                }
+            }
+
+            function updateContent(value) {
+                if (value.trim().length === 0) {
+                    value = "\\text{Your equation here}";
+                }
+                const url = `https://latex.codecogs.com/svg.image?${encodeURI(value)}`;
+                const output = document.getElementById("output");
+                output.href = url;
+                output.innerHTML = url;
+                renderLatex(value);
+            }
+
+            // Initial render
+            updateContent("\\text{Your equation here}");
+
+            const inputElement = document.getElementById("inp");
+            inputElement.addEventListener("sl-input", (e) => {
+                updateContent(e.target.value);
+            });
+
+            const b1 = document.getElementById("b1");
+            const b2 = document.getElementById("b2");
+
+            const showToast = (message) => {
+                const toast = Object.assign(
+                    document.createElement("sl-alert"),
+                    {
+                        variant: "success",
+                        duration: 2000,
+                        closable: true,
+                        innerHTML: `
+                            <sl-icon slot="icon" name="check2-circle"></sl-icon>
+                            ${message}
+                        `,
+                    },
+                );
+                document.body.append(toast);
+                toast.toast();
+            };
+
+            b1.addEventListener("click", (e) => {
+                navigator.clipboard.writeText(
+                    document.getElementById("output").href,
+                );
+                showToast("Image URL copied to clipboard!");
+            });
+
+            b2.addEventListener("click", (e) => {
+                navigator.clipboard.writeText(
+                    `![LaTeX image](${document.getElementById("output").href})`,
+                );
+                showToast("Markdown copied to clipboard!");
+            });
+        </script>
+    </body>
 </html>

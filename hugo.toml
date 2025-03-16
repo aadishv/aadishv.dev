@@ -11,13 +11,10 @@ pygmentscodefencesguesssyntax = true
 [params]
 subtitle = """
 **I built a thing:**
-[LaTeX to Markdown tool](/latex-img-tool)・
-[OC005 periodic table](/periodic)
+[LaTeX to Markdown tool](/latex-img-tool)・[OC005 periodic table](/periodic)
 
 **Chem stuff**:
-[aufbau](/chemutils/aufbau.jpg)・
-[bonding shapes](/chemutils/bonding.avif)・
-[solubility](/chemutils/solubility.webp)
+[aufbau](/chemutils/aufbau.jpg)・[bonding shapes](/chemutils/bonding.avif)・[solubility](/chemutils/solubility.webp)
 
 Student at Stanford Online High School, passionate about really anything [but especially STEM]. A few notable things I've done:
 
@@ -25,7 +22,7 @@ Won the OHS 2024 Labor Day Hackathon. I might write a blog post about it later :
 
 [Advent of Code](https://adventofcode.com/2024) 2024 participant. [[code](https://github.com/aadishv/aoc)]
 
-Lead coder for VEX V5 Robotics Competition team [315P](https://www.robotevents.com/teams/V5RC/315P) for Over Under and part of the High Stakes seasons. [My code is unfortunately private, I will try to make a public mirror available soon.]
+Lead coder for VEX V5 Robotics Competition team [315P](https://www.robotevents.com/teams/V5RC/315P) for Over Under and part of the High Stakes seasons. My code is unfortunately private, but I have made a [public mirror](https://github.com/aadishv/highstakes) of my High Stakes code available.
 """
 mode = "auto" # color-mode → light,dark,toggle or auto
 useCDN = false # don't use CDNs for fonts and icons, instead serve them locally.
