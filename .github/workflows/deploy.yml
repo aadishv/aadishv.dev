@@ -20,7 +20,7 @@ jobs:
         uses: withastro/action@v3
         with:
           # Specify PNPM as the package manager
-          package-manager: pnpm@latest # Add this line
+          package-manager: pnpm@10.6.4 # Add this line
 
   deploy:
     needs: build
