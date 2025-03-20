@@ -1,0 +1,28 @@
+main > h1,
+main > h2,
+main > h3 {
+  @apply mb-4 font-lora font-bold;
+}
+main > h1 {
+  @apply text-2xl;
+}
+main > h2 {
+  @apply text-xl;
+}
+main > h3 {
+  @apply text-lg;
+}
+main,
+main > * > a {
+  @apply font-mono;
+  font-size: 1rem;
+}
+a {
+  @apply decoration-header2 !important;
+}
+a:hover {
+  @apply decoration-header !important;
+}
+img {
+  @apply p-5;
+}

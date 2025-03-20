@@ -1,0 +1,44 @@
+---
+import "../../style/global.css";
+import "../../style/blog.css";
+import Header from "../../components/Header.astro";
+import BlogPostHeader from "../../components/BlogPostHeader.astro";
+import { getSlugFromPath } from "../../utils/get-slug-from-path";
+
+export async function getStaticPaths({ paginate, rss }) {
+  const allPosts = await Astro.glob("../../content/posts/*.md");
+
+  const paths = allPosts.map((post) => {
+    const slug = getSlugFromPath(post.file);
+    return {
+      params: {
+        slug,
+      },
+      props: { post },
+    };
+  });
+
+  return paths;
+}
+
+const { post } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{post.frontmatter.title}</title>
+  </head>
+  <body>
+    <Header />
+    <article class="prose prose-lg max-w-none p-10 pt-20 lg:prose-xl">
+      <main>
+        <BlogPostHeader post={post.frontmatter} />
+        <post.Content />
+      </main>
+    </article>
+  </body>
+</html>
+
+<style></style>
