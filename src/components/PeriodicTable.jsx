@@ -217,6 +217,80 @@ const RandomButton = ({ handleClick }) => {
   );
 };
 
+const ReferenceButton = ({ handleClick }) => {
+  return (
+    <div className="mr-4 flex items-end">
+      <button
+        className="m-0 h-8 justify-center truncate border-b-2 border-header2 p-0 font-lora text-xl hover:border-header"
+        onClick={handleClick}
+      >
+        References
+      </button>
+    </div>
+  );
+};
+const ReferenceModal = ({ showModal, setShowModal }) => {
+  const [activeTab, setActiveTab] = useState(0);
+  const tabs = [
+    {
+      name: "Aufbau Principle",
+      imageSrc: "/chemutils/aufbau.jpg",
+      alt: "Aufbau Principle",
+    },
+    {
+      name: "Bonding",
+      imageSrc: "/chemutils/bonding.avif",
+      alt: "Chemical Bonding",
+    },
+    {
+      name: "Solubility",
+      imageSrc: "/chemutils/solubility.webp",
+      alt: "Solubility Rules",
+    },
+  ];
+
+  return (
+    <Modal
+      isOpen={showModal}
+      onRequestClose={() => setShowModal(false)}
+      shouldCloseOnOverlayClick={true}
+      shouldCloseOnEsc={true}
+      className="modal"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4"
+      ariaHideApp={false}
+    >
+      <div className="rounded-lg bg-white">
+        <div
+          className="bg-stripes-header2 rounded-lg p-6"
+          style={{ width: "80vw", height: "80vh", maxWidth: "1200px" }}
+        >
+          <div className="mb-4 flex font-mono">
+            {tabs.map((tab, index) => (
+              <button
+                key={tab.name}
+                className={`mr-4 h-8 border-b-2 px-2 text-xl ${
+                  activeTab === index
+                    ? "border-header text-header"
+                    : "border-header2 hover:border-header"
+                }`}
+                onClick={() => setActiveTab(index)}
+              >
+                {tab.name}
+              </button>
+            ))}
+          </div>
+          <div className="h-[calc(80vh-140px)] overflow-auto">
+            <img
+              src={tabs[activeTab].imageSrc}
+              alt={tabs[activeTab].alt}
+              className="max-h-full max-w-full object-contain"
+            />
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+};
 const ModalButton = ({ handleClick }) => {
   return (
     <div className="flex items-end">
@@ -321,6 +395,7 @@ export default function PeriodicTableApp() {
     1 + Math.floor(Math.random() * PERIODIC_DATA.length);
   const [focusElement, setFocusElement] = useState(randomElementIndex);
   const [showModal, setShowModal] = useState(false);
+  const [showRefModal, setShowRefModal] = useState(false);
   const searchRef = useRef(null);
 
   useEffect(() => {
@@ -375,6 +450,7 @@ export default function PeriodicTableApp() {
         <SearchBar searchRef={searchRef} onSearch={handleSearch} />
         <div className="flex-grow" />
         <RandomButton handleClick={handleRandomClick} />
+        <ReferenceButton handleClick={() => setShowRefModal(true)} />
         <ModalButton handleClick={handleModalClick} />
       </div>
 
@@ -389,6 +465,8 @@ export default function PeriodicTableApp() {
       >
         <MassCalculator setShowModal={setShowModal} />
       </Modal>
+
+      <ReferenceModal showModal={showRefModal} setShowModal={setShowRefModal} />
 
       <TableContent
         focusElement={focusElement}
