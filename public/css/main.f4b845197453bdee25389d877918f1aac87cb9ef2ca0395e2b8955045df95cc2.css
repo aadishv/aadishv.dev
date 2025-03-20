@@ -1,0 +1,198 @@
+/* THIS FILE MODIFIED FROM OG THEME BY AADISHV */
+/* Markdown */
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap");
+:root {
+    --maincolor: red;
+    --bordercl: rebeccapurple;
+    --callouctcolor: dodgerblue;
+    --hovercolor: navy;
+    --darkMaincolor: #50fa7b;
+}
+h1,
+.main {
+    font-family: "Lora", serif;
+    font-weight: 200;
+    color: #0851d0;
+    font-size: 2rem;
+    margin: 0 !important;
+}
+h2 {
+    font-family: "Lora", serif;
+    font-weight: 200;
+    font-size: 1.6rem;
+}
+h3 {
+    font-family: "Lora", serif;
+    font-weight: 200;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+section > h1 > a {
+    font-size: 1.5rem;
+}
+.main {
+    font-size: 1.4rem;
+    text-align: center;
+}
+p,
+ul {
+    font-family: "Fira Code", monospace;
+}
+section.list-item {
+    padding: 0.5rem;
+    margin: 1rem;
+    border: black 2px solid;
+    border-radius: 0.5rem;
+}
+section.list-item:hover {
+    border: #0851d0 3px solid;
+}
+body {
+    display: block;
+    margin: 8px;
+}
+a {
+    color: #0851d0 !important;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+nav {
+    font-size: 1.2rem;
+    display: none;
+}
+nav > a,
+.main {
+    text-decoration: underline !important;
+}
+nav > a {
+    padding-right: 0.5rem;
+    font-family: "Fira Code", monospace;
+}
+div.site-description {
+    padding: 0.5rem;
+    margin: 1rem;
+    border: #0851d0 3px solid;
+    border-radius: 0.5rem;
+}
+div.site-description > div > p {
+    font-family: "Helvetica Neue", sans-serif !important;
+}
+
+::selection {
+    background: #0851d0;
+    color: #fff;
+}
+
+img {
+    max-width: 100vw;
+}
+div.meta,
+time {
+    font-family: "Lora", serif;
+    color: grey;
+}
+.description {
+    font-family: "Lora", serif;
+    font-style: italic;
+}
+.draft-label {
+    font-family: "Fira Code", monospace;
+    color: var(--bordercl);
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin-left: 6px;
+    background-color: #f9f2f4;
+}
+
+/*
+
+*/
+footer {
+    display: flex;
+    align-items: center;
+    border-top: 0.4rem dotted var(--bordercl);
+    padding: 2rem 0rem;
+    margin-top: 2rem;
+}
+.border {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    border: 1px solid;
+}
+svg {
+    max-height: 15px;
+}
+
+/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+dsfgdg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+/* Containers */
+.post-container {
+    align-items: flex-start;
+    display: flex;
+    gap: 20px;
+}
+
+.post-content {
+    flex: 3;
+    min-width: 0;
+}
+
+.toc {
+    background-color: #ececec;
+    border-radius: 5px;
+    color: #232333;
+    flex: 0 0 auto;
+    height: auto;
+    margin-left: 20px;
+    max-width: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    position: sticky;
+    top: 20px;
+}
+
+/* Footer */
+footer {
+    display: flex;
+    align-items: center;
+    border-top: 0.4rem dotted var(--bordercl);
+    padding: 2rem 0rem;
+    margin-top: 2rem;
+}

@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Aadish's Periodic Table</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css"
+    />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"
+    ></script>
+    <style>
+      sl-dialog::part(panel) {
+        border-radius: 1rem;
+      }
+      sl-dialog::part(overlay) {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+    </style>
+  </head>
+  <script src="script.js"></script>
+  <body>
+    <div class="flex flex-col" id="container">
+      <div class="flex flex-row items-center gap-2 m-3">
+        <sl-input
+          id="search"
+          class="flex-grow"
+          label="Search for elements (⌘/⌃ + F or K)"
+          help-text="Tip: typing in the element's number also works!"
+          pill
+        ></sl-input>
+        <sl-button id="calculator-btn" class="h-[40px] self-start mt-6" pill>
+          <sl-icon slot="prefix" name="calculator"></sl-icon>
+          Formula mass calculator
+        </sl-button>
+        <sl-button id="random-btn" class="h-[40px] self-start mt-6" pill>
+          <sl-icon slot="prefix" name="dice-5"></sl-icon>
+          Random
+        </sl-button>
+      </div>
+      <div class="flex flex-row">
+        <!-- The following periodic table HTML pregenerated -->
+        <div class="elements flex flex-col w-19/24">
+        </div>
+        <div id="details"></div>
+      </div>
+    </div>
+
+    <!-- Formula Mass Calculator Modal -->
+    <sl-dialog id="calculator-modal" label="Formula Mass Calculator" class="dialog-overview">
+      <div class="flex flex-col gap-4">
+        <sl-input
+          id="formula-input"
+          label="Chemical Formula"
+          help-text="Enter a chemical formula (e.g., H2O, NaCl, C6H12O6)"
+          placeholder="Enter formula..."
+          pill
+          autofocus
+        ></sl-input>
+        <div id="formula-result" class="text-lg"></div>
+      </div>
+    </sl-dialog>
+  </body>
+</html>
