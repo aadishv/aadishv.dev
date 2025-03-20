@@ -1,21 +1,14 @@
 ---
 import Header from "../components/Header.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 // import global.css
 import "../style/global.css";
 import PeriodicTable from "../components/PeriodicTable.jsx";
 const siteTitle = "Aadish's periodic table";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{siteTitle}</title>
-  </head>
-  <body>
-    <Header />
-    <div class="pt-16">
-      <PeriodicTable client:only />
-    </div>
-  </body>
-</html>
+<BaseLayout title={siteTitle}>
+  <div class="pt-16">
+    <PeriodicTable client:only />
+  </div>
+</BaseLayout>

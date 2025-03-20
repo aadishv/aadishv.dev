@@ -2,6 +2,7 @@
 import "../style/global.css";
 import BlogPostPreview from "../components/BlogPostPreview.astro";
 import Header from "../components/Header.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import { ViewTransitions } from "astro:transitions";
 
 const siteTitle = "Aadish's Blog";
@@ -16,24 +17,16 @@ const sortedPosts = allPosts
   .filter((p) => p.frontmatter.hidden !== true);
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{siteTitle}</title>
-  </head>
-  <body>
-    <Header />
-    <main class="p-20">
-      <div class="pb-8">
-        <h2 class="font-lora text-xl font-bold text-header">From the blog</h2>
-        <a href="/" class="font-mono text-lg">
-          {"<- back to home"}
-        </a>
-      </div>
-      <div class="pl-5 pr-5">
-        {sortedPosts.map((p) => <BlogPostPreview post={p} />)}
-      </div>
-    </main>
-  </body>
-</html>
+<BaseLayout title={siteTitle}>
+  <main class="p-20">
+    <div class="pb-8">
+      <h2 class="font-lora text-xl font-bold text-header">From the blog</h2>
+      <a href="/" class="font-mono text-lg">
+        {"<- back to home"}
+      </a>
+    </div>
+    <div class="pl-5 pr-5">
+      {sortedPosts.map((p) => <BlogPostPreview post={p} />)}
+    </div>
+  </main></BaseLayout
+>

@@ -2,21 +2,13 @@
 import Header from "../components/Header.astro";
 // import global.css
 import "../style/global.css";
-import PeriodicTable from "../components/PeriodicTable.jsx";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import LatexToImageApp from "../components/LatexToImg";
 const siteTitle = "LaTeX to img tool";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{siteTitle}</title>
-  </head>
-  <body>
-    <Header />
-    <div class="pt-16">
-      <LatexToImageApp client:only />
-    </div>
-  </body>
-</html>
+<BaseLayout title="LaTeX to img" description="">
+  <div class="pt-16">
+    <LatexToImageApp client:only />
+  </div>
+</BaseLayout>
