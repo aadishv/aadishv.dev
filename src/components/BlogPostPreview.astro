@@ -14,22 +14,11 @@ const date = parseISO(post.frontmatter.date);
 const formattedDate = format(date, "LLLL d, yyyy");
 ---
 
-<div class="bg-stripes mb-4 flex flex-col border-2 border-header2 p-2">
+<div class="bg-stripes-header2 mb-4 flex flex-col border-2 border-header2 p-2">
   <h1>
     <a href={url} class="font-mono text-xl text-black hover:text-header">
       {post.frontmatter.title}
     </a>
   </h1>
   <div class="ml-auto font-lora text-header">{formattedDate}</div>
-  <style>
-    .bg-stripes {
-      background: repeating-linear-gradient(
-        45deg,
-        rgba(130, 169, 229, 0.25) 0px,
-        rgba(130, 169, 229, 0.25) 1.5px,
-        rgba(255, 255, 255, 0.25) 1.5px,
-        rgba(255, 255, 255, 0.25) 5px
-      );
-    }
-  </style>
 </div>

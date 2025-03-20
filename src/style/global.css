@@ -16,12 +16,20 @@
   font-style: normal;
   font-display: swap;
 }
+.bg-stripes-header2 {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(130, 169, 229, 0.25) 0px,
+    rgba(130, 169, 229, 0.25) 1.5px,
+    rgba(255, 255, 255, 0.25) 1.5px,
+    rgba(255, 255, 255, 0.25) 5px
+  );
+}
 .font-mono {
   font-family: "Zed Sans", monospace !important;
 }
 a {
-  @apply font-lora text-header underline decoration-header2;
-  @apply hover:decoration-header;
+  @apply font-lora text-header underline decoration-header2 hover:decoration-header;
 }
 li::before {
   content: "•";

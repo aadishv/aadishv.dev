@@ -1,6 +1,9 @@
 import { defineConfig } from "astro/config";
 
+import react from "@astrojs/react";
+
 export default defineConfig({
   site: "https://aadishv.github.io",
-  base: "aadishv-astro",
+  base: "/",
+  integrations: [react()],
 });
