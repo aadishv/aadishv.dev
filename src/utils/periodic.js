@@ -57,6 +57,8 @@ const PERIODIC_DATA = [
         "User:Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/hydrogen.php",
     },
     block: "s",
+    oxistates: [1, -1],
+    oxistates_extended: [],
   },
   {
     type_localized: "Noble Gas",
@@ -117,6 +119,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/helium.php",
     },
     block: "s",
+    oxistates: [],
+    oxistates_extended: [],
   },
   {
     type_localized: "Alkali Metal",
@@ -176,6 +180,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/lithium.php",
     },
     block: "s",
+    oxistates: [1],
+    oxistates_extended: [],
   },
   {
     type_localized: "Alkaline Earth Metal",
@@ -233,6 +239,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/beryllium.php",
     },
     block: "s",
+    oxistates: [2],
+    oxistates_extended: [0, 1],
   },
   {
     type_localized: "Metalloid",
@@ -293,6 +301,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/boron.php",
     },
     block: "p",
+    oxistates: [3],
+    oxistates_extended: [-5, 2, 0, -1, 1],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -351,6 +361,8 @@ const PERIODIC_DATA = [
         "Texas Lane, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons",
     },
     block: "p",
+    oxistates: [4, -4],
+    oxistates_extended: [-1, -2, 0, 1, 2, 3, -3],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -410,6 +422,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/nitrogen.php",
     },
     block: "p",
+    oxistates: [-3, 5, 3],
+    oxistates_extended: [2, -1, -2, 0, 1, 4],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -469,6 +483,8 @@ const PERIODIC_DATA = [
         "Staff Sgt. Nika Glover, U.S. Air Force, Public domain, via Wikimedia Commons",
     },
     block: "p",
+    oxistates: [-2],
+    oxistates_extended: [1, -1, 2, 0],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -529,6 +545,8 @@ const PERIODIC_DATA = [
         "Fulvio314, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons",
     },
     block: "p",
+    oxistates: [-1],
+    oxistates_extended: [],
   },
   {
     type_localized: "Noble Gas",
@@ -591,6 +609,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/neon.php",
     },
     block: "p",
+    oxistates: [],
+    oxistates_extended: [],
   },
   {
     type_localized: "Alkali Metal",
@@ -652,6 +672,8 @@ const PERIODIC_DATA = [
         "The original uploader was Dnn87 at English Wikipedia., CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons",
     },
     block: "s",
+    oxistates: [1],
+    oxistates_extended: [-1, 0],
   },
   {
     type_localized: "Alkaline Earth Metal",
@@ -713,6 +735,8 @@ const PERIODIC_DATA = [
         "Warut Roonguthai, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons",
     },
     block: "s",
+    oxistates: [2],
+    oxistates_extended: [1, 0],
   },
   {
     type_localized: "Post-transition Metal",
@@ -774,6 +798,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/aluminium.php ",
     },
     block: "p",
+    oxistates: [3],
+    oxistates_extended: [1, -1, 0, 2, -2],
   },
   {
     type_localized: "Metalloid",
@@ -835,6 +861,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/silicon.php",
     },
     block: "p",
+    oxistates: [4, -4],
+    oxistates_extended: [-1, 1, 3, 0, 2, -3, -2],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -896,6 +924,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/phosphorus.php",
     },
     block: "p",
+    oxistates: [5, -3, 3],
+    oxistates_extended: [1, -1, 4, 2, -2, 0],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -957,6 +987,8 @@ const PERIODIC_DATA = [
         "James St. John, CC BY 2.0 <https://creativecommons.org/licenses/by/2.0>, via Wikimedia Commons",
     },
     block: "p",
+    oxistates: [2, 4, 6, -2],
+    oxistates_extended: [0, 1, 3, 5, -1],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -1018,6 +1050,8 @@ const PERIODIC_DATA = [
       attribution: "Benjah-bmm27, Public domain, via Wikimedia Commons",
     },
     block: "p",
+    oxistates: [5, -1, 7, 3, 1],
+    oxistates_extended: [4, 6, 2],
   },
   {
     type_localized: "Noble Gas",
@@ -1080,6 +1114,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/argon.php",
     },
     block: "p",
+    oxistates: [],
+    oxistates_extended: [],
   },
   {
     type_localized: "Alkali Metal",
@@ -1141,6 +1177,8 @@ const PERIODIC_DATA = [
         "Dnn87, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons",
     },
     block: "s",
+    oxistates: [1],
+    oxistates_extended: [-1],
   },
   {
     type_localized: "Alkaline Earth Metal",
@@ -1201,6 +1239,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/calcium.php",
     },
     block: "s",
+    oxistates: [2],
+    oxistates_extended: [1],
   },
   {
     type_localized: "Transition Metal",
@@ -1263,6 +1303,8 @@ const PERIODIC_DATA = [
         "JanDerChemiker, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons",
     },
     block: "d",
+    oxistates: [3],
+    oxistates_extended: [1, 2, 0],
   },
   {
     type_localized: "Transition Metal",
@@ -1326,6 +1368,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/titanium.php",
     },
     block: "d",
+    oxistates: [4],
+    oxistates_extended: [-1, 2, -2, 3, 0, 1],
   },
   {
     type_localized: "Transition Metal",
@@ -1387,6 +1431,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/vanadium.php",
     },
     block: "d",
+    oxistates: [5],
+    oxistates_extended: [0, 4, 3, -3, -1, 1, 2],
   },
   {
     type_localized: "Transition Metal",
@@ -1449,6 +1495,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/chromium.php",
     },
     block: "d",
+    oxistates: [6, 3],
+    oxistates_extended: [0, -2, -4, 4, 1, 5, -1, 2],
   },
   {
     type_localized: "Transition Metal",
@@ -1512,6 +1560,8 @@ const PERIODIC_DATA = [
         "W. Oelen, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons",
     },
     block: "d",
+    oxistates: [4, 2, 7],
+    oxistates_extended: [6, -3, 0, 5, 1, 3, -1],
   },
   {
     type_localized: "Transition Metal",
@@ -1575,6 +1625,8 @@ const PERIODIC_DATA = [
         "Chemical ELements A Virtual Museum, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0> source: https://images-of-elements.com/iron.php",
     },
     block: "d",
+    oxistates: [3, 2],
+    oxistates_extended: [0, 1, 7, 4, -4, 5, -2, -1, 6],
   },
   {
     type_localized: "Transition Metal",
@@ -1637,6 +1689,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/cobalt.php",
     },
     block: "d",
+    oxistates: [3, 2],
+    oxistates_extended: [4, 5, 1, -3, 0, -1],
   },
   {
     type_localized: "Transition Metal",
@@ -1698,6 +1752,8 @@ const PERIODIC_DATA = [
         "Materialscientist at English Wikipedia, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons",
     },
     block: "d",
+    oxistates: [2],
+    oxistates_extended: [1, 3, 0, 4, -2, -1],
   },
   {
     type_localized: "Transition Metal",
@@ -1760,6 +1816,8 @@ const PERIODIC_DATA = [
         "Native_Copper_Macro_Digon3.jpg: 'Jonathan Zander (Digon3)' derivative work: Materialscientist, CC BY-SA 2.5 <https://creativecommons.org/licenses/by-sa/2.5>, via Wikimedia Commons",
     },
     block: "d",
+    oxistates: [2],
+    oxistates_extended: [4, 3, -2, 1, 0],
   },
   {
     type_localized: "Transition Metal",
@@ -1821,6 +1879,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/zinc.php",
     },
     block: "d",
+    oxistates: [2],
+    oxistates_extended: [-2, 1, 0],
   },
   {
     type_localized: "Post-transition Metal",
@@ -1880,6 +1940,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/gallium.php",
     },
     block: "p",
+    oxistates: [3],
+    oxistates_extended: [-4, -5, 2, -1, -3, -2, 1, 0],
   },
   {
     type_localized: "Metalloid",
@@ -1938,6 +2000,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/germanium.php",
     },
     block: "p",
+    oxistates: [-4, 2, 4],
+    oxistates_extended: [-2, -3, -1, 0, 1, 3],
   },
   {
     type_localized: "Metalloid",
@@ -1997,6 +2061,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/arsenic.php",
     },
     block: "p",
+    oxistates: [5, 3, -3],
+    oxistates_extended: [2, 0, -2, -1, 4, 1],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -2055,6 +2121,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/selenium.php",
     },
     block: "p",
+    oxistates: [2, -2, 6, 4],
+    oxistates_extended: [1, 3, -1, 5, 0],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -2113,6 +2181,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/bromine.php",
     },
     block: "p",
+    oxistates: [3, 1, -1, 5],
+    oxistates_extended: [2, 7, 4],
   },
   {
     type_localized: "Noble Gas",
@@ -2175,6 +2245,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/krypton.php",
     },
     block: "p",
+    oxistates: [2],
+    oxistates_extended: [1],
   },
   {
     type_localized: "Alkali Metal",
@@ -2234,6 +2306,8 @@ const PERIODIC_DATA = [
         "Dnn87, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons",
     },
     block: "s",
+    oxistates: [1],
+    oxistates_extended: [-1],
   },
   {
     type_localized: "Alkaline Earth Metal",
@@ -2294,6 +2368,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/strontium.php",
     },
     block: "s",
+    oxistates: [2],
+    oxistates_extended: [1],
   },
   {
     type_localized: "Transition Metal",
@@ -2355,6 +2431,8 @@ const PERIODIC_DATA = [
         "Jan Anskeit, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons",
     },
     block: "d",
+    oxistates: [3],
+    oxistates_extended: [2, 1, 0],
   },
   {
     type_localized: "Transition Metal",
@@ -2413,6 +2491,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/zirconium.php",
     },
     block: "d",
+    oxistates: [4],
+    oxistates_extended: [2, 3, 1],
   },
   {
     type_localized: "Transition Metal",
@@ -2471,6 +2551,8 @@ const PERIODIC_DATA = [
         "Mauro Cateb, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons",
     },
     block: "d",
+    oxistates: [5],
+    oxistates_extended: [-1, 4, 2, 3, 1, 0, -3],
   },
   {
     type_localized: "Transition Metal",
@@ -2533,6 +2615,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/molybdenum.php",
     },
     block: "d",
+    oxistates: [4, 6],
+    oxistates_extended: [-1, 3, -2, 5, 0, 2, 1, -4],
   },
   {
     type_localized: "Transition Metal",
@@ -2591,6 +2675,8 @@ const PERIODIC_DATA = [
         "GFDL, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons",
     },
     block: "d",
+    oxistates: [4, 7],
+    oxistates_extended: [5, -1, 3, 6, -3, 2, 1],
   },
   {
     type_localized: "Transition Metal",
@@ -2649,6 +2735,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/ruthenium.php",
     },
     block: "d",
+    oxistates: [3, 4],
+    oxistates_extended: [2, 8, -2, 5, 1, 6, 7, -4],
   },
   {
     type_localized: "Transition Metal",
@@ -2706,6 +2794,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/rhodium.php",
     },
     block: "d",
+    oxistates: [3],
+    oxistates_extended: [-1, 2, 6, -3, 4, 1, 5, 7],
   },
   {
     type_localized: "Transition Metal",
@@ -2764,6 +2854,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/palladium.php",
     },
     block: "d",
+    oxistates: [2, 4],
+    oxistates_extended: [1, 3, 5],
   },
   {
     type_localized: "Transition Metal",
@@ -2822,6 +2914,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: http://images-of-elements.com/silver.php",
     },
     block: "d",
+    oxistates: [1],
+    oxistates_extended: [3, 2, 0, -1, -2],
   },
   {
     type_localized: "Transition Metal",
@@ -2880,6 +2974,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/cadmium.php",
     },
     block: "d",
+    oxistates: [2],
+    oxistates_extended: [-2, 1],
   },
   {
     type_localized: "Post-transition Metal",
@@ -2938,6 +3034,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: http://images-of-elements.com/indium.php",
     },
     block: "p",
+    oxistates: [3],
+    oxistates_extended: [2, 0, -5, -2, 1, -1],
   },
   {
     type_localized: "Post-transition Metal",
@@ -2996,6 +3094,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: http://images-of-elements.com/tin.php",
     },
     block: "p",
+    oxistates: [-4, 2, 4],
+    oxistates_extended: [-2, -1, 0, 3, -3, 1],
   },
   {
     type_localized: "Metalloid",
@@ -3054,6 +3154,8 @@ const PERIODIC_DATA = [
         "Unknown authorUnknown author, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/antimony.php",
     },
     block: "p",
+    oxistates: [5, 3, -3],
+    oxistates_extended: [1, -1, -2, 2, 4, 0],
   },
   {
     type_localized: "Metalloid",
@@ -3112,6 +3214,8 @@ const PERIODIC_DATA = [
         "Unknown authorUnknown author, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/tellurium.php",
     },
     block: "p",
+    oxistates: [2, -2, 6, 4],
+    oxistates_extended: [1, 3, 0, 5, -1],
   },
   {
     type_localized: "Reactive Nonmetal",
@@ -3169,6 +3273,8 @@ const PERIODIC_DATA = [
       attribution: "Benjah-bmm27, Public domain, via Wikimedia Commons",
     },
     block: "p",
+    oxistates: [1, 7, 3, 5, -1],
+    oxistates_extended: [4, 6, 2],
   },
   {
     type_localized: "Noble Gas",
@@ -3228,6 +3334,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/xenon.php",
     },
     block: "p",
+    oxistates: [4, 6, 2],
+    oxistates_extended: [8],
   },
   {
     type_localized: "Alkali Metal",
@@ -3286,6 +3394,8 @@ const PERIODIC_DATA = [
         "Dnn87 Contact email: Dnn87yahoo.dk, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons",
     },
     block: "s",
+    oxistates: [1],
+    oxistates_extended: [-1],
   },
   {
     type_localized: "Alkaline Earth Metal",
@@ -3345,6 +3455,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/barium.php",
     },
     block: "s",
+    oxistates: [2],
+    oxistates_extended: [1],
   },
   {
     type_localized: "Lanthanide",
@@ -3404,6 +3516,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/lanthanum.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [1, 0, 2],
   },
   {
     type_localized: "Lanthanide",
@@ -3463,6 +3577,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 1.0 <https://creativecommons.org/licenses/by/1.0>, via Wikimedia Commons, source: https://images-of-elements.com/cerium.php",
     },
     block: "f",
+    oxistates: [4, 3],
+    oxistates_extended: [2, 1],
   },
   {
     type_localized: "Lanthanide",
@@ -3520,6 +3636,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/praseodymium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [4, 0, 1, 5, 2],
   },
   {
     type_localized: "Lanthanide",
@@ -3579,6 +3697,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/neodymium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [2, 4, 0],
   },
   {
     type_localized: "Lanthanide",
@@ -3639,6 +3759,8 @@ const PERIODIC_DATA = [
         "Unknown authorUnknown author, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/promethium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [2],
   },
   {
     type_localized: "Lanthanide",
@@ -3699,6 +3821,8 @@ const PERIODIC_DATA = [
         "Unknown authorUnknown author, CC BY 1.0 <https://creativecommons.org/licenses/by/1.0>, via Wikimedia Commons, source: https://images-of-elements.com/samarium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [2, 1, 0],
   },
   {
     type_localized: "Lanthanide",
@@ -3759,6 +3883,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/europium.php",
     },
     block: "f",
+    oxistates: [3, 2],
+    oxistates_extended: [0],
   },
   {
     type_localized: "Lanthanide",
@@ -3818,6 +3944,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/gadolinium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [1, 0, 2],
   },
   {
     type_localized: "Lanthanide",
@@ -3875,6 +4003,8 @@ const PERIODIC_DATA = [
         "Unknown authorUnknown author, CC BY 1.0 <https://creativecommons.org/licenses/by/1.0>, via Wikimedia Commons, source: https://images-of-elements.com/terbium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [0, 1, 4, 2],
   },
   {
     type_localized: "Lanthanide",
@@ -3932,6 +4062,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/dysprosium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [2, 1, 4, 0],
   },
   {
     type_localized: "Lanthanide",
@@ -3989,6 +4121,8 @@ const PERIODIC_DATA = [
         "Unknown authorUnknown author, CC BY 1.0 <https://creativecommons.org/licenses/by/1.0>, via Wikimedia Commons, source: https://images-of-elements.com/holmium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [0, 1, 2],
   },
   {
     type_localized: "Lanthanide",
@@ -4046,6 +4180,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/erbium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [0, 1, 2],
   },
   {
     type_localized: "Lanthanide",
@@ -4105,6 +4241,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/thulium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [1, 0, 2],
   },
   {
     type_localized: "Lanthanide",
@@ -4162,6 +4300,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 1.0 <https://creativecommons.org/licenses/by/1.0>, via Wikimedia Commons, source: https://images-of-elements.com/ytterbium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [1, 0, 2],
   },
   {
     type_localized: "Lanthanide",
@@ -4219,6 +4359,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/lutetium.php",
     },
     block: "d",
+    oxistates: [3],
+    oxistates_extended: [2, 0, 1],
   },
   {
     type_localized: "Transition Metal",
@@ -4279,6 +4421,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/hafnium.php",
     },
     block: "d",
+    oxistates: [4],
+    oxistates_extended: [2, -2, 0, 1, 3],
   },
   {
     type_localized: "Transition Metal",
@@ -4339,6 +4483,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/tantalum.php",
     },
     block: "d",
+    oxistates: [5],
+    oxistates_extended: [-1, 1, 3, 4, 2, 0, -3],
   },
   {
     type_localized: "Transition Metal",
@@ -4399,6 +4545,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 1.0 <https://creativecommons.org/licenses/by/1.0>, via Wikimedia Commons, source: https://images-of-elements.com/tungsten.php",
     },
     block: "d",
+    oxistates: [4, 6],
+    oxistates_extended: [2, -4, 5, 0, 3, -1, -2, 1],
   },
   {
     type_localized: "Transition Metal",
@@ -4459,6 +4607,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/rhenium.php",
     },
     block: "d",
+    oxistates: [4],
+    oxistates_extended: [5, 7, -1, 6, -3, 2, 1, 0, 3],
   },
   {
     type_localized: "Transition Metal",
@@ -4518,6 +4668,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/osmium.php",
     },
     block: "d",
+    oxistates: [4],
+    oxistates_extended: [5, 2, 6, 1, -1, 0, 7, -2, 3, 8, -4],
   },
   {
     type_localized: "Transition Metal",
@@ -4577,6 +4729,8 @@ const PERIODIC_DATA = [
         "Unknown authorUnknown author, CC BY 1.0 <https://creativecommons.org/licenses/by/1.0>, via Wikimedia Commons, source: https://images-of-elements.com/iridium.php",
     },
     block: "d",
+    oxistates: [4, 3],
+    oxistates_extended: [5, -2, -1, 7, 6, -3, 9, 8, 2, 1],
   },
   {
     type_localized: "Transition Metal",
@@ -4636,6 +4790,8 @@ const PERIODIC_DATA = [
         "Periodictableru, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons",
     },
     block: "d",
+    oxistates: [2, 4],
+    oxistates_extended: [-3, 6, 1, -2, -1, 3, 5, 0],
   },
   {
     type_localized: "Transition Metal",
@@ -4694,6 +4850,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/gold.php",
     },
     block: "d",
+    oxistates: [3],
+    oxistates_extended: [2, -1, 0, -2, 1, -3, 5],
   },
   {
     type_localized: "Transition Metal",
@@ -4753,6 +4911,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images of Chemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/mercury.php",
     },
     block: "d",
+    oxistates: [1, 2],
+    oxistates_extended: [-2],
   },
   {
     type_localized: "Post-transition Metal",
@@ -4813,6 +4973,8 @@ const PERIODIC_DATA = [
         "Hi-Res Images ofChemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/thallium.php",
     },
     block: "p",
+    oxistates: [1, 3],
+    oxistates_extended: [-5, -2, -1, 2],
   },
   {
     type_localized: "Post-transition Metal",
@@ -4872,6 +5034,8 @@ const PERIODIC_DATA = [
         "Chemical Elements, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/lead.php",
     },
     block: "p",
+    oxistates: [4, 2],
+    oxistates_extended: [0, -2, 1, -1, -4, 3],
   },
   {
     type_localized: "Post-transition Metal",
@@ -4931,6 +5095,8 @@ const PERIODIC_DATA = [
         "Jurii, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons, source: https://images-of-elements.com/bismuth.php",
     },
     block: "p",
+    oxistates: [3],
+    oxistates_extended: [5, 2, -1, -2, -3, 0, 1, 4],
   },
   {
     type_localized: "Post-transition Metal",
@@ -4990,6 +5156,8 @@ const PERIODIC_DATA = [
         "Chemical ELements A Virtual Museum, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0> source: https://images-of-elements.com/polonium.php",
     },
     block: "p",
+    oxistates: [2, 4, -2],
+    oxistates_extended: [5, 6],
   },
   {
     type_localized: "Post-transition Metal",
@@ -5050,6 +5218,8 @@ const PERIODIC_DATA = [
         "Chemical ELements A Virtual Museum, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0> source: https://images-of-elements.com/astatine.php",
     },
     block: "p",
+    oxistates: [1, -1],
+    oxistates_extended: [3, 5, 7],
   },
   {
     type_localized: "Noble Gas",
@@ -5111,6 +5281,8 @@ const PERIODIC_DATA = [
         "Chemical ELements A Virtual Museum, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0> source: https://images-of-elements.com/radon.php",
     },
     block: "p",
+    oxistates: [],
+    oxistates_extended: [6, 2],
   },
   {
     type_localized: "Alkali Metal",
@@ -5170,6 +5342,8 @@ const PERIODIC_DATA = [
         "Chemical ELements A Virtual Museum, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0> source: https://images-of-elements.com/francium.jpg",
     },
     block: "s",
+    oxistates: [1],
+    oxistates_extended: [],
   },
   {
     type_localized: "Alkaline Earth Metal",
@@ -5230,6 +5404,8 @@ const PERIODIC_DATA = [
         "grenadier, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons",
     },
     block: "s",
+    oxistates: [2],
+    oxistates_extended: [],
   },
   {
     type_localized: "Actinide",
@@ -5290,6 +5466,8 @@ const PERIODIC_DATA = [
         "Oak Ridge National Laboratory, CC BY 2.0 <https://creativecommons.org/licenses/by/2.0>, via Wikimedia Commons, source: https://www.flickr.com/photos/oakridgelab/31481701837/",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [],
   },
   {
     type_localized: "Actinide",
@@ -5348,6 +5526,8 @@ const PERIODIC_DATA = [
         "W. Oelen, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [4],
+    oxistates_extended: [-1, 1, 2, 3],
   },
   {
     type_localized: "Actinide",
@@ -5406,6 +5586,8 @@ const PERIODIC_DATA = [
       attribution: "ENERGY.GOV, Public domain, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [5],
+    oxistates_extended: [3, 2, 4],
   },
   {
     type_localized: "Actinide",
@@ -5465,6 +5647,8 @@ const PERIODIC_DATA = [
         "Unknown authorUnknown author, Public domain, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [6],
+    oxistates_extended: [3, 1, 2, -1, 4, 5],
   },
   {
     type_localized: "Actinide",
@@ -5522,6 +5706,8 @@ const PERIODIC_DATA = [
         "Los Alamos National Laboratory,, Public domain, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [5],
+    oxistates_extended: [7, 2, 4, 3, 6],
   },
   {
     type_localized: "Actinide",
@@ -5581,6 +5767,8 @@ const PERIODIC_DATA = [
         "Los Alamos National Laboratory, Attribution, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [4],
+    oxistates_extended: [5, 7, 8, 6, 3, 2],
   },
   {
     type_localized: "Actinide",
@@ -5639,6 +5827,8 @@ const PERIODIC_DATA = [
         "Bionerd, CC BY 3.0 <https://creativecommons.org/licenses/by/3.0>, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [2, 6, 5, 4, 7],
   },
   {
     type_localized: "Actinide",
@@ -5697,6 +5887,8 @@ const PERIODIC_DATA = [
         "European Union, The Actinide Group, Institute for Transuranium Elements (JRC-ITU), source: https://images-of-elements.com/curium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [6, 5, 4],
   },
   {
     type_localized: "Actinide",
@@ -5756,6 +5948,8 @@ const PERIODIC_DATA = [
         "ORNL, Department of Energy, Public domain, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [4, 5, 2],
   },
   {
     type_localized: "Actinide",
@@ -5814,6 +6008,8 @@ const PERIODIC_DATA = [
         "United States Department of Energy (see File:Einsteinium.jpg), Public domain, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [4, 2, 5],
   },
   {
     type_localized: "Actinide",
@@ -5873,6 +6069,8 @@ const PERIODIC_DATA = [
         "Haire, R. G., US Department of Energy.Touched up by Materialscientist at en.wikipedia., Public domain, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [4, 2],
   },
   {
     type_localized: "Actinide",
@@ -5932,6 +6130,8 @@ const PERIODIC_DATA = [
         "U.S. Department of Energy, Public domain, via Wikimedia Commons",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [2],
   },
   {
     type_localized: "Actinide",
@@ -5991,6 +6191,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/mendelevium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [2],
   },
   {
     type_localized: "Actinide",
@@ -6050,6 +6252,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/nobelium.php",
     },
     block: "f",
+    oxistates: [3],
+    oxistates_extended: [2],
   },
   {
     type_localized: "Actinide",
@@ -6109,6 +6313,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/lawrencium.php",
     },
     block: "d",
+    oxistates: [3],
+    oxistates_extended: [],
   },
   {
     type_localized: "Transition Metal",
@@ -6169,6 +6375,8 @@ const PERIODIC_DATA = [
         "Image \u00a9 CERN, Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/rutherfordium.php",
     },
     block: "d",
+    oxistates: [4],
+    oxistates_extended: [3],
   },
   {
     type_localized: "Transition Metal",
@@ -6228,6 +6436,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/dubnium.php",
     },
     block: "d",
+    oxistates: [],
+    oxistates_extended: [3, 5, 4],
   },
   {
     type_localized: "Transition Metal",
@@ -6287,6 +6497,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/seaborgium.php",
     },
     block: "d",
+    oxistates: [],
+    oxistates_extended: [3, 6, 5, 4],
   },
   {
     type_localized: "Transition Metal",
@@ -6346,6 +6558,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/bohrium.php",
     },
     block: "d",
+    oxistates: [],
+    oxistates_extended: [4, 5, 3, 7],
   },
   {
     type_localized: "Transition Metal",
@@ -6405,6 +6619,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/hassium.php",
     },
     block: "d",
+    oxistates: [],
+    oxistates_extended: [3, 6, 8, 4],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6464,6 +6680,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/meitnerium.php",
     },
     block: "d",
+    oxistates: [],
+    oxistates_extended: [1, 6, 3],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6522,6 +6740,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/darmstadtium.php",
     },
     block: "d",
+    oxistates: [],
+    oxistates_extended: [2, 4, 6],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6580,6 +6800,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/roentgenium.php",
     },
     block: "d",
+    oxistates: [],
+    oxistates_extended: [3, 5, -1],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6639,6 +6861,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/copernicium.php",
     },
     block: "d",
+    oxistates: [],
+    oxistates_extended: [2, 4],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6697,6 +6921,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/nihonium.php",
     },
     block: "p",
+    oxistates: [],
+    oxistates_extended: [],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6757,6 +6983,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/flerovium.php",
     },
     block: "p",
+    oxistates: [],
+    oxistates_extended: [],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6816,6 +7044,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/moscovium.php",
     },
     block: "p",
+    oxistates: [],
+    oxistates_extended: [],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6874,6 +7104,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/livermorium.php",
     },
     block: "p",
+    oxistates: [],
+    oxistates_extended: [4, -2],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6932,6 +7164,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/tenessine.php",
     },
     block: "p",
+    oxistates: [],
+    oxistates_extended: [-1, 5],
   },
   {
     type_localized: "Unknown Chemical Properties",
@@ -6991,6 +7225,8 @@ const PERIODIC_DATA = [
         "Chemical Elements A Virtual Museum under a Creative Commons Attribution 3.0 Unported License, source: https://images-of-elements.com/oganesson.php",
     },
     block: "p",
+    oxistates: [],
+    oxistates_extended: [4, 6, -1, 1, 2],
   },
 ];
 export default PERIODIC_DATA;

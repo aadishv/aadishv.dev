@@ -97,9 +97,9 @@ const DetailRow = ({ name, value, textColor }) => {
   };
 
   return (
-    <span className="group inline-flex items-center p-1">
-      <span className="mr-2 font-lora underline">{name}</span>
-      <span className="font-mono">{value}</span>
+    <span className="items-center p-1">
+      <span className="mr-2 inline font-lora underline">{name}</span>
+      <span className="inline font-mono">{value}</span>
     </span>
   );
 };
@@ -135,7 +135,6 @@ const DetailsView = ({ elementNumber, periodicData }) => {
         {element.name}
         <br />({element.number}, {element.symbol})
       </h1>
-
       <DetailRow
         name="Electron config"
         value={element.electron_configuration_semantic}
@@ -155,6 +154,24 @@ const DetailsView = ({ elementNumber, periodicData }) => {
       <DetailRow
         name="Electronegativity"
         value={element.electronegativity_pauling ?? "N/A"}
+        textColor={textColor}
+      />
+      <DetailRow
+        name="Oxidation states"
+        value={
+          element.oxistates
+            ?.map((state) => (state > 0 ? `+${state}` : state))
+            .join(", ") ?? "N/A"
+        }
+        textColor={textColor}
+      />
+      <DetailRow
+        name="Oxidation states (extended)"
+        value={
+          element.oxistates_extended
+            ?.map((state) => (state > 0 ? `+${state}` : state))
+            .join(", ") ?? "N/A"
+        }
         textColor={textColor}
       />
       <DetailRow
@@ -229,6 +246,7 @@ const ReferenceButton = ({ handleClick }) => {
     </div>
   );
 };
+
 const ReferenceModal = ({ showModal, setShowModal }) => {
   const [activeTab, setActiveTab] = useState(0);
   const tabs = [
@@ -246,6 +264,11 @@ const ReferenceModal = ({ showModal, setShowModal }) => {
       name: "Solubility",
       imageSrc: "/chemutils/solubility.webp",
       alt: "Solubility Rules",
+    },
+    {
+      name: "Transition metal charges",
+      imageSrc: "/chemutils/transition_charges.avif",
+      alt: "Common transition metal charges",
     },
   ];
 
@@ -291,6 +314,7 @@ const ReferenceModal = ({ showModal, setShowModal }) => {
     </Modal>
   );
 };
+
 const ModalButton = ({ handleClick }) => {
   return (
     <div className="flex items-end">
