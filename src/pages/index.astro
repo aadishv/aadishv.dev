@@ -1,7 +1,7 @@
 ---
 import "../style/global.css";
 import BlogPostPreview from "../components/BlogPostPreview.astro";
-import Header from "../components/Header.astro";
+import ProjectPreview from "../components/ProjectPreview.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 const siteTitle = "Aadish Verma";
 
@@ -13,63 +13,74 @@ const sortedPosts = allPosts
       new Date(a.frontmatter.date).valueOf(),
   )
   .filter((p) => p.frontmatter.hidden !== true);
+const allProjectPosts = await Astro.glob("../content/projects/*.md");
+const sortedProjectPosts = allProjectPosts
+  .sort(
+    (a, b) =>
+      new Date(b.frontmatter.date).valueOf() -
+      new Date(a.frontmatter.date).valueOf(),
+  )
+  .filter((p) => p.frontmatter.hidden !== true);
 ---
 
 <BaseLayout title="Aadish Verma" description="Yet another nerd.">
-  <main class="p-20">
-    <h2 class="pb-10 font-lora text-xl font-bold text-header">
-      Hi 👋, I'm Aadish
-    </h2>
-    <div class="pb-10 font-lora">
-      <p>
-        <strong>I built a thing:</strong>
-        <a href="/latex">LaTeX to Markdown tool</a>・<a href="/periodic"
-          >OC005 periodic table</a
-        >
-      </p>
+  <h2 class="pb-10 font-lora text-xl font-bold text-header">
+    Hi 👋, I'm Aadish
+  </h2>
+  <div class="pb-10 font-lora">
+    <p>
+      <strong>Tools:</strong>
+      <a href="/tools/latex">LaTeX to Markdown tool</a>・<a
+        href="/tools/periodic">OC005 periodic table</a
+      >
+    </p>
 
-      <p>
-        <strong>Chem stuff</strong>:
-        <a href="/chemutils/aufbau.jpg">aufbau</a>・<a
-          href="/chemutils/bonding.avif">bonding shapes</a
-        >・<a href="/chemutils/solubility.webp">solubility</a>
-      </p>
+    <p>
+      Student at Stanford Online High School, passionate about really anything
+      [but especially STEM]. A few notable things I've done:
+    </p>
 
-      <p>
-        Student at Stanford Online High School, passionate about really anything
-        [but especially STEM]. A few notable things I've done:
-      </p>
+    <ul>
+      <li>
+        Won the OHS 2024 Labor Day Hackathon. I might write a blog post about it
+        later :) [<a href="https://github.com/aadishv/doleofdoves">code ↗</a>]
+      </li>
 
-      <ul>
-        <li>
-          Won the OHS 2024 Labor Day Hackathon. I might write a blog post about
-          it later :) [<a href="https://github.com/aadishv/doleofdoves">code</a
-          >]
-        </li>
+      <li>
+        <a href="https://adventofcode.com/2024">Advent of Code ↗</a> 2024 participant.
+        [<a href="https://github.com/aadishv/aoc">code ↗</a>]
+      </li>
 
-        <li>
-          <a href="https://adventofcode.com/2024">Advent of Code</a> 2024 participant.
-          [<a href="https://github.com/aadishv/aoc">code</a>]
-        </li>
-
-        <li>
-          Lead coder for VEX V5 Robotics Competition team <a
-            href="https://www.robotevents.com/teams/V5RC/315P">315P</a
-          > for Over Under and part of the High Stakes seasons. My code is unfortunately
-          private, but I have made a <a
-            href="https://github.com/aadishv/highstakes">public mirror</a
-          > of my High Stakes code available.
-        </li>
-      </ul>
-    </div>
-    <div class="pb-8">
-      <h2 class="font-lora text-xl font-bold text-header">From the blog</h2>
-      <a href="/blog" class="font-mono text-lg">
-        {"Read more from the blog ->"}
-      </a>
-    </div>
-    <div class="pl-5 pr-5">
-      {sortedPosts.slice(0, 2).map((p) => <BlogPostPreview post={p} />)}
-    </div>
-  </main>
+      <li>
+        Lead coder for VEX V5 Robotics Competition team <a
+          href="https://www.robotevents.com/teams/V5RC/315P">315P ↗</a
+        > for Over Under and part of the High Stakes seasons. My code is unfortunately
+        private, but I have made a <a
+          href="https://github.com/aadishv/highstakes">public mirror ↗</a
+        > of my High Stakes code available.
+      </li>
+    </ul>
+  </div>
+  <div class="pb-8">
+    <h2 class="font-lora text-xl font-bold text-header">From the blog</h2>
+    <a href="/blog" class="font-mono text-lg">
+      {"Read more from the blog ->"}
+    </a>
+  </div>
+  <div class="p-5">
+    {sortedPosts.slice(0, 2).map((p) => <BlogPostPreview post={p} />)}
+  </div>
+  <div class="pb-8">
+    <h2 class="font-lora text-xl font-bold text-header">Recent projects</h2>
+    <a href="/projects" class="font-mono text-lg">
+      {"See more projects ->"}
+    </a>
+  </div>
+  <div class="p-5">
+    {
+      sortedProjectPosts
+        .slice(0, 2)
+        .map((p) => <ProjectPreview post={p} index={true} />)
+    }
+  </div>
 </BaseLayout>

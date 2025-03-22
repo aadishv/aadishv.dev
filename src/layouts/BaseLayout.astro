@@ -4,10 +4,16 @@ import Header from "../components/Header.astro";
 interface Props {
   title: string;
   description?: string;
+  pt?: number;
+  p?: number;
 }
 
-const { title, description = "Aadish Verma's personal website and blog" } =
-  Astro.props;
+const {
+  title,
+  description = "Aadish Verma's personal website and blog",
+  pt = 24,
+  p = 20,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -25,8 +31,13 @@ const { title, description = "Aadish Verma's personal website and blog" } =
       rel="stylesheet"
     />
   </head>
-  <body class="font-sans text-text">
+  <body class="text-text font-sans">
     <Header />
-    <slot />
+    <main
+      class="h-full w-full"
+      style={`padding: ${p / 4}rem; padding-top: ${pt / 4}rem`}
+    >
+      <slot />
+    </main>
   </body>
 </html>

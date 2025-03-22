@@ -1,0 +1,53 @@
+---
+export interface Props {
+  post: any;
+  onpage?: boolean;
+  index?: boolean;
+}
+
+import { getSlugFromPath } from "../utils/get-slug-from-path";
+import { parseISO, format } from "date-fns";
+import "../style/global.css";
+
+const { post, onpage = false, index = false } = Astro.props;
+const url = "/projects/" + getSlugFromPath(post.file);
+
+const date = parseISO(post.frontmatter.date);
+const formattedDate = format(date, "MM/dd/yyyy");
+console.log(onpage);
+---
+
+<div
+  class={`bg-stripes-header2 mb-4 flex border-2 border-header2 ${onpage ? "p-1" : "p-2"}`}
+>
+  <img
+    src={post.frontmatter.image}
+    class="rounded"
+    style={!index ? `width: ${onpage ? "50%" : "60%"};` : "height: 15rem;"}
+  />
+  <div class={`${onpage ? "p-4" : "p-5"}`}>
+    <h1>
+      {
+        onpage ? (
+          <div class="text-blue font-lora text-2xl font-normal text-header">
+            {post.frontmatter.title}
+          </div>
+        ) : (
+          <a href={url} class="font-lora text-2xl text-black hover:text-header">
+            {post.frontmatter.title}
+          </a>
+        )
+      }
+    </h1>
+    <h2 class={`font-mono text-lg font-normal text-header`}>
+      {post.frontmatter.description}
+    </h2>
+    <div class="flex w-full flex-col">
+      <a href={post.frontmatter.link} class={`font-mono `}>Demo ↗</a>
+      <a href={post.frontmatter.github} class={`font-mono`}>GitHub ↗</a>
+      <div class={`font-lora text-header`}>
+        Last updated {formattedDate}
+      </div>
+    </div>
+  </div>
+</div>

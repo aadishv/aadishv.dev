@@ -57,20 +57,16 @@ export default function LatexToImageApp() {
 
           <div className="flex items-center gap-4">
             <span className="font-lora text-lg">Format:</span>
-            <div className="inline-flex rounded-md border-2 border-header font-mono">
+            <div className="flex font-mono">
               {["svg", "png", "gif"].map((formatOption) => (
                 <button
                   key={formatOption}
-                  className={`px-4 py-2 text-center uppercase ${
+                  className={`mr-4 h-8 px-2 text-xl ${
                     format === formatOption
-                      ? "bg-header text-white"
-                      : "bg-white hover:bg-gray-100"
-                  } ${formatOption === "svg" ? "rounded-l" : ""} ${formatOption === "gif" ? "rounded-r" : ""}`}
+                      ? "text-header underline decoration-header"
+                      : "underline decoration-header2 hover:decoration-header"
+                  }`}
                   onClick={() => setFormat(formatOption)}
-                  style={{
-                    borderRight:
-                      formatOption !== "gif" ? "2px solid #CBD5E0" : "none",
-                  }}
                 >
                   {formatOption}
                 </button>
@@ -92,13 +88,13 @@ export default function LatexToImageApp() {
           <div className="flex flex-wrap gap-4">
             <button
               onClick={copyImageUrl}
-              className="border-b-2 border-header2 p-2 font-lora text-xl hover:border-header"
+              className="font-lora text-xl underline decoration-header2 hover:decoration-header"
             >
               Copy image URL
             </button>
             <button
               onClick={copyMarkdown}
-              className="border-b-2 border-header2 p-2 font-lora text-xl hover:border-header"
+              className="font-lora text-xl underline decoration-header2 hover:decoration-header"
             >
               Copy image Markdown
             </button>
