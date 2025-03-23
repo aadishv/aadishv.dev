@@ -31,12 +31,6 @@
 a {
   @apply font-lora text-header underline decoration-header2 hover:decoration-header;
 }
-li::before {
-  content: "•";
-  display: inline-block;
-  width: 1em;
-  margin-left: 1em;
-}
 @layer base {
   body {
     @apply antialiased;

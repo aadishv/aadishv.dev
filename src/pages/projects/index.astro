@@ -15,11 +15,14 @@ const sortedPosts = allPosts
 ---
 
 <BaseLayout title="My projects">
-  <h2 class="font-lora text-xl font-bold text-header">My projects</h2>
-  <a href="/" class="font-mono text-lg">
-    {"<- back to home"}
-  </a>
-  <div class="p-5">
+  <div class="pb-8">
+    <h2 class="font-lora text-xl text-header">My projects</h2>
+    <a href="/" class="font-mono">
+      {"<- back to home"}
+    </a>
+  </div>
+
+  <div class="pl-5 pr-5">
     {sortedPosts.map((p) => <ProjectPreview post={p} />)}
   </div>
 </BaseLayout>

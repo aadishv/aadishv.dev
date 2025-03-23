@@ -1,6 +1,5 @@
 ---
 import "../../style/global.css";
-import "../../style/blog.css";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getSlugFromPath } from "../../utils/get-slug-from-path";
 import { parseISO, format } from "date-fns";
@@ -21,14 +20,16 @@ export async function getStaticPaths({ paginate, rss }) {
 }
 
 const { post } = Astro.props;
-
+const myProseSetup = "";
 // Blog post header functionality
 const date = parseISO(post.frontmatter.date);
 const formatted = format(date, "LLLL d, yyyy");
 ---
 
 <BaseLayout title={post.frontmatter.title}>
-  <article class="prose prose-lg max-w-none px-10 lg:prose-xl">
+  <article
+    class="prose font-mono text-black prose-headings:font-lora prose-headings:font-medium prose-a:font-mono prose-a:text-[0.94rem] prose-a:decoration-header2 prose-code:font-medium"
+  >
     <main>
       <div class="text-xl">
         <h2
