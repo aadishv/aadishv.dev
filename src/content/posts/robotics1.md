@@ -33,7 +33,8 @@ I was lucky to be part of team 315P, a member of the Paradigm club. Paradigm is 
 - Sanvi, the driver. Sanvi designed and guided our robot build, and contributed the most towards the hardware. She was in charge of every component except the catapult, and often put in a lot of extra work to earn top-tier driver skills.
 - Dyuthi, the strategist. Dyuthi partially coded some of the team’s autonomous routines and built and maintained our fabulous catapult. She also worked hand-in-hand with Sanvi to analyze dozens of our past matches before every tournament, allowing the team to develop a dynamic and high-performance game strategy.
 - And I, Aadish, a coder. I developed the core autonomous architecture and many of the team’s autonomous programs. I also communicated with our alliance during and before matches; this was a key method the team used to maximize our synergy with alliance partners. 
-  ⠀ Overall, each team member had an important role in the team, custom-fit for our ability while also teaching us various life skills. These roles, of course, were not set in stone; it would be a common occurrence to see an all-team discussion on various important aspects of our strategy, from the motions of the robot to size of a component.
+
+Overall, each team member had an important role in the team, custom-fit for our ability while also teaching us various life skills. These roles, of course, were not set in stone; it would be a common occurrence to see an all-team discussion on various important aspects of our strategy, from the motions of the robot to size of a component.
 
 ### The Robot & Strategy
 
@@ -110,7 +111,8 @@ This runs VEXos, which is not a full-fledged operating system, per se, but enabl
   - Pneumatics over three-wire ports
   - Writing files onto the SD slot
   - Serial over the USB port
-    Typically, these binaries are built and uploaded through VEX’s proprietary IDE, [VEXcode](https://www.vexrobotics.com/vexcode), or its corresponding VScode extension. However, there is also a division of VRC called VEXU, which is a collegiate-level version of the competition with more coding, two robots per team, and a few other different things. It turns out that Purdue University has a VEXU team, BLRS the Purdue ACM SIGBots (one of my all-time favorite teams :D), and _clearly_ college students have too much time because they wrote their own operating system for the V5…
+
+Typically, these binaries are built and uploaded through VEX’s proprietary IDE, [VEXcode](https://www.vexrobotics.com/vexcode), or its corresponding VScode extension. However, there is also a division of VRC called VEXU, which is a collegiate-level version of the competition with more coding, two robots per team, and a few other different things. It turns out that Purdue University has a VEXU team, BLRS the Purdue ACM SIGBots (one of my all-time favorite teams :D), and _clearly_ college students have too much time because they wrote their own operating system for the V5…
 
 ### PROS<!-- {"fold":true} -->
 
