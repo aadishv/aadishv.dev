@@ -1,10 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
-import PERIODIC_DATA from "/src/utils/periodic.js";
+/* eslint-disable react/prop-types */
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  memo,
+  useMemo,
+} from "react";
 import Fuse from "fuse.js";
 import Modal from "react-modal";
+import PERIODIC_DATA from "/src/utils/periodic.js";
 
-// PREGENERATION
-const textColors = {
+// Constants for colors
+const TEXT_COLORS = {
   "Alkali Metal": "#00768D",
   "Alkaline Earth Metal": "#D60024",
   "Transition Metal": "#6232EC",
@@ -17,7 +25,7 @@ const textColors = {
   "Unknown Chemical Properties": "#3F3750",
 };
 
-const backgroundColors = {
+const BG_COLORS = {
   "Alkali Metal": "#D7F8FF",
   "Alkaline Earth Metal": "#FFE6E5",
   "Transition Metal": "#F3E7FE",
@@ -30,18 +38,24 @@ const backgroundColors = {
   "Unknown Chemical Properties": "#E7E7EA",
 };
 
-const ElementComponent = ({ x, y, data, setFocusElement }) => {
-  if (!data || !Array.isArray(data)) return null;
-  const element = data.find((item) => item.xpos === x && item.ypos === y);
-  const elementType = element?.type || "";
-
-  const backgroundGradient = `repeating-linear-gradient(
+// Helper to generate gradient style for an element type.
+const getGradientStyle = (elementType) => {
+  const backgroundColor = BG_COLORS[elementType] || "white";
+  return `repeating-linear-gradient(
     45deg,
-    ${backgroundColors[elementType]} 0px,
-    ${backgroundColors[elementType]} 2px,
+    ${backgroundColor} 0px,
+    ${backgroundColor} 2px,
     white 2px,
     white 5px
   )`;
+};
+
+// Element Component (memoized for performance)
+const ElementComponent = memo(({ x, y, data, onFocusElement }) => {
+  if (!Array.isArray(data)) return null;
+  const element = data.find((item) => item.xpos === x && item.ypos === y);
+  const elementType = element?.type || "";
+  const gradientStyle = getGradientStyle(elementType);
 
   return (
     <div
@@ -49,12 +63,11 @@ const ElementComponent = ({ x, y, data, setFocusElement }) => {
       id={`element-${element ? element.number : ""}`}
       className="m-1 aspect-square h-14 w-14 border pl-1 pr-1 font-mono text-xl focus:border-2 focus:outline-none"
       style={{
-        background: backgroundGradient,
-        color: textColors[elementType],
-        borderColor:
-          element == undefined ? "rgba(0,0,0,0)" : textColors[elementType],
+        background: gradientStyle,
+        color: TEXT_COLORS[elementType],
+        borderColor: element ? TEXT_COLORS[elementType] : "transparent",
       }}
-      onFocus={() => setFocusElement(element.number)}
+      onFocus={() => onFocusElement(element.number)}
     >
       <div className="flex flex-grow justify-start">
         {element?.number ?? ""}
@@ -62,23 +75,24 @@ const ElementComponent = ({ x, y, data, setFocusElement }) => {
       <div className="flex flex-grow justify-end">{element?.symbol ?? ""}</div>
     </div>
   );
-};
+});
+ElementComponent.displayName = "ElementComponent";
 
-const PeriodicTable = ({ pdata, setFocus }) => {
-  const x = 18;
-  const y = 10;
+const PeriodicTable = ({ pdata, onSetFocus }) => {
+  const columns = 18;
+  const rows = 10;
 
   return (
     <>
-      {Array.from({ length: y }, (_, y) => (
-        <div key={y} className="flex flex-row">
-          {Array.from({ length: x }, (_, x) => (
+      {Array.from({ length: rows }, (_, rowIndex) => (
+        <div key={rowIndex} className="flex flex-row">
+          {Array.from({ length: columns }, (_, colIndex) => (
             <ElementComponent
-              key={`${x}-${y}`}
-              x={x + 1}
-              y={y + 1}
+              key={`${colIndex}-${rowIndex}`}
+              x={colIndex + 1}
+              y={rowIndex + 1}
               data={pdata}
-              setFocusElement={setFocus}
+              onFocusElement={onSetFocus}
             />
           ))}
         </div>
@@ -87,31 +101,34 @@ const PeriodicTable = ({ pdata, setFocus }) => {
   );
 };
 
-const DetailRow = ({ name, value, textColor }) => {
+const DetailRow = ({ name, value }) => {
   const [iconName, setIconName] = useState("copy");
 
-  const handleCopy = async () => {
+  const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(value);
     setIconName("check2");
     setTimeout(() => setIconName("copy"), 500);
-  };
+  }, [value]);
 
   return (
     <span className="items-center p-1">
       <span className="mr-2 inline font-lora underline">{name}</span>
       <span className="inline font-mono">{value}</span>
+      {/* Optionally, add a button/icon here that calls handleCopy */}
     </span>
   );
 };
 
 const DetailsView = ({ elementNumber, periodicData }) => {
-  console.log(elementNumber);
   const element = periodicData[elementNumber - 1];
-  const bg = backgroundColors[element.type];
-  const textColor = textColors[element.type];
+  const bgColor = BG_COLORS[element.type];
+  const textColor = TEXT_COLORS[element.type];
 
-  React.useEffect(() => {
-    document.getElementById(`element-${elementNumber}`).focus();
+  useEffect(() => {
+    const el = document.getElementById(`element-${elementNumber}`);
+    if (el) {
+      el.focus();
+    }
   }, [elementNumber]);
 
   return (
@@ -119,16 +136,10 @@ const DetailsView = ({ elementNumber, periodicData }) => {
       id="details"
       className="w-25vw m-2 flex h-full flex-col rounded-lg border-2 p-3"
       style={{
-        background: `repeating-linear-gradient(
-          45deg,
-          ${bg} 0px,
-          ${bg} 2px,
-          white 2px,
-          white 5px
-        )`,
+        background: getGradientStyle(element.type),
         color: textColor,
         width: "25vw",
-        borderColor: textColors[element.type],
+        borderColor: textColor,
       }}
     >
       <h1 className="bold flex w-full font-lora text-3xl">
@@ -138,23 +149,13 @@ const DetailsView = ({ elementNumber, periodicData }) => {
       <DetailRow
         name="Electron config"
         value={element.electron_configuration_semantic}
-        textColor={textColor}
       />
-      <DetailRow
-        name="Full config"
-        value={element.electron_configuration}
-        textColor={textColor}
-      />
-      <DetailRow name="Group" value={element.type} textColor={textColor} />
-      <DetailRow
-        name="Atomic mass"
-        value={element.atomic_mass}
-        textColor={textColor}
-      />
+      <DetailRow name="Full config" value={element.electron_configuration} />
+      <DetailRow name="Group" value={element.type} />
+      <DetailRow name="Atomic mass" value={element.atomic_mass} />
       <DetailRow
         name="Electronegativity"
         value={element.electronegativity_pauling ?? "N/A"}
-        textColor={textColor}
       />
       <DetailRow
         name="Oxidation states"
@@ -163,7 +164,6 @@ const DetailsView = ({ elementNumber, periodicData }) => {
             ?.map((state) => (state > 0 ? `+${state}` : state))
             .join(", ") ?? "N/A"
         }
-        textColor={textColor}
       />
       <DetailRow
         name="Oxidation states (extended)"
@@ -172,18 +172,14 @@ const DetailsView = ({ elementNumber, periodicData }) => {
             ?.map((state) => (state > 0 ? `+${state}` : state))
             .join(", ") ?? "N/A"
         }
-        textColor={textColor}
       />
-      <DetailRow
-        name="Fun fact"
-        value={element.fun_fact}
-        textColor={textColor}
-      />
+      <DetailRow name="Fun fact" value={element.fun_fact} />
       <a
-        href={`https://www.google.com/search?q=${encodeURIComponent(element.name + " chemical element")}`}
+        href={`https://www.google.com/search?q=${encodeURIComponent(
+          `${element.name} chemical element`,
+        )}`}
         target="_blank"
         rel="noopener noreferrer"
-        className=""
         style={{ borderColor: textColor, color: textColor }}
       >
         Search on Google
@@ -192,7 +188,6 @@ const DetailsView = ({ elementNumber, periodicData }) => {
   );
 };
 
-// Initialize Fuse.js search outside component for better performance
 const fuseOptions = {
   keys: [
     { name: "name", weight: 0.7 },
@@ -200,14 +195,14 @@ const fuseOptions = {
     { name: "number", weight: 0.1 },
   ],
 };
+// Initialize Fuse only once
 const fuse = new Fuse(PERIODIC_DATA, fuseOptions);
 
-// Search component
-const SearchBar = ({ searchRef, onSearch }) => {
+const SearchBar = ({ inputRef, onSearch }) => {
   return (
     <form onSubmit={onSearch} className="flex">
       <input
-        ref={searchRef}
+        ref={inputRef}
         type="text"
         placeholder="Search... (Cmd+F)"
         className="border-b-2 border-header2 font-mono text-xl focus:border-header focus:outline-none"
@@ -220,13 +215,12 @@ const SearchBar = ({ searchRef, onSearch }) => {
   );
 };
 
-// Random element button component
-const RandomButton = ({ handleClick }) => {
+const RandomButton = ({ onClickRandom }) => {
   return (
     <div className="mr-4 flex items-end">
       <button
         className="m-0 h-8 justify-center truncate border-b-2 border-header2 p-0 font-lora text-xl hover:border-header"
-        onClick={handleClick}
+        onClick={onClickRandom}
       >
         Random
       </button>
@@ -234,12 +228,12 @@ const RandomButton = ({ handleClick }) => {
   );
 };
 
-const ReferenceButton = ({ handleClick }) => {
+const ReferenceButton = ({ onClickReference }) => {
   return (
     <div className="mr-4 flex items-end">
       <button
         className="m-0 h-8 justify-center truncate border-b-2 border-header2 p-0 font-lora text-xl hover:border-header"
-        onClick={handleClick}
+        onClick={onClickReference}
       >
         References
       </button>
@@ -247,37 +241,53 @@ const ReferenceButton = ({ handleClick }) => {
   );
 };
 
-const ReferenceModal = ({ showModal, setShowModal }) => {
+const ModalButton = ({ onClickModal }) => {
+  return (
+    <div className="flex items-end">
+      <button
+        className="m-0 h-8 justify-center truncate border-b-2 border-header2 p-0 font-lora text-xl hover:border-header"
+        onClick={onClickModal}
+      >
+        Formula mass calculator
+      </button>
+    </div>
+  );
+};
+
+const ReferenceModal = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState(0);
-  const tabs = [
-    {
-      name: "Aufbau Principle",
-      imageSrc: "/chemutils/aufbau.jpg",
-      alt: "Aufbau Principle",
-    },
-    {
-      name: "Bonding",
-      imageSrc: "/chemutils/bonding.avif",
-      alt: "Chemical Bonding",
-    },
-    {
-      name: "Solubility",
-      imageSrc: "/chemutils/solubility.webp",
-      alt: "Solubility Rules",
-    },
-    {
-      name: "Transition metal charges",
-      imageSrc: "/chemutils/transition_charges.avif",
-      alt: "Common transition metal charges",
-    },
-  ];
+  const tabs = useMemo(
+    () => [
+      {
+        name: "Aufbau Principle",
+        imageSrc: "/chemutils/aufbau.jpg",
+        alt: "Aufbau Principle",
+      },
+      {
+        name: "Bonding",
+        imageSrc: "/chemutils/bonding.avif",
+        alt: "Chemical Bonding",
+      },
+      {
+        name: "Solubility",
+        imageSrc: "/chemutils/solubility.webp",
+        alt: "Solubility Rules",
+      },
+      {
+        name: "Transition metal charges",
+        imageSrc: "/chemutils/transition_charges.avif",
+        alt: "Common transition metal charges",
+      },
+    ],
+    [],
+  );
 
   return (
     <Modal
-      isOpen={showModal}
-      onRequestClose={() => setShowModal(false)}
-      shouldCloseOnOverlayClick={true}
-      shouldCloseOnEsc={true}
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      shouldCloseOnOverlayClick
+      shouldCloseOnEsc
       className="modal"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4"
       ariaHideApp={false}
@@ -315,19 +325,6 @@ const ReferenceModal = ({ showModal, setShowModal }) => {
   );
 };
 
-const ModalButton = ({ handleClick }) => {
-  return (
-    <div className="flex items-end">
-      <button
-        className="m-0 h-8 justify-center truncate border-b-2 border-header2 p-0 font-lora text-xl hover:border-header"
-        onClick={handleClick}
-      >
-        Formula mass calculator
-      </button>
-    </div>
-  );
-};
-
 const parseFormula = (formula) => {
   const regex = /([A-Z][a-z]?)(\d*)/g;
   const elements = {};
@@ -338,50 +335,49 @@ const parseFormula = (formula) => {
     elements[element] =
       (elements[element] || 0) + (count ? parseInt(count) : 1);
   }
-
   return elements;
 };
 
 const calculateMass = (formula) => {
-  const elements = parseFormula(formula);
+  const elementsFound = parseFormula(formula);
   let totalMass = 0;
-  console.log(elements);
-  for (const [element, count] of Object.entries(elements)) {
-    const elementData = PERIODIC_DATA.find((e) => e.symbol === element);
+
+  for (const [symbol, count] of Object.entries(elementsFound)) {
+    const elementData = PERIODIC_DATA.find((e) => e.symbol === symbol);
     if (!elementData) {
-      throw new Error(`Unknown element: ${element}`);
+      throw new Error(`Unknown element: ${symbol}`);
     }
     totalMass += elementData.atomic_mass * count;
   }
-
   return totalMass.toFixed(2);
 };
 
-const MassCalculator = ({ setShowModal }) => {
-  const searchRef = useRef(null);
+const MassCalculator = ({ onClose }) => {
+  const inputRef = useRef(null);
   const outputRef = useRef(null);
-  const onSearch = (event) => {
-    event.preventDefault();
-    const query = searchRef.current.value;
+
+  const calculateAndDisplayMass = useCallback(() => {
+    const formula = inputRef.current.value;
     try {
-      const mass = calculateMass(query);
+      const mass = calculateMass(formula);
       outputRef.current.innerText = `${mass} g/mol`;
     } catch (error) {
       outputRef.current.innerText = error.message;
     }
-  };
+  }, []);
 
+  // We can call calculation on every change.
   return (
     <div className="rounded bg-white">
       <div className="bg-stripes-header2 relative mx-auto max-w-md bg-opacity-100 p-6 pb-4">
         <div className="flex">
           <input
-            ref={searchRef}
+            ref={inputRef}
             type="text"
             placeholder="Type the chemical formula here"
             className="border-b-2 border-header2 bg-transparent font-lora text-xl focus:border-header focus:outline-none"
             style={{ width: "56vw", marginRight: "2vw" }}
-            onChange={(e) => onSearch(e)}
+            onChange={calculateAndDisplayMass}
           />
         </div>
         <div
@@ -393,108 +389,102 @@ const MassCalculator = ({ setShowModal }) => {
   );
 };
 
-// Main content component
-const TableContent = ({ focusElement, setFocusElement }) => {
+const TableContent = ({ focusElement, onSetFocusElement }) => {
   return (
     <div className="flex">
       <div className="flex-grow overflow-x-auto p-4">
         <div className="min-w-max">
-          <PeriodicTable pdata={PERIODIC_DATA} setFocus={setFocusElement} />
+          <PeriodicTable pdata={PERIODIC_DATA} onSetFocus={onSetFocusElement} />
         </div>
       </div>
       <div className="flex-shrink-0">
         <DetailsView
           elementNumber={focusElement}
           periodicData={PERIODIC_DATA}
-          style={{ width: "25vw" }}
         />
       </div>
     </div>
   );
 };
 
-// Main app component
 export default function PeriodicTableApp() {
-  const randomElementIndex =
+  const initialRandomElement =
     1 + Math.floor(Math.random() * PERIODIC_DATA.length);
-  const [focusElement, setFocusElement] = useState(randomElementIndex);
-  const [showModal, setShowModal] = useState(false);
-  const [showRefModal, setShowRefModal] = useState(false);
-  const searchRef = useRef(null);
+  const [focusElement, setFocusElement] = useState(initialRandomElement);
+  const [showMassModal, setShowMassModal] = useState(false);
+  const [showReferenceModal, setShowReferenceModal] = useState(false);
+  const searchInputRef = useRef(null);
+
+  const handleGlobalKeyDown = useCallback((e) => {
+    if ((e.metaKey || e.ctrlKey) && (e.key === "f" || e.key === "k")) {
+      e.preventDefault();
+      searchInputRef.current?.focus();
+    }
+  }, []);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      console.log(e.key);
-      // Check for Cmd+F (metaKey for Mac) or Cmd+K
-      if ((e.metaKey || e.ctrlKey) && (e.key === "f" || e.key === "k")) {
-        e.preventDefault();
-        searchRef.current?.focus();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleGlobalKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keydown", handleGlobalKeyDown);
     };
-  }, [showModal]);
-  useEffect(() => {
-    const handleModalEscapeKey = (e) => {
-      if (showModal && e.key === "Escape") {
-        setShowModal(false);
-      }
-    };
+  }, [handleGlobalKeyDown]);
 
-    document.addEventListener("keydown", handleModalEscapeKey);
-    return () => {
-      document.removeEventListener("keydown", handleModalEscapeKey);
-    };
-  }, [showModal]);
-
-  const handleSearch = (e) => {
+  const handleSearch = useCallback((e) => {
     e.preventDefault();
-    const targetv = e.target.elements[0].value;
-    const trimmedQ = targetv.trim().toLowerCase();
-    const sortedElements = fuse.search(trimmedQ);
-    var element = sortedElements[0];
-    document.getElementById(`element-${element.item.number}`).focus();
-  };
+    const query = e.target.elements[0].value.trim().toLowerCase();
+    const results = fuse.search(query);
+    if (results.length > 0) {
+      const element = results[0].item;
+      const el = document.getElementById(`element-${element.number}`);
+      if (el) {
+        el.focus();
+      }
+    }
+  }, []);
 
-  const handleRandomClick = () => {
-    const newRandomElement =
-      1 + Math.floor(Math.random() * PERIODIC_DATA.length);
-    setFocusElement(newRandomElement);
-  };
-  const handleModalClick = () => {
-    setShowModal(!showModal);
-  };
+  const handleRandomClick = useCallback(() => {
+    const randomElement = 1 + Math.floor(Math.random() * PERIODIC_DATA.length);
+    setFocusElement(randomElement);
+  }, []);
+
+  const handleMassModalToggle = useCallback(() => {
+    setShowMassModal((prev) => !prev);
+  }, []);
+
+  const handleReferenceModalOpen = useCallback(() => {
+    setShowReferenceModal(true);
+  }, []);
 
   return (
     <>
       <div className="flex" style={{ margin: "2vw" }}>
-        <SearchBar searchRef={searchRef} onSearch={handleSearch} />
+        <SearchBar inputRef={searchInputRef} onSearch={handleSearch} />
         <div className="flex-grow" />
-        <RandomButton handleClick={handleRandomClick} />
-        <ReferenceButton handleClick={() => setShowRefModal(true)} />
-        <ModalButton handleClick={handleModalClick} />
+        <RandomButton onClickRandom={handleRandomClick} />
+        <ReferenceButton onClickReference={handleReferenceModalOpen} />
+        <ModalButton onClickModal={handleMassModalToggle} />
       </div>
 
       <Modal
-        isOpen={showModal}
-        onRequestClose={() => setShowModal(false)}
-        shouldCloseOnOverlayClick={true}
-        shouldCloseOnEsc={true}
+        isOpen={showMassModal}
+        onRequestClose={() => setShowMassModal(false)}
+        shouldCloseOnOverlayClick
+        shouldCloseOnEsc
         className="modal"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4"
         ariaHideApp={false}
       >
-        <MassCalculator setShowModal={setShowModal} />
+        <MassCalculator onClose={() => setShowMassModal(false)} />
       </Modal>
 
-      <ReferenceModal showModal={showRefModal} setShowModal={setShowRefModal} />
+      <ReferenceModal
+        isOpen={showReferenceModal}
+        onClose={() => setShowReferenceModal(false)}
+      />
 
       <TableContent
         focusElement={focusElement}
-        setFocusElement={setFocusElement}
+        onSetFocusElement={setFocusElement}
       />
     </>
   );

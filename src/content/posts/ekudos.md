@@ -56,4 +56,8 @@ The script itself is very simple:
 
 <script src="https://gist.github.com/aadishv/0f3698ec722997d69beaf060a45f5d91.js"></script>
 
-Much of it is ai-generated but the core `for` loop at the end is handwritten. Of course this could be refactored in 10 different ways, but it did the job. Thanks for reading!
+Much of it is ai-generated but the core `for` loop at the end is handwritten. Of course this could be refactored in 10 different ways, but it did the job.
+
+**Epilogue**
+
+This ended up dramatically speeding up the process of sending the eKudos! It feels nice to be able to make the world a little bit better, even if it's just with a 30-line, hacked-together Python script. Thanks for reading!

@@ -1,4 +1,16 @@
-# aadishv-astro
+# aadishv.github.io
 
-Attempting to rewrite my personal website using Astro.
-It was initially built with Hugo but I found Astro's component-based model more flexible and easier to work with, also allowing to me to finally add a unified design system.
+Aadish's personal website, made with 🩷+💻 :D. Basic tech stack:
+
+- Astro + TailwindCSS (static site generation + SSR)
+- React (for the client-side periodic table)
+- Github Pages (hosting)
+
+**Sections**
+
+- Home
+- Blog
+- Projects
+- Tools
+  - Periodic table
+  - LaTeX to image tool
