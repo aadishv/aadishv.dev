@@ -1,0 +1,11 @@
+---
+import "../../style/global.css";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ChineseApp from "../../components/ChineseTest.jsx";
+
+const isDev = import.meta.env.DEV;
+---
+
+<BaseLayout title="Chinese _TEST_" description="">
+  {isDev ? <ChineseApp client:only /> : <div>:P</div>}
+</BaseLayout>

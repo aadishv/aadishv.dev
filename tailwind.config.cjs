@@ -11,24 +11,35 @@ module.exports = {
         header: "#0851D0",
         header2: "#82A9E5",
       },
-      animation: {
-        blob: "blob 7s infinite",
-      },
       keyframes: {
-        blob: {
+        rollin: {
           "0%": {
-            transform: "translate(0px, 0px) scale(1)",
-          },
-          "33%": {
-            transform: "translate(30px, -50px) scale(1.1)",
-          },
-          "66%": {
-            transform: "translate(-20px, 20px) scale(0.9)",
+            transform: "translateY(30%)",
+            opacity: "0",
           },
           "100%": {
-            transform: "tranlate(0px, 0px) scale(1)",
+            transform: "translateY(0)",
+            opacity: "1",
           },
         },
+        "chinese-widen": {
+          "0%": {
+            width: "0px",
+            opacity: 0,
+          },
+          "75%": {
+            width: "1.75rem",
+            opacity: 0.2,
+          },
+          "100%": {
+            width: "1.75rem",
+            opacity: 1,
+          },
+        },
+      },
+      animation: {
+        "roll-in": "rollin 1s linear",
+        "chinese-widen": "chinese-widen 1s linear",
       },
     },
   },
