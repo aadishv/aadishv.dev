@@ -14,11 +14,11 @@ module.exports = {
       keyframes: {
         rollin: {
           "0%": {
-            transform: "translateY(30%)",
+            transform: "translateY(10%)",
             opacity: "0",
           },
           "100%": {
-            transform: "translateY(0)",
+            transform: "translateY(0) rotateX(0deg)",
             opacity: "1",
           },
         },
@@ -39,7 +39,7 @@ module.exports = {
       },
       animation: {
         "roll-in": "rollin 1s linear",
-        "chinese-widen": "chinese-widen 1s linear",
+        "chinese-widen": "chinese-widen 0.6s linear",
       },
     },
   },

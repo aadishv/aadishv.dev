@@ -19,7 +19,8 @@ Aadish's personal website, made with 🩷+💻 :D. Basic tech stack:
 
 - Chinese
   - [ ] 2. Add footer with the following: help, clear localstorage, skip, bug/feature report, show history
-  - [ ] 1. Deliver the _massive design_ everyone has been waiting for
+  - [x] 1. Deliver the _massive design_ everyone has been waiting for
   - [ ] 3. Add the friggin data!!!
-  - [ ] 0. Implement conflict resolution
+  - [x] 0. Implement conflict resolution
+  - [ ] Organize into files
   - [ ]
