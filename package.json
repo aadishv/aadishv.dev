@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -26,6 +26,7 @@
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "@xstate/store": "^3.4.1",
+    "@yaireo/relative-time": "^1.0.5",
     "date-fns": "^2.28.0",
     "fuse.js": "^7.1.0",
     "hanzi-writer": "^3.7.2",

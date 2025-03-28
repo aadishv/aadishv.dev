@@ -1,16 +1,29 @@
-import type { Sentence } from "./chinese";
+export interface Sentence {
+  lesson: string;
+  def: string;
+  words: {
+    character: string;
+    pinyin: string;
+  }[];
+  id: string;
+}
+
+export enum CharState {
+  green = 0, // correctly written without hints
+  yellow = 1, // correctly written with hints
+  red = 2, // incorrectly written even with hints
+}
 
 /**
  * Transforms raw sentence data into structured format with character/pinyin pairs
  * @returns {Sentence[]} Array of sentences with character and pinyin pairs
  */
-export function remap(): Sentence[] {
-  const sentences_old = [
+export function getSentences(): Sentence[] {
+  const so = [
     {
-      lesson: "l8-1",
+      lesson: "ic lesson 8-1",
+      def: "Are you my friend?",
       words: [
-        "你",
-        "nǐ",
         "你",
         "nǐ",
         "是",
@@ -30,7 +43,14 @@ export function remap(): Sentence[] {
       ],
     },
   ];
-
+  const sentences_old = [
+    so[0],
+    {
+      lesson: "ic lesson 6-6",
+      def: "Are you my friend?",
+      words: ["的", "de", "朋", "péng", "友", "you", "吗", "ma", "?", ""],
+    },
+  ];
   return sentences_old.map((sentence) => ({
     ...sentence,
     words: sentence.words.reduce((acc, current, index, array) => {
@@ -42,5 +62,6 @@ export function remap(): Sentence[] {
       }
       return acc;
     }, []),
+    id: Math.random().toString(36).substring(2, 10) + Date.now().toString(36),
   }));
 }

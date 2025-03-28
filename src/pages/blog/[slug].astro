@@ -38,9 +38,16 @@ const formatted = format(date, "LLLL d, yyyy");
         >
           {post.frontmatter.title}
         </h2>
-        <time datetime={date.toString()} class="font-mono text-gray-500"
+        <time datetime={date.toString()} class="my-auto font-mono text-gray-500"
           >{formatted}</time
         >
+        {
+          post.frontmatter.hidden && (
+            <span class="my-auto ml-2 inline-block rounded-full bg-gray-200 px-2 text-base font-semibold">
+              UNLISTED
+            </span>
+          )
+        }
       </div>
       <post.Content />
     </main>

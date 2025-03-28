@@ -1,35 +1,25 @@
 import React, { useState, useRef, useEffect } from "react";
 import HanziWriter from "hanzi-writer";
 import { useSelector, useStore } from "@xstate/store/react";
-import { store } from "./chinesestore";
-import { CharState } from "./chinese";
+import { store } from "./Store";
+import { CharState } from "./Data";
 
 const CHARACTER_SIZE_STYLE = "h-28 w-28";
-
 /**
- * Component for practicing writing a single Chinese character
- * @param {string} character - The Chinese character to practice
- * @param {string} pinyin - The pinyin pronunciation (can be empty for punctuation)
- * @param {string} persistentId - Unique ID for the current practice session
+ * TrafficLights component that displays green, yellow, and red indicators
+ * showing the current state of character practice
+ * @param {boolean} checkMark - Whether to show the check mark in the selected state
+ * @param {CharState} state - The current state to highlight (green, yellow, or red)
+ * @returns A set of colored indicators showing the current practice state
  */
-export function CharacterReview({
-  character,
-  pinyin,
-  persistentId,
+export function TrafficLights({
+  checkMark,
+  state,
 }: {
-  character: string;
-  pinyin: string;
-  persistentId: string;
+  checkMark: boolean;
+  state: CharState;
 }) {
-  if (pinyin === "") {
-    return (
-      <div className="my-2 flex h-[12.875rem] flex-col px-2 font-lora">
-        <div className="my-auto text-3xl">{character}</div>
-      </div>
-    );
-  }
-
-  const checkMark = (
+  const checkMarkElement = (
     <svg
       width="20"
       height="20"
@@ -43,6 +33,55 @@ export function CharacterReview({
       />
     </svg>
   );
+  return (
+    <div className="flex gap-2">
+      <div
+        className={`h-5 w-5 rounded-full bg-green-500 transition-all ${state === CharState.green ? "hover:opacity-70" : "opacity-30 hover:opacity-15"}`}
+      >
+        {checkMark && state === CharState.green && checkMarkElement}
+      </div>
+      <div
+        className={`h-5 w-5 rounded-full bg-yellow-500 transition-all ${state === CharState.yellow ? "hover:opacity-70" : "opacity-30 hover:opacity-15"}`}
+      >
+        {checkMark && state === CharState.yellow && checkMarkElement}
+      </div>
+      <div
+        className={`h-5 w-5 rounded-full bg-red-500 transition-all ${state === CharState.red ? "hover:opacity-70" : "opacity-30 hover:opacity-15"}`}
+      >
+        {checkMark && state === CharState.red && checkMarkElement}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Component for practicing writing a single Chinese character
+ * @param {string} character - The Chinese character to practice
+ * @param {string} pinyin - The pinyin pronunciation (can be empty for punctuation)
+ * @param {string} persistentId - Unique ID for the current practice session
+ */
+export function CharacterReview({
+  character,
+  pinyin,
+  persistentId,
+  done,
+}: {
+  character: string;
+  pinyin: string;
+  persistentId: string;
+  done: () => void;
+}) {
+  if (pinyin === "") {
+    useEffect(() => {
+      done();
+    }, []); // Empty dependency array ensures this runs only once on mount
+
+    return (
+      <div className="my-2 flex h-[12.875rem] flex-col px-2 font-lora">
+        <div className="my-auto text-3xl">{character}</div>
+      </div>
+    );
+  }
 
   const local_store = useStore({
     context: {
@@ -164,7 +203,6 @@ export function CharacterReview({
   }, [writer]);
 
   useEffect(() => {
-    console.log(isCompleted);
     if (isCompleted) {
       store.trigger.updateCharacter({
         character: character,
@@ -179,23 +217,7 @@ export function CharacterReview({
       <div>
         <span className="mr-auto font-lora">{pinyin}</span>
         <div className="ml-auto">
-          <div className="flex gap-2">
-            <div
-              className={`h-5 w-5 rounded-full bg-green-500 transition-all ${state === CharState.green ? "hover:opacity-70" : "opacity-30 hover:opacity-15"}`}
-            >
-              {isCompleted && state == CharState.green && checkMark}
-            </div>
-            <div
-              className={`h-5 w-5 rounded-full bg-yellow-500 transition-all ${state === CharState.yellow ? "hover:opacity-70" : "opacity-30 hover:opacity-15"}`}
-            >
-              {isCompleted && state == CharState.yellow && checkMark}
-            </div>
-            <div
-              className={`h-5 w-5 rounded-full bg-red-500 transition-all ${state === CharState.red ? "hover:opacity-70" : "opacity-30 hover:opacity-15"}`}
-            >
-              {isCompleted && state == CharState.red && checkMark}
-            </div>
-          </div>
+          <TrafficLights state={state} checkMark={isCompleted} />
         </div>
       </div>
 

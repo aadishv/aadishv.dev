@@ -20,7 +20,6 @@ const {
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -34,8 +33,7 @@ const {
     <script
       is:inline
       async
-      src="https://www.googletagmanager.com/gtag/js?id=G-Y0HNZET7NE"
-    ></script>
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y0HNZET7NE"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
@@ -46,13 +44,13 @@ const {
       gtag("config", "G-Y0HNZET7NE");
     </script>
   </head>
-  <body class="text-text font-sans">
+  <body class="text-text h-[100vh] font-sans">
     <Header />
     <main
       class="h-full w-full"
       style={`padding: ${p / 4}rem; padding-top: ${pt / 4}rem`}
     >
       <slot />
-    </main>
-  </body>
+    </main></body
+  >
 </html>

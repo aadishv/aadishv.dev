@@ -18,9 +18,14 @@ Aadish's personal website, made with 🩷+💻 :D. Basic tech stack:
 **Todos (for Aadish)**
 
 - Chinese
-  - [ ] 2. Add footer with the following: help, clear localstorage, skip, bug/feature report, show history
-  - [x] 1. Deliver the _massive design_ everyone has been waiting for
-  - [ ] 3. Add the friggin data!!!
-  - [x] 0. Implement conflict resolution
-  - [ ] Organize into files
-  - [ ]
+  - [x] Add footer with the following: help, clear localstorage, skip, bug/feature report, show history
+  - [x] Deliver the _massive design_ everyone has been waiting for
+  - [ ] Add the friggin data!!!
+  - [x] Add sentence flow
+  - [x] Add sentence details
+  - [x] Implement conflict resolution
+  - [ ] Write help article
+  - [x] Organize into files
+  - [x] File structure
+    - [x] Get basic component structure down
+    - [x] Reorganize chinese, periodic using new structure

@@ -2,10 +2,10 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 // import global.css
 import "../../style/global.css";
-import PeriodicTable from "../../components/PeriodicTable.jsx";
+import PeriodicTableApp from "../../components/periodic/App.jsx";
 const siteTitle = "Aadish's periodic table";
 ---
 
 <BaseLayout title={siteTitle} pt={14} p={0}>
-  <PeriodicTable client:only />
+  <PeriodicTableApp client:only />
 </BaseLayout>
