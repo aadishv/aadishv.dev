@@ -48,7 +48,17 @@ export function getSentences(): Sentence[] {
     {
       lesson: "ic lesson 6-6",
       def: "Are you my friend?",
-      words: ["的", "de", "朋", "péng", "友", "you", "吗", "ma", "?", ""],
+      words: ["的", "de", "朋", "péng", "友", "you", "ma", "?", ""],
+    },
+    {
+      lesson: "ic lesson 1-1",
+      def: "hello",
+      words: ["你", "nǐ", "好", "hǎo"],
+    },
+    {
+      lesson: "ic lesson 1-2",
+      def: "goodbye",
+      words: ["再", "zài", "见", "jiàn"],
     },
   ];
   return sentences_old.map((sentence) => ({
