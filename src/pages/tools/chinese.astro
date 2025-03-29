@@ -3,11 +3,9 @@ import "../../style/global.css";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ChineseApp from "../../components/chinese/App.tsx";
 
-const isDev = import.meta.env.DEV;
+const isDev = import.meta.env.DEV; // remove this once the checklist is done
 ---
 
 <BaseLayout title="Aadish's Chinese practice" description="" pt={0} p={0}>
-  <div class="h-full w-full">
-    {isDev ? <ChineseApp client:only /> : <div>:P</div>}
-  </div>
+  {isDev ? <ChineseApp client:only /> : <div>:P</div>}
 </BaseLayout>

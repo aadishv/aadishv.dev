@@ -199,6 +199,7 @@ export function CharacterReview({
     writer.quiz({
       onMistake: local_store.trigger.mistake,
       onComplete: local_store.trigger.solved,
+      leniency: 1.2,
     });
   }, [writer]);
 
