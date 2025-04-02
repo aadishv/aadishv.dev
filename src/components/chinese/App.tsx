@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CharState, type Sentence } from "./Data";
 import { useSelector } from "@xstate/store/react";
-import { CharacterReview, TrafficLights } from "./CharacterReview";
+import { CharacterReview, TrafficLights } from "./characterreview";
 import { STORAGE_KEY, store } from "./Store";
 import Modal from "react-modal";
 import RelativeTime from "@yaireo/relative-time";
