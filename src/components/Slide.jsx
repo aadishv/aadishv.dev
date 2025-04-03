@@ -1,5 +1,7 @@
 import React from "react";
 import { useState, useEffect, useCallback, useRef } from "react";
+import Confetti from "react-confetti";
+import useWindowSize from "react-use/lib/useWindowSize";
 
 // --- Constants ---
 const GRID_SIZE = 4;
@@ -29,6 +31,15 @@ const isSolved = (tiles) => {
   return tiles[EMPTY_INDEX] === null;
 };
 
+// Function to format time in milliseconds to MM:SS.ss
+const formatTime = (milliseconds) => {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  const hundredths = Math.floor((milliseconds % 1000) / 10); // Get hundredths
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${String(hundredths).padStart(2, "0")}`;
+};
+
 // Function to get row and column from index
 const getCoords = (index) => ({
   row: Math.floor(index / GRID_SIZE),
@@ -45,11 +56,24 @@ const swap = (arr, i, j) => {
   return newArr;
 };
 
+// Function to calculate delay for shuffle animation (slow-fast-slow)
+const calculateShuffleDelay = (step, totalSteps) => {
+  const minDelay = 5; // Fastest delay (ms) in the middle
+  const maxDelay = 50; // Slowest delay (ms) at start/end - Further Reduced
+  const progress = step / totalSteps; // 0 to 1
+  // Use a parabolic function: 4 * (x - 0.5)^2 gives 1 at ends, 0 in middle
+  const parabola = 4 * Math.pow(progress - 0.5, 2);
+  const delay = minDelay + (maxDelay - minDelay) * parabola;
+  return Math.max(minDelay, delay); // Ensure delay doesn't go below minDelay
+};
+
 // --- Main App Component ---
 function App() {
   // --- State ---
   const [tiles, setTiles] = useState(generateSolvedTiles()); // Logical state (numbers 1-15, null)
   const [moves, setMoves] = useState(0);
+  const [timeElapsed, setTimeElapsed] = useState(0); // Timer state in milliseconds
+  const [timerActive, setTimerActive] = useState(false); // Timer active state
   const [solved, setSolved] = useState(true); // Track solved state
   const [originalImageSrc, setOriginalImageSrc] = useState(null); // Store the uploaded or default image source
   const [tileImages, setTileImages] = useState([]); // Store dataURLs for each image tile piece
@@ -58,7 +82,9 @@ function App() {
   const fileInputRef = useRef(null); // Ref for the file input
   const [animationDirection, setAnimationDirection] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false); // State for fullscreen status
+  const [isShuffling, setIsShuffling] = useState(false); // State for shuffle animation
   const appContainerRef = useRef(null); // Ref for the main component container
+  const { width, height } = useWindowSize(); // Get window dimensions for confetti
 
   // --- Derived State ---
   const emptyIndex = tiles.indexOf(null); // Find the index of the empty tile
@@ -66,18 +92,31 @@ function App() {
 
   // --- Shuffling Logic --- (Defined before processImage as it's called by it)
   const shuffleBoard = useCallback(
-    (forceShuffle = false) => {
-      if (isLoadingImage) return;
+    async (forceShuffle = false) => {
+      // Added async
+      if (isLoadingImage || isShuffling) return; // Prevent shuffle if loading or already shuffling
       if (!originalImageSrc && !forceShuffle) return;
 
-      let shuffledTiles = generateSolvedTiles();
+      setIsShuffling(true); // Start shuffling animation
+      setMoves(0);
+      setTimeElapsed(0); // Reset timer
+      setTimerActive(false); // Stop timer
+      setSolved(false); // Board is not solved during shuffle
+
+      let currentTiles = generateSolvedTiles();
       let currentEmptyIndex = EMPTY_INDEX;
-      const shuffleMoves = 150;
+      const shuffleMoves = 300; // Total number of shuffle steps - Increased
+
+      setTiles(currentTiles); // Show solved state briefly before starting
+
+      // Short initial delay before animation starts
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       for (let i = 0; i < shuffleMoves; i++) {
         const { row: currentEmptyRow, col: currentEmptyCol } =
           getCoords(currentEmptyIndex);
         const possibleMoves = [];
+        // Find valid neighboring tiles to swap with the empty space
         if (currentEmptyRow > 0)
           possibleMoves.push(getIndex(currentEmptyRow - 1, currentEmptyCol));
         if (currentEmptyRow < GRID_SIZE - 1)
@@ -87,17 +126,27 @@ function App() {
         if (currentEmptyCol < GRID_SIZE - 1)
           possibleMoves.push(getIndex(currentEmptyRow, currentEmptyCol + 1));
 
+        // Choose a random valid move
         const randomIndex = Math.floor(Math.random() * possibleMoves.length);
         const tileToMoveIndex = possibleMoves[randomIndex];
-        shuffledTiles = swap(shuffledTiles, currentEmptyIndex, tileToMoveIndex);
-        currentEmptyIndex = tileToMoveIndex;
+
+        // Perform the swap
+        currentTiles = swap(currentTiles, currentEmptyIndex, tileToMoveIndex);
+        currentEmptyIndex = tileToMoveIndex; // Update the empty index
+
+        // Update the state to show the move
+        setTiles(currentTiles);
+
+        // Calculate and wait for the delay
+        const delay = calculateShuffleDelay(i, shuffleMoves);
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
 
-      setTiles(shuffledTiles);
-      setMoves(0);
-      setSolved(isSolved(shuffledTiles));
+      // Ensure final state is consistent
+      setSolved(isSolved(currentTiles)); // Check if somehow solved (unlikely)
+      setIsShuffling(false); // End shuffling animation
     },
-    [originalImageSrc, isLoadingImage],
+    [originalImageSrc, isLoadingImage, isShuffling], // Add isShuffling dependency
   ); // Recreate if dependencies change
 
   // --- Image Processing Logic ---
@@ -214,7 +263,9 @@ function App() {
 
   // --- Tile Click Logic ---
   const handleTileClick = (clickedIndex) => {
-    if (solved || isLoadingImage || clickedIndex === emptyIndex) return;
+    // Disable clicks during shuffle animation
+    if (solved || isLoadingImage || isShuffling || clickedIndex === emptyIndex)
+      return;
 
     const { row: clickedRow, col: clickedCol } = getCoords(clickedIndex);
     let direction = null;
@@ -273,9 +324,22 @@ function App() {
       newTiles[slideIndices[slideIndices.length - 1]] = emptyValue;
     }
 
+    const newSolvedState = isSolved(newTiles);
+
     setTiles(newTiles);
     setMoves(moves + 1);
-    setSolved(isSolved(newTiles));
+    setSolved(newSolvedState);
+
+    // Start timer on first move
+    if (moves === 0 && !timerActive) {
+      setTimerActive(true);
+    }
+
+    // Stop timer if solved
+    if (newSolvedState) {
+      setTimerActive(false);
+    }
+
     setTimeout(() => {
       setAnimationDirection(null);
     }, 300);
@@ -308,6 +372,22 @@ function App() {
     };
   }, []); // Empty dependency array ensures this runs only once on mount
 
+  // --- Timer Effect ---
+  useEffect(() => {
+    let interval = null;
+    const intervalDuration = 10; // Update every 10ms for hundredths
+    if (timerActive) {
+      interval = setInterval(() => {
+        // Increment by the interval duration
+        setTimeElapsed((prevTime) => prevTime + intervalDuration);
+      }, intervalDuration);
+    } else if (!timerActive && timeElapsed !== 0) {
+      // Timer stopped but has a value, clear interval
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval); // Cleanup interval on unmount or timer stop
+  }, [timerActive, timeElapsed]); // Rerun effect if timerActive changes
+
   // --- Rendering with Periodic Table Styling ---
   return (
     // Add ref and conditional background for fullscreen
@@ -315,6 +395,16 @@ function App() {
       ref={appContainerRef}
       className={`flex min-h-screen flex-col items-center justify-center p-4 font-mono ${isFullscreen ? "bg-white dark:bg-gray-900" : ""}`} // Add background in fullscreen
     >
+      {/* Conditionally render confetti when solved */}
+      {solved && (
+        <Confetti
+          width={width}
+          height={height}
+          recycle={false} // Stop confetti after a bit
+          numberOfPieces={300} // Adjust number of pieces
+          gravity={0.3} // Adjust gravity
+        />
+      )}
       {/* Controls Row styled like periodic table controls */}
       <div className="flex" style={{ margin: "2vw" }}>
         {/* Search bar styled component replacement */}
@@ -334,19 +424,30 @@ function App() {
         </div>
 
         {/* Game stats */}
-        <div className="mr-4 flex items-end">
+        <div className="mr-4 flex items-end space-x-4">
+          {" "}
+          {/* Added space-x-4 */}
           <span className="m-0 h-8 border-b-2 border-header2 p-0 font-lora text-xl">
             Moves: {moves}
           </span>
+          <span className="m-0 h-8 border-b-2 border-header2 p-0 font-lora text-xl">
+            Time: {formatTime(timeElapsed)}
+          </span>
         </div>
 
-        {/* Reset/shuffle button and confirmation */}
-        <div className="flex items-end">
-          {!showResetConfirm ? (
+        {/* Reset/shuffle button, confirmation, or shuffling indicator */}
+        <div className="flex h-8 items-end">
+          {" "}
+          {/* Ensure consistent height */}
+          {isShuffling ? (
+            <span className="m-0 border-b-2 border-header2 p-0 font-lora text-xl text-gray-500">
+              Shuffling...
+            </span>
+          ) : !showResetConfirm ? (
             <button
               onClick={() => setShowResetConfirm(true)} // Show confirmation on click
-              className="m-0 h-8 border-b-2 border-header2 p-0 font-lora text-xl hover:border-header"
-              disabled={isLoadingImage} // Disable if loading
+              className="m-0 h-8 border-b-2 border-header2 p-0 font-lora text-xl hover:border-header disabled:cursor-not-allowed disabled:opacity-50" // Added disabled styles
+              disabled={isLoadingImage} // Only disable if loading, shuffling handled above
             >
               Reset / Shuffle
             </button>
@@ -355,7 +456,7 @@ function App() {
               <span className="text-sm text-yellow-800">Are you sure?</span>
               <button
                 onClick={() => {
-                  shuffleBoard(true);
+                  shuffleBoard(true); // This is now async, but we don't need to await it here
                   setShowResetConfirm(false); // Hide confirmation after action
                 }}
                 className="rounded bg-red-500 px-2 py-0.5 text-sm text-white hover:bg-red-600"
@@ -446,9 +547,9 @@ function App() {
                   return (
                     <div
                       key={currentVisualIndex}
-                      className={`/* Ensure is included in size */ absolute box-border flex select-none items-center justify-center rounded border font-bold shadow-sm ${!isEmpty ? "cursor-pointer" : "cursor-default"} ${!tileHasImage && !isEmpty ? "text-xl text-white" : ""} ${bgClass} `}
+                      className={`/* Ensure is included in size */ absolute box-border flex select-none items-center justify-center rounded border font-bold shadow-sm ${!isEmpty || isShuffling ? "cursor-default" : "cursor-pointer"} ${!tileHasImage && !isEmpty ? "text-xl text-white" : ""} ${bgClass} `} // Change cursor if shuffling
                       style={tileStyle}
-                      onClick={() => handleTileClick(currentVisualIndex)}
+                      onClick={() => handleTileClick(currentVisualIndex)} // Click handler already checks isShuffling
                     >
                       {!tileHasImage && !isEmpty && tileValue}
                     </div>
