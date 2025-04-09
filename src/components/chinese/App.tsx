@@ -148,7 +148,7 @@ function SentenceReview({ done }: { done: () => void }) {
             <div
               key={index}
               className={isPunctuation ? "inline-block -ml-2 whitespace-nowrap" : undefined}
-              style={isPunctuation ? {position: "relative", zIndex: 10} : undefined}
+              style={isPunctuation ? {position: "relative"} : undefined}
             >
               {CURRENT_MODE === "pinyin" ? (
                 <PinyinReview
