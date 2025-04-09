@@ -1,7 +1,15 @@
 import { createStore } from "@xstate/store";
 import { getSentences, CharState, type Sentence } from "./Data";
 
-export const STORAGE_KEY = "com.aadishv.chineseapp.pinyin.persistence";
+export let STORAGE_KEY = (() => {
+  let mode = localStorage.getItem("mode");
+  if (mode) {
+    return mode;
+  } else {
+    localStorage.setItem("mode", "chinese");
+    return "chinese";
+  }
+})();
 
 /**
  * Loads saved application state from localStorage

@@ -2,6 +2,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-kaishu {
+  font-family: "KaiTi", "STKaiti", "KaiTi_GB2312", serif;
+}
+
 @font-face {
   font-family: "Lora";
   src: url("/fonts/lora.woff2") format("woff2");

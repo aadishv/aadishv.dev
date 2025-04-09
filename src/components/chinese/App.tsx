@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CharState, type Sentence } from "./Data";
 import { useSelector } from "@xstate/store/react";
-import { CharacterReview, TrafficLights } from "./characterreview";
+import { PinyinReview, CharacterReview, TrafficLights } from "./Review";
 import { STORAGE_KEY, store } from "./Store";
 import Modal from "react-modal";
 import RelativeTime from "@yaireo/relative-time";
@@ -32,14 +32,17 @@ function Button({
     </button>
   );
 }
+
 /**
- * Basic sentence details
+ * Basic sentence details with click-to-reveal English meaning
  */
 function SentenceDetails() {
+  const [revealMeaning, setRevealMeaning] = useState(false);
   const sentence: Sentence = useSelector(
     store,
     (state) => state.context.sentences[0],
   );
+
   return (
     <div className="bg-stripes-header2 flex w-[50rem] gap-1 rounded-xl border border-header py-3">
       <span className="my-auto w-[20rem] border-r border-r-header px-5 font-lora text-xl">
@@ -49,12 +52,41 @@ function SentenceDetails() {
         <br />
         {sentence.lesson}
       </span>
-      <span className="my-auto w-[30rem] px-5 font-lora text-xl">
+      <span
+        className="group my-auto w-[30rem] cursor-pointer px-5 font-lora text-xl"
+        onClick={() => setRevealMeaning(!revealMeaning)}
+      >
         <span className="text-transform font-caps font-mono text-sm uppercase text-header">
-          english meaning
+          english meaning{" "}
+          {!revealMeaning && (
+            <span className="text-xs italic">(click to reveal)</span>
+          )}
         </span>
         <br />
-        {sentence.def}
+        {revealMeaning ? (
+          <span className="opacity-100 transition-opacity duration-500">
+            {sentence.def}
+          </span>
+        ) : (
+          <div className="flex items-center gap-1">
+            <span className="italic text-gray-400 transition-opacity duration-300 group-hover:opacity-50">
+              *** hidden ***
+            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="h-5 w-5 text-gray-400 transition-colors group-hover:text-header"
+            >
+              <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+              <path
+                fillRule="evenodd"
+                d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+        )}
       </span>
       <span className="mt-auto px-3 font-mono text-base text-gray-500">
         {sentence.id}
@@ -62,6 +94,7 @@ function SentenceDetails() {
     </div>
   );
 }
+
 /**
  * Component that renders a full sentence review interface with multiple characters
  */
@@ -104,24 +137,33 @@ function SentenceReview({ done }: { done: () => void }) {
 
     store.on("completedCountChanged", handleCompletedCountChanged);
   }, [sentences, numDone, uniqueWords]);
+
   return (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap justify-center gap-4">
       {sentences[0].words.map(
         (word: { character: string; pinyin: string }, index: number) => (
           <div key={index}>
-            <CharacterReview
-              character={word.character}
-              pinyin={word.pinyin}
-              persistentId={id}
-              done={() => setNumDone(numDone + 1)}
-            />
+            {STORAGE_KEY == "pinyin" ? (
+              <PinyinReview
+                character={word.character}
+                pinyin={word.pinyin}
+                persistentId={id}
+                done={() => setNumDone(numDone + 1)}
+              />
+            ) : (
+              <CharacterReview
+                character={word.character}
+                pinyin={word.pinyin}
+                persistentId={id}
+                done={() => setNumDone(numDone + 1)}
+              />
+            )}
           </div>
         ),
       )}
     </div>
   );
 }
-
 /**
  * Footer component with the following options: help, skip, show history (-> clear localstorage)
  */
@@ -134,6 +176,8 @@ function Footer({
   done: boolean;
   progressSentence: () => void;
 }) {
+  const currentState = STORAGE_KEY == "chinese" ? "pinyin" : "chinese";
+
   return (
     <div className="flex w-full">
       <div className="mb-0 mr-auto flex flex-row gap-5">
@@ -144,6 +188,14 @@ function Footer({
           }}
         />
         <Button name="history" onClick={() => showModal()} />
+        <Button
+          name={`switch to ${currentState}`}
+          onClick={() => {
+            localStorage.setItem("mode", currentState);
+            // reload
+            window.location.reload();
+          }}
+        />
       </div>
       <div className="mb-0 ml-auto flex flex-row gap-5">
         <Button
