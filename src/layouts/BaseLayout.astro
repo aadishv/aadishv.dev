@@ -14,6 +14,8 @@ const {
   pt = 24,
   p = 20,
 } = Astro.props;
+
+const isDev = import.meta.env.DEV; // remove this once the checklist is done
 ---
 
 <!doctype html>
@@ -30,6 +32,7 @@ const {
       rel="stylesheet"
     />
     <!-- Google tag (gtag.js) -->
+    {!isDev &&
     <script
       is:inline
       async
@@ -43,6 +46,7 @@ const {
 
       gtag("config", "G-Y0HNZET7NE");
     </script>
+    }
   </head>
   <body class="text-text h-[100vh] font-sans">
     <Header />
