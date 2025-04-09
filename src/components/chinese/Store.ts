@@ -1,15 +1,8 @@
 import { createStore } from "@xstate/store";
 import { getSentences, CharState, type Sentence } from "./Data";
 
-export let STORAGE_KEY = (() => {
-  let mode = localStorage.getItem("mode");
-  if (mode) {
-    return mode;
-  } else {
-    localStorage.setItem("mode", "chinese");
-    return "chinese";
-  }
-})();
+// Single storage key for all Chinese app data
+const CHINESE_APP_STORAGE_KEY = "chinese_app_data";
 
 /**
  * Loads saved application state from localStorage
@@ -17,7 +10,7 @@ export let STORAGE_KEY = (() => {
  */
 export const loadFromStorage = () => {
   try {
-    const storedData = localStorage.getItem(STORAGE_KEY);
+    const storedData = localStorage.getItem(CHINESE_APP_STORAGE_KEY);
     if (storedData) {
       return JSON.parse(storedData);
     }
@@ -33,15 +26,56 @@ export const loadFromStorage = () => {
  */
 export const saveToStorage = (data: any) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(CHINESE_APP_STORAGE_KEY, JSON.stringify(data));
   } catch (error) {
     console.error("Failed to save data to localStorage:", error);
   }
 };
 
+// Get the current mode from URL or localStorage
+export const getCurrentMode = (): "chinese" | "pinyin" => {
+  // First check URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const modeParam = urlParams.get("mode");
+  
+  // If valid mode in URL, use it and also save to localStorage as last used mode
+  if (modeParam === "chinese" || modeParam === "pinyin") {
+    // Load existing data
+    const storedData = loadFromStorage();
+    if (storedData) {
+      // Update lastMode in localStorage
+      saveToStorage({
+        ...storedData,
+        lastMode: modeParam
+      });
+    } else {
+      // Initialize with this mode
+      saveToStorage({
+        chinese: {},
+        pinyin: {},
+        sessions: {},
+        lastMode: modeParam
+      });
+    }
+    return modeParam;
+  }
+  
+  // If no valid mode in URL, check localStorage
+  const storedData = loadFromStorage();
+  const lastMode = storedData?.lastMode;
+  
+  // Return stored mode or default to 'chinese'
+  return (lastMode === "chinese" || lastMode === "pinyin") ? lastMode : "chinese";
+};
+
+// Get the current mode - evaluated at runtime
+export const CURRENT_MODE = typeof window !== "undefined" ? getCurrentMode() : "chinese";
+
+// Load stored data and initialize context
 const storedData = loadFromStorage();
 const initialContext = {
-  history: (storedData?.history || {}) as Record<string, [CharState, string]>,
+  // Get history specific to current mode or create empty object
+  history: (storedData?.[CURRENT_MODE] || {}) as Record<string, [CharState, string]>,
   sentences:
     storedData?.sentences ||
     ([...getSentences()].sort(() => 0.5 - Math.random()) as Sentence[]),
@@ -119,7 +153,22 @@ export const store = createStore({
 });
 
 store.subscribe((snapshot) => {
-  // Only save history, sentences, and sessions to localStorage, not completedCount
-  const { history, sentences, sessions } = snapshot.context;
-  saveToStorage({ history, sentences, sessions });
+  // Load the full data object
+  const storedData = loadFromStorage() || {
+    chinese: {},
+    pinyin: {},
+    sessions: {},
+    lastMode: CURRENT_MODE
+  };
+  
+  // Update only the current mode's data and sessions
+  const updatedData = {
+    ...storedData,
+    [CURRENT_MODE]: snapshot.context.history,
+    sessions: snapshot.context.sessions,
+    sentences: snapshot.context.sentences,
+  };
+  
+  // Save the updated data
+  saveToStorage(updatedData);
 });

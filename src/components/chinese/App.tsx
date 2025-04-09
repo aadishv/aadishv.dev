@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { CharState, type Sentence } from "./Data";
 import { useSelector } from "@xstate/store/react";
 import { PinyinReview, CharacterReview, TrafficLights } from "./Review";
-import { STORAGE_KEY, store } from "./Store";
+import { CURRENT_MODE, store } from "./Store";
 import Modal from "react-modal";
 import RelativeTime from "@yaireo/relative-time";
 
@@ -53,8 +53,8 @@ function SentenceDetails() {
         {sentence.lesson}
       </span>
       <span
-        className="group my-auto w-[30rem] cursor-pointer px-5 font-lora text-xl"
-        onClick={() => setRevealMeaning(!revealMeaning)}
+        className={`group my-auto w-[30rem] ${!revealMeaning ? 'cursor-pointer' : ''} px-5 font-lora text-xl`}
+        onClick={() => setRevealMeaning(true)}
       >
         <span className="text-transform font-caps font-mono text-sm uppercase text-header">
           english meaning{" "}
@@ -68,15 +68,12 @@ function SentenceDetails() {
             {sentence.def}
           </span>
         ) : (
-          <div className="flex items-center gap-1">
-            <span className="italic text-gray-400 transition-opacity duration-300 group-hover:opacity-50">
-              *** hidden ***
-            </span>
+          <div className="flex items-center gap-1 relative group" title="English hidden for a little extra challenge, click to reveal it">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
-              className="h-5 w-5 text-gray-400 transition-colors group-hover:text-header"
+              className="h-6 w-6 text-gray-400 transition-colors group-hover:text-header"
             >
               <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
               <path
@@ -139,27 +136,38 @@ function SentenceReview({ done }: { done: () => void }) {
   }, [sentences, numDone, uniqueWords]);
 
   return (
-    <div className="flex flex-wrap justify-center gap-4">
+    <div className="flex flex-wrap justify-center gap-4 w-full overflow-visible">
       {sentences[0].words.map(
-        (word: { character: string; pinyin: string }, index: number) => (
-          <div key={index}>
-            {STORAGE_KEY == "pinyin" ? (
-              <PinyinReview
-                character={word.character}
-                pinyin={word.pinyin}
-                persistentId={id}
-                done={() => setNumDone(numDone + 1)}
-              />
-            ) : (
-              <CharacterReview
-                character={word.character}
-                pinyin={word.pinyin}
-                persistentId={id}
-                done={() => setNumDone(numDone + 1)}
-              />
-            )}
-          </div>
-        ),
+        (word: { character: string; pinyin: string }, index: number) => {
+          // Special handling for punctuation - display inline with previous character
+          const isPunctuation = word.pinyin === "";
+          const previousIsPunctuation = index > 0 && sentences[0].words[index-1].pinyin === "";
+
+          // Create a non-breaking span for punctuation to keep it with preceding characters
+          return (
+            <div
+              key={index}
+              className={isPunctuation ? "inline-block -ml-2 whitespace-nowrap" : undefined}
+              style={isPunctuation ? {position: "relative", zIndex: 10} : undefined}
+            >
+              {CURRENT_MODE === "pinyin" ? (
+                <PinyinReview
+                  character={word.character}
+                  pinyin={word.pinyin}
+                  persistentId={id}
+                  done={() => setNumDone(numDone + 1)}
+                />
+              ) : (
+                <CharacterReview
+                  character={word.character}
+                  pinyin={word.pinyin}
+                  persistentId={id}
+                  done={() => setNumDone(numDone + 1)}
+                />
+              )}
+            </div>
+          );
+        },
       )}
     </div>
   );
@@ -176,7 +184,8 @@ function Footer({
   done: boolean;
   progressSentence: () => void;
 }) {
-  const currentState = STORAGE_KEY == "chinese" ? "pinyin" : "chinese";
+  // Toggle between pinyin and chinese modes
+  const oppositeMode = CURRENT_MODE === "chinese" ? "pinyin" : "chinese";
 
   return (
     <div className="flex w-full">
@@ -189,11 +198,12 @@ function Footer({
         />
         <Button name="history" onClick={() => showModal()} />
         <Button
-          name={`switch to ${currentState}`}
+          name={`switch to ${oppositeMode}`}
           onClick={() => {
-            localStorage.setItem("mode", currentState);
-            // reload
-            window.location.reload();
+            // Update URL with the new mode
+            const url = new URL(window.location.href);
+            url.searchParams.set("mode", oppositeMode);
+            window.location.href = url.toString();
           }}
         />
       </div>
@@ -262,7 +272,13 @@ function MyModal({ modalIsOpen, closeModal, relativeTimes, history }) {
                     "Are you sure you want to delete all data from past practice sessions?",
                   )
                 ) {
-                  localStorage.removeItem(STORAGE_KEY);
+                  // Get existing data
+                  const storedData = JSON.parse(localStorage.getItem("chinese_app_data") || "{}");
+                  // Clear only current mode data
+                  if (storedData) {
+                    storedData[CURRENT_MODE] = {};
+                    localStorage.setItem("chinese_app_data", JSON.stringify(storedData));
+                  }
                   window.location.reload();
                 }
               }}
@@ -319,7 +335,10 @@ export default function ChineseApp() {
     <div className="flex h-full w-full flex-col items-center justify-center text-2xl">
       <div className="p-20 pt-20">
         <SentenceDetails />
-        <SentenceReview key={currentId} done={() => setDone(true)} />
+        {/* Container that constrains character component width */}
+        <div className="w-[50rem] mt-4 px-4 py-4">
+          <SentenceReview key={currentId} done={() => setDone(true)} />
+        </div>
       </div>
       <MyModal
         modalIsOpen={modalIsOpen}

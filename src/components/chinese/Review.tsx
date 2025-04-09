@@ -5,6 +5,7 @@ import { store } from "./Store";
 import { CharState } from "./Data";
 
 const CHARACTER_SIZE_STYLE = "h-28 w-28";
+const CHARACTER_SIZE_HEIGHT = "h-28";
 
 /**
  * Converts pinyin with number tones to standard pinyin
@@ -141,8 +142,9 @@ export function CharacterReview({
     }, []); // Empty dependency array ensures this runs only once on mount
 
     return (
-      <div className="my-2 flex h-[12.875rem] flex-col px-2 font-lora">
-        <div className="my-auto text-3xl">{character}</div>
+      // Single div with appropriate top padding to align with other characters
+      <div className="px-2 mt-24 inline-flex flex-col items-center">
+        <span className="font-kaishu text-5xl text-gray-600" title="Punctuation">{character}</span>
       </div>
     );
   }
@@ -278,7 +280,7 @@ export function CharacterReview({
   }, [isCompleted, state, character, persistentId]);
 
   return (
-    <div className="my-2 flex flex-col px-2">
+    <div className="-px-1 my-2 flex flex-col">
       <div>
         <span className="mr-auto font-lora">{pinyin}</span>
         <div className="ml-auto">
@@ -293,7 +295,7 @@ export function CharacterReview({
 
       <div>
         <button
-          className="font-lora text-lg underline decoration-header2 hover:decoration-header"
+          className="font-lora text-base underline decoration-header2 hover:decoration-header"
           onClick={() => local_store.trigger.buttonClick()}
         >
           {buttonName}
@@ -331,16 +333,13 @@ export function PinyinReview({
     // For punctuation, we only render the character itself, but maintain the same structure
     // for consistent spacing and alignment
     return (
-      <div
-        className="my-2 flex flex-col items-center px-2"
-        style={{ width: "130px" }}
-      >
+      <div className="flex flex-col items-center" style={{ width: "130px" }}>
         {/* Empty space where traffic lights would be */}
         <div className="mb-2 flex h-5 w-full justify-center"></div>
 
         <div className="flex flex-col items-center">
           {/* Only render the character itself */}
-          <span className="font-kaishu text-7xl">{character}</span>
+          <span className="font-kaishu text-7xl text-gray-600" title="Punctuation">{character}</span>
 
           {/* Empty space with same height as input field */}
           <div className="relative h-8 w-28"></div>
@@ -365,6 +364,7 @@ export function PinyinReview({
       showError: false,
       isErrorAnimating: false,
       hint: "",
+      lastIncorrectInput: "", // Track last incorrect input to avoid penalizing repeated submissions
     },
     on: {
       // ... all the handlers remain unchanged
@@ -428,23 +428,41 @@ export function PinyinReview({
         };
       },
 
-      submit: (context) => {
+      submit: (context, _, enqueue) => {
         // If already completed, do nothing
         if (context.isCompleted) return context;
+
+        // Don't count empty submissions as wrong
+        if (!context.inputValue.trim()) {
+          return context;
+        }
 
         // Normalize the input and correct pinyin for comparison
         const normalizedInput = normalizePinyin(context.inputValue);
         const normalizedPinyin = normalizePinyin(pinyin);
 
         if (normalizedInput === normalizedPinyin) {
+          // Use the solved handler directly to ensure inputValue is updated consistently
           return {
             ...context,
             isCompleted: true,
             state: context.state,
+            inputValue: pinyin, // Set the input value to the correct pinyin
           };
         } else {
+          // Check if this is a repeated submission of the same incorrect answer
+          // Don't count repeating the same wrong answer multiple times
+          if (
+            context.showError &&
+            context.inputValue === context.lastIncorrectInput
+          ) {
+            return context;
+          }
           // Instead of triggering mistake, we'll directly update the context here
           const newMistakes = context.mistakes + 1;
+
+          // Store the last incorrect input to avoid penalizing repeated submissions
+          const lastIncorrectInput = context.inputValue;
 
           // Check if we need to change state based on mistake count
           if (
@@ -457,6 +475,7 @@ export function PinyinReview({
               state: CharState.yellow,
               showError: true,
               isErrorAnimating: true,
+              lastIncorrectInput,
             };
           }
 
@@ -470,6 +489,7 @@ export function PinyinReview({
               state: CharState.red,
               showError: true,
               isErrorAnimating: true,
+              lastIncorrectInput,
             };
           }
 
@@ -479,6 +499,7 @@ export function PinyinReview({
             mistakes: newMistakes,
             showError: true,
             isErrorAnimating: true,
+            lastIncorrectInput,
           };
         }
       },
@@ -587,15 +608,15 @@ export function PinyinReview({
         <span className="font-kaishu text-7xl">{character}</span>
 
         {/* Input field - same width as character display */}
-        <div className="relative w-28">
-          <div className="flex items-center">
+        <div className="relative w-28 mx-auto">
+          <div className="flex items-center justify-center">
             <input
               type="text"
               value={inputValue}
               onChange={(e) =>
                 local_store.trigger.updateInput({ value: e.target.value })
               }
-              className={`w-full bg-transparent py-1 pr-8 font-lora outline-none ${isErrorAnimating ? "opacity-50 transition-all duration-300" : "transition-all duration-300"} underline ${isErrorAnimating ? "decoration-red-500" : "decoration-header2"}`}
+              className={`w-full bg-transparent py-1 ${isCompleted ? 'text-center' : 'pr-8'} font-lora text-header outline-none ${isErrorAnimating ? "opacity-50 transition-all duration-300" : "transition-all duration-300"} underline ${isErrorAnimating ? "decoration-red-500" : "decoration-header2"}`}
               disabled={isCompleted}
               placeholder="Pinyin"
               onKeyDown={(e) => {
