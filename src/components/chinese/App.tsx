@@ -53,7 +53,7 @@ function SentenceDetails() {
         {sentence.lesson}
       </span>
       <span
-        className={`group my-auto w-[30rem] ${!revealMeaning ? 'cursor-pointer' : ''} px-5 font-lora text-xl`}
+        className={`group my-auto w-[30rem] ${!revealMeaning ? "cursor-pointer" : ""} px-5 font-lora text-xl`}
         onClick={() => setRevealMeaning(true)}
       >
         <span className="text-transform font-caps font-mono text-sm uppercase text-header">
@@ -68,7 +68,10 @@ function SentenceDetails() {
             {sentence.def}
           </span>
         ) : (
-          <div className="flex items-center gap-1 relative group" title="English hidden for a little extra challenge, click to reveal it">
+          <div
+            className="group relative flex items-center gap-1"
+            title="English hidden for a little extra challenge, click to reveal it"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -136,19 +139,24 @@ function SentenceReview({ done }: { done: () => void }) {
   }, [sentences, numDone, uniqueWords]);
 
   return (
-    <div className="flex flex-wrap justify-center gap-4 w-full overflow-visible">
+    <div className="flex w-full flex-wrap justify-center gap-4 overflow-visible">
       {sentences[0].words.map(
         (word: { character: string; pinyin: string }, index: number) => {
           // Special handling for punctuation - display inline with previous character
           const isPunctuation = word.pinyin === "";
-          const previousIsPunctuation = index > 0 && sentences[0].words[index-1].pinyin === "";
+          const previousIsPunctuation =
+            index > 0 && sentences[0].words[index - 1].pinyin === "";
 
           // Create a non-breaking span for punctuation to keep it with preceding characters
           return (
             <div
               key={index}
-              className={isPunctuation ? "inline-block -ml-2 whitespace-nowrap" : undefined}
-              style={isPunctuation ? {position: "relative"} : undefined}
+              className={
+                isPunctuation
+                  ? "-ml-2 inline-block whitespace-nowrap"
+                  : undefined
+              }
+              style={isPunctuation ? { position: "relative" } : undefined}
             >
               {CURRENT_MODE === "pinyin" ? (
                 <PinyinReview
@@ -273,11 +281,16 @@ function MyModal({ modalIsOpen, closeModal, relativeTimes, history }) {
                   )
                 ) {
                   // Get existing data
-                  const storedData = JSON.parse(localStorage.getItem("chinese_app_data") || "{}");
+                  const storedData = JSON.parse(
+                    localStorage.getItem("chinese_app_data") || "{}",
+                  );
                   // Clear only current mode data
                   if (storedData) {
                     storedData[CURRENT_MODE] = {};
-                    localStorage.setItem("chinese_app_data", JSON.stringify(storedData));
+                    localStorage.setItem(
+                      "chinese_app_data",
+                      JSON.stringify(storedData),
+                    );
                   }
                   window.location.reload();
                 }
@@ -332,21 +345,29 @@ export default function ChineseApp() {
     (state) => state.context.sentences[0].id,
   );
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center text-2xl">
-      <div className="p-20 pt-20">
+    <div className="flex h-screen w-full flex-col items-center text-2xl">
+      {/* Fixed header area */}
+      <div className="w-full flex-shrink-0 px-20 pt-20 flex justify-center">
         <SentenceDetails />
+      </div>
+
+      {/* Scrollable middle content area */}
+      <div className="w-full flex-grow overflow-y-auto px-20">
         {/* Container that constrains character component width */}
-        <div className="w-[50rem] mt-4 px-4 py-4">
+        <div className="mx-auto w-[50rem] py-4">
           <SentenceReview key={currentId} done={() => setDone(true)} />
         </div>
       </div>
+
       <MyModal
         modalIsOpen={modalIsOpen}
         closeModal={closeModal}
         relativeTimes={relativeTimes}
         history={history}
       />
-      <div className="mt-auto w-full p-5 px-20">
+
+      {/* Fixed footer area */}
+      <div className="w-full flex-shrink-0 p-5 px-20">
         <Footer
           showModal={showModal}
           done={done}
