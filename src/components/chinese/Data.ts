@@ -4,17 +4,17 @@ import lessonData21 from "./data/2-1.json";
 import lessonData22 from "./data/2-2.json";
 import lessonData31 from "./data/3-1.json";
 import lessonData32 from "./data/3-2.json";
-import lessonData41 from "./data/4-1.json";
-import lessonData42 from "./data/4-2.json";
-import lessonData51 from "./data/5-1.json";
-import lessonData52 from "./data/5-2.json";
-import lessonData61 from "./data/6-1.json";
-import lessonData62 from "./data/6-2.json";
-import lessonData71 from "./data/7-1.json";
-import lessonData72 from "./data/7-2.json";
-import lessonData81 from "./data/8-1.json";
-import lessonData82 from "./data/8-2.json";
-import lessonData91 from "./data/9-1.json";
+// import lessonData41 from "./data/4-1.json";
+// import lessonData42 from "./data/4-2.json";
+// import lessonData51 from "./data/5-1.json";
+// import lessonData52 from "./data/5-2.json";
+// import lessonData61 from "./data/6-1.json";
+// import lessonData62 from "./data/6-2.json";
+// import lessonData71 from "./data/7-1.json";
+// import lessonData72 from "./data/7-2.json";
+// import lessonData81 from "./data/8-1.json";
+// import lessonData82 from "./data/8-2.json";
+// import lessonData91 from "./data/9-1.json";
 
 export interface Sentence {
   lesson: string;
@@ -76,17 +76,17 @@ export function getSentences(): Sentence[] {
     ...transformLessonData(lessonData22, "ic lesson 2-2"),
     ...transformLessonData(lessonData31, "ic lesson 3-1"),
     ...transformLessonData(lessonData32, "ic lesson 3-2"),
-    ...transformLessonData(lessonData41, "ic lesson 4-1"),
-    ...transformLessonData(lessonData42, "ic lesson 4-2"),
-    ...transformLessonData(lessonData51, "ic lesson 5-1"),
-    ...transformLessonData(lessonData52, "ic lesson 5-2"),
-    ...transformLessonData(lessonData61, "ic lesson 6-1"),
-    ...transformLessonData(lessonData62, "ic lesson 6-2"),
-    ...transformLessonData(lessonData71, "ic lesson 7-1"),
-    ...transformLessonData(lessonData72, "ic lesson 7-2"),
-    ...transformLessonData(lessonData81, "ic lesson 8-1"),
-    ...transformLessonData(lessonData82, "ic lesson 8-2"),
-    ...transformLessonData(lessonData91, "ic lesson 9-1"),
+    // ...transformLessonData(lessonData41, "ic lesson 4-1"),
+    // ...transformLessonData(lessonData42, "ic lesson 4-2"),
+    // ...transformLessonData(lessonData51, "ic lesson 5-1"),
+    // ...transformLessonData(lessonData52, "ic lesson 5-2"),
+    // ...transformLessonData(lessonData61, "ic lesson 6-1"),
+    // ...transformLessonData(lessonData62, "ic lesson 6-2"),
+    // ...transformLessonData(lessonData71, "ic lesson 7-1"),
+    // ...transformLessonData(lessonData72, "ic lesson 7-2"),
+    // ...transformLessonData(lessonData81, "ic lesson 8-1"),
+    // ...transformLessonData(lessonData82, "ic lesson 8-2"),
+    // ...transformLessonData(lessonData91, "ic lesson 9-1"),
   ];
 }
 

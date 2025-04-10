@@ -35,7 +35,7 @@
       ]
     },
     {
-      "def": "May I ask, what's your honorable surname?",
+      "def": "Excuse me, what's your honorable surname?",
       "words": [
         {
           "character": "请",
@@ -68,7 +68,7 @@
       ]
     },
     {
-      "def": "My surname is Li.",
+      "def": "My surname is Li. And you?",
       "words": [
         {
           "character": "我",
@@ -85,12 +85,7 @@
         {
           "character": "。",
           "pinyin": ""
-        }
-      ]
-    },
-    {
-      "def": "And you?",
-      "words": [
+        },
         {
           "character": "你",
           "pinyin": "Nǐ"
@@ -106,7 +101,7 @@
       ]
     },
     {
-      "def": "My surname is Wang.",
+      "def": "My surname is Wang. Miss Li, what's your name?",
       "words": [
         {
           "character": "我",
@@ -123,12 +118,7 @@
         {
           "character": "。",
           "pinyin": ""
-        }
-      ]
-    },
-    {
-      "def": "Miss Li, what's your name?",
-      "words": [
+        },
         {
           "character": "李",
           "pinyin": "Lǐ"
@@ -176,7 +166,7 @@
       ]
     },
     {
-      "def": "My name is Li You.",
+      "def": "My name is Li You. Mr. Wang, what's your name?",
       "words": [
         {
           "character": "我",
@@ -197,12 +187,7 @@
         {
           "character": "。",
           "pinyin": ""
-        }
-      ]
-    },
-    {
-      "def": "Mr. Wang, what is your name?",
-      "words": [
+        },
         {
           "character": "王",
           "pinyin": "Wáng"
