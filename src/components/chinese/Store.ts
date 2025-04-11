@@ -1,6 +1,5 @@
 import { createStore } from "@xstate/store";
 import { getSentences, CharState, type Sentence } from "./Data";
-import hi from "date-fns/esm/locale/hi";
 
 // Single storage key for all Chinese app data
 const CHINESE_APP_STORAGE_KEY = "chinese_app_data";
@@ -70,12 +69,6 @@ const initialContext = {
 
 export const store = createStore({
   context: initialContext,
-  emits: {
-    completedCountChanged: (payload: {
-      completedCount: number;
-      history: HistoryType;
-    }) => {},
-  },
   on: {
     updateCharacter: (
       context,
@@ -90,7 +83,7 @@ export const store = createStore({
       const lastState = context.history[event.character];
       const noChange = lastState && lastState[0] === event.newState;
 
-      const newContext = {
+      return {
         ...context,
         completedCount: context.completedCount + 1,
         history: noChange
@@ -103,14 +96,6 @@ export const store = createStore({
               },
             } as HistoryType),
       };
-
-      // Emit event with updated values
-      enqueue.emit.completedCountChanged({
-        completedCount: newContext.completedCount,
-        history: newContext.history,
-      });
-
-      return newContext;
     },
     resetCompletedCount: (context, _, enqueue) => {
       const newContext = {
@@ -155,6 +140,12 @@ export const store = createStore({
       return {
         ...context,
         enabledLessons: event.enabledLessons,
+      };
+    },
+    increaseCompletedCount: (context) => {
+      return {
+        ...context,
+        completedCount: context.completedCount + 1,
       };
     },
   },

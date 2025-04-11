@@ -5,10 +5,6 @@ import { Review, TrafficLights } from "./Review";
 import { store, type AppMode, getAllLessons } from "./Store";
 import Modal from "react-modal";
 import RelativeTime from "@yaireo/relative-time";
-
-function getCharFromState(state: CharState) {
-  return state == CharState.green ? "G" : state == CharState.red ? "R" : "Y";
-}
 /**
  * Simple button component that renders a clickable button with underline decoration
  * @param {string} name - The text to display on the button
@@ -98,13 +94,7 @@ function SentenceDetails() {
 /**
  * Component that renders a full sentence review interface with multiple characters
  */
-function SentenceReview({
-  done,
-  mode,
-}: {
-  done: () => void;
-  mode: AppMode | null;
-}) {
+function SentenceReview({ mode }: { mode: AppMode | null }) {
   const id = useRef({
     id: Math.random().toString(36).substring(2, 10) + Date.now().toString(36),
     m: mode ?? ((Math.random() < 0.5 ? "character" : "pinyin") as AppMode),
@@ -116,30 +106,6 @@ function SentenceReview({
   }, []);
 
   const sentences = useSelector(store, (state) => state.context.sentences);
-  const [numDone, setNumDone] = useState(0);
-
-  const uniqueWords = useMemo(() => {
-    const seen = new Set<string>();
-    return sentences[0].words.filter((word) => {
-      if (seen.has(word.character)) {
-        return false;
-      }
-      seen.add(word.character);
-      return true;
-    });
-  }, [sentences]);
-
-  // Move event listener to useEffect
-  useEffect(() => {
-    const handleCompletedCountChanged = (event) => {
-      if (event.completedCount !== sentences[0].words.length - numDone) {
-        return;
-      }
-      done();
-    };
-
-    store.on("completedCountChanged", handleCompletedCountChanged);
-  }, [sentences, numDone, uniqueWords]);
 
   return (
     <div className="flex w-full flex-wrap justify-center gap-4 overflow-visible">
@@ -165,7 +131,6 @@ function SentenceReview({
                 character={word.character}
                 pinyin={word.pinyin}
                 persistentId={id.id}
-                done={() => setNumDone(numDone + 1)}
                 mode={id.m}
               />
             </div>
@@ -175,18 +140,14 @@ function SentenceReview({
     </div>
   );
 }
-/**
- * Footer component with options: help, history, settings, and skip/continue
- */
+
 function Footer({
   showModal,
   showSettingsModal,
-  done,
   progressSentence, // (skips if not done)
 }: {
   showModal: () => void;
   showSettingsModal: () => void;
-  done: boolean;
   progressSentence: () => void;
 }) {
   return (
@@ -203,7 +164,7 @@ function Footer({
       </div>
       <div className="mb-0 ml-auto flex flex-row gap-5">
         <Button
-          name={done ? "continue" : "skip"}
+          name="continue"
           onClick={() => {
             progressSentence();
           }}
@@ -212,22 +173,13 @@ function Footer({
     </div>
   );
 }
-/**
- * Modal component that displays the user's learning history
- * @param {boolean} modalIsOpen - Whether the modal is currently visible
- * @param {() => void} closeModal - Function to close the modal
- * @param {Record<string, string>} relativeTimes - Object mapping characters to relative time strings
- * @param {Object} history - User's learning history data from the store
- */
-function MyModal({
-  modalIsOpen,
-  closeModal,
-  relativeTimes,
-  history,
-  numSentences,
-}) {
-  const [activeTab, setActiveTab] = useState("character");
 
+function MyModal({ modalIsOpen, closeModal, relativeTimes, history }) {
+  const [activeTab, setActiveTab] = useState("character");
+  const numSentences = useSelector(
+    store,
+    (state) => state.context.sentences.length,
+  );
   // Determine which data to use based on active tab
   const currentHistory = history[activeTab] || {};
 
@@ -320,13 +272,6 @@ function MyModal({
   );
 }
 
-/**
- * Settings modal component that allows users to change the mode and select lessons
- * @param {boolean} modalIsOpen - Whether the modal is currently visible
- * @param {() => void} closeModal - Function to close the modal
- * @param {AppMode | null} currentMode - Current mode setting
- * @param {(mode: AppMode | null) => void} setMode - Function to update the mode
- */
 function SettingsModal({
   modalIsOpen,
   closeModal,
@@ -469,13 +414,10 @@ function SettingsModal({
     </Modal>
   );
 }
-/**
- * Main application component that manages app state and renders appropriate view
- */
+
 export default function ChineseApp() {
   const [historyModalIsOpen, setHistoryModalIsOpen] = useState(false);
   const [settingsModalIsOpen, setSettingsModalIsOpen] = useState(false);
-  const [done, setDone] = useState(false);
   const [mode, setMode] = useState<AppMode | null>(null);
 
   // Function to show modals
@@ -520,6 +462,7 @@ export default function ChineseApp() {
     });
     return times;
   }, [history]);
+
   const currentId = useSelector(
     store,
     (state) => state.context.sentences[0].id,
@@ -541,11 +484,7 @@ export default function ChineseApp() {
       <div className="w-full flex-grow overflow-y-auto px-20">
         {/* Container that constrains character component width */}
         <div className="mx-auto w-[50rem] py-4">
-          <SentenceReview
-            key={currentId}
-            done={() => setDone(true)}
-            mode={mode}
-          />
+          <SentenceReview key={currentId} mode={mode} />
         </div>
       </div>
 
@@ -554,7 +493,6 @@ export default function ChineseApp() {
         closeModal={closeHistoryModal}
         relativeTimes={times}
         history={history}
-        numSentences={numSentences}
       />
 
       <SettingsModal
@@ -569,11 +507,7 @@ export default function ChineseApp() {
         <Footer
           showModal={showHistoryModal}
           showSettingsModal={showSettingsModal}
-          done={done}
-          progressSentence={() => {
-            setDone(false);
-            store.trigger.progressSentence();
-          }}
+          progressSentence={() => store.trigger.progressSentence()}
         />
       </div>
     </div>
