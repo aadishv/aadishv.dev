@@ -1,17 +1,105 @@
 import React, { useState, useRef, useEffect } from "react";
 import HanziWriter from "hanzi-writer";
 import { useSelector, useStore } from "@xstate/store/react";
-import { store } from "./Store";
+import { store, type AppMode } from "./Store";
 import { CharState } from "./Data";
+import { GrLocal } from "react-icons/gr";
+import { DiPerl } from "react-icons/di";
 
 const CHARACTER_SIZE_STYLE = "h-28 w-28";
-const CHARACTER_SIZE_HEIGHT = "h-28";
 
-/**
- * Converts pinyin with number tones to standard pinyin
- * @param {string} pinyin - Pinyin with number tones (e.g. "ni3")
- * @returns {string} - Standard pinyin (e.g. "nǐ")
- */
+const useReviewStateMachine = (data: {
+  char: string;
+  id: string;
+  mode: AppMode;
+}) => {
+  const local_store = useStore({
+    context: {
+      mistakes: 0,
+      state: CharState.green,
+      state2: CharState.green,
+      isCompleted: false,
+      mistakesToYellow: data.mode == "character" ? 5 : 2,
+      mistakesToRed: data.mode == "character" ? 4 : 7,
+      parentData: data,
+    },
+    emits: {
+      showSolution: () => {},
+      showPartialSolution: () => {},
+    },
+    on: {
+      solved: (context, event: {}, enqueue) => {
+        setTimeout(() => enqueue.emit.showSolution({}), 400);
+        store.trigger.updateCharacter({
+          character: context.parentData.char,
+          newState: context.state,
+          id: context.parentData.id,
+          mode: context.parentData.mode,
+        });
+        return { ...context, isCompleted: true };
+      },
+      mistake: (context) => {
+        const newMistakes = context.mistakes + 1;
+
+        if (
+          context.state === CharState.green &&
+          newMistakes >= context.mistakesToYellow
+        ) {
+          return {
+            ...context,
+            mistakes: 0,
+            state: CharState.yellow,
+          };
+        }
+
+        if (
+          context.state === CharState.yellow &&
+          newMistakes >= context.mistakesToRed
+        ) {
+          return {
+            ...context,
+            mistakes: 0,
+            state: CharState.red,
+          };
+        }
+
+        return { ...context, mistakes: newMistakes };
+      },
+      button: (context, event: {}, enqueue) => {
+        if (context.isCompleted) {
+          return context;
+        } else if (context.state2 === CharState.green) {
+          enqueue.emit.showPartialSolution({});
+          return {
+            ...context,
+            state:
+              context.state === CharState.red
+                ? CharState.red
+                : CharState.yellow,
+            state2: CharState.yellow,
+            mistakes: context.state === CharState.yellow ? context.mistakes : 0,
+          };
+        } else if (context.state2 === CharState.yellow) {
+          local_store.trigger.solved();
+          store.trigger.updateCharacter({
+            character: context.parentData.char,
+            newState: CharState.red,
+            id: context.parentData.id,
+            mode: context.parentData.mode,
+          });
+          return {
+            ...context,
+            state: CharState.red,
+            state2: CharState.red,
+            isCompleted: true,
+          };
+        }
+      },
+    },
+  });
+  return local_store;
+};
+
 function convertNumberTonesToMarks(pinyin: string): string {
   const pinyinLower = pinyin.toLowerCase();
 
@@ -52,12 +140,6 @@ function convertNumberTonesToMarks(pinyin: string): string {
   // No vowel found to modify, return as is
   return normalizedPinyin;
 }
-
-/**
- * Normalizes pinyin for comparison - handles both number tones and standard pinyin
- * @param {string} input - The pinyin input to normalize
- * @returns {string} Normalized pinyin in lowercase without spaces
- */
 function normalizePinyin(input: string): string {
   // Remove spaces and make lowercase
   const trimmed = input.toLowerCase().trim();
@@ -70,13 +152,6 @@ function normalizePinyin(input: string): string {
   return trimmed;
 }
 
-/**
- * TrafficLights component that displays green, yellow, and red indicators
- * showing the current state of character practice
- * @param {boolean} checkMark - Whether to show the check mark in the selected state
- * @param {CharState} state - The current state to highlight (green, yellow, or red)
- * @returns A set of colored indicators showing the current practice state
- */
 export function TrafficLights({
   checkMark,
   state,
@@ -119,13 +194,7 @@ export function TrafficLights({
   );
 }
 
-/**
- * Component for practicing writing a single Chinese character
- * @param {string} character - The Chinese character to practice
- * @param {string} pinyin - The pinyin pronunciation (can be empty for punctuation)
- * @param {string} persistentId - Unique ID for the current practice session
- */
-export function CharacterReview({
+function CharacterReview({
   character,
   pinyin,
   persistentId,
@@ -136,105 +205,10 @@ export function CharacterReview({
   persistentId: string;
   done: () => void;
 }) {
-  if (pinyin === "") {
-    useEffect(() => {
-      done();
-    }, []); // Empty dependency array ensures this runs only once on mount
-
-    return (
-      // Single div with appropriate top padding to align with other characters
-      <div className="px-2 mt-24 inline-flex flex-col items-center">
-        <span className="font-kaishu text-5xl text-gray-600" title="Punctuation">{character}</span>
-      </div>
-    );
-  }
-
-  const local_store = useStore({
-    context: {
-      mistakes: 0,
-      state: CharState.green,
-      state2: CharState.green,
-      isCompleted: false,
-      redLimit: 12,
-      writer: null as HanziWriter | null,
-    },
-    on: {
-      solved: (context) => {
-        setTimeout(() => {
-          context.writer?.animateCharacter();
-        }, 1000);
-        return { ...context, isCompleted: true };
-      },
-
-      mistake: (context) => {
-        const newMistakes = context.mistakes + 1;
-
-        if (context.state === CharState.green && newMistakes >= 5) {
-          return {
-            ...context,
-            mistakes: newMistakes,
-            state: CharState.yellow,
-            redLimit: newMistakes + 7,
-          };
-        }
-
-        if (
-          context.state === CharState.yellow &&
-          newMistakes >= context.redLimit
-        ) {
-          return {
-            ...context,
-            mistakes: newMistakes,
-            state: CharState.red,
-          };
-        }
-
-        return { ...context, mistakes: newMistakes };
-      },
-
-      buttonClick: (context) => {
-        if (context.isCompleted || context.state2 === CharState.red) {
-          context.writer?.animateCharacter();
-          return context;
-        }
-        if (context.state2 === CharState.green) {
-          context.writer?.showOutline();
-          return {
-            ...context,
-            state:
-              context.state === CharState.red
-                ? CharState.red
-                : CharState.yellow,
-            state2: CharState.yellow,
-          };
-        } else if (context.state2 === CharState.yellow) {
-          context.writer?.animateCharacter();
-          return {
-            ...context,
-            state: CharState.red,
-            state2: CharState.red,
-            isCompleted: true,
-          };
-        }
-      },
-
-      initWriter: (
-        context,
-        event: { ref: React.RefObject<HTMLDivElement> },
-      ) => {
-        const hanziWriter = HanziWriter.create(event.ref.current, character, {
-          padding: 5,
-          strokeColor: "#0851D0",
-          drawingColor: "#0851D0",
-          outlineColor: "rgba(130, 169, 229, 0.5)",
-          acceptBackwardsStrokes: true,
-          showHintAfterMisses: false,
-          showOutline: false,
-          strokeFadeDuration: 0,
-        });
-        return { ...context, writer: hanziWriter };
-      },
-    },
+  const local_store = useReviewStateMachine({
+    char: character,
+    id: persistentId,
+    mode: "character",
   });
 
   const state = useSelector(local_store, (state) => state.context.state);
@@ -243,49 +217,67 @@ export function CharacterReview({
     (state) => state.context.isCompleted,
   );
 
-  const writer = useSelector(local_store, (state) => state.context.writer);
-
   const buttonName = useSelector(local_store, (state) => {
-    if (state.context.isCompleted || state.context.state2 === CharState.red) {
+    if (state.context.isCompleted) {
       return "Replay";
     }
     return state.context.state2 === CharState.green
       ? "Show outline"
       : "Show solution";
   });
-
+  // set up writer stuff
   const writerRef = useRef<HTMLDivElement>(null);
-
+  const [writer, setWriter] = useState<HanziWriter | null>(null);
   useEffect(() => {
-    local_store.trigger.initWriter({ ref: writerRef });
+    setWriter(
+      HanziWriter.create(writerRef.current, character, {
+        padding: 5,
+        strokeColor: "#0851D0",
+        drawingColor: "#0851D0",
+        outlineColor: "rgba(130, 169, 229, 0.5)",
+        acceptBackwardsStrokes: true,
+        showHintAfterMisses: false,
+        showOutline: false,
+        strokeFadeDuration: 0,
+      }),
+    );
   }, []);
-
   useEffect(() => {
     if (!writer) return;
     writer.quiz({
       onMistake: local_store.trigger.mistake,
-      onComplete: local_store.trigger.solved,
+      onComplete: () => local_store.trigger.solved(),
       leniency: 1.2,
     });
-  }, [writer]);
 
-  useEffect(() => {
-    if (isCompleted) {
-      store.trigger.updateCharacter({
-        character: character,
-        newState: state,
-        id: persistentId,
-      });
-    }
-  }, [isCompleted, state, character, persistentId]);
+    const subscription = local_store.on("showSolution", ({}) => {
+      writer.animateCharacter();
+    });
+    const subscription2 = local_store.on("showPartialSolution", ({}) => {
+      writer.showOutline();
+    });
+    return () => {
+      subscription.unsubscribe();
+      subscription2.unsubscribe();
+    };
+  }, [writer]);
 
   return (
     <div className="-px-1 my-2 flex flex-col">
-      <div>
-        <span className="mr-auto font-lora">{pinyin}</span>
-        <div className="ml-auto">
-          <TrafficLights state={state} checkMark={isCompleted} />
-        </div>
+      <div className="w-full">
+        <button
+          className="hover:decoration-heade font-lora text-base underline decoration-header2"
+          onClick={() => {
+            if (isCompleted) {
+              writer.animateCharacter();
+            } else {
+              local_store.trigger.button();
+            }
+          }}
+        >
+          {buttonName}
+        </button>
+        <TrafficLights state={state} checkMark={isCompleted} />
       </div>
 
       <div
@@ -294,24 +286,13 @@ export function CharacterReview({
       ></div>
 
       <div>
-        <button
-          className="font-lora text-base underline decoration-header2 hover:decoration-header"
-          onClick={() => local_store.trigger.buttonClick()}
-        >
-          {buttonName}
-        </button>
+        <span className="mr-auto font-lora">{pinyin}</span>
       </div>
     </div>
   );
 }
 
-/**
- * Component for practicing typing pinyin for a Chinese character
- * @param {string} character - The Chinese character to show
- * @param {string} pinyin - The correct pinyin pronunciation
- * @param {string} persistentId - Unique ID for the current practice session
- */
-export function PinyinReview({
+function PinyinReview({
   character,
   pinyin,
   persistentId,
@@ -322,332 +303,151 @@ export function PinyinReview({
   persistentId: string;
   done: () => void;
 }) {
-  // Special handling for punctuation marks
-  if (pinyin === "") {
-    // Use effect to mark as complete immediately
-    useEffect(() => {
-      // Notify parent that this component is done
-      done();
-    }, []);
-
-    // For punctuation, we only render the character itself, but maintain the same structure
-    // for consistent spacing and alignment
-    return (
-      <div className="flex flex-col items-center" style={{ width: "130px" }}>
-        {/* Empty space where traffic lights would be */}
-        <div className="mb-2 flex h-5 w-full justify-center"></div>
-
-        <div className="flex flex-col items-center">
-          {/* Only render the character itself */}
-          <span className="font-kaishu text-7xl text-gray-600" title="Punctuation">{character}</span>
-
-          {/* Empty space with same height as input field */}
-          <div className="relative h-8 w-28"></div>
-        </div>
-
-        {/* Empty space where button would be */}
-        <div className="h-8 w-full"></div>
-      </div>
-    );
-  }
-
-  // Rest of the component for regular characters remains the same
-  const local_store = useStore({
-    context: {
-      mistakes: 0,
-      state: CharState.green,
-      state2: CharState.green,
-      isCompleted: false,
-      yellowLimit: 2, // After 2 mistakes, go to yellow
-      redLimit: 4, // After 4 total mistakes, go to red
-      inputValue: "",
-      showError: false,
-      isErrorAnimating: false,
-      hint: "",
-      lastIncorrectInput: "", // Track last incorrect input to avoid penalizing repeated submissions
-    },
-    on: {
-      // ... all the handlers remain unchanged
-      solved: (context) => {
-        return {
-          ...context,
-          isCompleted: true,
-          inputValue: pinyin,
-        };
-      },
-
-      mistake: (context) => {
-        const newMistakes = context.mistakes + 1;
-
-        if (
-          context.state === CharState.green &&
-          newMistakes >= context.yellowLimit
-        ) {
-          return {
-            ...context,
-            mistakes: newMistakes,
-            state: CharState.yellow,
-            showError: true,
-            isErrorAnimating: true,
-          };
-        }
-
-        if (
-          context.state === CharState.yellow &&
-          newMistakes >= context.redLimit
-        ) {
-          return {
-            ...context,
-            mistakes: newMistakes,
-            state: CharState.red,
-            showError: true,
-            isErrorAnimating: true,
-          };
-        }
-
-        return {
-          ...context,
-          mistakes: newMistakes,
-          showError: true,
-          isErrorAnimating: true,
-        };
-      },
-
-      resetErrorAnimation: (context) => {
-        return {
-          ...context,
-          isErrorAnimating: false,
-        };
-      },
-
-      updateInput: (context, event: { value: string }) => {
-        return {
-          ...context,
-          inputValue: event.value,
-          showError: false,
-        };
-      },
-
-      submit: (context, _, enqueue) => {
-        // If already completed, do nothing
-        if (context.isCompleted) return context;
-
-        // Don't count empty submissions as wrong
-        if (!context.inputValue.trim()) {
-          return context;
-        }
-
-        // Normalize the input and correct pinyin for comparison
-        const normalizedInput = normalizePinyin(context.inputValue);
-        const normalizedPinyin = normalizePinyin(pinyin);
-
-        if (normalizedInput === normalizedPinyin) {
-          // Use the solved handler directly to ensure inputValue is updated consistently
-          return {
-            ...context,
-            isCompleted: true,
-            state: context.state,
-            inputValue: pinyin, // Set the input value to the correct pinyin
-          };
-        } else {
-          // Check if this is a repeated submission of the same incorrect answer
-          // Don't count repeating the same wrong answer multiple times
-          if (
-            context.showError &&
-            context.inputValue === context.lastIncorrectInput
-          ) {
-            return context;
-          }
-          // Instead of triggering mistake, we'll directly update the context here
-          const newMistakes = context.mistakes + 1;
-
-          // Store the last incorrect input to avoid penalizing repeated submissions
-          const lastIncorrectInput = context.inputValue;
-
-          // Check if we need to change state based on mistake count
-          if (
-            context.state === CharState.green &&
-            newMistakes >= context.yellowLimit
-          ) {
-            return {
-              ...context,
-              mistakes: newMistakes,
-              state: CharState.yellow,
-              showError: true,
-              isErrorAnimating: true,
-              lastIncorrectInput,
-            };
-          }
-
-          if (
-            context.state === CharState.yellow &&
-            newMistakes >= context.redLimit
-          ) {
-            return {
-              ...context,
-              mistakes: newMistakes,
-              state: CharState.red,
-              showError: true,
-              isErrorAnimating: true,
-              lastIncorrectInput,
-            };
-          }
-
-          // Default case - increment mistakes but keep same state
-          return {
-            ...context,
-            mistakes: newMistakes,
-            showError: true,
-            isErrorAnimating: true,
-            lastIncorrectInput,
-          };
-        }
-      },
-
-      buttonClick: (context) => {
-        if (context.isCompleted) {
-          return context; // Do nothing if already completed
-        }
-
-        if (context.state2 === CharState.green) {
-          // Show all letters but strip tones
-          const noTones = pinyin
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
-          return {
-            ...context,
-            hint: noTones,
-            inputValue: noTones, // Set input value to the hint
-            // Keep the state as red if it's already red, otherwise go to yellow
-            state:
-              context.state === CharState.red
-                ? CharState.red
-                : CharState.yellow,
-            state2: CharState.yellow,
-          };
-        } else if (context.state2 === CharState.yellow) {
-          // Show full solution
-          return {
-            ...context,
-            hint: pinyin,
-            inputValue: pinyin,
-            isCompleted: true,
-            state: CharState.red,
-            state2: CharState.red,
-          };
-        }
-
-        return context;
-      },
-    },
+  const local_store = useReviewStateMachine({
+    char: character,
+    id: persistentId,
+    mode: "pinyin",
   });
 
-  // All the useSelector and useEffect code remains the same
   const state = useSelector(local_store, (state) => state.context.state);
   const state2 = useSelector(local_store, (state) => state.context.state2);
+
   const isCompleted = useSelector(
     local_store,
     (state) => state.context.isCompleted,
   );
-  const inputValue = useSelector(
-    local_store,
-    (state) => state.context.inputValue,
-  );
-  const showError = useSelector(
-    local_store,
-    (state) => state.context.showError,
-  );
-  const isErrorAnimating = useSelector(
-    local_store,
-    (state) => state.context.isErrorAnimating,
-  );
 
-  // Determine button text based on state2
   const buttonName = useSelector(local_store, (state) => {
     if (state.context.isCompleted) {
-      return ""; // No button when completed
+      return "";
     }
     return state.context.state2 === CharState.green
       ? "Show letters"
       : "Show solution";
   });
 
-  // Handle error animation
-  useEffect(() => {
-    if (isErrorAnimating) {
-      const timer = setTimeout(() => {
-        local_store.trigger.resetErrorAnimation();
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [isErrorAnimating]);
+  const [input, setInput] = useState("");
+  const [isErrorAnimating, setIsErrorAnimating] = useState(false);
 
-  // Update the global state when completed
-  useEffect(() => {
-    if (isCompleted) {
-      store.trigger.updateCharacter({
-        character: character,
-        newState: state,
-        id: persistentId,
-      });
-      done();
+  const submitted = () => {
+    if (!input.trim()) return;
+
+    const normalizedInput = normalizePinyin(input);
+    const normalizedPinyin = normalizePinyin(pinyin);
+    if (normalizedInput === normalizedPinyin) {
+      local_store.trigger.solved();
+    } else {
+      local_store.trigger.mistake();
+      setIsErrorAnimating(true);
+      setTimeout(() => setIsErrorAnimating(false), 400);
     }
-  }, [isCompleted, state, character, persistentId]);
+  };
+
+  useEffect(() => {
+    const subscription = local_store.on("showSolution", ({}) => {
+      setInput(pinyin);
+    });
+    const subscription2 = local_store.on("showPartialSolution", ({}) => {
+      const noTones = pinyin.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      setInput(noTones);
+    });
+    return () => {
+      subscription.unsubscribe();
+      subscription2.unsubscribe();
+    };
+  }, []);
 
   return (
-    <div
-      className="my-2 flex flex-col items-center px-2"
-      style={{ width: "130px" }}
-    >
-      <div className="mb-2 flex w-full justify-center">
+    <div className="mb-2 flex w-28 flex-col items-center justify-center">
+      <div className="w-full">
+        <button
+          className={`w-full font-lora text-base ${isCompleted ? "text-gray-500" : "underline decoration-header2 hover:decoration-header"}`}
+          onClick={() => local_store.trigger.button()}
+          disabled={isCompleted}
+        >
+          {isCompleted ? "Completed" : buttonName}
+        </button>
         <TrafficLights state={state} checkMark={isCompleted} />
       </div>
 
-      <div className="flex flex-col items-center">
-        {/* Character display - square box without border */}
-        <span className="font-kaishu text-7xl">{character}</span>
+      <span className="font-kaishu text-7xl">{character}</span>
 
-        {/* Input field - same width as character display */}
-        <div className="relative w-28 mx-auto">
-          <div className="flex items-center justify-center">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) =>
-                local_store.trigger.updateInput({ value: e.target.value })
-              }
-              className={`w-full bg-transparent py-1 ${isCompleted ? 'text-center' : 'pr-8'} font-lora text-header outline-none ${isErrorAnimating ? "opacity-50 transition-all duration-300" : "transition-all duration-300"} underline ${isErrorAnimating ? "decoration-red-500" : "decoration-header2"}`}
-              disabled={isCompleted}
-              placeholder="Pinyin"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  local_store.trigger.submit();
-                }
-              }}
-            />
-            {!isCompleted && (
-              <button
-                className="absolute right-1 cursor-pointer"
-                onClick={() => local_store.trigger.submit()}
-                aria-label="Submit"
-              >
-                <span className="text-lg text-header">⏎</span>
-              </button>
-            )}
-          </div>
+      <div className="relative mx-auto w-28">
+        <div className="flex items-center justify-center">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className={`w-full bg-transparent py-1 ${isCompleted ? "text-center" : "pr-8"} font-lora text-header outline-none ${isErrorAnimating ? "opacity-50 transition-all duration-300" : "transition-all duration-300"} underline ${isErrorAnimating ? "decoration-red-500" : "decoration-header2"}`}
+            disabled={isCompleted}
+            placeholder="Pinyin"
+            onKeyDown={(e) => {
+              if (e.key !== "Enter") return;
+              submitted();
+            }}
+          />
+          {!isCompleted && (
+            <button
+              className="absolute right-1 cursor-pointer"
+              onClick={() => submitted()}
+              aria-label="Submit"
+            >
+              <span className="text-lg text-header">⏎</span>
+            </button>
+          )}
         </div>
-      </div>
-
-      <div className="w-full">
-        {buttonName && (
-          <button
-            className="w-full font-lora text-lg underline decoration-header2 hover:decoration-header"
-            onClick={() => local_store.trigger.buttonClick()}
-          >
-            {buttonName}
-          </button>
-        )}
       </div>
     </div>
   );
+}
+
+export function Review({
+  character,
+  pinyin,
+  persistentId,
+  done,
+  mode,
+}: {
+  character: string;
+  pinyin: string;
+  persistentId: string;
+  done: () => void;
+  mode: AppMode;
+}) {
+  if (pinyin === "") {
+    useEffect(() => {
+      done();
+    }, []); // Empty dependency array ensures this runs only once on mount
+
+    return (
+      // Single div with appropriate top padding to align with other characters
+      <div className="mt-24 inline-flex flex-col items-center px-2">
+        <span
+          className="font-kaishu text-5xl text-gray-600"
+          title="Punctuation"
+        >
+          {character}
+        </span>
+      </div>
+    );
+  }
+  if (mode == "pinyin") {
+    return (
+      <PinyinReview
+        character={character}
+        pinyin={pinyin}
+        persistentId={persistentId}
+        done={done}
+      />
+    );
+  } else if (mode == "character") {
+    return (
+      <CharacterReview
+        character={character}
+        pinyin={pinyin}
+        persistentId={persistentId}
+        done={done}
+      />
+    );
+  }
 }

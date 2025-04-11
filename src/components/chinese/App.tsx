@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CharState, type Sentence } from "./Data";
 import { useSelector } from "@xstate/store/react";
-import { PinyinReview, CharacterReview, TrafficLights } from "./Review";
-import { CURRENT_MODE, store } from "./Store";
+import { Review, TrafficLights } from "./Review";
+import { store, type AppMode, getAllLessons } from "./Store";
 import Modal from "react-modal";
 import RelativeTime from "@yaireo/relative-time";
 
@@ -98,18 +98,21 @@ function SentenceDetails() {
 /**
  * Component that renders a full sentence review interface with multiple characters
  */
-function SentenceReview({ done }: { done: () => void }) {
-  const id = useRef(
-    Math.random().toString(36).substring(2, 10) + Date.now().toString(36),
-  ).current;
-
-  const oldState = useMemo(() => {
-    return store.getSnapshot().context.history;
-  }, []);
+function SentenceReview({
+  done,
+  mode,
+}: {
+  done: () => void;
+  mode: AppMode | null;
+}) {
+  const id = useRef({
+    id: Math.random().toString(36).substring(2, 10) + Date.now().toString(36),
+    m: mode ?? ((Math.random() < 0.5 ? "character" : "pinyin") as AppMode),
+  }).current;
 
   // Move session update to useEffect
   useEffect(() => {
-    store.trigger.updateSession({ key: id, date: new Date() });
+    store.trigger.updateSession({ key: id.id, date: new Date() });
   }, []);
 
   const sentences = useSelector(store, (state) => state.context.sentences);
@@ -158,21 +161,13 @@ function SentenceReview({ done }: { done: () => void }) {
               }
               style={isPunctuation ? { position: "relative" } : undefined}
             >
-              {CURRENT_MODE === "pinyin" ? (
-                <PinyinReview
-                  character={word.character}
-                  pinyin={word.pinyin}
-                  persistentId={id}
-                  done={() => setNumDone(numDone + 1)}
-                />
-              ) : (
-                <CharacterReview
-                  character={word.character}
-                  pinyin={word.pinyin}
-                  persistentId={id}
-                  done={() => setNumDone(numDone + 1)}
-                />
-              )}
+              <Review
+                character={word.character}
+                pinyin={word.pinyin}
+                persistentId={id.id}
+                done={() => setNumDone(numDone + 1)}
+                mode={id.m}
+              />
             </div>
           );
         },
@@ -181,20 +176,19 @@ function SentenceReview({ done }: { done: () => void }) {
   );
 }
 /**
- * Footer component with the following options: help, skip, show history (-> clear localstorage)
+ * Footer component with options: help, history, settings, and skip/continue
  */
 function Footer({
   showModal,
+  showSettingsModal,
   done,
   progressSentence, // (skips if not done)
 }: {
   showModal: () => void;
+  showSettingsModal: () => void;
   done: boolean;
   progressSentence: () => void;
 }) {
-  // Toggle between pinyin and chinese modes
-  const oppositeMode = CURRENT_MODE === "chinese" ? "pinyin" : "chinese";
-
   return (
     <div className="flex w-full">
       <div className="mb-0 mr-auto flex flex-row gap-5">
@@ -205,15 +199,7 @@ function Footer({
           }}
         />
         <Button name="history" onClick={() => showModal()} />
-        <Button
-          name={`switch to ${oppositeMode}`}
-          onClick={() => {
-            // Update URL with the new mode
-            const url = new URL(window.location.href);
-            url.searchParams.set("mode", oppositeMode);
-            window.location.href = url.toString();
-          }}
-        />
+        <Button name="settings" onClick={() => showSettingsModal()} />
       </div>
       <div className="mb-0 ml-auto flex flex-row gap-5">
         <Button
@@ -233,7 +219,18 @@ function Footer({
  * @param {Record<string, string>} relativeTimes - Object mapping characters to relative time strings
  * @param {Object} history - User's learning history data from the store
  */
-function MyModal({ modalIsOpen, closeModal, relativeTimes, history }) {
+function MyModal({
+  modalIsOpen,
+  closeModal,
+  relativeTimes,
+  history,
+  numSentences,
+}) {
+  const [activeTab, setActiveTab] = useState("character");
+
+  // Determine which data to use based on active tab
+  const currentHistory = history[activeTab] || {};
+
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -245,15 +242,32 @@ function MyModal({ modalIsOpen, closeModal, relativeTimes, history }) {
     >
       <div className="bg-stripes-header2 h-full w-full p-6">
         <h2 className="mb-4 text-xl font-bold">Learning history</h2>
+        <p className="">You have {numSentences} sentences left this cycle.</p>
+        {/* Tabs for switching between character and pinyin history */}
+        <div className="mb-4 flex border-b border-header">
+          <button
+            className={`mr-4 px-2 py-1 font-medium ${activeTab === "character" ? "border-b-2 border-header text-header" : "text-gray-500"}`}
+            onClick={() => setActiveTab("character")}
+          >
+            Characters
+          </button>
+          <button
+            className={`px-2 py-1 font-medium ${activeTab === "pinyin" ? "border-b-2 border-header text-header" : "text-gray-500"}`}
+            onClick={() => setActiveTab("pinyin")}
+          >
+            Pinyin
+          </button>
+        </div>
+
         <div className="mb-4">
-          {!Object.keys(history).length && (
+          {!Object.keys(currentHistory).length ? (
             <p>
-              Your learning history will appear here. It is currently empty.
+              Your {activeTab} learning history will appear here. It is
+              currently empty.
             </p>
-          )}
-          {Object.keys(history).length > 0 && (
+          ) : (
             <div className="list-disc">
-              {Object.entries(history).map(([key, value]) => (
+              {Object.entries(currentHistory).map(([key, value]) => (
                 <div key={key} className="flex">
                   <span className="w-20 font-lora text-xl font-bold">
                     {key}
@@ -262,7 +276,7 @@ function MyModal({ modalIsOpen, closeModal, relativeTimes, history }) {
                     <TrafficLights state={value[0]} checkMark={false} />
                   </span>
                   <span className="my-auto px-4 font-mono text-gray-500">
-                    {relativeTimes[key]} ({value[1].slice(0, 7)})
+                    {relativeTimes[activeTab][key]}
                   </span>
                 </div>
               ))}
@@ -286,7 +300,7 @@ function MyModal({ modalIsOpen, closeModal, relativeTimes, history }) {
                   );
                   // Clear only current mode data
                   if (storedData) {
-                    storedData[CURRENT_MODE] = {};
+                    // storedData[CURRENT_MODE] = {};
                     localStorage.setItem(
                       "chinese_app_data",
                       JSON.stringify(storedData),
@@ -305,71 +319,256 @@ function MyModal({ modalIsOpen, closeModal, relativeTimes, history }) {
     </Modal>
   );
 }
+
+/**
+ * Settings modal component that allows users to change the mode and select lessons
+ * @param {boolean} modalIsOpen - Whether the modal is currently visible
+ * @param {() => void} closeModal - Function to close the modal
+ * @param {AppMode | null} currentMode - Current mode setting
+ * @param {(mode: AppMode | null) => void} setMode - Function to update the mode
+ */
+function SettingsModal({
+  modalIsOpen,
+  closeModal,
+  currentMode,
+  setMode,
+}: {
+  modalIsOpen: boolean;
+  closeModal: () => void;
+  currentMode: AppMode | null;
+  setMode: (mode: AppMode | null) => void;
+}) {
+  // Update settings immediately when changed
+  const updateMode = (newMode: AppMode | null) => {
+    setMode(newMode);
+  };
+
+  // State for lesson selection
+  const allLessons = useMemo(() => getAllLessons(), []);
+  const enabledLessons = useSelector(
+    store,
+    (state) => state.context.enabledLessons,
+  );
+  const [selectedLessons, setSelectedLessons] =
+    useState<string[]>(enabledLessons);
+
+  // Handle the selection/deselection of a lesson
+  const toggleLesson = (lesson: string) => {
+    setSelectedLessons((prev) =>
+      prev.includes(lesson)
+        ? prev.filter((l) => l !== lesson)
+        : [...prev, lesson],
+    );
+  };
+
+  // Handle select all / deselect all
+  const toggleAllLessons = () => {
+    if (selectedLessons.length === allLessons.length) {
+      setSelectedLessons([]);
+    } else {
+      setSelectedLessons([...allLessons]);
+    }
+  };
+
+  // Apply lesson selection changes
+  useEffect(() => {
+    // If no lessons are selected, select all (default behavior)
+    const lessonsToApply =
+      selectedLessons.length === 0 ? allLessons : selectedLessons;
+
+    // Update the store with enabled lessons
+    store.trigger.updateEnabledLessons({ enabledLessons: lessonsToApply });
+  }, [selectedLessons, allLessons]);
+
+  return (
+    <Modal
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
+      contentLabel="Settings Modal"
+      className="m-auto w-3/4 max-w-lg bg-white font-lora"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      ariaHideApp={false}
+    >
+      <div className="bg-stripes-header2 h-full w-full p-6">
+        <h2 className="mb-4 text-xl font-bold">Settings</h2>
+
+        <div className="mb-6">
+          <h3 className="mb-2 font-medium">Practice Mode</h3>
+          <div className="flex flex-col gap-2">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="mode"
+                checked={currentMode === null}
+                onChange={() => updateMode(null)}
+                className="mr-2"
+              />
+              I'm feeling lucky (random)
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="mode"
+                checked={currentMode === "character"}
+                onChange={() => updateMode("character")}
+                className="mr-2"
+              />
+              Character mode
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="mode"
+                checked={currentMode === "pinyin"}
+                onChange={() => updateMode("pinyin")}
+                className="mr-2"
+              />
+              Pinyin mode
+            </label>
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <div className="mb-2 flex items-center justify-between">
+            <h3 className="font-medium">Lessons</h3>
+            <Button
+              name={
+                selectedLessons.length === allLessons.length
+                  ? "Deselect All"
+                  : "Select All"
+              }
+              onClick={toggleAllLessons}
+            />
+          </div>
+          <div className="max-h-40 overflow-y-auto rounded border border-gray-200 p-2">
+            {allLessons.map((lesson) => (
+              <label key={lesson} className="mb-1 flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedLessons.includes(lesson)}
+                  onChange={() => toggleLesson(lesson)}
+                  className="mr-2"
+                />
+                {lesson}
+              </label>
+            ))}
+          </div>
+          {selectedLessons.length === 0 && (
+            <p className="mt-1 text-sm text-gray-500">
+              When no lessons are selected, all lessons will be used.
+            </p>
+          )}
+        </div>
+
+        <div className="flex justify-end">
+          <div className="px-4 py-2">
+            <Button name="Close" onClick={closeModal} />
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+}
 /**
  * Main application component that manages app state and renders appropriate view
  */
 export default function ChineseApp() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [historyModalIsOpen, setHistoryModalIsOpen] = useState(false);
+  const [settingsModalIsOpen, setSettingsModalIsOpen] = useState(false);
   const [done, setDone] = useState(false);
+  const [mode, setMode] = useState<AppMode | null>(null);
 
-  // Function to show modal
-  const showModal = () => {
-    setModalIsOpen(true);
+  // Function to show modals
+  const showHistoryModal = () => {
+    setHistoryModalIsOpen(true);
   };
-  // Function to close modal
-  const closeModal = () => {
-    setModalIsOpen(false);
+
+  const showSettingsModal = () => {
+    setSettingsModalIsOpen(true);
+  };
+
+  // Function to close modals
+  const closeHistoryModal = () => {
+    setHistoryModalIsOpen(false);
+  };
+
+  const closeSettingsModal = () => {
+    setSettingsModalIsOpen(false);
   };
 
   const history = useSelector(store, (state) => state.context.history);
-
-  const relativeTimes = useMemo(() => {
-    // Only calculate relative times when modal is open
-    if (!modalIsOpen) return {};
-
+  const times = useMemo(() => {
+    const state = store.getSnapshot();
+    const history = state.context.history;
     const rtf = new RelativeTime();
-    let times = {} as Record<string, string>;
+    let times = {
+      character: {} as Record<string, string>,
+      pinyin: {} as Record<string, string>,
+    };
 
-    Object.entries(history).forEach(([char, [_, sessionId]]) => {
-      if (store.getSnapshot().context.sessions[sessionId]) {
-        const time = new Date(store.getSnapshot().context.sessions[sessionId]);
-        times[char] = rtf.from(time);
+    Object.entries(history.character).forEach(([char, [_, sessionId]]) => {
+      if (state.context.sessions[sessionId]) {
+        const time = new Date(state.context.sessions[sessionId]);
+        times.character[char] = rtf.from(time);
       }
     });
-
+    Object.entries(history.pinyin).forEach(([char, [_, sessionId]]) => {
+      if (state.context.sessions[sessionId]) {
+        const time = new Date(state.context.sessions[sessionId]);
+        times.pinyin[char] = rtf.from(time);
+      }
+    });
     return times;
-  }, [modalIsOpen, history]);
-
+  }, [history]);
   const currentId = useSelector(
     store,
     (state) => state.context.sentences[0].id,
   );
+  const numSentences = useSelector(
+    store,
+    (state) => state.context.sentences.length,
+  );
   return (
     <div className="flex h-screen w-full flex-col items-center text-2xl">
       {/* Fixed header area */}
-      <div className="w-full flex-shrink-0 px-20 pt-20 flex justify-center">
-        <SentenceDetails />
+      <div className="w-full flex-shrink-0 px-20 pt-20">
+        <div className="flex justify-center">
+          <SentenceDetails />
+        </div>
       </div>
 
       {/* Scrollable middle content area */}
       <div className="w-full flex-grow overflow-y-auto px-20">
         {/* Container that constrains character component width */}
         <div className="mx-auto w-[50rem] py-4">
-          <SentenceReview key={currentId} done={() => setDone(true)} />
+          <SentenceReview
+            key={currentId}
+            done={() => setDone(true)}
+            mode={mode}
+          />
         </div>
       </div>
 
       <MyModal
-        modalIsOpen={modalIsOpen}
-        closeModal={closeModal}
-        relativeTimes={relativeTimes}
+        modalIsOpen={historyModalIsOpen}
+        closeModal={closeHistoryModal}
+        relativeTimes={times}
         history={history}
+        numSentences={numSentences}
+      />
+
+      <SettingsModal
+        modalIsOpen={settingsModalIsOpen}
+        closeModal={closeSettingsModal}
+        currentMode={mode}
+        setMode={setMode}
       />
 
       {/* Fixed footer area */}
       <div className="w-full flex-shrink-0 p-5 px-20">
         <Footer
-          showModal={showModal}
+          showModal={showHistoryModal}
+          showSettingsModal={showSettingsModal}
           done={done}
           progressSentence={() => {
             setDone(false);

@@ -1,5 +1,6 @@
 import { createStore } from "@xstate/store";
 import { getSentences, CharState, type Sentence } from "./Data";
+import hi from "date-fns/esm/locale/hi";
 
 // Single storage key for all Chinese app data
 const CHINESE_APP_STORAGE_KEY = "chinese_app_data";
@@ -31,56 +32,40 @@ export const saveToStorage = (data: any) => {
     console.error("Failed to save data to localStorage:", error);
   }
 };
+export type AppMode = "pinyin" | "character";
 
-// Get the current mode from URL or localStorage
-export const getCurrentMode = (): "chinese" | "pinyin" => {
-  // First check URL parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const modeParam = urlParams.get("mode");
-  
-  // If valid mode in URL, use it and also save to localStorage as last used mode
-  if (modeParam === "chinese" || modeParam === "pinyin") {
-    // Load existing data
-    const storedData = loadFromStorage();
-    if (storedData) {
-      // Update lastMode in localStorage
-      saveToStorage({
-        ...storedData,
-        lastMode: modeParam
-      });
-    } else {
-      // Initialize with this mode
-      saveToStorage({
-        chinese: {},
-        pinyin: {},
-        sessions: {},
-        lastMode: modeParam
-      });
-    }
-    return modeParam;
-  }
-  
-  // If no valid mode in URL, check localStorage
-  const storedData = loadFromStorage();
-  const lastMode = storedData?.lastMode;
-  
-  // Return stored mode or default to 'chinese'
-  return (lastMode === "chinese" || lastMode === "pinyin") ? lastMode : "chinese";
+type HistoryType = {
+  character: Record<string, [CharState, string]>;
+  pinyin: Record<string, [CharState, string]>;
 };
 
-// Get the current mode - evaluated at runtime
-export const CURRENT_MODE = typeof window !== "undefined" ? getCurrentMode() : "chinese";
+// Get all available lesson names
+export const getAllLessons = (): string[] => {
+  const allSentences = getSentences();
+  const uniqueLessons = new Set<string>();
+
+  allSentences.forEach((sentence) => {
+    uniqueLessons.add(sentence.lesson);
+  });
+
+  return Array.from(uniqueLessons).sort();
+};
 
 // Load stored data and initialize context
 const storedData = loadFromStorage();
+const allLessons = getAllLessons();
+
 const initialContext = {
-  // Get history specific to current mode or create empty object
-  history: (storedData?.[CURRENT_MODE] || {}) as Record<string, [CharState, string]>,
+  history: (storedData?.history || {
+    character: {},
+    pinyin: {},
+  }) as HistoryType,
   sentences:
     storedData?.sentences ||
     ([...getSentences()].sort(() => 0.5 - Math.random()) as Sentence[]),
   sessions: (storedData?.sessions || {}) as Record<string, string>,
   completedCount: 0, // Always starts at 0 and is not persisted
+  enabledLessons: storedData?.enabledLessons || allLessons, // Default to all lessons enabled
 };
 
 export const store = createStore({
@@ -88,15 +73,18 @@ export const store = createStore({
   emits: {
     completedCountChanged: (payload: {
       completedCount: number;
-      history: Record<string, [CharState, string]>;
-    }) => {
-      // Event signature definition
-    },
+      history: HistoryType;
+    }) => {},
   },
   on: {
     updateCharacter: (
       context,
-      event: { character: string; newState: CharState; id: string },
+      event: {
+        character: string;
+        newState: CharState;
+        id: string;
+        mode: AppMode;
+      },
       enqueue,
     ) => {
       const lastState = context.history[event.character];
@@ -109,14 +97,17 @@ export const store = createStore({
           ? context.history
           : ({
               ...context.history,
-              [event.character]: [event.newState, event.id],
-            } as Record<string, [CharState, string]>),
+              [event.mode]: {
+                ...context.history[event.mode],
+                [event.character]: [event.newState, event.id],
+              },
+            } as HistoryType),
       };
 
       // Emit event with updated values
       enqueue.emit.completedCountChanged({
         completedCount: newContext.completedCount,
-        history: newContext.history as Record<string, [CharState, string]>,
+        history: newContext.history,
       });
 
       return newContext;
@@ -138,37 +129,36 @@ export const store = createStore({
       };
     },
     progressSentence: (context) => {
-      const randomShuffle = [...getSentences()].sort(() => Math.random() - 0.5);
-      console.log(context.sentences.map((s) => s.lesson));
+      const enabledLessons = context.enabledLessons;
+      let sentences = context.sentences.slice(1);
+      console.log(sentences);
+      while (
+        enabledLessons &&
+        sentences.length > 0 &&
+        !enabledLessons.includes(sentences[0].lesson)
+      ) {
+        sentences = sentences.slice(1);
+        console.log("hi", enabledLessons, sentences[0], sentences.length > 0);
+      }
+
+      const randomShuffle =
+        sentences.length > 0
+          ? sentences
+          : [...getSentences()].sort(() => Math.random() - 0.5);
+      console.log(sentences, randomShuffle);
       return {
         ...context,
         completedCount: 0,
-        sentences:
-          context.sentences.length == 1
-            ? randomShuffle
-            : context.sentences.slice(1),
+        sentences: randomShuffle,
+      };
+    },
+    updateEnabledLessons: (context, event: { enabledLessons: string[] }) => {
+      return {
+        ...context,
+        enabledLessons: event.enabledLessons,
       };
     },
   },
 });
 
-store.subscribe((snapshot) => {
-  // Load the full data object
-  const storedData = loadFromStorage() || {
-    chinese: {},
-    pinyin: {},
-    sessions: {},
-    lastMode: CURRENT_MODE
-  };
-  
-  // Update only the current mode's data and sessions
-  const updatedData = {
-    ...storedData,
-    [CURRENT_MODE]: snapshot.context.history,
-    sessions: snapshot.context.sessions,
-    sentences: snapshot.context.sentences,
-  };
-  
-  // Save the updated data
-  saveToStorage(updatedData);
-});
+store.subscribe((snapshot) => saveToStorage(snapshot.context));

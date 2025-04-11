@@ -253,9 +253,6 @@ function App() {
     if (DEFAULT_IMAGE_URL) {
       processImage(DEFAULT_IMAGE_URL);
     } else {
-      console.log(
-        "No valid default image URL found, initializing with numbers.",
-      );
       shuffleBoard(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
