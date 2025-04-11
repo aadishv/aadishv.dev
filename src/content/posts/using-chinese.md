@@ -1,7 +1,7 @@
 ---
-date: "2025-04-09"
+date: "2025-04-10"
 title: "Using Aadish's Chinese practice"
-description: ""
+description: "A comprehensive guide to using the Chinese practice application"
 hidden: true
 ---
 
@@ -13,7 +13,7 @@ _Aadish's Chinese practice_ is a little tool I've created to help me practice my
 
 ## Introduction
 
-Aadish's Chinese Practice is an interactive tool designed to help learners practice Chinese characters and pinyin pronunciation. This application offers two distinct practice modes, comprehensive progress tracking, and an intuitive interface to enhance your Chinese language learning experience.
+Aadish's Chinese Practice is an interactive tool designed to help learners practice Chinese characters and pinyin pronunciation. This application offers two distinct practice modes, comprehensive progress tracking, and an intuitive interface to enhance your Chinese language learning experience. All sentences are from the Integrated Chinese textbook and were scraped using Gemini 2.5 Pro Experimental 03-25. All data is stored in local storage, which means I cannot see any of your data.
 
 ## Getting Started
 
@@ -24,7 +24,7 @@ The application offers two primary practice modes:
 1. **Chinese Character Writing Practice (Default)** - Practice writing Chinese characters stroke by stroke
 2. **Pinyin Practice** - Practice typing the correct pinyin with tone marks for given characters
 
-To switch between modes, click the "switch to pinyin" or "switch to chinese" button in the bottom left corner of the interface. Your selection will persist across sessions.
+To switch between modes, use the settings menu by clicking the "settings" button in the bottom left corner of the interface. Your selection will persist across sessions.
 
 ### Understanding the Interface
 
@@ -107,6 +107,18 @@ You can enter pinyin in two formats:
 
 Both input methods are accepted by the system.
 
+## Lesson Selection
+
+You can customize which lessons you want to practice:
+
+### Selecting Lessons
+
+1. Click the **"settings"** button at the bottom of the screen
+2. In the Settings modal, you'll see a list of all available lessons
+3. Check or uncheck lessons according to your learning needs
+4. Click **"Select All"** or **"Deselect All"** to quickly modify your selection
+5. When no lessons are selected, all lessons will be used by default
+
 ## Progress Tracking
 
 ### Viewing History
@@ -118,6 +130,7 @@ To view your learning history:
    - Traffic light indicators showing mastery level
    - The relative time since last practice
    - Session identifiers for tracking purposes
+3. Toggle between "Characters" and "Pinyin" tabs to view your progress in each mode
 
 ### Clearing Data
 
@@ -131,7 +144,7 @@ If you wish to reset your progress:
 
 - **help** - Opens this help documentation
 - **history** - Shows your learning progress and history
-- **switch to [mode]** - Toggles between character writing and pinyin practice
+- **settings** - Opens the settings panel to configure mode and lessons
 - **skip/continue** - Proceeds to the next sentence without completing the current one or after completion
 
 ## Tips for Effective Learning
@@ -141,13 +154,17 @@ If you wish to reset your progress:
 3. **Review your history** - Regularly check your progress to identify characters that need extra attention
 4. **Use hints strategically** - Try without hints first to maintain a green status, using more assistance only when necessary
 5. **Pay attention to traffic lights** - Focus additional practice on characters that consistently show yellow or red status
+6. **Select appropriate lessons** - Focus on specific lessons that align with your current learning goals
 
 ## Troubleshooting
 
 - If characters don't display correctly, ensure you're using a modern browser with Chinese font support
 - If writing recognition seems too strict, try writing more deliberately and following standard stroke order
 - Clear your browser cache if you experience unusual behavior or if the application fails to save your progress
+- If the application becomes unresponsive, try refreshing the page (your progress is automatically saved)
 
 ---
 
 For additional assistance or to report issues, please contact me (Aadish) at [aadish@ohs.stanford.edu](mailto:aadish@ohs.stanford.edu)
+
+All code is open-source. Find the most stable release [here](https://github.com/aadishv/aadishv.github.io/tree/main/src/components/chinese).

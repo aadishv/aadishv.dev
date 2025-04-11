@@ -131,25 +131,24 @@ export const store = createStore({
     progressSentence: (context) => {
       const enabledLessons = context.enabledLessons;
       let sentences = context.sentences.slice(1);
-      console.log(sentences);
+      if (sentences.length === 0) {
+        sentences = [...getSentences()].sort(() => Math.random() - 0.5);
+      }
       while (
-        enabledLessons &&
+        enabledLessons.length > 0 &&
         sentences.length > 0 &&
         !enabledLessons.includes(sentences[0].lesson)
       ) {
+        console.log(sentences.length);
         sentences = sentences.slice(1);
-        console.log("hi", enabledLessons, sentences[0], sentences.length > 0);
+        if (sentences.length === 0) {
+          sentences = [...getSentences()].sort(() => Math.random() - 0.5);
+        }
       }
-
-      const randomShuffle =
-        sentences.length > 0
-          ? sentences
-          : [...getSentences()].sort(() => Math.random() - 0.5);
-      console.log(sentences, randomShuffle);
       return {
         ...context,
         completedCount: 0,
-        sentences: randomShuffle,
+        sentences: sentences,
       };
     },
     updateEnabledLessons: (context, event: { enabledLessons: string[] }) => {
