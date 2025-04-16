@@ -64,6 +64,16 @@ export default function PeriodicTableApp() {
     setFocusElement(randomElement);
   }, []);
 
+  // Check if current date is April 16 or 17, 2025
+  const isDisabledDate = useCallback(() => {
+    const today = new Date();
+    const month = today.getMonth(); // 0-based index (April = 3)
+    const day = today.getDate();
+    const year = today.getFullYear();
+    
+    return year === 2025 && month === 3 && (day === 16 || day === 17);
+  }, []);
+
   const handleMassModalToggle = useCallback(() => {
     setShowMassModal((prev) => !prev);
   }, []);
@@ -80,6 +90,7 @@ export default function PeriodicTableApp() {
         handleRandomClick={handleRandomClick}
         handleReferenceModalOpen={handleReferenceModalOpen}
         handleMassModalToggle={handleMassModalToggle}
+        isDisabled={isDisabledDate()}
       />
 
       <MassModal

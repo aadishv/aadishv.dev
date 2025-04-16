@@ -58,14 +58,28 @@ export const ReferenceButton = ({ onClickReference }: ReferenceButtonProps) => {
 
 interface ModalButtonProps {
   onClickModal: () => void;
+  isDisabled?: boolean;
 }
 
-export const ModalButton = ({ onClickModal }: ModalButtonProps) => {
+export const ModalButton = ({ onClickModal, isDisabled = false }: ModalButtonProps) => {
+  const handleClick = () => {
+    if (isDisabled) {
+      alert("The formula mass calculator has been temporarily disabled on April 16-17, 2025 for the Stanford OHS OC005 quiz. Please try again after this date.");
+      return;
+    }
+    onClickModal();
+  };
+
   return (
     <div className="flex items-end">
       <button
-        className="m-0 h-8 justify-center truncate border-b-2 border-header2 p-0 font-lora text-xl hover:border-header"
-        onClick={onClickModal}
+        className={`m-0 h-8 justify-center truncate border-b-2 p-0 font-lora text-xl ${
+          isDisabled 
+            ? "border-gray-300 text-gray-400 cursor-not-allowed" 
+            : "border-header2 hover:border-header"
+        }`}
+        onClick={handleClick}
+        // Don't use the disabled attribute so we can still show the alert
       >
         Formula mass calculator
       </button>
@@ -78,7 +92,8 @@ export const Controls = ({
   handleSearch,
   handleRandomClick,
   handleReferenceModalOpen,
-  handleMassModalToggle
+  handleMassModalToggle,
+  isDisabled = false
 }) => {
   return (
     <div className="flex" style={{ margin: "2vw" }}>
@@ -86,7 +101,7 @@ export const Controls = ({
       <div className="flex-grow" />
       <RandomButton onClickRandom={handleRandomClick} />
       <ReferenceButton onClickReference={handleReferenceModalOpen} />
-      <ModalButton onClickModal={handleMassModalToggle} />
+      <ModalButton onClickModal={handleMassModalToggle} isDisabled={isDisabled} />
     </div>
   );
 };
