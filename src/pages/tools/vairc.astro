@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+// import global.css
+import "../../style/global.css";
+import VAIRCApp from "../../components/vairc/App.tsx";
+const siteTitle = "3151A Dashboard";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={"3151A web dashboard"} />
+    <title>{siteTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="text-text h-[100vh] font-sans">
+    <main
+      class="h-full w-full"
+    >
+        <VAIRCApp client:only />
+    </main></body>
+</html>
