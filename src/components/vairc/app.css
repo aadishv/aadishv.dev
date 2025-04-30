@@ -1,7 +1,417 @@
+/* aadishv.github.io/src/components/vairc/app.css */
 html,
 body,
 #app {
   height: 100%;
   width: 100%;
   margin: 0;
+}
+
+/* Main layout container */
+.vairc-layout {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header styling */
+.vairc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  height: 50px;
+  background-color: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.vairc-header-logos {
+  display: flex;
+  align-items: center;
+}
+
+.vairc-header .logo {
+  height: 32px;
+  margin-right: 15px;
+  border-right: 1px solid #d0d7de;
+  padding-right: 15px;
+}
+
+.vairc-header .logo:last-child {
+  border-right: none;
+}
+
+/* Settings button styling */
+.vairc-settings-button {
+  background-color: transparent;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.vairc-settings-button:hover {
+  background-color: #f3f4f6;
+}
+
+/* Settings modal styling */
+.settings-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.settings-modal {
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+  width: 480px;
+  max-width: 90%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.settings-modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.settings-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #57606a;
+}
+
+.settings-modal-body {
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.settings-modal-body h3 {
+  margin-top: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.settings-section {
+  margin-bottom: 24px;
+}
+
+.settings-section:last-child {
+  margin-bottom: 0;
+}
+
+.window-switches {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Server configuration input styling */
+.server-config-input {
+  margin-top: 10px;
+}
+
+.server-config-input label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.server-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.server-input {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d7de;
+  font-size: 14px;
+  background-color: #f6f8fa;
+}
+
+.server-input:focus {
+  outline: none;
+  border-color: #0969da;
+  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+}
+
+.primer-button-small {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.server-config-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #57606a;
+}
+
+/* Primer UI style toggle switch */
+.primer-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  position: relative;
+  padding: 8px 0;
+}
+
+.primer-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.primer-toggle-track {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 16px;
+  border-radius: 10px;
+  background-color: #d0d7de;
+  margin-right: 12px;
+  transition: all 0.2s ease;
+}
+
+.primer-toggle input:checked + .primer-toggle-track {
+  background-color: #2da44e;
+}
+
+.primer-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.primer-toggle input:checked + .primer-toggle-track .primer-toggle-thumb {
+  left: 14px;
+}
+
+.primer-toggle:hover .primer-toggle-track {
+  background-color: #afb8c1;
+}
+
+.primer-toggle:hover input:checked + .primer-toggle-track {
+  background-color: #26863e;
+}
+
+.primer-toggle-label {
+  font-weight: 500;
+  color: #24292f;
+}
+
+.window-switches {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+
+.settings-modal-footer {
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #d0d7de;
+}
+
+/* Primer UI style buttons */
+.primer-button {
+  background-color: #f6f8fa;
+  border: 1px solid rgba(31, 35, 40, 0.15);
+  border-radius: 6px;
+  padding: 5px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #24292f;
+  transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  box-shadow: 0 1px 0 rgba(31, 35, 40, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.primer-button:hover {
+  background-color: #f3f4f6;
+  border-color: rgba(31, 35, 40, 0.15);
+  transition-duration: 0.1s;
+}
+
+.primer-button:active {
+  background-color: hsla(220, 14%, 93%, 1);
+  border-color: rgba(31, 35, 40, 0.15);
+  box-shadow: inset 0 1px 0 rgba(208, 215, 222, 0.2);
+  transition: none;
+}
+
+.primer-button-primary {
+  background-color: #2da44e;
+  color: #ffffff;
+  border-color: rgba(31, 35, 40, 0.15);
+}
+
+.primer-button-primary:hover {
+  background-color: #2c974b;
+  border-color: rgba(31, 35, 40, 0.15);
+}
+
+.primer-button-danger {
+  color: #cf222e;
+}
+
+.primer-button-danger:hover {
+  color: #ffffff;
+  background-color: #a40e26;
+  border-color: rgba(31, 35, 40, 0.15);
+}
+
+/* Mosaic container */
+.vairc-mosaic-container {
+  flex: 1;
+  position: relative;
+}
+
+/* Override mosaic styles for a cleaner look */
+.mosaic {
+  background-color: #f6f8fa !important;
+}
+
+.mosaic-window {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.mosaic-window-title {
+  background-color: #f6f8fa;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.mosaic-window-body {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.mosaic-window-toolbar {
+  display: flex;
+}
+
+.mosaic-window-controls {
+  margin-left: auto;
+}
+
+/* Custom styles for the videos */
+.mosaic-window-body .aspect-video {
+  width: 100%;
+  height: 100%;
+}
+
+/* Spinner for loading states */
+.vairc-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* V5 Details Panel Styles */
+.v5-details-card {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  transition: transform 0.2s ease;
+}
+
+.v5-details-card:hover {
+  transform: translateY(-2px);
+}
+
+.v5-details-heading {
+  font-size: 2rem; 
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #1a202c;
+}
+
+.v5-details-value {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #2d3748;
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.v5-details-label {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #718096;
+}
+
+/* Animated value transitions */
+@keyframes pulse-highlight {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgba(66, 153, 225, 0.1); }
+}
+
+.v5-value-changed {
+  animation: pulse-highlight 1s ease;
+  border-radius: 4px;
+}
+
+.vairc-loading::after {
+  content: "";
+  width: 30px;
+  height: 30px;
+  border: 2px solid #d0d7de;
+  border-radius: 50%;
+  border-top-color: #0969da;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
 }
