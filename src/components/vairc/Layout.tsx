@@ -27,6 +27,9 @@ export interface Detection {
   class: string;
   confidence: number;
   depth?: number;
+  fx?: number;
+  fy?: number;
+  fz?: number;
 }
 
 export interface Pose {
@@ -59,15 +62,19 @@ interface WindowProps {
 interface LayoutProps {
   windowComponents: WindowComponentMap;
   windowTitles?: WindowTitleMap;
+  /** Optional flag to ignore mixed content errors (for testing) */
+  debugIgnoreMixedContent?: boolean;
 }
 
 // SSE Hook for detection data
 export function useSSEDetections(
     server: string,
     endpoint: string = "events",
-    initialValue: DetectionPayload | null = null
-): DetectionPayload | null {
+    initialValue: DetectionPayload | null = null,
+    debugIgnoreMixedContent: boolean = false
+): { detections: DetectionPayload | null, connectionError: boolean } {
     const [detections, setDetections] = useState<DetectionPayload | null>(initialValue);
+    const [connectionError, setConnectionError] = useState<boolean>(false);
 
     useEffect(() => {
         // Skip connection if server is not provided
@@ -77,9 +84,21 @@ export function useSSEDetections(
             return;
         }
 
+        // Always use HTTP protocol since the Flask server is HTTP-only
+        // This will work in HTTP contexts, and we'll handle the error in HTTPS contexts
         const url = `http://${server}/${endpoint}`;
-        console.log(`Connecting to SSE endpoint: ${url}`);
-        const eventSource = new EventSource(url);
+        console.log(`Attempting to connect to SSE endpoint: ${url}`);
+
+        let eventSource: EventSource;
+
+        try {
+            eventSource = new EventSource(url);
+        } catch (error) {
+            console.error('Failed to create EventSource:', error);
+            setConnectionError(true);
+            setDetections(initialValue);
+            return;
+        }
 
         // Handle incoming messages
         eventSource.onmessage = (event: MessageEvent) => {
@@ -92,8 +111,9 @@ export function useSSEDetections(
         };
 
         // Handle connection errors
-        eventSource.onerror = () => {
-            console.error('SSE connection error');
+        eventSource.onerror = (error) => {
+            console.error('SSE connection error', error);
+            setConnectionError(true);
             setDetections(initialValue);
             eventSource.close();
         };
@@ -105,7 +125,7 @@ export function useSSEDetections(
         };
     }, [server, endpoint, initialValue]);
 
-    return detections;
+    return { detections, connectionError };
 }
 
 // Window Component
@@ -122,14 +142,59 @@ const Window = ({ path, component: WindowComponent, title, latestDetections, ser
 };
 
 // Header Component
-const Header: React.FC<{ onToggleSettings: () => void }> = ({ onToggleSettings }) => {
+const Header: React.FC<{
+  onToggleSettings: () => void,
+  connectionError: boolean,
+  serverConfig: string
+}> = ({ onToggleSettings, connectionError, serverConfig }) => {
+  // Function to reload the page
+  const handleReload = () => {
+    window.location.reload();
+  };
+
   return (
-    <div className="vairc-header">
-      <div className="vairc-header-logos">
-        <img src="https://team315.org/imgs/00001.png" alt="Paradigm Logo" className="logo" />
-        <img src="https://content.vexrobotics.com/images/vexai/VAIRC-Logo-4C.png" alt="VAIRC Logo" className="logo" />
+    <div className="vairc-header bg-white">
+      <div className="vairc-header-logos h-20">
+        <img
+          src="https://yt3.googleusercontent.com/yxrKYF6JiG2fHeHk7UBWZ3H14E72kyqzOF60vKaDhc7a2stmH9zA9SJSYGDXP6RZEizQRahIhrc=s160-c-k-c0x00ffffff-no-rj"
+          alt="Paradigm Logo"
+          className="logo"
+          style={{mixBlendMode: 'multiply'}}
+        />
+        <img src="https://recf.org/wp-content/uploads/2024/10/VEX-AI-Robotics-Competition-Element-Sidebar.png" alt="VAIRC Logo" className="logo" />
       </div>
-      <button className="primer-button" onClick={onToggleSettings}>
+
+      {/* Connection error warning */}
+      {connectionError && (
+        <div className="flex-grow mx-4 flex items-center">
+          <div className="border border-gray-300 bg-gray-50 p-2 flex items-center justify-between w-full rounded-md">
+            <div className="flex items-center">
+              <div className="mr-2 text-gray-700 flex-shrink-0">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <span className="text-gray-700 text-sm">
+                Connection error: Cannot connect to server at <code className="bg-gray-100 px-1 py-0.5 rounded border border-gray-200 text-xs font-mono">{serverConfig}</code>
+              </span>
+            </div>
+            <button
+              onClick={handleReload}
+              className="primer-button primer-button-small ml-4 flex items-center"
+            >
+              <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Reload
+            </button>
+          </div>
+        </div>
+      )}
+
+      <button
+        className="primer-button !text-2xl"
+        onClick={onToggleSettings}
+      >
         ⚙️ Settings
       </button>
     </div>
@@ -262,7 +327,11 @@ const VISIBILITY_STORAGE_KEY = 'vairc-window-visibility';
 const SERVER_CONFIG_KEY = 'vairc-server-config';
 
 // Main Layout Component
-export const Layout: React.FC<LayoutProps> = ({ windowComponents, windowTitles = {} }) => {
+export const Layout: React.FC<LayoutProps> = ({
+  windowComponents,
+  windowTitles = {},
+  debugIgnoreMixedContent = false
+}) => {
   const [currentNode, setCurrentNode] = useState<MosaicNode<number> | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [serverConfig, setServerConfig] = useState<string>(() => {
@@ -271,7 +340,12 @@ export const Layout: React.FC<LayoutProps> = ({ windowComponents, windowTitles =
     return savedConfig || DEFAULT_SERVER;
   });
 
-  const latestDetections = useSSEDetections(serverConfig, "events", null);
+  const { detections: latestDetections, connectionError } = useSSEDetections(
+    serverConfig,
+    "events",
+    null,
+    debugIgnoreMixedContent
+  );
 
   const [windowVisibility, setWindowVisibility] = useState<Record<number, boolean>>(() => {
     // Try to load visibility state from localStorage
@@ -416,9 +490,76 @@ export const Layout: React.FC<LayoutProps> = ({ windowComponents, windowTitles =
     updateNodeStructure();
   }, [windowVisibility, updateNodeStructure]);
 
+  // Mixed content warning component
+  const MixedContentWarning = () => {
+    // Only show in https contexts when there's a connection error
+    const isHttps = window.location.protocol === 'https:';
+    if (!connectionError || !isHttps || debugIgnoreMixedContent) return null;
+
+    // Function to handle switching to HTTP version
+    const switchToHttp = () => {
+      const currentUrl = window.location.href;
+      const httpUrl = currentUrl.replace('https://', 'http://');
+      window.location.href = httpUrl;
+    };
+
+    // Function to reload the page
+    const reloadPage = () => {
+      window.location.reload();
+    };
+
+    return (
+      <div className="bg-amber-50 border-amber-200 border-b px-4 py-3">
+        <div className="flex items-center">
+          <div className="flex-shrink-0 text-amber-500">
+            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div className="ml-3 flex-1">
+            <p className="text-sm text-amber-800">
+              <strong className="font-bold">Mixed Content Warning:</strong> Cannot connect to HTTP server from HTTPS page.
+            </p>
+            <p className="mt-1 text-sm text-amber-700">
+              Your browser is blocking connections to the HTTP server because this page is loaded over HTTPS. To fix this:
+            </p>
+            <div className="mt-2 mb-1">
+              <ul className="ml-4 list-disc text-sm text-amber-700 space-y-1">
+                <li>Open this page with HTTP instead of HTTPS</li>
+                <li>In Chrome, click the shield icon in the address bar and allow insecure content</li>
+                <li>Set up a secure proxy for your server</li>
+              </ul>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                onClick={switchToHttp}
+                className="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1 rounded text-sm font-medium"
+              >
+                Switch to HTTP Version
+              </button>
+              <button
+                onClick={reloadPage}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm font-medium"
+              >
+                Reload Page
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="vairc-layout">
-      <Header onToggleSettings={toggleSettings} />
+      <Header
+        onToggleSettings={toggleSettings}
+        connectionError={connectionError}
+        serverConfig={serverConfig}
+      />
+
+      {/* Show mixed content warning if needed */}
+      <MixedContentWarning />
 
       <SettingsModal
         isOpen={isSettingsOpen}

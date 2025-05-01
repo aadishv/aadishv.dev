@@ -30,5 +30,7 @@ const windowTitles = {
 
 // Main App Component
 export default function VAIRCApp() {
-  return <Layout windowComponents={windowComponents} windowTitles={windowTitles} />;
+  return (
+    <Layout windowComponents={windowComponents} windowTitles={windowTitles} />
+  );
 }

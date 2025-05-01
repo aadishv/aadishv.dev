@@ -50,12 +50,16 @@ const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverC
                   <div
                     key={index}
                     className="p-3 bg-white rounded-md border border-gray-200 border-l-4"
-                    style={{ borderLeftColor: getDetectionColor(flag.class) }}
+                    style={{ 
+                      borderLeftColor: getDetectionColor(flag.class)
+                    }}
                   >
                     <div className="flex justify-between items-center">
-                      <span className="text-2xl font-semibold capitalize" style={{ color: getDetectionColor(flag.class) }}>
-                        {flag.class}
-                      </span>
+                      <div className="flex items-center">
+                        <span className="text-2xl font-semibold capitalize" style={{ color: getDetectionColor(flag.class) }}>
+                          {flag.class}
+                        </span>
+                      </div>
                       {flag.depth !== undefined && (
                         <div className="text-right">
                           <div className="text-xs font-medium text-gray-500">Distance</div>
@@ -65,7 +69,7 @@ const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverC
                     </div>
                     <div className="mt-3 grid grid-cols-2 gap-3">
                       <div>
-                        <div className="text-xs font-medium text-gray-500">Position</div>
+                        <div className="text-xs font-medium text-gray-500">Camera Position</div>
                         <div className="text-xl font-mono">
                           X: {flag.x.toFixed(0)} <br/>
                           Y: {flag.y.toFixed(0)}
@@ -77,6 +81,33 @@ const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverC
                           {(flag.confidence * 100).toFixed(1)}%
                         </div>
                       </div>
+                      
+                      {/* Field Position Section - Only show if fx/fy values are available */}
+                      {(flag.fx !== undefined || flag.fy !== undefined || flag.fz !== undefined) && (
+                        <div className="col-span-2 mt-2 border border-gray-200 p-2 rounded-md">
+                          <div className="text-xs font-medium text-gray-500 mb-1">Field Position</div>
+                          <div className="grid grid-cols-3 gap-2">
+                            {flag.fx !== undefined && (
+                              <div>
+                                <div className="text-xs text-gray-500">X-field</div>
+                                <div className="text-lg font-mono">{flag.fx.toFixed(2)}</div>
+                              </div>
+                            )}
+                            {flag.fy !== undefined && (
+                              <div>
+                                <div className="text-xs text-gray-500">Y-field</div>
+                                <div className="text-lg font-mono">{flag.fy.toFixed(2)}</div>
+                              </div>
+                            )}
+                            {flag.fz !== undefined && (
+                              <div>
+                                <div className="text-xs text-gray-500">Z-field</div>
+                                <div className="text-lg font-mono">{flag.fz.toFixed(2)}</div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -132,9 +163,6 @@ const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverC
                     <div className="text-xl font-mono">{(latestDetections.pose.theta * 180 / Math.PI).toFixed(1)}°</div>
                   </div>
                 </div>
-
-                {/* Visual indicator for direction */}
-
               </div>
             ) : (
               // Fallback to bot detections if no pose data is available
@@ -145,12 +173,16 @@ const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverC
                       key={index}
                       className="p-3 bg-white rounded-md border border-gray-200 border-l-4 border-l-gray-600"
                     >
-                      <div className="text-2xl font-semibold capitalize mb-2 text-gray-800">
-                        {bot.class}
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="flex items-center">
+                          <span className="text-2xl font-semibold capitalize text-gray-800">
+                            {bot.class}
+                          </span>
+                        </div>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="border border-gray-200 p-2 rounded-md">
-                          <div className="text-xs font-medium text-gray-500 mb-1">Position</div>
+                          <div className="text-xs font-medium text-gray-500 mb-1">Camera Position</div>
                           <div className="grid grid-cols-2 gap-2">
                             <div>
                               <div className="text-xs text-gray-500">X-coord</div>
@@ -166,6 +198,33 @@ const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverC
                           <div className="border border-gray-200 p-2 rounded-md">
                             <div className="text-xs font-medium text-gray-500 mb-1">Distance</div>
                             <div className="text-xl font-mono">{bot.depth.toFixed(2)} m</div>
+                          </div>
+                        )}
+
+                        {/* Field Position Section for bots - Only show if fx/fy values are available */}
+                        {(bot.fx !== undefined || bot.fy !== undefined || bot.fz !== undefined) && (
+                          <div className="col-span-2 mt-2 border border-gray-200 p-2 rounded-md">
+                            <div className="text-xs font-medium text-gray-500 mb-1">Field Position</div>
+                            <div className="grid grid-cols-3 gap-2">
+                              {bot.fx !== undefined && (
+                                <div>
+                                  <div className="text-xs text-gray-500">X-field</div>
+                                  <div className="text-lg font-mono">{bot.fx.toFixed(2)}</div>
+                                </div>
+                              )}
+                              {bot.fy !== undefined && (
+                                <div>
+                                  <div className="text-xs text-gray-500">Y-field</div>
+                                  <div className="text-lg font-mono">{bot.fy.toFixed(2)}</div>
+                                </div>
+                              )}
+                              {bot.fz !== undefined && (
+                                <div>
+                                  <div className="text-xs text-gray-500">Z-field</div>
+                                  <div className="text-lg font-mono">{bot.fz.toFixed(2)}</div>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>
@@ -200,7 +259,7 @@ const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverC
           <div className="p-4 bg-white rounded-md border border-gray-200 border-l-4 border-l-green-600">
             <div className="grid grid-cols-2 gap-3 mb-3">
               {/* CPU Temperature */}
-              <div className="flex flex-col bg-gray-50 p-3 rounded-lg shadow-sm">
+              <div className="flex flex-col bg-gray-50 p-3 rounded-lg border border-gray-200">
                 <div className="text-xs font-medium text-gray-500">CPU Temperature</div>
                 <div className="flex items-baseline">
                   <span className="text-2xl font-mono font-semibold">
@@ -221,7 +280,7 @@ const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverC
               </div>
 
               {/* GPU Temperature */}
-              <div className="flex flex-col bg-gray-50 p-3 rounded-lg shadow-sm">
+              <div className="flex flex-col bg-gray-50 p-3 rounded-lg border border-gray-200">
                 <div className="text-xs font-medium text-gray-500">GPU Temperature</div>
                 <div className="flex items-baseline">
                   <span className="text-2xl font-mono font-semibold">
@@ -243,7 +302,7 @@ const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverC
             </div>
 
             {/* Uptime */}
-            <div className="p-3 bg-gray-50 rounded-lg shadow-sm">
+            <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
               <div className="text-xs font-medium text-gray-500 mb-1">System Uptime</div>
               <div className="text-xl font-mono font-semibold">
                 {(() => {
