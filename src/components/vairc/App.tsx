@@ -2,7 +2,7 @@
 import React from "react";
 import { Layout } from "./Layout";
 import { ColorFeed, DepthFeed } from "./components/Feeds";
-import { InfoPanel, JsonRenderer } from "./components/InfoPanels";
+import { JsonRenderer } from "./components/InfoPanels";
 import DetailsPanel from "./components/DetailsPanel";
 import FieldView from "./components/FieldView";
 import 'react-mosaic-component/react-mosaic-component.css';
@@ -13,7 +13,6 @@ const windowComponents = {
   1: ColorFeed,
   2: DepthFeed,
   3: JsonRenderer,
-  4: InfoPanel,
   5: DetailsPanel,
   6: FieldView,
 };
@@ -23,7 +22,6 @@ const windowTitles = {
   1: "Color Feed",
   2: "Depth Feed",
   3: "Raw Data",
-  4: "Info Panel",
   5: "Details",
   6: "Field View"
 };

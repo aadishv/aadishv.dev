@@ -1,7 +1,8 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
 // import global.css
 import "../../style/global.css";
+// Import shadcn/ui global styles
+import "../../styles/globals.css";
 import VAIRCApp from "../../components/vairc/App.tsx";
 const siteTitle = "3151A Dashboard";
 ---
@@ -11,6 +12,7 @@ const siteTitle = "3151A Dashboard";
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={"3151A web dashboard"} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{siteTitle}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,10 +22,9 @@ const siteTitle = "3151A Dashboard";
       rel="stylesheet"
     />
   </head>
-  <body class="text-text h-[100vh] font-sans">
-    <main
-      class="h-full w-full"
-    >
-        <VAIRCApp client:only />
-    </main></body>
+  <body class="h-[100vh]">
+    <main class="h-full w-full">
+      <VAIRCApp client:only />
+    </main>
+  </body>
 </html>

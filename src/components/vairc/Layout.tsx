@@ -9,6 +9,19 @@ import {
   type MosaicBranch
 } from 'react-mosaic-component';
 
+import { Button } from '../../components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../../components/ui/dialog';
+import { Switch } from '../../components/ui/switch';
+import { Input } from '../../components/ui/input';
+import { AlertCircle, Settings, RotateCw } from 'lucide-react';
+
 import 'react-mosaic-component/react-mosaic-component.css';
 import './app.css';
 
@@ -62,16 +75,13 @@ interface WindowProps {
 interface LayoutProps {
   windowComponents: WindowComponentMap;
   windowTitles?: WindowTitleMap;
-  /** Optional flag to ignore mixed content errors (for testing) */
-  debugIgnoreMixedContent?: boolean;
 }
 
 // SSE Hook for detection data
 export function useSSEDetections(
     server: string,
     endpoint: string = "events",
-    initialValue: DetectionPayload | null = null,
-    debugIgnoreMixedContent: boolean = false
+    initialValue: DetectionPayload | null = null
 ): { detections: DetectionPayload | null, connectionError: boolean } {
     const [detections, setDetections] = useState<DetectionPayload | null>(initialValue);
     const [connectionError, setConnectionError] = useState<boolean>(false);
@@ -153,51 +163,54 @@ const Header: React.FC<{
   };
 
   return (
-    <div className="vairc-header bg-white">
-      <div className="vairc-header-logos h-20">
-        <img
-          src="https://yt3.googleusercontent.com/yxrKYF6JiG2fHeHk7UBWZ3H14E72kyqzOF60vKaDhc7a2stmH9zA9SJSYGDXP6RZEizQRahIhrc=s160-c-k-c0x00ffffff-no-rj"
-          alt="Paradigm Logo"
-          className="logo"
-          style={{mixBlendMode: 'multiply'}}
-        />
-        <img src="https://recf.org/wp-content/uploads/2024/10/VEX-AI-Robotics-Competition-Element-Sidebar.png" alt="VAIRC Logo" className="logo" />
-      </div>
-
-      {/* Connection error warning */}
-      {connectionError && (
-        <div className="flex-grow mx-4 flex items-center">
-          <div className="border border-gray-300 bg-gray-50 p-2 flex items-center justify-between w-full rounded-md">
-            <div className="flex items-center">
-              <div className="mr-2 text-gray-700 flex-shrink-0">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
-              <span className="text-gray-700 text-sm">
-                Connection error: Cannot connect to server at <code className="bg-gray-100 px-1 py-0.5 rounded border border-gray-200 text-xs font-mono">{serverConfig}</code>
-              </span>
-            </div>
-            <button
-              onClick={handleReload}
-              className="primer-button primer-button-small ml-4 flex items-center"
-            >
-              <svg className="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              Reload
-            </button>
-          </div>
+    <header className="border-b">
+      <div className="flex items-center justify-between py-4 px-5 w-[100vw]">
+        <div className="flex items-center h-16 ml-0">
+          <img
+            src="/vairc/paradigm.jpg"
+            alt="Paradigm Logo"
+            className="h-full border-r pr-4 mr-4"
+            style={{mixBlendMode: 'multiply'}}
+          />
+          <img
+            src="https://recf.org/wp-content/uploads/2024/10/VEX-AI-Robotics-Competition-Element-Sidebar.png"
+            alt="VAIRC Logo"
+            className="h-full"
+          />
         </div>
-      )}
 
-      <button
-        className="primer-button !text-2xl"
-        onClick={onToggleSettings}
-      >
-        ⚙️ Settings
-      </button>
-    </div>
+        {/* Connection error warning */}
+        {connectionError && (
+          <div className="flex-1 mx-4">
+            <div className="border rounded-md bg-destructive/10 p-3 text-destructive flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-4 w-4" />
+                <span>
+                  Connection error: Cannot connect to server at <code className="bg-destructive/20 p-0.5 rounded text-xs font-mono">{serverConfig}</code>
+                </span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleReload}
+              >
+                <RotateCw className="h-3.5 w-3.5 mr-1" />
+                Reload
+              </Button>
+            </div>
+          </div>
+        )}
+
+        <Button
+          variant="outline"
+          onClick={onToggleSettings}
+          className="gap-2"
+        >
+          <Settings className="h-4 w-4" />
+          Settings
+        </Button>
+      </div>
+    </header>
   );
 };
 
@@ -247,77 +260,86 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   }, [serverConfig, isOpen]);
 
   return (
-    <div className="settings-modal-backdrop" onClick={onClose}>
-      <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="settings-modal-header">
-          <h2>Settings</h2>
-          <button className="settings-modal-close" onClick={onClose}>×</button>
-        </div>
-        <div className="settings-modal-body">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Settings</DialogTitle>
+          <DialogDescription>
+            Configure your VAIRC dashboard settings
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-6">
           {/* Server Configuration Section */}
-          <div className="settings-section">
-            <h3>Server Configuration</h3>
-            <div className="server-config-input">
-              <label htmlFor="server-config">Server Host:Port</label>
-              <div className="server-input-group">
-                <input
-                  type="text"
+          <div>
+            <h3 className="text-lg font-medium mb-3">Server Configuration</h3>
+            <div className="space-y-2">
+              <label htmlFor="server-config" className="text-sm">
+                Server Host:Port
+              </label>
+              <div className="flex gap-2">
+                <Input
                   id="server-config"
                   value={tempServerConfig}
                   onChange={handleServerInputChange}
                   placeholder="host:port"
-                  className="server-input"
+                  className="flex-1"
                 />
-                <button
-                  className="primer-button primer-button-small"
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={handleApplyServerConfig}
                 >
                   Apply
-                </button>
-                <button
-                  className="primer-button primer-button-small"
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={handleResetServerConfig}
                 >
                   Reset
-                </button>
+                </Button>
               </div>
-              <div className="server-config-hint">
+              <p className="text-sm text-muted-foreground">
                 Example: 192.168.86.98:5000
-              </div>
+              </p>
             </div>
           </div>
 
           {/* Window Visibility Section */}
-          <div className="settings-section">
-            <h3>Toggle Window Visibility</h3>
-            <div className="window-switches">
+          <div>
+            <h3 className="text-lg font-medium mb-3">Toggle Window Visibility</h3>
+            <div className="space-y-4">
               {Array.from({ length: windowCount }).map((_, index) => {
                 const windowId = index + 1;
                 const title = windowTitles[windowId] ?? `Window ${windowId}`;
                 const shouldRender = windowTitles[windowId] !== undefined;
 
                 return shouldRender ? (
-                  <label key={windowId} className="primer-toggle">
-                    <input
-                      type="checkbox"
+                  <div key={windowId} className="flex items-center justify-between">
+                    <label
+                      htmlFor={`window-${windowId}`}
+                      className="text-sm cursor-pointer"
+                    >
+                      {title}
+                    </label>
+                    <Switch
+                      id={`window-${windowId}`}
                       checked={windowVisibility[windowId] || false}
-                      onChange={() => onToggle(windowId)}
+                      onCheckedChange={() => onToggle(windowId)}
                     />
-                    <span className="primer-toggle-track">
-                      <span className="primer-toggle-thumb"></span>
-                    </span>
-                    <span className="primer-toggle-label">{title}</span>
-                  </label>
+                  </div>
                 ) : null;
               })}
             </div>
           </div>
         </div>
-        <div className="settings-modal-footer">
-          <button className="primer-button" onClick={onClose}>Close</button>
-        </div>
-      </div>
-    </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
@@ -330,7 +352,6 @@ const SERVER_CONFIG_KEY = 'vairc-server-config';
 export const Layout: React.FC<LayoutProps> = ({
   windowComponents,
   windowTitles = {},
-  debugIgnoreMixedContent = false
 }) => {
   const [currentNode, setCurrentNode] = useState<MosaicNode<number> | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -343,8 +364,7 @@ export const Layout: React.FC<LayoutProps> = ({
   const { detections: latestDetections, connectionError } = useSSEDetections(
     serverConfig,
     "events",
-    null,
-    debugIgnoreMixedContent
+    null
   );
 
   const [windowVisibility, setWindowVisibility] = useState<Record<number, boolean>>(() => {
@@ -490,66 +510,6 @@ export const Layout: React.FC<LayoutProps> = ({
     updateNodeStructure();
   }, [windowVisibility, updateNodeStructure]);
 
-  // Mixed content warning component
-  const MixedContentWarning = () => {
-    // Only show in https contexts when there's a connection error
-    const isHttps = window.location.protocol === 'https:';
-    if (!connectionError || !isHttps || debugIgnoreMixedContent) return null;
-
-    // Function to handle switching to HTTP version
-    const switchToHttp = () => {
-      const currentUrl = window.location.href;
-      const httpUrl = currentUrl.replace('https://', 'http://');
-      window.location.href = httpUrl;
-    };
-
-    // Function to reload the page
-    const reloadPage = () => {
-      window.location.reload();
-    };
-
-    return (
-      <div className="bg-amber-50 border-amber-200 border-b px-4 py-3">
-        <div className="flex items-center">
-          <div className="flex-shrink-0 text-amber-500">
-            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className="ml-3 flex-1">
-            <p className="text-sm text-amber-800">
-              <strong className="font-bold">Mixed Content Warning:</strong> Cannot connect to HTTP server from HTTPS page.
-            </p>
-            <p className="mt-1 text-sm text-amber-700">
-              Your browser is blocking connections to the HTTP server because this page is loaded over HTTPS. To fix this:
-            </p>
-            <div className="mt-2 mb-1">
-              <ul className="ml-4 list-disc text-sm text-amber-700 space-y-1">
-                <li>Open this page with HTTP instead of HTTPS</li>
-                <li>In Chrome, click the shield icon in the address bar and allow insecure content</li>
-                <li>Set up a secure proxy for your server</li>
-              </ul>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                onClick={switchToHttp}
-                className="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1 rounded text-sm font-medium"
-              >
-                Switch to HTTP Version
-              </button>
-              <button
-                onClick={reloadPage}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm font-medium"
-              >
-                Reload Page
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="vairc-layout">
       <Header
@@ -557,9 +517,6 @@ export const Layout: React.FC<LayoutProps> = ({
         connectionError={connectionError}
         serverConfig={serverConfig}
       />
-
-      {/* Show mixed content warning if needed */}
-      <MixedContentWarning />
 
       <SettingsModal
         isOpen={isSettingsOpen}

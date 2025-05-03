@@ -1,6 +1,7 @@
 // aadishv.github.io/src/components/vairc/components/FieldView.tsx
 import React, { useEffect, useRef, useState } from "react";
 import type { DetectionPayload, Pose } from "../Layout";
+import { Card, CardContent } from "../../../components/ui/card";
 
 // Field View Panel Component
 const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConfig: string}> = ({latestDetections}) => {
@@ -16,10 +17,10 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
   useEffect(() => {
     // Skip if image is not loaded or no canvas
     if (!imageLoaded || !canvasRef.current) return;
-    
+
     // Get the current pose directly from latest detections
     const currentPose = latestDetections?.pose || null;
-    
+
     // Directly draw the field with the current pose
     const canvas = canvasRef.current;
     if (canvas) {
@@ -33,7 +34,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
     const container = containerRef.current;
 
     if (!canvas || !image || !container) return;
-    
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -45,15 +46,15 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
     // Field dimensions in inches
     const FIELD_WIDTH_INCHES = 152;
     const FIELD_HEIGHT_INCHES = 152;
-    
+
     // Robot dimensions in inches (18x18 inch square robot)
     const ROBOT_SIZE_INCHES = 18;
-    
+
     // Calculate scaling factor to convert inches to pixels
     const scaleX = containerRect.width / FIELD_WIDTH_INCHES;
     const scaleY = containerRect.height / FIELD_HEIGHT_INCHES;
     const scale = Math.min(scaleX, scaleY); // Use the smaller scale to maintain aspect ratio
-    
+
     // Calculate offset to center the field
     const offsetX = (containerRect.width - FIELD_WIDTH_INCHES * scale) / 2;
     const offsetY = (containerRect.height - FIELD_HEIGHT_INCHES * scale) / 2;
@@ -64,14 +65,14 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       // 1. Translate from field center origin to top-left origin
       const centeredX = fieldX + FIELD_WIDTH_INCHES / 2;
       const centeredY = FIELD_HEIGHT_INCHES / 2 - fieldY; // Invert Y-axis
-      
+
       // 2. Scale from inches to pixels
       const pixelX = centeredX * scale + offsetX;
       const pixelY = centeredY * scale + offsetY;
-      
+
       return { x: pixelX, y: pixelY };
     };
-    
+
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -84,7 +85,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
           // Map from confidence range (0.2 - 1.0) to opacity range (0.0 - 1.0)
           const confidence = detection.confidence || 0;
           let opacity = 0;
-          
+
           if (confidence <= 0.2) {
             opacity = 0; // Below 20% confidence is fully transparent
           } else if (confidence >= 1.0) {
@@ -93,14 +94,14 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
             // Linear interpolation between 0.2 and 1.0
             opacity = (confidence - 0.2) / 0.8;
           }
-          
+
           // Set opacity for this detection
           ctx.globalAlpha = opacity; // 100% confidence is now fully opaque
-          
+
           // All ring and goal coordinates are absolute
           const canvasPos = fieldToCanvas(detection.fx, detection.fy);
           const detectionClass = detection.class.toLowerCase();
-          
+
           // Define sizes based on object type (in inches)
           let sizeInches = 0;
           switch (detectionClass) {
@@ -117,37 +118,37 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
             default:
               sizeInches = 8; // Default size
           }
-          
+
           // Calculate pixel size
           const pixelSize = sizeInches * scale;
-          
+
           // Create image path
           const imagePath = `/vairc/images/${detectionClass}.png`;
-          
+
           // Create and use an image element
           const spriteImage = new Image();
           spriteImage.src = imagePath;
-          
+
           // Function to draw the image properly cropped to square
           const drawCroppedImage = (img: HTMLImageElement) => {
             // Get image dimensions
             const imgWidth = img.naturalWidth;
             const imgHeight = img.naturalHeight;
-            
+
             // Determine crop dimensions to make the image square
             let sourceX = 0;
             let sourceY = 0;
             let sourceSize = Math.min(imgWidth, imgHeight);
-            
+
             // If width > height, crop from center of width
             if (imgWidth > imgHeight) {
               sourceX = (imgWidth - sourceSize) / 2;
-            } 
+            }
             // If height > width, crop from center of height
             else if (imgHeight > imgWidth) {
               sourceY = (imgHeight - sourceSize) / 2;
             }
-            
+
             // Draw the cropped image
             ctx.drawImage(
               img,
@@ -158,7 +159,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
               pixelSize, pixelSize    // Destination dimensions
             );
           };
-          
+
           // If image is already loaded, draw it immediately
           if (spriteImage.complete && spriteImage.naturalWidth) {
             drawCroppedImage(spriteImage);
@@ -167,13 +168,13 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
             spriteImage.onload = () => {
               drawCroppedImage(spriteImage);
             };
-            
+
             // Fallback if image fails to load
             spriteImage.onerror = () => {
               console.error(`Failed to load image: ${imagePath}`);
               // Draw a colored circle as fallback with opacity based on confidence
-              ctx.fillStyle = detectionClass === 'red' ? `rgba(255, 0, 0, ${opacity})` 
-                            : detectionClass === 'blue' ? `rgba(0, 0, 255, ${opacity})` 
+              ctx.fillStyle = detectionClass === 'red' ? `rgba(255, 0, 0, ${opacity})`
+                            : detectionClass === 'blue' ? `rgba(0, 0, 255, ${opacity})`
                             : detectionClass === 'goal' ? `rgba(255, 255, 0, ${opacity})`
                             : `rgba(128, 128, 128, ${opacity})`;
               ctx.beginPath();
@@ -183,22 +184,22 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
           }
         }
       });
-      
+
       // Reset global alpha after drawing detections
       ctx.globalAlpha = 1.0;
     }
-    
+
     // Draw the robot if we have pose data
     if (robotPose) {
       const { x, y, theta } = robotPose;
-      
+
       // Convert robot position from field to canvas coordinates
       const canvasPos = fieldToCanvas(x, y);
-      
+
       // Calculate robot size in pixels
       const robotSizePixels = ROBOT_SIZE_INCHES * scale;
       const halfSize = robotSizePixels / 2;
-      
+
       // Define robot corners relative to its center position (in canvas pixel space)
       const corners = [
         { x: -halfSize, y: -halfSize }, // Top-left
@@ -206,24 +207,27 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
         { x: halfSize, y: halfSize },   // Bottom-right
         { x: -halfSize, y: halfSize }   // Bottom-left
       ];
-      
+
       // Rotate and position the robot corners
       // For CCW rotation where 0 = up (north)
       const rotatedCorners = corners.map(corner => {
-        // Rotate the corner around robot center - using counterclockwise rotation formula
-        const cosTheta = Math.cos(theta);
-        const sinTheta = Math.sin(theta);
+        // Convert theta from degrees to radians for trigonometric functions
+        const thetaRadians = theta * (Math.PI / 180);
         
+        // Rotate the corner around robot center - using counterclockwise rotation formula
+        const cosTheta = Math.cos(thetaRadians);
+        const sinTheta = Math.sin(thetaRadians);
+
         const rotatedX = corner.x * cosTheta + corner.y * sinTheta;
         const rotatedY = -corner.x * sinTheta + corner.y * cosTheta;
-        
+
         // Translate to robot position on canvas
         return {
           x: canvasPos.x + rotatedX,
           y: canvasPos.y + rotatedY
         };
       });
-      
+
       // Draw robot body
       ctx.fillStyle = 'rgba(128, 128, 128, 0.7)';
       ctx.beginPath();
@@ -233,7 +237,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       }
       ctx.closePath();
       ctx.fill();
-      
+
       // Draw robot outline
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
       ctx.lineWidth = 2;
@@ -244,7 +248,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       }
       ctx.closePath();
       ctx.stroke();
-      
+
       // Draw blue front face (0-1 side to be on top when the robot is at 0° orientation)
       ctx.strokeStyle = 'rgba(0, 102, 255, 1.0)';
       ctx.lineWidth = 4;
@@ -252,7 +256,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       ctx.moveTo(rotatedCorners[0].x, rotatedCorners[0].y);
       ctx.lineTo(rotatedCorners[1].x, rotatedCorners[1].y);
       ctx.stroke();
-      
+
       // Draw a small dot at the robot center for reference
       ctx.fillStyle = 'rgba(255, 0, 0, 0.7)';
       ctx.beginPath();
@@ -289,7 +293,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
   useEffect(() => {
     const container = containerRef.current;
     const image = imageRef.current;
-    
+
     if (!container || !image) return;
 
     // Handle resize
