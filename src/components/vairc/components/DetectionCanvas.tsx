@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DEFAULT_SERVER, type DetectionPayload, type Detection } from "../Layout";
 import { getDetectionColor } from "../utils/colors";
+import { safeGetStuff, isValidDetectionPayload } from "../utils/validation";
 import { Switch } from "../../../components/ui/switch";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent } from "../../../components/ui/card";
@@ -85,6 +86,14 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
       return;
     }
     
+    // Use safe validation utility to get the stuff array (returns empty array if invalid)
+    const validDetections = safeGetStuff(detections);
+    
+    // If no valid detections to show, just return after clearing
+    if (validDetections.length === 0) {
+      return;
+    }
+    
     // Calculate the scaling factor from original image to displayed image size
     const imageAspectRatio = originalImageWidth / originalImageHeight;
     const containerAspectRatio = containerRect.width / containerRect.height;
@@ -116,7 +125,14 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
     ctx.textBaseline = "bottom";
     
     // Draw each detection
-    detections.stuff.forEach((d: Detection) => {
+    validDetections.forEach((d: Detection) => {
+      // Skip invalid detections
+      if (!d || typeof d !== 'object' || typeof d.x !== 'number' || 
+          typeof d.y !== 'number' || typeof d.width !== 'number' || 
+          typeof d.height !== 'number' || !d.class) {
+        return;
+      }
+      
       // Calculate scaled position and dimensions
       const boxWidth = d.width * scaleX;
       const boxHeight = d.height * scaleY;

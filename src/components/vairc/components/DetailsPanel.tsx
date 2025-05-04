@@ -2,6 +2,7 @@
 import React from "react";
 import { type DetectionPayload } from "../Layout";
 import { getDetectionColor } from "../utils/colors";
+import { safeGetStuff } from "../utils/validation";
 import {
   Accordion,
   AccordionContent,
@@ -14,18 +15,25 @@ import { Card, CardContent } from "../../../components/ui/card";
 const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverConfig: string}> = ({
   latestDetections
 }) => {
+  // Extract flag information from detections with safe validation
+  const stuff = safeGetStuff(latestDetections);
+  
   // Extract flag information from detections
-  const flags = latestDetections?.stuff?.filter(d =>
-    d.class.toLowerCase().includes('flag') ||
-    d.class.toLowerCase() === 'red' ||
-    d.class.toLowerCase() === 'blue'
-  ) || [];
+  const flags = stuff.filter(d =>
+    d && typeof d === 'object' && d.class && (
+      d.class.toLowerCase().includes('flag') ||
+      d.class.toLowerCase() === 'red' ||
+      d.class.toLowerCase() === 'blue'
+    )
+  );
 
   // Extract pose information (assuming bot detections might have pose data)
-  const botDetections = latestDetections?.stuff?.filter(d =>
-    d.class.toLowerCase() === 'bot' ||
-    d.class.toLowerCase().includes('pose')
-  ) || [];
+  const botDetections = stuff.filter(d =>
+    d && typeof d === 'object' && d.class && (
+      d.class.toLowerCase() === 'bot' ||
+      d.class.toLowerCase().includes('pose')
+    )
+  );
 
   return (
     <div className="flex flex-col p-6 h-full overflow-auto bg-gray-50">

@@ -113,10 +113,43 @@ export function useSSEDetections(
         // Handle incoming messages
         eventSource.onmessage = (event: MessageEvent) => {
             try {
-                const data: DetectionPayload = JSON.parse(event.data);
+                // Parse the JSON data
+                const parsedData = JSON.parse(event.data);
+        
+                // Validate that the parsed data has the expected structure
+                if (!parsedData || typeof parsedData !== 'object') {
+                    console.error('Invalid SSE data format: Not an object', event.data);
+                    return;
+                }
+        
+                // Validate that 'stuff' array exists
+                if (!Array.isArray(parsedData.stuff)) {
+                    console.error('Invalid SSE data: Missing or invalid "stuff" array', event.data);
+                    // Continue processing anyway as some features might still work without detections
+                }
+        
+                // If pose is present, ensure it has the right structure
+                if (parsedData.pose && (
+                    typeof parsedData.pose !== 'object' ||
+                    typeof parsedData.pose.x !== 'number' ||
+                    typeof parsedData.pose.y !== 'number' ||
+                    typeof parsedData.pose.theta !== 'number'
+                )) {
+                    console.warn('Invalid pose data in SSE message', parsedData.pose);
+                    // Don't return, still process the rest of the data
+                }
+        
+                // Cast to our type and set state
+                const data: DetectionPayload = parsedData;
                 setDetections(data);
+                setConnectionError(false); // Reset connection error state on successful data
             } catch (error) {
-                console.error('Failed to parse SSE data:', event.data, error);
+                console.error('Failed to parse SSE data:', error);
+                // Log the first 200 chars of the data to avoid flooding the console
+                const truncatedData = typeof event.data === 'string' 
+                    ? (event.data.length > 200 ? event.data.substring(0, 200) + '...' : event.data)
+                    : 'non-string data';
+                console.debug('Raw data sample:', truncatedData);
             }
         };
 
@@ -364,7 +397,7 @@ export const Layout: React.FC<LayoutProps> = ({
   const { detections: latestDetections, connectionError } = useSSEDetections(
     serverConfig,
     "events",
-    null
+    { stuff: [] } // Provide a default with empty stuff array
   );
 
   const [windowVisibility, setWindowVisibility] = useState<Record<number, boolean>>(() => {

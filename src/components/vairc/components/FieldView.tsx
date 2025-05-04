@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { DetectionPayload, Pose } from "../Layout";
 import { Card, CardContent } from "../../../components/ui/card";
+import { safeGetStuff, isValidDetectionPayload } from "../utils/validation";
 
 // Field View Panel Component
 const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConfig: string}> = ({latestDetections}) => {
@@ -77,10 +78,13 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw all detections first (behind the robot)
-    if (detections?.stuff && detections.stuff.length > 0) {
-      detections.stuff.forEach(detection => {
+    if (isValidDetectionPayload(detections)) {
+      const validDetections = safeGetStuff(detections);
+      validDetections.forEach(detection => {
         // Only process detections that have absolute field coordinates
-        if (detection.fx !== undefined && detection.fy !== undefined) {
+        if (detection && typeof detection === 'object' &&
+            detection.fx !== undefined && detection.fy !== undefined && 
+            typeof detection.fx === 'number' && typeof detection.fy === 'number') {
           // Calculate transparency based on confidence
           // Map from confidence range (0.2 - 1.0) to opacity range (0.0 - 1.0)
           const confidence = detection.confidence || 0;
@@ -190,7 +194,11 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
     }
 
     // Draw the robot if we have pose data
-    if (robotPose) {
+    if (robotPose && 
+        typeof robotPose === 'object' && 
+        typeof robotPose.x === 'number' && 
+        typeof robotPose.y === 'number' && 
+        typeof robotPose.theta === 'number') {
       const { x, y, theta } = robotPose;
 
       // Convert robot position from field to canvas coordinates

@@ -1,0 +1,10 @@
+---
+import "../../styles/globals.css";
+import "../../style/global.css";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StudyApp from "../../components/study/App.tsx";
+---
+
+<BaseLayout title="slide puzzle" description="">
+  <StudyApp client:only />
+</BaseLayout>

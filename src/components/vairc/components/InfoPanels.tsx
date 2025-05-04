@@ -9,9 +9,9 @@ import {
 } from "../../../components/ui/tabs";
 import { Card, CardContent } from "../../../components/ui/card";
 
-export const JsonRenderer: React.FC<{latestDetections: DetectionPayload, serverConfig: string}> = ({latestDetections}) => (
+export const JsonRenderer: React.FC<{latestDetections: DetectionPayload | null, serverConfig: string}> = ({latestDetections}) => (
   <div className="flex flex-col p-4 overflow-auto h-full">
-   <pre className="text-sm">{JSON.stringify(latestDetections, null, 2)}</pre>
+   <pre className="text-sm">{JSON.stringify(latestDetections || { stuff: [] }, null, 2)}</pre>
   </div>
 );
 
