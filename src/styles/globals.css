@@ -74,3 +74,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .glimmer {
+    position: relative;
+    overflow: hidden;
+    color: transparent !important;
+  }
+  .glimmer::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+    animation: shimmer 1.2s infinite;
+    z-index: 1;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+}

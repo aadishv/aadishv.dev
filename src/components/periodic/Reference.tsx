@@ -36,6 +36,11 @@ const ReferenceModal = ({ isOpen, onClose }: ReferenceModalProps) => {
         imageSrc: "/chemutils/transition_charges.avif",
         alt: "Common transition metal charges",
       },
+      {
+        name: "Metal activity series",
+        imageSrc: "/chemutils/activity_series.avif",
+        alt: "Willingness of metals to ionize",
+      }
     ],
     [],
   );
