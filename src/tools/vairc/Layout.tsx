@@ -359,7 +359,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     <Switch
                       id={`window-${windowId}`}
                       checked={windowVisibility[windowId] || false}
-                      onCheckedChange={() => onToggle(windowId)}
+                      onCheckedChange={(checked) => {
+                        if (checked !== windowVisibility[windowId]) {
+                          onToggle(windowId);
+                        }
+                      }}
                     />
                   </div>
                 ) : null;
@@ -481,61 +485,9 @@ export const Layout: React.FC<LayoutProps> = ({
 
   // Effect to update layout whenever visibility changes or on initial mount if no layout restored
   useEffect(() => {
-      // This effect ensures the layout is built based on the current windowVisibility state.
-      // It runs on mount and whenever windowVisibility changes.
-      // It also ensures the layout is built correctly based on restored visibility on mount
-      // if no layout was explicitly saved.
-      if (currentNode === null) { // Only rebuild automatically if there's no saved layout or it's explicitly null
-         updateNodeStructure();
-         console.log('Visibility state changed or no saved layout, updating layout structure...');
-      } else {
-         // If a layout was restored, the visibility state might be inconsistent with it initially.
-         // Let's ensure visibility is updated to match the restored layout nodes.
-         const visibleIdsInLayout: Record<number, boolean> = {};
-         if (currentNode) {
-             // Recursively find all leaf nodes in the layout
-             const findLeaves = (node: MosaicNode<number> | null, leaves: number[]) => {
-                 if (node === null) return;
-                 if (typeof node === 'number') {
-                     leaves.push(node);
-                 } else {
-                     findLeaves(node.first, leaves);
-                     findLeaves(node.second, leaves);
-                 }
-             }
-             const currentLeaves: number[] = [];
-             findLeaves(currentNode, currentLeaves);
-             currentLeaves.forEach(id => { visibleIdsInLayout[id] = true; });
-         }
-
-         // Update visibility state to match the restored layout
-         setWindowVisibility(prevVisibility => {
-             const newVisibility = { ...prevVisibility };
-             let changed = false;
-             // Mark IDs in the layout as visible
-             Object.keys(visibleIdsInLayout).map(Number).forEach(id => {
-                 if (newVisibility[id] !== true) {
-                     newVisibility[id] = true;
-                     changed = true;
-                 }
-             });
-             // Mark IDs not in the layout as hidden
-             Object.keys(newVisibility).map(Number).forEach(id => {
-                 if (!visibleIdsInLayout[id] && newVisibility[id] !== false) {
-                     newVisibility[id] = false;
-                     changed = true;
-                 }
-             });
-             if (changed) {
-                 console.log('Adjusted window visibility to match restored layout');
-                 // Saving to localStorage happens in the toggleWindowVisibility handler or updateNodeStructure,
-                 // which will be triggered if the newVisibility state changes the UI.
-             }
-             return newVisibility;
-         });
-      }
-
-  }, [windowVisibility, updateNodeStructure, currentNode]); // Depend on windowVisibility, updateNodeStructure, and currentNode
+    updateNodeStructure();
+    // Only generate layout from windowVisibility; do not sync windowVisibility from layout
+  }, [windowVisibility, updateNodeStructure]);
 
 
   // Toggle window visibility

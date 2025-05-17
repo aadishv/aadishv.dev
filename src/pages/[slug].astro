@@ -117,7 +117,7 @@ const isProject = post.file.includes('/content/projects/');
                 </CardHeader>
                 <CardContent>
                   {headings.map((heading) => (
-                    <div style={`margin-left: ${2 * heading.depth - 3}rem`}>
+                    <div style={`margin-left: ${2 * heading.depth - 1}rem`}>
                       <a href={`#${heading.slug}`} class="text-sm">
                         {heading.text}
                       </a>
