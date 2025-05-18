@@ -8,9 +8,19 @@ title: "Design Process: AI for the Interaction Period"
 
 Written by: **Aadish Verma**
 
+**Problem: The prominent feature of the VEX AI Robotics Competition is the Interaction Period, in which teams utilize advanced technologies and strategies to interact with field elements and other robots entirely autonomously.**
+
+**Relevance: We need a good routine to dynamically score and interact with Field Elements in the Interaction Period in order to maximize the amount of points we can gain to win the game.**
+
+**Impact: In building out this highly complex solution, we made a number of important observations with other VEX AI teams would benefit from knowing. Much of our implementation structure can also be generalized, providing a good starting point for other VAIRC teams to fill in their own custom code.**
+
+**Solution: We use the Engineering Design Process. In the initial "brainstorming" phase we derive a set of requirements for scoring rings in the Interaction Period and list the necessary technologies to meet it. Then, we break up the requirements into subtasks and use the EDP to arrive at the optimal solution for each subtask.**
+
 ## General areas<!-- {"fold":true} -->
 
-The prominent feature of the VEX AI Robotics Competition is the Interaction Period, in which teams utilize advanced technologies and strategies to interact with field elements and other robots entirely autonomously. For the Interaction Period, 3151A has obtained two NVIDIA Jetson Nanos, which both have powerful GPUs to run neural networks as well as active cooling to last the 2 minutes of a standard VAIRC match. There are many general areas which we need to consider for the Jetson, which we’ll then refine into more focused subtasks:
+For the Interaction Period, 3151A has obtained two NVIDIA Jetson Nanos, which both have powerful GPUs to run neural networks as well as active cooling to last the 2 minutes of a standard VAIRC match.
+
+There are many general areas which we need to consider for the Jetson, which we’ll then refine into more focused subtasks:
 
 ### Area 1: Detecting objects<!-- {"fold":true} -->
 
