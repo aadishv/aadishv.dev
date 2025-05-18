@@ -31,6 +31,10 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
 
   // Function to draw the field and robot with a specific pose
   const drawField = (canvas: HTMLCanvasElement, robotPose: Pose | null, detections: DetectionPayload | null) => {
+    // let robotPose: Pose | null = null;
+    // if (robotPose2) {
+    //   robotPose = { x: robotPose2.x, y: robotPose2.y, theta: -robotPose2.theta };
+    // }
     const image = imageRef.current;
     const container = containerRef.current;
 
@@ -83,7 +87,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       validDetections.forEach(detection => {
         // Only process detections that have absolute field coordinates
         if (detection && typeof detection === 'object' &&
-            detection.fx !== undefined && detection.fy !== undefined && 
+            detection.fx !== undefined && detection.fy !== undefined &&
             typeof detection.fx === 'number' && typeof detection.fy === 'number') {
           // Calculate transparency based on confidence
           // Map from confidence range (0.2 - 1.0) to opacity range (0.0 - 1.0)
@@ -194,10 +198,10 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
     }
 
     // Draw the robot if we have pose data
-    if (robotPose && 
-        typeof robotPose === 'object' && 
-        typeof robotPose.x === 'number' && 
-        typeof robotPose.y === 'number' && 
+    if (robotPose &&
+        typeof robotPose === 'object' &&
+        typeof robotPose.x === 'number' &&
+        typeof robotPose.y === 'number' &&
         typeof robotPose.theta === 'number') {
       const { x, y, theta } = robotPose;
 
@@ -221,7 +225,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       const rotatedCorners = corners.map(corner => {
         // Convert theta from degrees to radians for trigonometric functions
         const thetaRadians = theta * (Math.PI / 180);
-        
+
         // Rotate the corner around robot center - using counterclockwise rotation formula
         const cosTheta = Math.cos(thetaRadians);
         const sinTheta = Math.sin(thetaRadians);
