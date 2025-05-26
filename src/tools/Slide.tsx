@@ -7,6 +7,8 @@ const GRID_SIZE = 4;
 const TILE_COUNT = GRID_SIZE * GRID_SIZE;
 const EMPTY_INDEX = TILE_COUNT - 1;
 const DEFAULT_IMAGE_URL = "https://i.imgur.com/y2h8wno.png";
+const CUSTOM_IMAGE_KEY = "slide-puzzle-custom-image";
+const MAX_IMAGE_SIZE = 600; // Maximum width/height for puzzle images
 
 function generateSolvedTiles() {
   return Array.from({ length: TILE_COUNT }, (_, i) =>
@@ -58,6 +60,8 @@ export default function Slide() {
   const [tileImages, setTileImages] = useState<string[]>([]);
   const [tileRects, setTileRects] = useState<{x: number, y: number, width: number, height: number}[]>([]);
   const [imgDims, setImgDims] = useState<{width: number, height: number} | null>(null);
+  const [useCustomImage, setUseCustomImage] = useState(false);
+  const [customImageUrl, setCustomImageUrl] = useState<string | null>(null);
 
   // Timer effect
   useEffect(() => {
@@ -154,14 +158,50 @@ export default function Slide() {
     shuffleBoard();
   }
 
-  // File input (image upload) - not implemented, placeholder for extensibility
+  // File input (image upload)
   function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file.');
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (result) {
+        // Save to localStorage
+        localStorage.setItem(CUSTOM_IMAGE_KEY, result);
+        setCustomImageUrl(result);
+        setUseCustomImage(true);
+        loadImageAndGenerateTiles(result);
+      }
+    };
+    reader.readAsDataURL(file);
+    
     if (fileInputRef.current) fileInputRef.current.value = "";
-    // Placeholder: no-op
   }
 
-  // On mount: slice the default image into tile images, then shuffle
-  useEffect(() => {
+  // Image loading and tile generation
+  function loadImageAndGenerateTiles(imageUrl: string) {
+    function resizeImage(img: HTMLImageElement): { width: number; height: number } {
+      let { width, height } = img;
+      
+      // Calculate scale factor to fit within MAX_IMAGE_SIZE while maintaining aspect ratio
+      const scale = Math.min(MAX_IMAGE_SIZE / width, MAX_IMAGE_SIZE / height);
+      
+      if (scale < 1) {
+        width = Math.floor(width * scale);
+        height = Math.floor(height * scale);
+      }
+      
+      return { width, height };
+    }
+
     function getTileRects(imgWidth: number, imgHeight: number) {
       const rects = [];
       let y = 0;
@@ -188,21 +228,32 @@ export default function Slide() {
 
     const img = new window.Image();
     img.crossOrigin = "anonymous";
-    img.src = DEFAULT_IMAGE_URL;
+    img.src = imageUrl;
     img.onload = () => {
-      const rects = getTileRects(img.width, img.height);
+      const { width: resizedWidth, height: resizedHeight } = resizeImage(img);
+      
+      // Create a canvas to resize the image
+      const resizeCanvas = document.createElement("canvas");
+      const resizeCtx = resizeCanvas.getContext("2d");
+      resizeCanvas.width = resizedWidth;
+      resizeCanvas.height = resizedHeight;
+      resizeCtx!.drawImage(img, 0, 0, resizedWidth, resizedHeight);
+      
+      const rects = getTileRects(resizedWidth, resizedHeight);
       setTileRects(rects);
-      setImgDims({ width: img.width, height: img.height });
+      setImgDims({ width: resizedWidth, height: resizedHeight });
+      
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       const images: string[] = [];
+      
       for (let i = 0; i < TILE_COUNT - 1; i++) {
         const { x, y, width, height } = rects[i];
         canvas.width = width;
         canvas.height = height;
         ctx!.clearRect(0, 0, width, height);
         ctx!.drawImage(
-          img,
+          resizeCanvas,
           x,
           y,
           width,
@@ -217,6 +268,39 @@ export default function Slide() {
       setTileImages(images);
       shuffleBoard();
     };
+  }
+
+  // Toggle between custom and default image
+  function toggleImageSource() {
+    const newUseCustomImage = !useCustomImage;
+    setUseCustomImage(newUseCustomImage);
+    
+    if (newUseCustomImage && customImageUrl) {
+      loadImageAndGenerateTiles(customImageUrl);
+    } else {
+      loadImageAndGenerateTiles(DEFAULT_IMAGE_URL);
+    }
+  }
+
+  // Remove custom image
+  function removeCustomImage() {
+    localStorage.removeItem(CUSTOM_IMAGE_KEY);
+    setCustomImageUrl(null);
+    setUseCustomImage(false);
+    loadImageAndGenerateTiles(DEFAULT_IMAGE_URL);
+  }
+
+  // On mount: load saved custom image or default, then slice into tiles and shuffle
+  useEffect(() => {
+    // Check for saved custom image
+    const savedCustomImage = localStorage.getItem(CUSTOM_IMAGE_KEY);
+    if (savedCustomImage) {
+      setCustomImageUrl(savedCustomImage);
+      setUseCustomImage(true);
+      loadImageAndGenerateTiles(savedCustomImage);
+    } else {
+      loadImageAndGenerateTiles(DEFAULT_IMAGE_URL);
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -227,6 +311,17 @@ export default function Slide() {
           .puzzle-tile-anim {
             transition: left 0.12s cubic-bezier(0.4,0,0.2,1), top 0.12s cubic-bezier(0.4,0,0.2,1);
             will-change: left, top;
+          }
+          .empty-space {
+            background: repeating-linear-gradient(
+              45deg,
+              #f0f0f0,
+              #f0f0f0 8px,
+              #e0e0e0 8px,
+              #e0e0e0 16px
+            );
+            border: 2px dashed #d0d0d0;
+            border-radius: 4px;
           }
         `}
       </style>
@@ -239,6 +334,18 @@ export default function Slide() {
           minHeight: imgDims?.height,
         }}
       >
+        {/* Empty space indicator */}
+        {tiles.indexOf(null) !== -1 && imgDims && (
+          <div
+            className="absolute empty-space"
+            style={{
+              left: tileRects[tiles.indexOf(null)]?.x || 0,
+              top: tileRects[tiles.indexOf(null)]?.y || 0,
+              width: tileRects[tiles.indexOf(null)]?.width || 0,
+              height: tileRects[tiles.indexOf(null)]?.height || 0,
+            }}
+          />
+        )}
         {Array.from({ length: TILE_COUNT - 1 }).map((_, tileValue) => {
           const idx = tiles.indexOf(tileValue + 1);
           const rect = tileRects[idx];
@@ -284,6 +391,53 @@ export default function Slide() {
                 >
                   Reset / Shuffle
                 </Button>
+              </div>
+              
+              <div className="flex flex-col gap-3 w-full">
+                <Label htmlFor="image-upload" className="text-lg font-semibold">
+                  Custom Image
+                </Label>
+                <div className="flex gap-2 w-full">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="flex-1 text-sm py-3"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isShuffling}
+                  >
+                    Upload
+                  </Button>
+                  {customImageUrl && (
+                    <Button
+                      variant={useCustomImage ? "default" : "outline"}
+                      size="lg"
+                      className="flex-1 text-sm py-3"
+                      onClick={toggleImageSource}
+                      disabled={isShuffling}
+                    >
+                      {useCustomImage ? "Custom" : "Switch"}
+                    </Button>
+                  )}
+                </div>
+                {customImageUrl && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="text-xs py-2"
+                    onClick={removeCustomImage}
+                    disabled={isShuffling}
+                  >
+                    Remove Custom
+                  </Button>
+                )}
+                <Input
+                  ref={fileInputRef}
+                  id="image-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
               </div>
               {showConfirm && (
                 <div className="flex flex-col gap-2 items-center w-full">

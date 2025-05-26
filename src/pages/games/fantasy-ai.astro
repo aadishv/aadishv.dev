@@ -1,0 +1,18 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { App } from "@/tools/fantasy-ai/App.tsx";
+
+const { url } = Astro;
+const searchParams = new URLSearchParams(url.search);
+const ranked = searchParams.get('ranked') || '';
+const name = searchParams.get('name') || '';
+
+const initialProps = {
+  ranked,
+  name: name ? decodeURIComponent(name) : ''
+};
+---
+
+<Layout title="Fantasy AI Rankings">
+    <App client:only="react" initialProps={initialProps} />
+</Layout>
