@@ -3,6 +3,8 @@ date: "2025-03-23"
 title: "Robotics 2: 315P (High Stakes)"
 ---
 
+**🚨THIS IS A TECHNICAL POST🚨**
+
 This is the second part of what will soon become a four- or five-part series. The first two parts are about my time on the robotics team 315P.
 
 Here are the previous posts:
@@ -21,7 +23,7 @@ After we had finished celebrating our awards, we began working on our robot for 
 ### Kernel
 
 Any and all code I write for the robot runs on the VEX V5 brain:
-![](/assets/robotics/post1/7.png)
+![](assets/robotics12/7.png)
 This runs VEXos, which is not a full-fledged operating system, per se, but enables the execution of custom binaries which can interface with I/O. I/O on the V5 brain includes quite a few things, most of which come from either the screen, the smart ports (pictured above on either vertical side of the screen), or the three-wire ports (not shown above).
 
 - Inputs
@@ -142,7 +144,7 @@ Now that this is all out of the way, let’s explain a bit more about the autono
 
 As noted in the first blog post, V5RC matches start with a 15-second autonomous period. This is where the code I write gets executed (there are only ~50 LOC dedicated to running in the driver control period). Strategy in High Stakes is very important; for example, if teams do not coordinate their autonomous strategies, both robots could try to score on their alliance stake at the same time and clash, preventing either one from scoring and messing up the rest of the autonomous routines. Thus, a number of different routines, colloquially known as “autons”, are needed. There is, of course, also a need to choose two things at the beginning of a match: which auton to run, and what side the robot is on (blue or red). The latter is important because in High Stakes, the field is symmetric by reflection (while the Over Under field was symmetric by rotation), creating the need to “mirror” the turns of an autonomous routine if it switches sides. This was handled by our selector, which ended up looking like this:
 
-![](/assets/robotics/post1/8.png)
+![](assets/robotics12/8.png)
 (ignore the thing at the bottom that says “Skills”.)
 
 When the field control told the robot to run its autonomous, whichever routine had last been clicked on was run. The code for autons themselves look something like this:

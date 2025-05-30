@@ -68,7 +68,7 @@ Definitely worth my time!
 ## Conclusion
 
 Just for fun, here is my performance on AoC for the initial (Python) run -- pretty mediocre but still a blast.
-![leaderboard](/assets/aoc-24/leaderboard.png)
+![leaderboard](assets/aoc-24.png)
 
 Check out my [code](https://github.com/aadishv/aoc), including some problems with 2015, 2019, and 2023 for practice, and my [Rust code](https://github.com/aadishv/aoc/tree/main/aoc_rust).
 

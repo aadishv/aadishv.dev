@@ -53,23 +53,23 @@ const ElementTooltip: React.FC<ElementTooltipProps> = ({
       </CardHeader>
       <CardContent className="h-[512px] overflow-y-auto">
         <div className="">
-          <h6 className="underline decoration-wavy decoration-blue-500">Electron config</h6>
+          <h6 className="underline decoration-blue-500">Electron config</h6>
           <p>{el.electron_configuration_semantic || el.electron_configuration}</p>
         </div>
         <div className="">
-          <h6 className="underline decoration-wavy decoration-blue-500">Full config</h6>
+          <h6 className="underline decoration-blue-500">Full config</h6>
           <p>{el.electron_configuration}</p>
         </div>
         <div className="">
-          <h6 className="underline decoration-wavy decoration-blue-500">Group</h6>
+          <h6 className="underline decoration-blue-500">Group</h6>
           <p>{(el as unknown as  {"group": string})["group"] ?? "N/A"}</p>
         </div>
         <div className="">
-          <h6 className="underline decoration-wavy decoration-blue-500">Atomic mass</h6>
+          <h6 className="underline decoration-blue-500">Atomic mass</h6>
           <p>{el.atomic_mass.toFixed(2)}</p>
         </div>
         <div className="">
-          <h6 className="underline decoration-wavy decoration-blue-500">Electronegativity</h6>
+          <h6 className="underline decoration-blue-500">Electronegativity</h6>
           <p>
             {el.electronegativity_pauling !== undefined && el.electronegativity_pauling !== null
               ? el.electronegativity_pauling
@@ -77,7 +77,7 @@ const ElementTooltip: React.FC<ElementTooltipProps> = ({
           </p>
         </div>
         <div className="">
-          <h6 className="underline decoration-wavy decoration-blue-500">Oxidation states</h6>
+          <h6 className="underline decoration-blue-500">Oxidation states</h6>
           <p>
             {Array.isArray(el.oxistates) && el.oxistates.length > 0
               ? el.oxistates.join(", ")
@@ -85,7 +85,7 @@ const ElementTooltip: React.FC<ElementTooltipProps> = ({
           </p>
         </div>
         <div className="">
-          <h6 className="underline decoration-wavy decoration-blue-500">Oxidation states (extended)</h6>
+          <h6 className="underline decoration-blue-500">Oxidation states (extended)</h6>
           <p>
             {Array.isArray(el.oxistates_extended) && el.oxistates_extended.length > 0
               ? el.oxistates_extended.join(", ")
@@ -93,7 +93,7 @@ const ElementTooltip: React.FC<ElementTooltipProps> = ({
           </p>
         </div>
         <div className="">
-          <h6 className="underline decoration-wavy decoration-blue-500">Fun fact</h6>
+          <h6 className="underline decoration-blue-500">Fun fact</h6>
           <p>{el.fun_fact}</p>
         </div>
         <div className="mt-4">

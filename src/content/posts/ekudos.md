@@ -46,7 +46,7 @@ fakeuser13@ohs.stanford.edu	Just wanted to let you know you're appreciated. Keep
 
 Luckily for me, the TSV was sorted by alphabetical order, meaning each email's messages were grouped together. Thus, a simple for-loop was enough. For a first try, I quickly hacked together a script which used `mailto:` urls that one could click on to open Gmail, with the recipient, message title, and body already filled out, with just the send button waiting to be pressed. It also put each message in a HTML `a` tag so I could upload it to Codepen and share it that way. This worked great on my end, but...
 
-![uh-oh](/assets/ekudos.png)
+![uh-oh](assets/ekudos.png)
 
 Ah yes, the classic Microsoft frustrations. I asked Copilot what I could do to make it work, and it told me that Gmail had its own `mailto` equivalent which directly sent the user to gmail (instead of a random mail app). This quick change made the script work perfectly! :D
 

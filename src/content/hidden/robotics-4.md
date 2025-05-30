@@ -650,4 +650,4 @@ How the dashboard is hosted is also particularly interesting:
 
 Here is a video of the dashboard fully working:
 
-<video src="/assets/robotics-3/video.mov" controls></video>
+<video src="assets/robotics4/video.mov" controls></video>

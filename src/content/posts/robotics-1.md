@@ -12,12 +12,12 @@ _Preface_: For much of the Over Under and High Stakes seasons of the VEX V5 Robo
 _Note from 2025: The following is an unedited copy of a blog post, titled “My Experience Playing in the VEX V5 Robotics Competition” I wrote about my time on the team during Over Under. It was written at the behest of my coach during the beginning of the summer of 2024. 🚨CRINGE ALERT🚨_
 
 The VEX V5 Robotics Competition (V5RC) is a student-centered robotics program which educates teams on crucial skills and techniques. The game for the 2023-2024 season was called _Over Under._ This article is about my experience playing Over Under as part of the team 315P.
-![](/assets/robotics/post1/1.png)
+![](assets/robotics12/1.png)
 _The team receiving the Amaze Award at the world championships. From left to right: Sanvi, Dyuthi, Aadish._
 
 ### The Game<!-- {"fold":true} -->
 
-![](/assets/robotics/post1/2.png)
+![](assets/robotics12/2.png)
 _The V5RC Over Under match field._
 
 Over Under is a soccer-like game, played by two competing alliances (an alliance consists of two teams, each of which builds and competes with one robot) There is a central barrier dividing the field (whose ground is made of foam tiles) into two halves; each half contains a goal to score oddly-shaped triballs in. Each game starts with a few trials on the field and team members can introduce triballs onto a robot under certain conditions (this is called match loading). There are two alliance-specific climbing locations where robots can elevate themselves on poles in the last few seconds of the match to earn a climbing bonus. A match consists of a 15-second autonomous period where robots move on their own and a 1 minute, 45 second driver controlled period. 
@@ -38,17 +38,17 @@ Overall, each team member had an important role in the team, custom-fit for our 
 
 ### The Robot & Strategy
 
-![](/assets/robotics/post1/3.png)
+![](assets/robotics12/3.png)
 
 _Above: our robot, Friday_
 
 The initial “meta” strategy (a meta in robotics is used to describe a trend) was to build a high-performance catapult, which could then shoot triballs over the barrier. There, an alliance partner’s robot could easily sweep triballs into the goal. In order to do this, we built our second robot, named Friday. (I wasn’t there to witness our first robot, Jarvis.) Friday was a simple robot, with a drivetrain that was fairly slow but high-torque, a claw-style intake to hold triballs, a slow but reliable catapult, one set of pneumatic “wings” to push multiple triballs at once, and a motor-powered climb mechanism.
-![](/assets/robotics/post1/4.png)
-![](/assets/robotics/post1/5.png)
+![](assets/robotics12/4.png)
+![](assets/robotics12/5.png)
 _Above two pictures: our robot, Marvin_
 
 Eventually, though, the game became more defensive. Some smart cookie somewhere realized that with specially shaped wings, robots could easily push over and score triballs catapulted by the opponent alliance. This strategy initiated the rise of robots which, like leeches, stole opponents’ triballs instead of introducing their own. In order to avoid such effective strategies, triball control became the name of the game. This evolved into two main meta strategies. The first is one-by-ones, in which a single triball is placed into a robot’s intake; then, the robot drives over or around the barrier to score it. One-by-ones are almost completely resistant to defense (only inferior to specialized robots which are designed to steal triballs from intakes), but fairly slow in scoring. The second strategy is bowling, in which numerous triballs are placed in front of a robot, which then drives around the barrier to push all of them into the goal. Bowling can easily score one hundred points in a minute, but is more prone to getting disrupted by defense. Most teams, including us, used a combination of the two, in which the strategist makes a choice about which strategy to use based on the state of the match. In order to facilitate this change in game strategy, we built our second robot, Marvin. Marvin maintained the same drivetrain, but added two motors to improve torque (the number of motors doesn’t impact speed). Marvin also had a dramatically improved flex-wheel intake, which eventually became the intake of choice among teams. We also made the catapult faster (however, from that point on, we made the decision to only use the catapult in skills runs, where there was no opponent). Finally, because we moved motors from the climber to the drivetrain, we redesigned our climbing mechanism to be a fast and effective pneumatic hang. We maintained the same wings, as they were super effective in pushing around triballs, but added a second air tank to accommodate the climb. It was with Marvin that we won a tournament for the first (and, unfortunately, last) time.
-![](/assets/robotics/post1/6.png)
+![](assets/robotics12/6.png)
 
 In the weeks preceding the world championship, as the team reviewed previous matches to finalize the robot design for the final complete rebuild, we noticed a slight shift in strategy yet once more. The best teams began to prioritize a few key elements while removing resources from other components. Specifically, super fast yet high-torque drivetrains became prevalent, a focus was put on optimizing the intake, and a few teams had two sets of wings (each with different designs) for use in particular tasks. Using this information, we built our final bot of the Over Under season, Luna. Luna had a powerful drivetrain, containing the vast majority of our robot’s motors as well as a carefully chosen gear ratio. Luna’s intake was one of the biggest areas of change, though. Through participating in numerous scrimmages (mock tournaments) and reviewing our gameplay, we slowly fine-tuned the flex wheel intake to match the ideal strategy. Thus was created an intake which could effectively intake, outtake, matchload, and score, all within half a second. We added two sets of wings and improved our climb mech using newly available pistons. Also, we made the catapult detachable (since we weren’t planning to use it in matches) and lowered the robot’s center of mass to avoid getting tipped. Luna was the best and final iteration of 315P’s robot, and the design we took to the world championships.
 

@@ -1,74 +1,43 @@
 ---
 date: '2025-03-15'
-title: 'Interactive Periodic Table'
+title: 'Periodic Table'
 description: 'A modern, interactive periodic table with detailed element information designed for chemistry students'
-image: '/assets/projects/periodic/thumbnail.png'
+link: "/tools/periodic"
 ---
+## Demo
 
-This started off as a simple project to try out web technologies, Tailwind CSS, and JS best practices -- and to fulfill my dire need for an actually well-designed periodic table. It eventually grew quite a bit, with many more features than initially imagined and several of my classmates at OHS using it.
+<a href="/tools/periodic">Open this in a new tab to play around with</a>
+<iframe src="/tools/periodic" class="w-[56rem] h-[42rem] my-auto mx-auto mt-2"></iframe>
+
+
+This started off as a simple project to try out web technologies, Tailwind CSS, and JS best practices by porting a small SwiftUI app I'd made -- and to fulfill my dire need for an actually well-designed periodic table. It eventually grew quite a bit, with many more features than initially imagined and several of my classmates at OHS using it.
 
 ## Features
 
 - (Obviously) all 118 elements
-- Colorful elements based on the scheme of the [Google Arts Experiments periodic table ↗](https://artsexperiments.withgoogle.com/periodic-table/)
+- Colorful elements based on the scheme of the [Google Arts Experiments periodic table](https://artsexperiments.withgoogle.com/periodic-table/)
 - Click on an element to see a bunch of cool details about it:
-  - Electron configuration (abbreviated and extended)
+  - Electron configuration (abbreviated)
+  - Full electron configuration
+  - Group
   - Atomic mass
-  - Electronegativity
+  - Electronegativity (Pauling)
   - Oxidation states
+  - Oxidation states (extended)
   - Fun fact
+- _Super_-helpful formula mass calculator for any compound (and by "super helpful" I mean it; I've been asked to disable this during exams should students misuse it!)
+  - Quick link to search the element on Google
 - Fuzzy search that lets it read your mind and know you meant to type "praseodymium" instead of "preasdfdtyuhguim"
-- _Super_-helpful formula mass calculator for any compound
 - A reference tab full of helpful images to have in a chem class
 
 ## Tech stack
 
-- React (mainly for the component hierarchy with a few `useState` hooks)
-- Tailwind CSS (for styling)
-- Astro (for static site generation, SSR, and preloading, as well as the header components)
-- Fun fact: the entire codebase is in one JSX file! (send help)
+- My website stack (coming soon!)
+- Data collected using a custom scraper script combining data from the Google periodic table, a GitHub repository, and the Pearson periodic table
 
-## Changelog
 
-This only includes major releases (~every 5-15 commits).
+## [Code!](https://github.com/aadishv/aadishv.github.io/blob/main/src/tools/periodic)
 
-### v1.0: Full launch
+This went through around four major iterations:
 
-_03/21/25_
-[Check out the code](https://github.com/aadishv/aadishv.github.io/blob/main/src/components/PeriodicTable.jsx)
-
-<br>
-This was a complete rewrite of the periodic table to accompany the launch of my redesigned, Astro-based website. The old one looked a little terrible and had incoherent design (not to mention the incompatible design choices with the rest of my sites), but this has a very unified structure across my entire website. For example, it now sticks to just two fonts and two colors. The last release used Shoelace web components, which were nice for their simple and elegant design + DX, but now I've switched to custom-built components for better styling. This release doesn't add much functionality, per se, but it's still a major overhaul in terms of design and usability.
-
-#### New features
-
-- Added a reference tab full of helpful images to have in a chem class
-
-#### Improvements
-
-- Much faster page loading thanks to some Astro magic
-- Improved accessibility with better keyboard navigation and screen reader support
-- As alluded to above, vastly improved styling choices
-
-### v0.2: HTML website
-
-_01/01/25_
-[Check out the code](https://github.com/aadishv/aadishv.github.io/tree/astro-rewrite/static/periodic)
-
-<br>
-(Note that v0.1 was a small SwiftUI prototype.)
-
-This is a soft launch of a public version of my periodic table, featuring a simple design mirroring the SwiftUI version and going beyond with Shoelace web components. It's a bit more polished than the previous version, with better styling and more features.
-
-#### Features
-
-- Can now use "tab" to navigate between elements
-- Works on web 👑
-- Basic formula mass calculator
-- A fun random element button! 🎲
-
-#### Tech stack
-
-- Raw HTML and JS
-- Tailwind imported through the CDN
-- No build step
+* The initial one was just a SwiftUI app that I had only ever built for myself. It was <200 LOC (lines of code)

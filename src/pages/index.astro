@@ -4,6 +4,7 @@ import "@/styles/globals.css";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { parseISO, format } from "date-fns";
+import {Image} from "astro:assets";
 
 const isDev = import.meta.env.DEV;
 
@@ -101,14 +102,14 @@ const sortedProjects = allProjects
   <h2 class="pb-5">Projects</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     {sortedProjects.map((project) => (
-      <a href={'/' + getSlugFromPath(project.file)}>
-        <Card className="transition-shadow h-full flex flex-col">
+      <a href={'/' + getSlugFromPath(project.file)} class="aadish-none">
+        <Card className="w-[25rem] transition-shadow h-full flex flex-col hover:shadow-md">
           {project.frontmatter.image ? (
             <div class="m-4 mb-0">
               <img
                 src={project.frontmatter.image}
                 alt={project.frontmatter.title}
-                class="object-cover h-60 rounded-lg shadow-sm mx-auto"
+                class="object-cover rounded-lg shadow-sm mx-auto"
               />
             </div>
           ) : null}
@@ -117,10 +118,10 @@ const sortedProjects = allProjects
               <CardTitle className="text-xl">{project.frontmatter.title}</CardTitle>
               <CardDescription>{format(parseISO(project.frontmatter.date), "LLLL d, yyyy")}</CardDescription>
             </CardHeader>
+          </div>
             <CardContent>
               <p class="line-clamp-3 text-sm">{project.frontmatter.description}</p>
             </CardContent>
-          </div>
         </Card>
       </a>
     ))}
