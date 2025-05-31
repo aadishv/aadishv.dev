@@ -24,6 +24,7 @@ interface DetectionCanvasProps {
   className?: string;
   /** Optional flag to hide the component if no image URL is provided */
   hideWhenNoUrl?: boolean;
+
 }
 
 const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
@@ -56,8 +57,23 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
 
   // URL construction
   const isHttps = window.location.protocol === 'https:';
-  const effectiveImageUrl = imageUrl || (imageEndpoint ? `http://${serverConfig}/${imageEndpoint}` : null);
+  const effectiveImageUrl = imageUrl ? imageUrl : (imageEndpoint ? `http://${serverConfig}/${imageEndpoint}` : null);
   const isMixedContent = isHttps && !!effectiveImageUrl && effectiveImageUrl.startsWith('http:');
+  
+  console.log('DetectionCanvas:', {
+    imageUrl,
+    imageEndpoint,
+    effectiveImageUrl,
+    hideWhenNoUrl,
+    isReplayMode: !!imageUrl,
+    serverConfig,
+    urlConstruction: {
+      imageUrlUndefined: imageUrl === undefined,
+      imageEndpointExists: !!imageEndpoint,
+      serverConfigExists: !!serverConfig,
+      constructedUrl: imageEndpoint ? `http://${serverConfig}/${imageEndpoint}` : 'no endpoint'
+    }
+  });
 
   // Draw bounding boxes or clear canvas based on toggle state
   const updateCanvas = useCallback(() => {
@@ -251,8 +267,14 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
 
   // Handle image error
   const handleImageError = () => {
-    console.error('Failed to load image stream');
+    console.error('Failed to load image stream:', effectiveImageUrl);
     setImageError(true);
+  };
+
+  // Handle image load success
+  const handleImageLoad = () => {
+    console.log('Image loaded successfully:', effectiveImageUrl);
+    setImageError(false);
   };
 
   // Reload the image
@@ -311,6 +333,7 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
                 alt="Live stream"
                 className="absolute top-0 left-0 w-full h-full object-contain"
                 onError={handleImageError}
+                onLoad={handleImageLoad}
               />
 
               {/* Canvas for bounding boxes */}
@@ -368,6 +391,7 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
                       <div className="bg-gray-100 p-2 rounded-md border border-gray-200 mb-4 font-mono text-sm overflow-auto">
                         {effectiveImageUrl}
                       </div>
+
                       <Button
                         onClick={reloadImage}
                         className="flex items-center mx-auto"
@@ -384,8 +408,19 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
             </>
           ) : (
             // Placeholder when no image URL
-            <div className="absolute inset-0 bg-gray-300 flex items-center justify-center text-gray-500">
-              No Image Stream
+            <div className="absolute inset-0 bg-gray-300 flex items-center justify-center">
+              <div className="text-center text-gray-700">
+                <div>No Image Stream</div>
+                <div className="text-xs mt-2 font-mono">
+                  URL: {effectiveImageUrl || 'null'}
+                </div>
+                <div className="text-xs mt-1">
+                  Server: {serverConfig || 'undefined'}
+                </div>
+                <div className="text-xs mt-1">
+                  Endpoint: {imageEndpoint || 'undefined'}
+                </div>
+              </div>
             </div>
           )}
         </div>

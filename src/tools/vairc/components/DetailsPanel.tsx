@@ -12,7 +12,14 @@ import {
 import { Card, CardContent } from "../../../components/ui/card";
 
 // Details Panel
-const DetailsPanel: React.FC<{latestDetections: DetectionPayload | null, serverConfig: string}> = ({
+const DetailsPanel: React.FC<{
+  latestDetections: DetectionPayload | null, 
+  serverConfig: string,
+  replayData?: {
+    colorImageUrl?: string;
+    depthImageUrl?: string;
+  }
+}> = ({
   latestDetections
 }) => {
   // Extract flag information from detections with safe validation

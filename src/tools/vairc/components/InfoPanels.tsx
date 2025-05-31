@@ -9,13 +9,26 @@ import {
 } from "../../../components/ui/tabs";
 import { Card, CardContent } from "../../../components/ui/card";
 
-export const JsonRenderer: React.FC<{latestDetections: DetectionPayload | null, serverConfig: string}> = ({latestDetections}) => (
+export const JsonRenderer: React.FC<{
+  latestDetections: DetectionPayload | null, 
+  serverConfig: string,
+  replayData?: {
+    colorImageUrl?: string;
+    depthImageUrl?: string;
+  }
+}> = ({latestDetections}) => (
   <div className="flex flex-col p-4 overflow-auto h-full">
    <pre className="text-sm">{JSON.stringify(latestDetections || { stuff: [] }, null, 2)}</pre>
   </div>
 );
 
-export const InfoPanel: React.FC<{serverConfig: string}> = ({serverConfig}) => {
+export const InfoPanel: React.FC<{
+  serverConfig: string,
+  replayData?: {
+    colorImageUrl?: string;
+    depthImageUrl?: string;
+  }
+}> = ({serverConfig}) => {
   return (
     <div className="flex flex-col h-full overflow-auto">
       <Tabs defaultValue="overview" className="w-full h-full">
