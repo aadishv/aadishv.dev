@@ -32,6 +32,7 @@
     "@xstate/store": "^3.5.1",
     "@yaireo/relative-time": "^1.0.5",
     "astro": "^5.7.2",
+    "blockly": "^12.1.0",
     "bun": "^1.2.13",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
