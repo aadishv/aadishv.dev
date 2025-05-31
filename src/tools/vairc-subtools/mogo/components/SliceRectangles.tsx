@@ -29,7 +29,7 @@ export function SliceRectangles({ slices }: { slices: SliceDebug[] }) {
       }}
     >
       <img
-        src="/vairc/mogo_straight.png"
+        src="/tools/vairc/mogo_straight.png"
         alt=""
         style={{
           position: "absolute",

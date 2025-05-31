@@ -131,7 +131,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
           const pixelSize = sizeInches * scale;
 
           // Create image path
-          const imagePath = `/vairc/images/${detectionClass}.png`;
+          const imagePath = `/tools/vairc/images/${detectionClass}.png`;
 
           // Create and use an image element
           const spriteImage = new Image();
@@ -347,10 +347,9 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
             {/* Image element - ensure it's properly sized and centered */}
             <img
               ref={imageRef}
-              src={"/vairc/field.png"}
+              src={"/tools/vairc/field.png"}
               alt="VEX Field View"
               className={`absolute top-0 left-0 w-full h-full object-contain ${!imageLoaded ? 'opacity-0' : 'opacity-100'}`}
-              loading="eager"
             />
 
             {/* Placeholder while image is loading */}

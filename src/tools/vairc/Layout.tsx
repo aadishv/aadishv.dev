@@ -200,7 +200,7 @@ const Header: React.FC<{
       <div className="flex items-center justify-between py-4 px-5 w-[100vw]">
         <div className="flex items-center h-16 ml-0">
           <img
-            src="/vairc/paradigm.jpg"
+            src="/tools/vairc/paradigm.jpg"
             alt="Paradigm Logo"
             className="h-full border-r pr-4 mr-4"
             style={{mixBlendMode: 'multiply'}}
