@@ -1,250 +1,213 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
-interface MarkdownToken {
-  type: string;
-  start: number;
-  end: number;
-  content: string;
-}
+// Define rainbow colors outside the component for stability.
+const RAINBOW_COLORS = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#8B00FF']; // Red, Orange, Yellow, Green, Blue, Indigo, Violet
 
-function parseMarkdown(text: string): MarkdownToken[] {
-  const tokens: MarkdownToken[] = [];
-  const lines = text.split('\n');
-  let offset = 0;
+// Cache for style objects to ensure referential equality for unchanged styles.
+// This is key for "fine-grained" updates, allowing React to skip DOM manipulations
+// if the style object instance itself hasn't changed.
+const styleCache: { [key: string]: React.CSSProperties } = {
+  // Pre-populate a common default style object.
+  'default-style-inherit': { color: 'inherit' }
+};
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+/**
+ * Generates or retrieves a cached CSS style object for a given character.
+ * For alphabetic characters, it assigns a color from the rainbow.
+ * Other characters get a default style.
+ * @param {string} char - The character to style.
+ * @returns {object} A CSS style object (e.g., { color: 'red' }).
+ */
+const getCharacterStyle = (char: string) => {
+  const lowerChar = char.toLowerCase();
 
-    // Headers
-    const headerMatch = line.match(/^(#{1,6})\s+(.*)$/);
-    if (headerMatch) {
-      tokens.push({
-        type: `header-${headerMatch[1].length}`,
-        start: offset,
-        end: offset + line.length,
-        content: line
-      });
+  if (lowerChar >= 'a' && lowerChar <= 'z') {
+    const charCode = lowerChar.charCodeAt(0) - 'a'.charCodeAt(0);
+    const color = RAINBOW_COLORS[charCode % RAINBOW_COLORS.length];
+    const styleKey = `char-${lowerChar}-${color}`; // Unique key for this specific character and color
+
+    if (!styleCache[styleKey]) {
+      styleCache[styleKey] = { color: color };
     }
-
-    // Bold **text**
-    let boldRegex = /\*\*(.*?)\*\*/g;
-    let match;
-    while ((match = boldRegex.exec(line)) !== null) {
-      tokens.push({
-        type: 'bold',
-        start: offset + match.index,
-        end: offset + match.index + match[0].length,
-        content: match[0]
-      });
-    }
-
-    
-    // Italic *text*
-    let italicRegex = /\*((?!\*)[^*]+)\*/g;
-    while ((match = italicRegex.exec(line)) !== null) {
-      tokens.push({
-        type: 'italic',
-        start: offset + match.index,
-        end: offset + match.index + match[0].length,
-        content: match[0]
-      });
-    }
-    
-    // Code `text`
-    let codeRegex = /`([^`]+)`/g;
-    while ((match = codeRegex.exec(line)) !== null) {
-      tokens.push({
-        type: 'code',
-        start: offset + match.index,
-        end: offset + match.index + match[0].length,
-        content: match[0]
-      });
-    }
-    
-    // Links [text](url)
-    let linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-    while ((match = linkRegex.exec(line)) !== null) {
-      tokens.push({
-        type: 'link',
-        start: offset + match.index,
-        end: offset + match.index + match[0].length,
-        content: match[0]
-      });
-    }
-    
-    offset += line.length + 1; // +1 for newline
+    return styleCache[styleKey];
   }
-  
-  return tokens;
-}
 
-function getTokenAtPosition(tokens: MarkdownToken[], position: number): MarkdownToken | null {
-  return tokens.find(token => position >= token.start && position < token.end) || null;
-}
-
-function renderStyledText(text: string, tokens: MarkdownToken[]): React.ReactNode[] {
-  if (!text) return [];
-  
-  const elements: React.ReactNode[] = [];
-  let lastIndex = 0;
-  
-  // Sort tokens by start position
-  const sortedTokens = [...tokens].sort((a, b) => a.start - b.start);
-  
-  for (let i = 0; i < sortedTokens.length; i++) {
-    const token = sortedTokens[i];
-    
-    // Add text before token
-    if (token.start > lastIndex) {
-      const beforeText = text.slice(lastIndex, token.start);
-      elements.push(
-        <span key={`text-${lastIndex}`} className="whitespace-pre-wrap">
-          {beforeText}
-        </span>
-      );
-    }
-    
-    // Add styled token
-    const tokenText = text.slice(token.start, token.end);
-    let className = "";
-    
-    switch (token.type) {
-      case 'header-1':
-        className = "text-3xl font-bold text-blue-400";
-        break;
-      case 'header-2':
-        className = "text-2xl font-bold text-blue-300";
-        break;
-      case 'header-3':
-        className = "text-xl font-bold text-blue-200";
-        break;
-      case 'header-4':
-        className = "text-lg font-bold text-blue-100";
-        break;
-      case 'header-5':
-        className = "font-bold text-blue-50";
-        break;
-      case 'header-6':
-        className = "font-bold text-gray-300";
-        break;
-      case 'bold':
-        className = "font-bold text-yellow-300";
-        break;
-      case 'italic':
-        className = "italic text-green-300";
-        break;
-      case 'code':
-        className = "bg-gray-800 text-pink-300 px-1 rounded";
-        break;
-      case 'link':
-        className = "text-cyan-400 underline";
-        break;
-      default:
-        className = "";
-    }
-    
-    elements.push(
-      <span key={`token-${token.start}`} className={`whitespace-pre-wrap ${className}`}>
-        {tokenText}
-      </span>
-    );
-    
-    lastIndex = token.end;
-  }
-  
-  // Add remaining text
-  if (lastIndex < text.length) {
-    const remainingText = text.slice(lastIndex);
-    elements.push(
-      <span key={`text-${lastIndex}`} className="whitespace-pre-wrap">
-        {remainingText}
-      </span>
-    );
-  }
-  
-  return elements;
-}
+  // For all non-alphabetic characters (spaces, punctuation, newlines, etc.),
+  // return the shared default style object.
+  return styleCache['default-style-inherit'];
+};
 
 function App() {
-  const [value, setValue] = useState("");
-  const [tokens, setTokens] = useState<MarkdownToken[]>([]);
-  const [cursorPosition, setCursorPosition] = useState(0);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const [text, setText] = useState('');
+  // Stores an array of style objects, one for each character in `text`.
+  const [charStyles, setCharStyles] = useState<React.CSSProperties[]>([]);
+  const editorRef = useRef<HTMLDivElement>(null);
+  // Ref to track IME composition state to prevent updates during composition.
+  const isComposing = useRef(false);
 
-  const updateTokens = useCallback((text: string) => {
-    const newTokens = parseMarkdown(text);
-    setTokens(newTokens);
-  }, []);
+  /**
+   * This function is called when the editor's content changes.
+   * It takes the current text and returns an array of CSS style objects,
+   * one for each character.
+   * @param {string} currentText - The current text content of the editor.
+   * @returns {Array<object>} An array of style objects.
+   */
+  const calculateStylesForText = useCallback((currentText: string) => {
+    return currentText.split('').map(char => getCharacterStyle(char));
+  }, []); // `getCharacterStyle` is stable due to its external definition and cache.
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newValue = e.target.value;
-    setValue(newValue);
-    updateTokens(newValue);
+  // Effect hook to recalculate styles whenever the `text` state changes.
+  useEffect(() => {
+    const newStyles = calculateStylesForText(text);
+    setCharStyles(newStyles);
+    // The "fine-grained manner" of applying styles is achieved by React's reconciliation.
+    // When `charStyles` updates, the `editorContent` is re-calculated.
+    // React then diffs the new list of <span> elements with the old one.
+    // Because `getCharacterStyle` returns memoized (cached) style objects,
+    // if a character's style hasn't actually changed (i.e., it receives the same
+    // style object instance), React can optimize DOM updates for that specific span's style.
+  }, [text, calculateStylesForText]);
+
+  // Helper function to get cursor position in text
+  const getCursorPosition = (element: HTMLElement): number => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return 0;
+    
+    const range = selection.getRangeAt(0);
+    const preCaretRange = range.cloneRange();
+    preCaretRange.selectNodeContents(element);
+    preCaretRange.setEnd(range.endContainer, range.endOffset);
+    return preCaretRange.toString().length;
   };
 
-  const handleSelectionChange = () => {
-    if (textareaRef.current) {
-      setCursorPosition(textareaRef.current.selectionStart);
-    }
-  };
+  // Helper function to set cursor position
+  const setCursorPosition = (element: HTMLElement, offset: number) => {
+    const selection = window.getSelection();
+    if (!selection) return;
 
-  useEffect(() => {
-    updateTokens(value);
-  }, [value, updateTokens]);
+    let currentOffset = 0;
+    const walker = document.createTreeWalker(
+      element,
+      NodeFilter.SHOW_TEXT,
+      null
+    );
 
-  useEffect(() => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.addEventListener('selectionchange', handleSelectionChange);
-      textarea.addEventListener('keyup', handleSelectionChange);
-      textarea.addEventListener('mouseup', handleSelectionChange);
+    let node;
+    while (node = walker.nextNode()) {
+      const textNode = node as Text;
+      const textLength = textNode.textContent?.length || 0;
       
-      return () => {
-        textarea.removeEventListener('selectionchange', handleSelectionChange);
-        textarea.removeEventListener('keyup', handleSelectionChange);
-        textarea.removeEventListener('mouseup', handleSelectionChange);
-      };
+      if (currentOffset + textLength >= offset) {
+        const range = document.createRange();
+        range.setStart(textNode, offset - currentOffset);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        return;
+      }
+      currentOffset += textLength;
     }
-  }, []);
 
-  const styledElements = renderStyledText(value, tokens);
+    // If we get here, set cursor at the end
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  };
+
+  // Handles the input event from the contentEditable div.
+  const handleInput = (event: React.FormEvent<HTMLDivElement>) => {
+    // If currently in IME composition (e.g., typing Chinese, Japanese, Korean),
+    // don't update the text state until composition is complete.
+    if (isComposing.current) {
+      return;
+    }
+    // Use `textContent` to get the raw text, stripping any previous HTML (like our spans).
+    const newText = event.currentTarget.textContent || "";
+    setText(newText);
+    
+    // Prevent the default contentEditable behavior by clearing the content
+    // Our styled spans will be the only content shown
+    event.currentTarget.innerHTML = '';
+  };
+
+  // Handler for IME composition start.
+  const handleCompositionStart = () => {
+    isComposing.current = true;
+  };
+
+  // Handler for IME composition end.
+  const handleCompositionEnd = (event: React.CompositionEvent<HTMLDivElement>) => {
+    isComposing.current = false;
+    // Update text state with the composed text.
+    const newText = event.currentTarget.textContent || "";
+    setText(newText);
+    
+    // Prevent the default contentEditable behavior by clearing the content
+    // Our styled spans will be the only content shown
+    event.currentTarget.innerHTML = '';
+  };
+
+  // Memoized generation of the editor's content (styled spans).
+  // This ensures the expensive mapping only happens if `text` or `charStyles` change.
+  const editorContent = useMemo(() => {
+    return text.split('').map((char, index) => {
+      // Fallback to a fresh style calculation if `charStyles` is somehow out of sync.
+      const style = charStyles[index] || getCharacterStyle(char);
+      return (
+        <span key={index} style={style}>
+          {char}
+        </span>
+      );
+    });
+  }, [text, charStyles]);
+
+  // Effect to preserve cursor position when content updates
+  useEffect(() => {
+    if (!editorRef.current || isComposing.current) return;
+
+    // Only restore cursor if we have actual content and the element is focused
+    if (text.length > 0 && document.activeElement === editorRef.current) {
+      requestAnimationFrame(() => {
+        if (editorRef.current) {
+          // Set cursor to end of content
+          const range = document.createRange();
+          const selection = window.getSelection();
+          if (selection) {
+            range.selectNodeContents(editorRef.current);
+            range.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+        }
+      });
+    }
+  }, [text]);
 
   return (
-    <div className="fixed inset-0 bg-background flex items-stretch">
-      <div className="relative w-full h-full">
-        <textarea
-          ref={textareaRef}
-          className="absolute inset-0 w-full h-full resize-none outline-none border-none bg-transparent font-mono text-base p-6 text-transparent caret-white z-10"
-          style={{ 
-            minHeight: "100vh",
-            lineHeight: "1.5",
-            letterSpacing: "0"
-          }}
-          value={value}
-          onChange={handleChange}
-          onSelect={handleSelectionChange}
-          spellCheck={false}
-          autoFocus
-          aria-label="Markdown Editor"
-        />
-        <div
-          ref={overlayRef}
-          className="absolute inset-0 w-full h-full font-mono text-base p-6 pointer-events-none z-0 overflow-hidden"
-          style={{ 
-            minHeight: "100vh",
-            lineHeight: "1.5",
-            letterSpacing: "0",
-            whiteSpace: "pre-wrap",
-            wordWrap: "break-word"
-          }}
-          aria-hidden="true"
-        >
-          {styledElements}
-        </div>
-      </div>
+    <div
+      ref={editorRef}
+      contentEditable={true}
+      suppressContentEditableWarning={true} // Required for controlled contentEditable components in React.
+      onInput={handleInput}
+      onCompositionStart={handleCompositionStart} // Handle IME start
+      onCompositionEnd={handleCompositionEnd}     // Handle IME end
+      role="textbox" // ARIA role for accessibility.
+      aria-multiline="true"
+      aria-label="Accessible Text Editor"
+      style={{
+        border: '1px solid #ccc',
+        padding: '10px',
+        minHeight: '100px',
+        fontFamily: 'monospace', // Ensures characters are roughly same width.
+        whiteSpace: 'pre-wrap',  // Preserves spaces and newlines from the text.
+        outline: 'none',         // Optional: Removes default browser focus outline.
+      }}
+    >
+      {editorContent}
     </div>
   );
 }
 
-export { App };
+export default App;
