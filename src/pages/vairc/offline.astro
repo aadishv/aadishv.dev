@@ -2,9 +2,6 @@
 import Layout from "@/layouts/Layout.astro";
 import VAIRCApp from "@/tools/vairc/App.tsx";
 import "@/styles/globals.css";
-import ThemeToggleIsland from "@/components/ThemeToggleIsland.tsx";
-const { title, nothing, light } = Astro.props;
-const isDev = import.meta.env.DEV;
 ---
 
 <!doctype html>
@@ -12,17 +9,10 @@ const isDev = import.meta.env.DEV;
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={"An 8th grader and avid coder."} />
-    <title>{title}</title>
+    <title>{"vairc/offline"}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
-  <body class={light ? "light" : undefined}>
-    {
-      !light && (
-        <div style="position: fixed; top: 1rem; right: 1rem; z-index: 1000;">
-          <ThemeToggleIsland client:only="react" />
-        </div>
-      )
-    }
+  <body>
     <VAIRCApp client:only="react" />
   </body>
 </html>

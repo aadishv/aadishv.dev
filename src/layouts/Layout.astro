@@ -23,18 +23,19 @@ const isDev = import.meta.env.DEV;
   </head>
   <body class={light ? "light" : undefined}>
     <div
-      class="fixed pt-4 left-4 right-4 z-[1000] flex max-lg:backdrop-blur-sm"
+      class={`fixed pt-4 left-4 right-4 z-[1000] flex max-lg:backdrop-blur-sm ${nothing && "backdrop-blur-sm"}`}
     >
       {
-        !hideName && (
+        (!hideName && !light) && (
           <a href="/" class="text-lg mr-auto" style={{ fontFamily: "Lora" }}>
             Aadish Verma
           </a>
         )
       }
+      <div class="mx-auto">{""}</div>
       {
         !light && (
-          <div style="mr-auto">
+          <div style="ml-auto">
             <ThemeToggleIsland client:only="react" />
           </div>
         )
