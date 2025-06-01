@@ -5,7 +5,10 @@ import { Card, CardContent } from "../../../components/ui/card";
 import { safeGetStuff, isValidDetectionPayload } from "../utils/validation";
 
 // Field View Panel Component
-const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConfig: string}> = ({latestDetections}) => {
+const FieldView: React.FC<{
+  latestDetections: DetectionPayload | null;
+  serverConfig: string;
+}> = ({ latestDetections }) => {
   // References for drawing
   const imageRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -30,7 +33,11 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
   }, [latestDetections, imageLoaded]);
 
   // Function to draw the field and robot with a specific pose
-  const drawField = (canvas: HTMLCanvasElement, robotPose: Pose | null, detections: DetectionPayload | null) => {
+  const drawField = (
+    canvas: HTMLCanvasElement,
+    robotPose: Pose | null,
+    detections: DetectionPayload | null,
+  ) => {
     // let robotPose: Pose | null = null;
     // if (robotPose2) {
     //   robotPose = { x: robotPose2.x, y: robotPose2.y, theta: -robotPose2.theta };
@@ -40,7 +47,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
 
     if (!canvas || !image || !container) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Get container dimensions
@@ -84,11 +91,16 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
     // Draw all detections first (behind the robot)
     if (isValidDetectionPayload(detections)) {
       const validDetections = safeGetStuff(detections);
-      validDetections.forEach(detection => {
+      validDetections.forEach((detection) => {
         // Only process detections that have absolute field coordinates
-        if (detection && typeof detection === 'object' &&
-            detection.fx !== undefined && detection.fy !== undefined &&
-            typeof detection.fx === 'number' && typeof detection.fy === 'number') {
+        if (
+          detection &&
+          typeof detection === "object" &&
+          detection.fx !== undefined &&
+          detection.fy !== undefined &&
+          typeof detection.fx === "number" &&
+          typeof detection.fy === "number"
+        ) {
           // Calculate transparency based on confidence
           // Map from confidence range (0.2 - 1.0) to opacity range (0.0 - 1.0)
           const confidence = detection.confidence || 0;
@@ -113,14 +125,14 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
           // Define sizes based on object type (in inches)
           let sizeInches = 0;
           switch (detectionClass) {
-            case 'red':
-            case 'blue':
+            case "red":
+            case "blue":
               sizeInches = 8; // 8 inch OD for rings
               break;
-            case 'goal':
+            case "goal":
               sizeInches = 10; // 10 inch OD for goals
               break;
-            case 'bot':
+            case "bot":
               sizeInches = 18; // 18 inch OD for bots
               break;
             default:
@@ -160,11 +172,14 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
             // Draw the cropped image
             ctx.drawImage(
               img,
-              sourceX, sourceY,      // Source position (top-left of crop)
-              sourceSize, sourceSize, // Source dimensions (crop to square)
-              canvasPos.x - pixelSize/2, // Destination position
-              canvasPos.y - pixelSize/2,
-              pixelSize, pixelSize    // Destination dimensions
+              sourceX,
+              sourceY, // Source position (top-left of crop)
+              sourceSize,
+              sourceSize, // Source dimensions (crop to square)
+              canvasPos.x - pixelSize / 2, // Destination position
+              canvasPos.y - pixelSize / 2,
+              pixelSize,
+              pixelSize, // Destination dimensions
             );
           };
 
@@ -181,12 +196,16 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
             spriteImage.onerror = () => {
               console.error(`Failed to load image: ${imagePath}`);
               // Draw a colored circle as fallback with opacity based on confidence
-              ctx.fillStyle = detectionClass === 'red' ? `rgba(255, 0, 0, ${opacity})`
-                            : detectionClass === 'blue' ? `rgba(0, 0, 255, ${opacity})`
-                            : detectionClass === 'goal' ? `rgba(255, 255, 0, ${opacity})`
-                            : `rgba(128, 128, 128, ${opacity})`;
+              ctx.fillStyle =
+                detectionClass === "red"
+                  ? `rgba(255, 0, 0, ${opacity})`
+                  : detectionClass === "blue"
+                    ? `rgba(0, 0, 255, ${opacity})`
+                    : detectionClass === "goal"
+                      ? `rgba(255, 255, 0, ${opacity})`
+                      : `rgba(128, 128, 128, ${opacity})`;
               ctx.beginPath();
-              ctx.arc(canvasPos.x, canvasPos.y, pixelSize/2, 0, Math.PI * 2);
+              ctx.arc(canvasPos.x, canvasPos.y, pixelSize / 2, 0, Math.PI * 2);
               ctx.fill();
             };
           }
@@ -198,11 +217,13 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
     }
 
     // Draw the robot if we have pose data
-    if (robotPose &&
-        typeof robotPose === 'object' &&
-        typeof robotPose.x === 'number' &&
-        typeof robotPose.y === 'number' &&
-        typeof robotPose.theta === 'number') {
+    if (
+      robotPose &&
+      typeof robotPose === "object" &&
+      typeof robotPose.x === "number" &&
+      typeof robotPose.y === "number" &&
+      typeof robotPose.theta === "number"
+    ) {
       const { x, y, theta } = robotPose;
 
       // Convert robot position from field to canvas coordinates
@@ -215,14 +236,14 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       // Define robot corners relative to its center position (in canvas pixel space)
       const corners = [
         { x: -halfSize, y: -halfSize }, // Top-left
-        { x: halfSize, y: -halfSize },  // Top-right
-        { x: halfSize, y: halfSize },   // Bottom-right
-        { x: -halfSize, y: halfSize }   // Bottom-left
+        { x: halfSize, y: -halfSize }, // Top-right
+        { x: halfSize, y: halfSize }, // Bottom-right
+        { x: -halfSize, y: halfSize }, // Bottom-left
       ];
 
       // Rotate and position the robot corners
       // For CCW rotation where 0 = up (north)
-      const rotatedCorners = corners.map(corner => {
+      const rotatedCorners = corners.map((corner) => {
         // Convert theta from degrees to radians for trigonometric functions
         const thetaRadians = theta * (Math.PI / 180);
 
@@ -236,12 +257,12 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
         // Translate to robot position on canvas
         return {
           x: canvasPos.x + rotatedX,
-          y: canvasPos.y + rotatedY
+          y: canvasPos.y + rotatedY,
         };
       });
 
       // Draw robot body
-      ctx.fillStyle = 'rgba(128, 128, 128, 0.7)';
+      ctx.fillStyle = "rgba(128, 128, 128, 0.7)";
       ctx.beginPath();
       ctx.moveTo(rotatedCorners[0].x, rotatedCorners[0].y);
       for (let i = 1; i < rotatedCorners.length; i++) {
@@ -251,7 +272,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       ctx.fill();
 
       // Draw robot outline
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(rotatedCorners[0].x, rotatedCorners[0].y);
@@ -262,7 +283,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       ctx.stroke();
 
       // Draw blue front face (0-1 side to be on top when the robot is at 0° orientation)
-      ctx.strokeStyle = 'rgba(0, 102, 255, 1.0)';
+      ctx.strokeStyle = "rgba(0, 102, 255, 1.0)";
       ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(rotatedCorners[0].x, rotatedCorners[0].y);
@@ -270,7 +291,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       ctx.stroke();
 
       // Draw a small dot at the robot center for reference
-      ctx.fillStyle = 'rgba(255, 0, 0, 0.7)';
+      ctx.fillStyle = "rgba(255, 0, 0, 0.7)";
       ctx.beginPath();
       ctx.arc(canvasPos.x, canvasPos.y, 2, 0, Math.PI * 2);
       ctx.fill();
@@ -288,7 +309,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
     };
 
     // Add event listener
-    image.addEventListener('load', handleImageLoad);
+    image.addEventListener("load", handleImageLoad);
 
     // If image is already loaded
     if (image.complete && image.naturalWidth) {
@@ -297,7 +318,7 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
 
     // Cleanup
     return () => {
-      image.removeEventListener('load', handleImageLoad);
+      image.removeEventListener("load", handleImageLoad);
     };
   }, []);
 
@@ -323,13 +344,13 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
     });
 
     // Add resize listeners
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     resizeObserver.observe(container);
     resizeObserver.observe(image);
 
     // Cleanup on unmount
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       resizeObserver.disconnect();
     };
   }, [latestDetections]);
@@ -339,7 +360,10 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
       <div className="bg-gray-100 p-2 border-b border-gray-200 text-sm font-medium text-gray-700">
         <span>VEX High Stakes Field</span>
       </div>
-      <div className="flex-1 relative overflow-hidden bg-white" ref={containerRef}>
+      <div
+        className="flex-1 relative overflow-hidden bg-white"
+        ref={containerRef}
+      >
         {/* Field container - using a single centered container */}
         <div className="absolute inset-0 flex items-center justify-center">
           {/* Image and canvas container with fixed aspect ratio */}
@@ -349,13 +373,15 @@ const FieldView: React.FC<{latestDetections: DetectionPayload | null, serverConf
               ref={imageRef}
               src={"/tools/vairc/field.png"}
               alt="VEX Field View"
-              className={`absolute top-0 left-0 w-full h-full object-contain ${!imageLoaded ? 'opacity-0' : 'opacity-100'}`}
+              className={`absolute top-0 left-0 w-full h-full object-contain ${!imageLoaded ? "opacity-0" : "opacity-100"}`}
             />
 
             {/* Placeholder while image is loading */}
             {!imageLoaded && (
               <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
-                <div className="animate-pulse text-gray-500">Loading field view...</div>
+                <div className="animate-pulse text-gray-500">
+                  Loading field view...
+                </div>
               </div>
             )}
 

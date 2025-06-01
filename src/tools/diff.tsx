@@ -46,7 +46,7 @@ function App() {
     const currentSegments = splitText(currentText);
 
     const slices = Array.from(
-      calcSlices(originalSegments, currentSegments)
+      calcSlices(originalSegments, currentSegments),
     ).map(([type, slice]) => ({
       type,
       text: diffMode === "character" ? slice.join("") : slice.join("\n"),

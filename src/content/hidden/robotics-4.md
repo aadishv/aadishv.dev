@@ -1,9 +1,7 @@
 ---
-
 date: "2025-05-17"
 
 title: "Design Process: AI for the Interaction Period"
-
 ---
 
 Written by: **Aadish Verma**
@@ -28,49 +26,49 @@ In order to efficiently compete in the interaction period, we need to be able to
 
 After considering both approaches, we decided to go with the neural network. While color blob detection would be simpler, we decided not to use it because it had the potential to be easily tricked, such as if a robot had a license plate the same color as a ring, or the alliance stakes.
 
-The VEX AI image provides a pre-trained YOLO v3 model for use with it. This model is trained on many images from simulation.  However, we decided to not use that model for several reasons.
+The VEX AI image provides a pre-trained YOLO v3 model for use with it. This model is trained on many images from simulation. However, we decided to not use that model for several reasons.
 
-* Choosing to use the VEX AI model would require us to shift into the ecosystem of the VEX AI code, which we were not willing to do as we were planning to write a lot of custom code on the Jetson side.
+- Choosing to use the VEX AI model would require us to shift into the ecosystem of the VEX AI code, which we were not willing to do as we were planning to write a lot of custom code on the Jetson side.
 
-* After testing the model, we decided that its performance was not up to par. It was only able to run at around 10 frames per second, and it only used the ONNX runtime for the NVIDIA GPU on the Jetson. It did not use the full potential of the TensorRT runtime which NVIDIA exposes, which would significantly speed up the model execution.
+- After testing the model, we decided that its performance was not up to par. It was only able to run at around 10 frames per second, and it only used the ONNX runtime for the NVIDIA GPU on the Jetson. It did not use the full potential of the TensorRT runtime which NVIDIA exposes, which would significantly speed up the model execution.
 
-* We also found that the model's quality was not very good. It was not able to detect rings that were less than 10 inches away or more than 40 inches away.  At the same time, its detection of mobile goals was terrible, so we could not implement a goal-stealing strategy in our interaction. Similarly, it was only confined to three classes, red ring, blue ring, and mobile goal, which did not include the capability to find robots. This means we cannot detect opponent robots to use for our strategy.
+- We also found that the model's quality was not very good. It was not able to detect rings that were less than 10 inches away or more than 40 inches away. At the same time, its detection of mobile goals was terrible, so we could not implement a goal-stealing strategy in our interaction. Similarly, it was only confined to three classes, red ring, blue ring, and mobile goal, which did not include the capability to find robots. This means we cannot detect opponent robots to use for our strategy.
 
-* Finally, the model architecture use also severely limited both performance and quality. YOLO v3 is a relatively old architecture for the YOLO family of object detection models. This is one of the primary reasons that the model's quality was not as good. When we decided to train our own model, we used much more modern YOLO models for the provided hardware.
+- Finally, the model architecture use also severely limited both performance and quality. YOLO v3 is a relatively old architecture for the YOLO family of object detection models. This is one of the primary reasons that the model's quality was not as good. When we decided to train our own model, we used much more modern YOLO models for the provided hardware.
 
-Based on this, we decided to train our own custom YOLO model for use with our Jetson Nano.  This came with many challenges, however, which we divided up into subtasks.
+Based on this, we decided to train our own custom YOLO model for use with our Jetson Nano. This came with many challenges, however, which we divided up into subtasks.
 
-* Which of the YOLO versions to use, and which model from that specific family to use. Each YOLO family offers multiple sizes of models ranging from nano to large.
+- Which of the YOLO versions to use, and which model from that specific family to use. Each YOLO family offers multiple sizes of models ranging from nano to large.
 
-* How to efficiently run the models on the Jetson's GPU using the TensorRT runtime.  The YOLO models use a post-processing step known as non-maximum suppression, or NMS for short, which requires a lot of heavy operations.  However, this is not built into the YOLO models, meaning that we have to find a way to efficiently execute it either on the CPU or GPU. Also, the YOLO repository, which is generally used for training, exporting, and running YOLO models, is confined to Python 3.8 or above, which does not run on our Jetson Nano.  We went through several attempts to install separate Python versions, such as Python 3.8 or Python 3.12, on our Jetson Nano, but none of them were able to detect the CUDA GPU.
+- How to efficiently run the models on the Jetson's GPU using the TensorRT runtime. The YOLO models use a post-processing step known as non-maximum suppression, or NMS for short, which requires a lot of heavy operations. However, this is not built into the YOLO models, meaning that we have to find a way to efficiently execute it either on the CPU or GPU. Also, the YOLO repository, which is generally used for training, exporting, and running YOLO models, is confined to Python 3.8 or above, which does not run on our Jetson Nano. We went through several attempts to install separate Python versions, such as Python 3.8 or Python 3.12, on our Jetson Nano, but none of them were able to detect the CUDA GPU.
 
-* How to efficiently find training data for our models.  Object detection models like YOLO require hundreds of images of training data to be able to effectively detect objects.  However, finding all of these ourselves and labeling them manually was not ideal as it would require an immense amount of manpower and take time away from other operations of the team.  We went through multiple iterations to try to find the optimal blend of manually labeled, publicly available, and AI labeled training data.
+- How to efficiently find training data for our models. Object detection models like YOLO require hundreds of images of training data to be able to effectively detect objects. However, finding all of these ourselves and labeling them manually was not ideal as it would require an immense amount of manpower and take time away from other operations of the team. We went through multiple iterations to try to find the optimal blend of manually labeled, publicly available, and AI labeled training data.
 
-* How to access the Intel RealSense D435 cameras that we have obtained for use with the Jetsons.  Intel offers a RealSense2 SDK for use with Python. However, we had to find a way to efficiently share the data across multiple different processes that accessed both the depth and color feeds. This was also part of our code architecture subtask. Another big issue was frame alignment. The stereoscopic depth images and the color RGB images from the RealSense are not natively aligned. The RealSense SDK offers a method to align them, but it requires a lot of heavy operations on the CPU and would starve our scheduler of other processes doing work. So we had to find a way to custom implement our alignment process.
+- How to access the Intel RealSense D435 cameras that we have obtained for use with the Jetsons. Intel offers a RealSense2 SDK for use with Python. However, we had to find a way to efficiently share the data across multiple different processes that accessed both the depth and color feeds. This was also part of our code architecture subtask. Another big issue was frame alignment. The stereoscopic depth images and the color RGB images from the RealSense are not natively aligned. The RealSense SDK offers a method to align them, but it requires a lot of heavy operations on the CPU and would starve our scheduler of other processes doing work. So we had to find a way to custom implement our alignment process.
 
-* Converting the poses of the detections. While the native output of the V5's YOLO model after post-processing and NMS are bounding boxes with x, y, width, and height, those do not automatically translate into field coordinates for the VEX High Stakes field. It would require advanced genometry including matrix transformations to bring it from the RealSense’s world space into the robot's world space.
+- Converting the poses of the detections. While the native output of the V5's YOLO model after post-processing and NMS are bounding boxes with x, y, width, and height, those do not automatically translate into field coordinates for the VEX High Stakes field. It would require advanced genometry including matrix transformations to bring it from the RealSense’s world space into the robot's world space.
 
 ### Area 2: Localization & collision detection<!-- {"fold":true} -->
 
 Most VEX teams use an odometry system including two tracking wheels mounted perpendicular to each other and an IMU to detect orientation changes to properly localize their VEX robots. This works extremely well for the 15-second V5RC autonomous period and the 45-second VURC autonomous period, but for the full 2 minutes that our robot is needed to be autonomous, this odometry system is likely not feasible. We decided to move forward by testing the “drift” of our current, tracking wheel + IMU-based odometry and seeing how accurate that was.
 
-However, we decided to have a fail-safe Jetson localization method, just in case if our drift on our current odometry system was too high.  Currently, we have implemented this method to just echo the same pose as is sent over from the V5 brain.  However, if needed, we could implement more complex localization algorithms, such as Monte Carlo localization, if we determine that the V5 odometry is not up to standards.
+However, we decided to have a fail-safe Jetson localization method, just in case if our drift on our current odometry system was too high. Currently, we have implemented this method to just echo the same pose as is sent over from the V5 brain. However, if needed, we could implement more complex localization algorithms, such as Monte Carlo localization, if we determine that the V5 odometry is not up to standards.
 
 Also, we currently are at risk of getting disqualified for pinning if we run into another robot during the interaction period. We currently need a way of detecting if another robot is immediately in front of us. Currently, we can stop if we run into a robot using a timeout in our motion control library, but if the robot has no other way to escape so that will still count as pinning and disqualify us. We couldn't just use a front mounted distance sensor, that might also trigger for ring stacks or rings or mobile goals.
 
-After brainstorming a number of ways to do this, we decided that using the tools we already had was actually ideal. The Intel RealSense camera we were using has a depth mode.  So by reading from one row of the depth mode and taking the 10th percentile of the depth value, we can detect if an object is less than 12 inches away from the robot and brake accordingly. We also mounted our RealSense camera so that its center row of measurement was above the plane of any ring stacks, rings, or mobile goals, ensuring that there wouldn't be any false alarms from field elements. However, implementing this feature was actually relatively difficult, as it required sharing our depth data between our camera process, our inference process, and our collision detection process.
+After brainstorming a number of ways to do this, we decided that using the tools we already had was actually ideal. The Intel RealSense camera we were using has a depth mode. So by reading from one row of the depth mode and taking the 10th percentile of the depth value, we can detect if an object is less than 12 inches away from the robot and brake accordingly. We also mounted our RealSense camera so that its center row of measurement was above the plane of any ring stacks, rings, or mobile goals, ensuring that there wouldn't be any false alarms from field elements. However, implementing this feature was actually relatively difficult, as it required sharing our depth data between our camera process, our inference process, and our collision detection process.
 
 ### Area 3: Communicating with the V5 Brain<!-- {"fold":true} -->
 
-Since we cannot directly drive the V5 hardware from the Jetson, we have to communicate all of our findings back to the V5 brain.  This requires multiple steps. First of all, we need to set up an actual serial connection between the brain and the Jetson using a specified protocol.  Then we need to specify a specific way to send packets of data back and forth, as well as a standardized format for reading and writing.  Finally, we have to work on reducing latency to ensure that updates from the Jetson arrive at the V5 and are parsed as quickly as possible.
+Since we cannot directly drive the V5 hardware from the Jetson, we have to communicate all of our findings back to the V5 brain. This requires multiple steps. First of all, we need to set up an actual serial connection between the brain and the Jetson using a specified protocol. Then we need to specify a specific way to send packets of data back and forth, as well as a standardized format for reading and writing. Finally, we have to work on reducing latency to ensure that updates from the Jetson arrive at the V5 and are parsed as quickly as possible.
 
 After analyzing the requirements of the above two areas, we decided that there were three main things that we needed to send from the Jetson into the brain:
 
-* The current pose of the robot. As previously noted, we are currently echoing back the same pose that the V5 brain sends, but eventually we may implement more complex algorithms here.
+- The current pose of the robot. As previously noted, we are currently echoing back the same pose that the V5 brain sends, but eventually we may implement more complex algorithms here.
 
-* A list of detected objects. We unfortunately cannot send over the raw data from the inference engine, as after running non-maximum suppression we still need to filter for confidence, convert class indices to class names, and convert camera world space to the robot world space before having a sensible data format to send over to the brain.
+- A list of detected objects. We unfortunately cannot send over the raw data from the inference engine, as after running non-maximum suppression we still need to filter for confidence, convert class indices to class names, and convert camera world space to the robot world space before having a sensible data format to send over to the brain.
 
-* A flag parameter. Currently this parameter can either be an empty string or it can be an all caps STOP. Eventually we might add more modes into this flag parameter but for now least only two. The STOP flag is triggered whenever the collision detection deems an object to be too close to the robot.
+- A flag parameter. Currently this parameter can either be an empty string or it can be an all caps STOP. Eventually we might add more modes into this flag parameter but for now least only two. The STOP flag is triggered whenever the collision detection deems an object to be too close to the robot.
 
 A second concern with this is how we're able to debug the Jetson code. Obviously, there will be inevitable errors with our code, and we need to be able to visualize exactly what's going wrong with our inference. This means we need to have some kind of web-based dashboard system which we can access over the network that fetches data from the Jetson and visualizes this in an easy-to-understand manner.
 
@@ -84,17 +82,17 @@ Based on our brainstorming for the above general areas of concern, we have devel
 
 #### The issue<!-- {"fold":true} -->
 
-The Jetson codebase is a behemoth and we have revered it several times in our quest to find the perfect balance of our code architecture.  Because of this, it's extremely important that we choose the correct method for organizing and communication between our files.
+The Jetson codebase is a behemoth and we have revered it several times in our quest to find the perfect balance of our code architecture. Because of this, it's extremely important that we choose the correct method for organizing and communication between our files.
 
-The biggest issue we faced while developing our Jetson code is that different parts of the code need to update at different refresh rates.  For example, our inference code needs to update at only around 10 frames per second, as it's generally waiting for around 100 milliseconds every time for the GPU to finish running our model. However, our post-processing code needs to run at up to 30 frames per second in order to update our inference outputs with the most up-to-date depth information. At the same time, our serial communications code does not run at a fixed frame rate and only updates whenever it gets a new update from the V5. During the initial parts of the program, it is completely idle as the V5 has not yet connected. This meant that running all of our programs as a single while loop that refreshes, say, once every 30th of a second was not feasible and would not lead to a good implementation of our goals.
+The biggest issue we faced while developing our Jetson code is that different parts of the code need to update at different refresh rates. For example, our inference code needs to update at only around 10 frames per second, as it's generally waiting for around 100 milliseconds every time for the GPU to finish running our model. However, our post-processing code needs to run at up to 30 frames per second in order to update our inference outputs with the most up-to-date depth information. At the same time, our serial communications code does not run at a fixed frame rate and only updates whenever it gets a new update from the V5. During the initial parts of the program, it is completely idle as the V5 has not yet connected. This meant that running all of our programs as a single while loop that refreshes, say, once every 30th of a second was not feasible and would not lead to a good implementation of our goals.
 
 #### Iteration 1: Web servers<!-- {"fold":true} -->
 
-Our initial iteration for our code structure involved multiple communicating web servers. In order for this to work, we spawned several separate web workers using the Flask library in Python.  For example, one of our web servers was called the inference web server. And this continually ran the YOLO model on the GPU.  Whenever the model finished doing inference, it would then call another web server known as the post-processing web server.  The post-processing web server ran things like non-maximum suppression and post-conversion.  Finally, the post-processing server would call the serial server to queue up the most recent update to send to the V5 Brain.
+Our initial iteration for our code structure involved multiple communicating web servers. In order for this to work, we spawned several separate web workers using the Flask library in Python. For example, one of our web servers was called the inference web server. And this continually ran the YOLO model on the GPU. Whenever the model finished doing inference, it would then call another web server known as the post-processing web server. The post-processing web server ran things like non-maximum suppression and post-conversion. Finally, the post-processing server would call the serial server to queue up the most recent update to send to the V5 Brain.
 
 We used this architecture for several weeks in our initial Jetson code work. However, we soon ran into multiple issues with it. The biggest issue we encountered was latency. Because every single process was a web worker running the separate Python thread, they could not share memory or files. This meant that a large amount of data such as the tensor of model output from the YOLO model had to be sent over the network. Because we were using Jetson over a Wi-Fi network, this was incredibly slow, as the router had to serve as a middleman between our competing Python web servers
 
- This meant that not only was the data processing incredibly slow, it also taxed the Jetson’s Internet connection, which might have been needed for other things. At the same time, the time between the inference engine running, it finishing inference, and the final data being sent to the V5 brain, was over three seconds, which was completely not feasible for an interaction period where we only had one minute to do dynamic scoring.
+This meant that not only was the data processing incredibly slow, it also taxed the Jetson’s Internet connection, which might have been needed for other things. At the same time, the time between the inference engine running, it finishing inference, and the final data being sent to the V5 brain, was over three seconds, which was completely not feasible for an interaction period where we only had one minute to do dynamic scoring.
 
 Because of this, we decided to move to another architecture where all of the code was spawned by a singular file and was not transferred ever over the network.
 
@@ -104,15 +102,15 @@ Our biggest takeaway from the first iteration was that serving data over the net
 
 In this model, one file served multiple processes using the sub-processing library in Python. These still serve as independent processes, much like in our web server iteration. However, instead of each one having their own web server, these processes communicate using files. For example, the camera process would save the most recent depth and color images to a file, which the inference process would read from. The inference process would then save the YOLO results to a numpy file, which the post-processing process would read from, convert to a JSON format, and then store in another file. Then, the serial process reads from this file, and sends the final data to the V5 Brain.
 
-This was a big improvement over Iteration 1 but was still not perfect. It was extremely complex and was not sustainable to maintain for larger codebases. It was also still relatively slow, as it took a long time to save and read from files. Also, there were generally issues of corruption, as we did not use sub-process locks to ensure that only one process was accessing the file at a time, which meant that a process could read from a file at the same time that another process was writing to it, leading to corrupted data.  Implementing best practices for communicating between processes, such as using a lock between the processes or using a shared memory library would be exceedingly complex, requiring us to manage the memory ourselves, which would be no better than a language like C++. Because of this, we decided to move off of the multiple process model, as we found that the massive amount of data that we were transferring made this model just not feasible.
+This was a big improvement over Iteration 1 but was still not perfect. It was extremely complex and was not sustainable to maintain for larger codebases. It was also still relatively slow, as it took a long time to save and read from files. Also, there were generally issues of corruption, as we did not use sub-process locks to ensure that only one process was accessing the file at a time, which meant that a process could read from a file at the same time that another process was writing to it, leading to corrupted data. Implementing best practices for communicating between processes, such as using a lock between the processes or using a shared memory library would be exceedingly complex, requiring us to manage the memory ourselves, which would be no better than a language like C++. Because of this, we decided to move off of the multiple process model, as we found that the massive amount of data that we were transferring made this model just not feasible.
 
 #### Iteration 3: Threads
 
-After our learnings from the previous two iterations, we decided to move to a model using threads.  Threads are superficially the same as processes, but they are actually two distinct things. Processes are entirely separate commands, and are managed by the operating system level scheduler. However, threads are subtasks of the same process and are managed by the Python scheduler, in this case, using the global interpreter lock (GIL). While it seems like our requirement of having multiple separate threads with different refresh rates makes it impossible to use a single process, this is actually perfectly fine for our use cases, as essentially all of our processes spend most of their time idle.
+After our learnings from the previous two iterations, we decided to move to a model using threads. Threads are superficially the same as processes, but they are actually two distinct things. Processes are entirely separate commands, and are managed by the operating system level scheduler. However, threads are subtasks of the same process and are managed by the Python scheduler, in this case, using the global interpreter lock (GIL). While it seems like our requirement of having multiple separate threads with different refresh rates makes it impossible to use a single process, this is actually perfectly fine for our use cases, as essentially all of our processes spend most of their time idle.
 
 The inference code, for example, spends its time idle waiting for the GPU to finish running the YOLO model. Our serial code spends a lot of its time idle waiting for a response from the V5 brain. The camera thread spends a lot of time waiting for the next frame from our Vilsense camera. In this way, most of them actually are not using the CPU for much of their runtime, and thus can release the global interpreter lock during those times, since they are only accessing peripherals. At the entry point of our main.py file, we initialize our subtasks each using the threading library in Python. Then we start them each in parallel and register a set-town task to cleanly stop them all and release used memory if there is a set intermination of our process. This makes it incredibly easy to run and debug multiple threads at the same time.
 
-Also, these threads are all methods on the same app instance. This means that they can access global variables on the app instance, allowing them to share memory.  This also completely avoids the issue of data corruption. Given the idea of a process, only one thread is using the global interpreter lock, GIL, at a time. This means that there is actually never more than one thread running at a time, as is the old analogy about the scheduler struggling multiple tasks, but only ever running actually one at a time, synchronously. This means that only one thread or task can read or write from a file at a time or memory completely erasing any corruption issues.
+Also, these threads are all methods on the same app instance. This means that they can access global variables on the app instance, allowing them to share memory. This also completely avoids the issue of data corruption. Given the idea of a process, only one thread is using the global interpreter lock, GIL, at a time. This means that there is actually never more than one thread running at a time, as is the old analogy about the scheduler struggling multiple tasks, but only ever running actually one at a time, synchronously. This means that only one thread or task can read or write from a file at a time or memory completely erasing any corruption issues.
 
 You can see how this is implemented in our code walkthrough. After testing this for weeks, we found this to be the best iteration that balanced performance and speed.
 
@@ -152,25 +150,25 @@ Each of these new images was meticulously hand labeled by a human labeller on th
 
 Because of the intense training we were doing for up to 500 epochs, we spent a total of $10 on Google Colab Compute Units to access incredibly powerful graphical processing units or GPUs for our use in training the models. So this was indeed a great investment as even 100 epochs was only a few cents on Google Colab. So we ended up not even fully using our computing, as we still have around 95 units left for use in training future models.
 
-  After uploading and testing this final YOLO V5N model, we found that everything about it was completely excellent. Its quality was good on red rings, blue rings, mobile goals, and robots, and it was easily running at a smooth 15 frames per second, and often up to 20 frames per second on our Jetson Nano with a fan on. Based on the massive gains we saw, we decided to make this our final model so we could focus on other things.
+After uploading and testing this final YOLO V5N model, we found that everything about it was completely excellent. Its quality was good on red rings, blue rings, mobile goals, and robots, and it was easily running at a smooth 15 frames per second, and often up to 20 frames per second on our Jetson Nano with a fan on. Based on the massive gains we saw, we decided to make this our final model so we could focus on other things.
 
 ### Running the model<!-- {"fold":true} -->
 
 Running our model is one of the most important parts of our AI system. Obviously, we need a way to run the model efficiently using the GPU on our Nvidia Jetson Nano. Luckily, there are several open-source attempts to run YOLO models, which of course are very popular on NVIDIA hardware.
 
- There are multiple different methods we explored. They generally fell into one of several classes. The first one is the runtime on which the actual model was executed. This may be the cloud runtime on a server sitting in a data center, the GPU or the CPU. The second is the Python kernel which these libraries ran in. This could either be Python 3.6 or Python 3.8.
+There are multiple different methods we explored. They generally fell into one of several classes. The first one is the runtime on which the actual model was executed. This may be the cloud runtime on a server sitting in a data center, the GPU or the CPU. The second is the Python kernel which these libraries ran in. This could either be Python 3.6 or Python 3.8.
 
 To install Python 3.8, we used the `pyenv` tool. This enables us to install and manage multiple separate versions of Python. For our first two iterations, we set Python 3.8 to be the default Python runtime after installing it to make it easier to run and test code with. We also set pip to default to the Python 3.8 pip version.
 
 We also built a specific evaluation benchmark to test the performance of our models on. This involved running the models on 20 separate images to detect how long it took on each one. Based on this, we calculated an image per second number. We used this both for the technical inference speed of the models themselves, as well as the inference speed of our implementations to run the models on the Jetson Nano. Here are the final eval outputs for each iteration:
 
-* Inference package + CPU: ~3 fps
+- Inference package + CPU: ~3 fps
 
-* Ultralytics SDK + CPU: ~4 fps
+- Ultralytics SDK + CPU: ~4 fps
 
-* Custom GPU code (Ultralytics NMS): ~0.2 fps
+- Custom GPU code (Ultralytics NMS): ~0.2 fps
 
-* Custom GPU code (custom NMS): ~15-20 fps
+- Custom GPU code (custom NMS): ~15-20 fps
 
 #### Iteration 1: Inference package + CPU<!-- {"fold":true} -->
 
@@ -206,7 +204,7 @@ This actually was having to do three separate expert steps. After training our m
 
 After training and exporting our .pt file, in the same Google Colab that we used for training, we first of all ran the Ultralytics repository export.py script to convert it to an ONNX file. This ONNX file was sent over to the Jetson Nano. We use secure copy or SCP to do so over the network.
 
-On the Jetson Nano, we ran the `trtexec` command to convert this to a .engine file, which is the format that TensorRT uses, which is extremely optimized for the specific GPU. This means that we could not run `trtexec` on the Google Colab, as Iitwould optimize it for the Colab’s GPU instead of the Jetson’s.  Then our .engine file is imported into a script which uses the TensorRT Python bindings to load it in, create an engine and run the model.
+On the Jetson Nano, we ran the `trtexec` command to convert this to a .engine file, which is the format that TensorRT uses, which is extremely optimized for the specific GPU. This means that we could not run `trtexec` on the Google Colab, as Iitwould optimize it for the Colab’s GPU instead of the Jetson’s. Then our .engine file is imported into a script which uses the TensorRT Python bindings to load it in, create an engine and run the model.
 
 As noted above, the TensorRT runtime, unfortunately, is only half the story. After that, we use the Ultralytics code to do NMS on the output tensors to have it ready to use with other algorithms. After importing the Ultralytics code, however, we found that it used some Python 3.8 specific language features. So this meant that we'd still have to run it on Python 3.8. Luckily, this was the first iteration of our code architecture, where we were using multiple web servers. The advantage of this was that we could run the TensorRT code in Python 3.6. This achieves maximum performance, while still running the Ultralytics code on a Python 3.8 web server. This enables them to both communicate over the network protocol, while the intermediate output is saved to a NumPy file (.np).
 
@@ -228,7 +226,7 @@ The PyRealSense 2 API provides a built-in method for aligning the color and dept
 
 However, when using this code, we noticed a weird behavior with our inference thread. The inference thread only seems to be updating the detections once every fourth of a second, even though we knew based on our evaluations that the model itself could easily run at up to 20 frames per second. We decided to debug a lot, and after installing several debugging tools to visualize how much time each thread is using per second in our process, found that the PyRealSense2 align API was actually the issue.
 
-The aligned code seems to be calling a lot of loops in the underlying C++ code. While being C++ code, it’s still  extremely fast, having to loop over every pixel in the image and do an computationally intensive calculation on them uses a lot of CPU time. And because this is still running on the CPU and not as a peripheral, it holds our global interpreter lock or GIL for up to three quarters of a second for every second of the process. This meant that all of the other threads had to compete for the remaining quarter of a second to use for their own code.
+The aligned code seems to be calling a lot of loops in the underlying C++ code. While being C++ code, it’s still extremely fast, having to loop over every pixel in the image and do an computationally intensive calculation on them uses a lot of CPU time. And because this is still running on the CPU and not as a peripheral, it holds our global interpreter lock or GIL for up to three quarters of a second for every second of the process. This meant that all of the other threads had to compete for the remaining quarter of a second to use for their own code.
 
 This effectively limited many of our threads to run for only three or four frames per second. This actually held us up for up to a week because we were seeing mysterious slowdowns in other parts of our code. We never realized that our align API was actually blocking the process for so long that these threads were actually being starved of their execution time.
 
@@ -240,120 +238,119 @@ Our initial attempts involved using Jax, which is a NumPy equivalent that runs c
 
 This is enough speed to avoid the GIL-starving issues we experienced earlier, so we decided to let this be our final iteration for alignment.
 
-
 Another issue we had was that our lighting conditions were very variable depending on where we were testing the RealSense camera in. To achieve this, we actually created a program that would constantly read from a JSON file which stored offsets to tune our HSV colors, to be in the same color profile regardless of environment. For every different environment that the camera would be in, we tuned the JSON file specifically for that environment. This concluded all of our work for the camera side.
 
 ### Post-processing model outputs<!-- {"fold":true} -->
 
 Here’s an overview of how our post-processing works:
 
-* Setup
+- Setup
 
-  * Grabs the app, robot's starting position, and camera info.
+  - Grabs the app, robot's starting position, and camera info.
 
-  * Sets up some starting numbers and a simple object for finding location.
+  - Sets up some starting numbers and a simple object for finding location.
 
-* Distance check
+- Distance check
 
-  * Figures out how far away things are using the camera's depth image.
+  - Figures out how far away things are using the camera's depth image.
 
-  * Looks at the depth in the area around each thing detected.
+  - Looks at the depth in the area around each thing detected.
 
-  * Handles bad depth readings.
+  - Handles bad depth readings.
 
-* Computer info
+- Computer info
 
-  * Tries to read the Jetson's temperature and how long it's been running.
+  - Tries to read the Jetson's temperature and how long it's been running.
 
-* Data conversion `convert_to_v5`
+- Data conversion `convert_to_v5`
 
-  * Changes the data to a new format
+  - Changes the data to a new format
 
-    * Makes the `theta` value negative
+    - Makes the `theta` value negative
 
-    * Renames the values
+    - Renames the values
 
-    * Uses json.dumps to convert dictionary to string
+    - Uses json.dumps to convert dictionary to string
 
-* Main `update` function
+- Main `update` function
 
-  * Grabs the depth image, detections, and robot position.
+  - Grabs the depth image, detections, and robot position.
 
-  * Adjusts what it sees
+  - Adjusts what it sees
 
-    * Scales the vertical position of detections.
+    - Scales the vertical position of detections.
 
-    * Changes the size of goal detections for some models.
+    - Changes the size of goal detections for some models.
 
-    * Finds the depth of each detection.
+    - Finds the depth of each detection.
 
-    * Ignores detections it's not sure about.
+    - Ignores detections it's not sure about.
 
-  * Finding location
+  - Finding location
 
-    * Converts camera positions to world positions using a special function.
+    - Converts camera positions to world positions using a special function.
 
-  * Check for obstacles
+  - Check for obstacles
 
-    * Looks at a line in the depth image for things in the way.
+    - Looks at a line in the depth image for things in the way.
 
-    * Sets a "STOP" flag if something is too close.
+    - Sets a "STOP" flag if something is too close.
 
-  * Builds the report
+  - Builds the report
 
-    * Includes robot position, detections, the stop flag, and Jetson info.
+    - Includes robot position, detections, the stop flag, and Jetson info.
 
-    * Converts the data to V5 json format with `convert_to_v5`.
+    - Converts the data to V5 json format with `convert_to_v5`.
 
-  * Returns the report.
+  - Returns the report.
 
 ### Serial layer<!-- {"fold":true} -->
 
 Here’s an overview of how our serial code works:
 
-* Starts communication
+- Starts communication
 
-  * Establishes a connection to the robot's serial port.
+  - Establishes a connection to the robot's serial port.
 
-* Main operation
+- Main operation
 
-  * Continuously reads messages from the robot.
+  - Continuously reads messages from the robot.
 
-  * If the connection fails, it automatically attempts to reconnect.
+  - If the connection fails, it automatically attempts to reconnect.
 
-* Receives data
+- Receives data
 
-  * Acquires a line of text from the serial port.
+  - Acquires a line of text from the serial port.
 
-  * Cleans the text.
+  - Cleans the text.
 
-* Understands the data
+- Understands the data
 
-  * Attempts to convert the text into a structured data format (like a Python dictionary).
+  - Attempts to convert the text into a structured data format (like a Python dictionary).
 
-  * If conversion fails, the malformed data is logged.
+  - If conversion fails, the malformed data is logged.
 
-* Initial setup
+- Initial setup
 
-  * For the first message received, all position values are used to configure a `Processing` object.
+  - For the first message received, all position values are used to configure a `Processing` object.
 
-* Subsequent actions
+- Subsequent actions
 
-  * Extracts x, y, and theta position values.
+  - Extracts x, y, and theta position values.
 
-  * Utilizes the `update` function in the `Processing` object to determine the robot's complete environmental state.
+  - Utilizes the `update` function in the `Processing` object to determine the robot's complete environmental state.
 
-  * Converts this state to a V5 format.
+  - Converts this state to a V5 format.
 
-  * Transmits the V5 formatted information back to the robot.
+  - Transmits the V5 formatted information back to the robot.
 
-* Error management
+- Error management
 
-  * If a problem occurs during serial communication, an error is reported and reconnection is attempted after a short pause.
+  - If a problem occurs during serial communication, an error is reported and reconnection is attempted after a short pause.
 
 ### Terminal forwarding<!-- {"fold":true} -->
 
-Our Jetson serial implementation ended up working great. However, it is often the case that one of our coders for the isolation period needs to debug a specific part of code or API when coding for the robot and the V5 brain. This was previously near impossible. This was because using cout or printf, which are typically used for debugging statements,  doesn't work anymore. This is for two separate reasons.
+Our Jetson serial implementation ended up working great. However, it is often the case that one of our coders for the isolation period needs to debug a specific part of code or API when coding for the robot and the V5 brain. This was previously near impossible. This was because using cout or printf, which are typically used for debugging statements, doesn't work anymore. This is for two separate reasons.
 
 The first reason is the change in the encoding scheme. We use the PROS framework instead of VEXcode for our programming on the V5 side. PROS uses an encoding scheme known as COBS to ensure that packet delimiters do not include as part of message content. This works great for the PROS integrated terminal, which is what most V5RC teams use to debug their statements, and is what cout or printf log to. But this is not good for our VEX AI code, because our Jetson serial layer does not handle COBS decoding. Because of this, we actually disable the COBS layer on the V5 side. This dramatically simplifies our serial layer while still allowing us to send data back and forth. This actually speeds up our serial code because the compute of needing to encode and decode using COBS is completely bypassed. However, the code for the PROS integrated terminal assumes that the serial input from the V5 brain’s stdout is using COBS encoding. Otherwise, it fails to correctly decode the packets. This means that even if the packets do end up making it to the computer, they will be read as gibberish.
 
@@ -363,7 +360,7 @@ This is a big issue. Much of our team’s work involves tuning small things or c
 
 One way to bypass this is to have each process that needs to log something, have its own specific implementation for logging. For example, PID tuning could create its own UI based on the LVGL graphic language, or debugging could invent its own visual debugger for the V5 brain screen. However, this is insanely complex and not feasible for the short term, especially for the smaller logging needs. We decided to then begin looking into ways to so-called "harvest" the data from the brain's USB connection that is sent to the Jetson in a way that we can route it back to our computers in order to read what it sends.
 
-We ended up implementing this using an *event stream*. HTTPS or HTTP connections are generally short-lived, where a single request is made and the entire file is sent over immediately. This works for most use cases, such as loading a website or fetching a video. However, some things require continual updates from the server. Because of this, an entirely separate version of the HTTP spec, known as server-side events or SSE for short, was created.
+We ended up implementing this using an _event stream_. HTTPS or HTTP connections are generally short-lived, where a single request is made and the entire file is sent over immediately. This works for most use cases, such as loading a website or fetching a video. However, some things require continual updates from the server. Because of this, an entirely separate version of the HTTP spec, known as server-side events or SSE for short, was created.
 
 The key idea of SSE is that it is a long-living connection. That means that the request does not terminate immediately after the first response. Instead, the host keeps the HTTP connection open and continually appends updates to the message. You can consider like another version of the serial layer, but instead of going over the USB, it goes over the network. In this sense, the host is continually sending new packets of information to the client.
 
@@ -503,7 +500,6 @@ Implementing port forwarding is actually a one-line change:
 
 That’s all you need to start appending non-JSON packets to the shared `v5_logs` variable!
 
-
 To implement the web server side we look at our `DashboardServer` class. This handles all of our webserver-related code. To run the server, you can simply call `DashboardServer(App()).run()`. (We initialize it with an `App` instance so it can access the shared memory from the app.)
 
 ```py
@@ -618,35 +614,35 @@ In order to properly visualize all of our testing, we built a web dashboard to h
 
 This was written as part of a team member's [website](https://aadishv.github.io). It uses the following technologies:
 
-* React, a JavaScript library for building interactive, component-based Web UIs
+- React, a JavaScript library for building interactive, component-based Web UIs
 
-* Astro, a Server-Side Rendering framework that React is used with to improve site performance
+- Astro, a Server-Side Rendering framework that React is used with to improve site performance
 
-* TailwindCSS, a styling solution to simplify our layouts
+- TailwindCSS, a styling solution to simplify our layouts
 
-* shadcn/ui, a component library built on top of TailwindCSS that provides good default components (such as buttons and cards)
+- shadcn/ui, a component library built on top of TailwindCSS that provides good default components (such as buttons and cards)
 
-* React Mosaic, a library for building drag-and-drop, window management-style experiences
+- React Mosaic, a library for building drag-and-drop, window management-style experiences
 
-* TypeScript, a superset of JavaScript that adds strict typing behaviors to decrease the amounts of errors
+- TypeScript, a superset of JavaScript that adds strict typing behaviors to decrease the amounts of errors
 
 The dashboard offers a comprehensive experience. It offers multiple views to debug separate aspects:
 
-* Color Feed — a color image from the Realsense camera, live stream
+- Color Feed — a color image from the Realsense camera, live stream
 
-* Depth Feed — a depth map from the Realsense camera, live stream
+- Depth Feed — a depth map from the Realsense camera, live stream
 
-* Raw Data — shows the raw JSON that the Jetson outputs
+- Raw Data — shows the raw JSON that the Jetson outputs
 
-* Details — shows specific details, such as numbers for detections and thermals + uptime for Jetson
+- Details — shows specific details, such as numbers for detections and thermals + uptime for Jetson
 
-* Field View — visualizes the robot pose and detections on a field image to provide a realistic simulation of reality
+- Field View — visualizes the robot pose and detections on a field image to provide a realistic simulation of reality
 
 How the dashboard is hosted is also particularly interesting:
 
-* The dashboard itself is a Bun app with is written in TypeScript.
+- The dashboard itself is a Bun app with is written in TypeScript.
 
-* The dashboard is run on a team member’s computer. Unlike the Node.js-based VEX AI dashboard for the default VEX code, this dramatically reduces the amount of data coming over the network (as the JavaScript bundle is massive) and improves responsively. The dashboard only exchanges JSON packets with the Jetson, instead of having to reload the entire page when new data is acqured.
+- The dashboard is run on a team member’s computer. Unlike the Node.js-based VEX AI dashboard for the default VEX code, this dramatically reduces the amount of data coming over the network (as the JavaScript bundle is massive) and improves responsively. The dashboard only exchanges JSON packets with the Jetson, instead of having to reload the entire page when new data is acqured.
 
 Here is a video of the dashboard fully working:
 

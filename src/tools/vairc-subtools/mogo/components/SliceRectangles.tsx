@@ -72,16 +72,25 @@ export function SliceRectangles({ slices }: { slices: SliceDebug[] }) {
                 height: rectHeight,
                 borderRadius: 999,
                 background: color,
-                border: color === "transparent" ? "1.5px dashed #cbd5e1" : "1.5px solid #cbd5e1",
+                border:
+                  color === "transparent"
+                    ? "1.5px dashed #cbd5e1"
+                    : "1.5px solid #cbd5e1",
                 opacity: color === "transparent" ? 0.3 : 1,
                 transition: "background 0.2s, border 0.2s, opacity 0.2s",
-                boxShadow: color !== "transparent" ? "0 1px 4px 0 rgba(16, 30, 54, 0.08)" : "none",
+                boxShadow:
+                  color !== "transparent"
+                    ? "0 1px 4px 0 rgba(16, 30, 54, 0.08)"
+                    : "none",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 margin: 0,
               }}
-              title={slice.colorType.charAt(0).toUpperCase() + slice.colorType.slice(1)}
+              title={
+                slice.colorType.charAt(0).toUpperCase() +
+                slice.colorType.slice(1)
+              }
             />
           );
         })}

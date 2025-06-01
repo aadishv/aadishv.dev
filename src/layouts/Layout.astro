@@ -1,9 +1,10 @@
 ---
-import '@/styles/globals.css';
+import "@/styles/globals.css";
 import ThemeToggleIsland from "@/components/ThemeToggleIsland.tsx";
-const { title, nothing, light } = Astro.props;
+const { title, nothing, light, hideName } = Astro.props;
 const isDev = import.meta.env.DEV;
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -13,19 +14,42 @@ const isDev = import.meta.env.DEV;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body class={light ? "light" : undefined}>
-    {!light && (
-      <div style="position: fixed; top: 1rem; right: 1rem; z-index: 1000;">
-        <ThemeToggleIsland client:only="react" />
-      </div>
-    )}
-    {nothing
-      ? <div><slot /></div>
-      : <div class="container mx-auto py-10 px-52"><slot /></div>
+    <div
+      class="fixed pt-4 left-4 right-4 z-[1000] flex max-lg:backdrop-blur-sm"
+    >
+      {
+        !hideName && (
+          <a href="/" class="text-lg mr-auto" style={{ fontFamily: "Lora" }}>
+            Aadish Verma
+          </a>
+        )
+      }
+      {
+        !light && (
+          <div style="mr-auto">
+            <ThemeToggleIsland client:only="react" />
+          </div>
+        )
+      }
+    </div>
+    {
+      nothing ? (
+        <div>
+          <slot />
+        </div>
+      ) : (
+        <div class="container mx-auto py-10 lg:px-52">
+          <slot />
+        </div>
+      )
     }
   </body>
 </html>

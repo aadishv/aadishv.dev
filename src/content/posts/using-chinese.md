@@ -9,7 +9,6 @@ _Aadish's Chinese practice_ is a little tool I've created to help me practice my
 
 <span class="underline text-red-500">Warning!</span> This help article was AI-generated with minor edits from me (Aadish). If you still have questions, please feel free to reach out to me (contact details at bottom). Also note this is still in development so there _will_ be breaking changes.
 
-
 ## Introduction
 
 Aadish's Chinese Practice is an interactive tool designed to help learners practice Chinese characters and pinyin pronunciation. This application offers two distinct practice modes, comprehensive progress tracking, and an intuitive interface to enhance your Chinese language learning experience. All sentences are from the Integrated Chinese textbook and were scraped using Gemini 2.5 Pro Experimental 03-25. All data is stored in local storage, which means I cannot see any of your data.

@@ -1,6 +1,10 @@
 // aadishv.github.io/src/components/vairc/components/DetectionCanvas.tsx
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { DEFAULT_SERVER, type DetectionPayload, type Detection } from "../Layout";
+import {
+  DEFAULT_SERVER,
+  type DetectionPayload,
+  type Detection,
+} from "../Layout";
 import { getDetectionColor } from "../utils/colors";
 import { safeGetStuff, isValidDetectionPayload } from "../utils/validation";
 import { Switch } from "../../../components/ui/switch";
@@ -24,7 +28,6 @@ interface DetectionCanvasProps {
   className?: string;
   /** Optional flag to hide the component if no image URL is provided */
   hideWhenNoUrl?: boolean;
-
 }
 
 const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
@@ -34,7 +37,7 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
   imageEndpoint,
   originalImageWidth,
   originalImageHeight,
-  className = '',
+  className = "",
   hideWhenNoUrl = true,
 }) => {
   // Refs for canvas and image elements
@@ -48,19 +51,24 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
   // State for bounding box toggle with localStorage persistence
   const [showBoundingBoxes, setShowBoundingBoxes] = useState(() => {
     try {
-      const saved = localStorage.getItem('vairc-show-bounding-boxes');
-      return saved === null ? true : saved === 'true';
+      const saved = localStorage.getItem("vairc-show-bounding-boxes");
+      return saved === null ? true : saved === "true";
     } catch {
       return true; // Default to true if localStorage fails
     }
   });
 
   // URL construction
-  const isHttps = window.location.protocol === 'https:';
-  const effectiveImageUrl = imageUrl ? imageUrl : (imageEndpoint ? `http://${serverConfig}/${imageEndpoint}` : null);
-  const isMixedContent = isHttps && !!effectiveImageUrl && effectiveImageUrl.startsWith('http:');
-  
-  console.log('DetectionCanvas:', {
+  const isHttps = window.location.protocol === "https:";
+  const effectiveImageUrl = imageUrl
+    ? imageUrl
+    : imageEndpoint
+      ? `http://${serverConfig}/${imageEndpoint}`
+      : null;
+  const isMixedContent =
+    isHttps && !!effectiveImageUrl && effectiveImageUrl.startsWith("http:");
+
+  console.log("DetectionCanvas:", {
     imageUrl,
     imageEndpoint,
     effectiveImageUrl,
@@ -71,8 +79,10 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
       imageUrlUndefined: imageUrl === undefined,
       imageEndpointExists: !!imageEndpoint,
       serverConfigExists: !!serverConfig,
-      constructedUrl: imageEndpoint ? `http://${serverConfig}/${imageEndpoint}` : 'no endpoint'
-    }
+      constructedUrl: imageEndpoint
+        ? `http://${serverConfig}/${imageEndpoint}`
+        : "no endpoint",
+    },
   });
 
   // Draw bounding boxes or clear canvas based on toggle state
@@ -81,13 +91,13 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Get parent container dimensions
     const containerRect = canvas.parentElement?.getBoundingClientRect() || {
       width: canvas.offsetWidth,
-      height: canvas.offsetHeight
+      height: canvas.offsetHeight,
     };
 
     // Set canvas size to match container dimensions
@@ -143,9 +153,15 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
     // Draw each detection
     validDetections.forEach((d: Detection) => {
       // Skip invalid detections
-      if (!d || typeof d !== 'object' || typeof d.x !== 'number' ||
-          typeof d.y !== 'number' || typeof d.width !== 'number' ||
-          typeof d.height !== 'number' || !d.class) {
+      if (
+        !d ||
+        typeof d !== "object" ||
+        typeof d.x !== "number" ||
+        typeof d.y !== "number" ||
+        typeof d.width !== "number" ||
+        typeof d.height !== "number" ||
+        !d.class
+      ) {
         return;
       }
 
@@ -163,7 +179,7 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
       ctx.strokeStyle = color;
       ctx.strokeRect(x0, y0, boxWidth, boxHeight);
       ctx.strokeStyle = "white";
-      ctx.strokeRect(x0+1, y0+1, boxWidth-2, boxHeight-2);
+      ctx.strokeRect(x0 + 1, y0 + 1, boxWidth - 2, boxHeight - 2);
 
       // Prepare label text
       let label = `${d.class} ${d.confidence.toFixed(2)}`;
@@ -192,15 +208,10 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
 
       // Draw label background
       ctx.fillStyle = color;
-      ctx.fillRect(
-        textBgX,
-        textBgY,
-        textWidth + padding,
-        textHeight + padding
-      );
+      ctx.fillRect(textBgX, textBgY, textWidth + padding, textHeight + padding);
 
       // Draw label text
-      ctx.fillStyle = '#FFFFFF'; // White text
+      ctx.fillStyle = "#FFFFFF"; // White text
       ctx.fillText(label, textX, textY);
     });
   }, [detections, originalImageWidth, originalImageHeight, showBoundingBoxes]);
@@ -226,7 +237,7 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
     // Simple debounce for resize events
     const debounce = (fn: Function, ms: number) => {
       let timeoutId: ReturnType<typeof setTimeout>;
-      return function(...args: any[]) {
+      return function (...args: any[]) {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => fn.apply(args), ms);
       };
@@ -235,12 +246,12 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
     const debouncedResize = debounce(handleResize, 200);
 
     // Add event listeners
-    image.addEventListener('load', handleImageLoad);
-    window.addEventListener('resize', debouncedResize);
+    image.addEventListener("load", handleImageLoad);
+    window.addEventListener("resize", debouncedResize);
 
     // Set up ResizeObserver for more reliable size changes
     let resizeObserver: ResizeObserver | null = null;
-    if (container && 'ResizeObserver' in window) {
+    if (container && "ResizeObserver" in window) {
       resizeObserver = new ResizeObserver(debouncedResize);
       resizeObserver.observe(container);
     }
@@ -252,8 +263,8 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
 
     // Cleanup
     return () => {
-      image.removeEventListener('load', handleImageLoad);
-      window.removeEventListener('resize', debouncedResize);
+      image.removeEventListener("load", handleImageLoad);
+      window.removeEventListener("resize", debouncedResize);
       if (resizeObserver) {
         resizeObserver.disconnect();
       }
@@ -267,13 +278,13 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
 
   // Handle image error
   const handleImageError = () => {
-    console.error('Failed to load image stream:', effectiveImageUrl);
+    console.error("Failed to load image stream:", effectiveImageUrl);
     setImageError(true);
   };
 
   // Handle image load success
   const handleImageLoad = () => {
-    console.log('Image loaded successfully:', effectiveImageUrl);
+    console.log("Image loaded successfully:", effectiveImageUrl);
     setImageError(false);
   };
 
@@ -293,9 +304,9 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
 
     // Save to localStorage
     try {
-      localStorage.setItem('vairc-show-bounding-boxes', String(newValue));
+      localStorage.setItem("vairc-show-bounding-boxes", String(newValue));
     } catch (error) {
-      console.warn('Failed to save bounding box setting');
+      console.warn("Failed to save bounding box setting");
     }
 
     // Force an immediate canvas update
@@ -303,9 +314,14 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
     // even if the effect doesn't trigger fast enough
     setTimeout(() => {
       if (canvasRef.current) {
-        const ctx = canvasRef.current.getContext('2d');
+        const ctx = canvasRef.current.getContext("2d");
         if (ctx) {
-          ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+          ctx.clearRect(
+            0,
+            0,
+            canvasRef.current.width,
+            canvasRef.current.height,
+          );
           if (newValue) {
             // If turning on, force redraw
             updateCanvas();
@@ -321,7 +337,10 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
   }
 
   return (
-    <div ref={containerRef} className={`relative w-full h-full overflow-hidden ${className}`}>
+    <div
+      ref={containerRef}
+      className={`relative w-full h-full overflow-hidden ${className}`}
+    >
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative w-full h-full">
           {effectiveImageUrl ? (
@@ -348,24 +367,50 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
                   <Card className="max-w-md border border-gray-300 bg-gray-50">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-center mb-4">
-                        <svg className="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        <svg
+                          className="h-10 w-10 text-gray-500"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                          />
                         </svg>
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Mixed Content Blocked</h3>
-                      <p className="mb-4 text-gray-600">Your browser is blocking the HTTP camera stream because this page is loaded over HTTPS.</p>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        Mixed Content Blocked
+                      </h3>
+                      <p className="mb-4 text-gray-600">
+                        Your browser is blocking the HTTP camera stream because
+                        this page is loaded over HTTPS.
+                      </p>
                       <div className="text-sm bg-gray-100 p-3 rounded-md text-left mb-4 border border-gray-200">
-                        <p className="font-medium text-gray-700 mb-1">Solutions:</p>
+                        <p className="font-medium text-gray-700 mb-1">
+                          Solutions:
+                        </p>
                         <ol className="list-decimal list-inside space-y-1 text-gray-600">
                           <li>Access this page with HTTP instead of HTTPS</li>
-                          <li>In Chrome, click the shield icon and allow insecure content</li>
-                          <li>Consider setting up a secure proxy for your camera streams</li>
+                          <li>
+                            In Chrome, click the shield icon and allow insecure
+                            content
+                          </li>
+                          <li>
+                            Consider setting up a secure proxy for your camera
+                            streams
+                          </li>
                         </ol>
                       </div>
                       <Button
                         onClick={() => {
                           const currentUrl = window.location.href;
-                          const httpUrl = currentUrl.replace('https://', 'http://');
+                          const httpUrl = currentUrl.replace(
+                            "https://",
+                            "http://",
+                          );
                           window.location.href = httpUrl;
                         }}
                       >
@@ -382,12 +427,26 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
                   <Card className="max-w-md border border-gray-300 bg-gray-50">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-center mb-4">
-                        <svg className="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                        <svg
+                          className="h-10 w-10 text-gray-500"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
                         </svg>
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Camera Stream Error</h3>
-                      <p className="mb-4 text-gray-600">Failed to load the stream from:</p>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        Camera Stream Error
+                      </h3>
+                      <p className="mb-4 text-gray-600">
+                        Failed to load the stream from:
+                      </p>
                       <div className="bg-gray-100 p-2 rounded-md border border-gray-200 mb-4 font-mono text-sm overflow-auto">
                         {effectiveImageUrl}
                       </div>
@@ -396,8 +455,18 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
                         onClick={reloadImage}
                         className="flex items-center mx-auto"
                       >
-                        <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        <svg
+                          className="h-4 w-4 mr-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
                         </svg>
                         Retry Connection
                       </Button>
@@ -412,13 +481,13 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
               <div className="text-center text-gray-700">
                 <div>No Image Stream</div>
                 <div className="text-xs mt-2 font-mono">
-                  URL: {effectiveImageUrl || 'null'}
+                  URL: {effectiveImageUrl || "null"}
                 </div>
                 <div className="text-xs mt-1">
-                  Server: {serverConfig || 'undefined'}
+                  Server: {serverConfig || "undefined"}
                 </div>
                 <div className="text-xs mt-1">
-                  Endpoint: {imageEndpoint || 'undefined'}
+                  Endpoint: {imageEndpoint || "undefined"}
                 </div>
               </div>
             </div>
@@ -438,7 +507,7 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
             htmlFor="bounding-boxes-toggle"
             className="text-xs font-medium text-gray-800 cursor-pointer"
           >
-            {showBoundingBoxes ? 'Boxes On' : 'Boxes Off'}
+            {showBoundingBoxes ? "Boxes On" : "Boxes Off"}
           </label>
         </div>
       </div>

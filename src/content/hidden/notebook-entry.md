@@ -16,7 +16,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Handling RealSense Library Import
 
 **Purpose:**
-*Ensure the RealSense library is imported correctly and the camera pipeline can be initialized, regardless of installation quirks.*
+_Ensure the RealSense library is imported correctly and the camera pipeline can be initialized, regardless of installation quirks._
 
 - The code attempts to import the RealSense library in two different ways to maximize compatibility.
 - It tests basic functionality by initializing a pipeline and an alignment object.
@@ -25,7 +25,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Importing Supporting Libraries
 
 **Purpose:**
-*Bring in essential libraries for image processing, numerical operations, file handling, and configuration management.*
+_Bring in essential libraries for image processing, numerical operations, file handling, and configuration management._
 
 - OpenCV is used for image manipulation and color space conversions.
 - NumPy is used for efficient numerical operations and array management.
@@ -38,7 +38,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Camera Initialization
 
 **Purpose:**
-*Set up the RealSense camera pipeline and configure the streams for depth and color data.*
+_Set up the RealSense camera pipeline and configure the streams for depth and color data._
 
 - The camera is configured to stream both depth and color at a specific resolution and frame rate.
 - The color stream uses the BGR format, which is compatible with OpenCV.
@@ -46,7 +46,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Starting the Camera
 
 **Purpose:**
-*Begin streaming from the camera and retrieve important calibration data.*
+_Begin streaming from the camera and retrieve important calibration data._
 
 - The pipeline is started, and the depth scale (conversion from raw depth units to meters) is obtained.
 - If starting fails, an error is printed and the method returns failure.
@@ -54,7 +54,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Frame Acquisition
 
 **Purpose:**
-*Retrieve the latest set of synchronized depth and color frames from the camera.*
+_Retrieve the latest set of synchronized depth and color frames from the camera._
 
 - The method waits for new frames and returns them for further processing.
 - If frame acquisition fails, it returns None.
@@ -62,7 +62,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Stopping the Camera
 
 **Purpose:**
-*Gracefully stop the camera pipeline when finished.*
+_Gracefully stop the camera pipeline when finished._
 
 - The pipeline is stopped, and a message is printed to confirm.
 
@@ -73,7 +73,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Initialization and Calibration
 
 **Purpose:**
-*Prepare for image and depth processing by loading or generating mapping data and setting up color correction parameters.*
+_Prepare for image and depth processing by loading or generating mapping data and setting up color correction parameters._
 
 - The class retrieves camera intrinsics and extrinsics for both depth and color streams.
 - It attempts to load mapping arrays from files to speed up startup. If the files are missing or invalid, it regenerates them.
@@ -82,7 +82,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Generating and Saving Mapping Arrays
 
 **Purpose:**
-*Create lookup tables that map color image pixels to corresponding depth pixels, accounting for camera calibration.*
+_Create lookup tables that map color image pixels to corresponding depth pixels, accounting for camera calibration._
 
 - For each pixel in the color image, the code computes where it maps in the depth image using camera calibration data.
 - The mapping arrays are saved to disk for future use, reducing startup time on subsequent runs.
@@ -90,7 +90,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Image Processing
 
 **Purpose:**
-*Apply HSV-based color correction to the input image using tunable parameters.*
+_Apply HSV-based color correction to the input image using tunable parameters._
 
 - The image is converted from BGR to HSV color space.
 - Hue, saturation, and value are adjusted according to the current parameters.
@@ -99,7 +99,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Frame Processing
 
 **Purpose:**
-*Align depth data to the color image and apply color correction.*
+_Align depth data to the color image and apply color correction._
 
 - Raw depth and color frames are extracted and converted to NumPy arrays.
 - Depth data is converted to meters and slightly adjusted for accuracy.
@@ -114,7 +114,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Initialization
 
 **Purpose:**
-*Set up the camera, processing pipeline, and configuration management for real-time operation.*
+_Set up the camera, processing pipeline, and configuration management for real-time operation._
 
 - The camera is started and checked for successful initialization.
 - The processing class is initialized with calibration data and mapping arrays.
@@ -124,7 +124,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### HSV Parameter Management
 
 **Purpose:**
-*Allow real-time tuning of color correction parameters via a JSON file.*
+_Allow real-time tuning of color correction parameters via a JSON file._
 
 - The method reads the JSON file and updates the HSV parameters in the processing class.
 - If the file is missing or invalid, it prints a warning and continues with the current parameters.
@@ -132,7 +132,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Worker Loop
 
 **Purpose:**
-*Continuously capture and process frames, periodically updating color correction parameters.*
+_Continuously capture and process frames, periodically updating color correction parameters._
 
 - The loop increments a counter and updates HSV parameters at a set interval.
 - It retrieves new frames from the camera and processes them.
@@ -142,7 +142,7 @@ This file is responsible for handling camera input, processing image and depth d
 ### Cleanup
 
 **Purpose:**
-*Provide a method to stop the camera pipeline from outside the worker loop.*
+_Provide a method to stop the camera pipeline from outside the worker loop._
 
 - The camera is stopped to release resources.
 
@@ -161,7 +161,7 @@ This file provides a web server interface for interacting with the robot's camer
 ### Importing Libraries
 
 **Purpose:**
-*Bring in all necessary libraries for web serving, image processing, data handling, and system operations.*
+_Bring in all necessary libraries for web serving, image processing, data handling, and system operations._
 
 - Flask is used to create the web server and define HTTP endpoints.
 - Flask-CORS is used to allow cross-origin requests, making the dashboard accessible from different devices.
@@ -177,7 +177,7 @@ This file provides a web server interface for interacting with the robot's camer
 ### Camera Pipeline String Generation
 
 **Purpose:**
-*Provide a utility to generate a GStreamer pipeline string for camera capture, specifically for NVIDIA Jetson platforms.*
+_Provide a utility to generate a GStreamer pipeline string for camera capture, specifically for NVIDIA Jetson platforms._
 
 - The function returns a formatted string that sets up a camera pipeline with specified parameters like resolution, framerate, and flip method.
 - This is useful for systems that use GStreamer-compatible cameras, but is not directly used in the main server logic.
@@ -189,7 +189,7 @@ This file provides a web server interface for interacting with the robot's camer
 ### Initialization
 
 **Purpose:**
-*Set up the Flask application, enable CORS, and define all HTTP routes.*
+_Set up the Flask application, enable CORS, and define all HTTP routes._
 
 - The Flask app is initialized with a custom name.
 - CORS is enabled for all routes, allowing the dashboard to be accessed from any origin.
@@ -202,7 +202,7 @@ This file provides a web server interface for interacting with the robot's camer
 ### Video Streaming Endpoints
 
 **Purpose:**
-*Serve live video streams of color and depth images over HTTP in MJPEG format.*
+_Serve live video streams of color and depth images over HTTP in MJPEG format._
 
 - The `/color.mjpg` and `/depth.mjpg` endpoints stream color and depth video, respectively.
 - Frames are fetched from the camera, processed, and encoded as JPEG images.
@@ -217,7 +217,7 @@ yield (b'--frame\r\n'
 ### Server-Sent Events (SSE) for Results
 
 **Purpose:**
-*Stream the most recent result data to the dashboard in real time.*
+_Stream the most recent result data to the dashboard in real time._
 
 - The `/events` endpoint uses SSE to push JSON-encoded result data to connected clients at a regular interval.
 - This allows the dashboard to display live updates without polling.
@@ -225,7 +225,7 @@ yield (b'--frame\r\n'
 ### HSV Configuration Update Endpoint
 
 **Purpose:**
-*Allow the dashboard to update HSV color correction parameters in real time.*
+_Allow the dashboard to update HSV color correction parameters in real time._
 
 - The `/update_hsv` endpoint accepts POST requests with new HSV values in JSON format.
 - The server validates the input, ensures all required keys are present, and writes the new configuration to a JSON file.
@@ -234,7 +234,7 @@ yield (b'--frame\r\n'
 ### Terminal Log Streaming
 
 **Purpose:**
-*Stream log messages from the robot to the dashboard for real-time monitoring.*
+_Stream log messages from the robot to the dashboard for real-time monitoring._
 
 - The `/terminal` endpoint streams all log messages, including past logs, using SSE.
 - The `/terminal2` endpoint streams only new log messages, excluding past logs.
@@ -243,7 +243,7 @@ yield (b'--frame\r\n'
 ### Index Redirect
 
 **Purpose:**
-*Redirect the root URL to the main dashboard page.*
+_Redirect the root URL to the main dashboard page._
 
 - The `/` endpoint redirects to a specific dashboard URL, making it easy to access the main interface.
 
@@ -254,7 +254,7 @@ yield (b'--frame\r\n'
 ### Running the Flask Server
 
 **Purpose:**
-*Start the Flask web server with custom logging and environment settings.*
+_Start the Flask web server with custom logging and environment settings._
 
 - The server is configured to suppress the default Flask banner and reduce log verbosity.
 - It listens on all network interfaces at port 5000, allowing access from other devices on the network.
@@ -275,7 +275,7 @@ yield (b'--frame\r\n'
 ### Importing Libraries
 
 **Purpose:**
-*Bring in all necessary libraries for deep learning inference, image processing, and GPU management.*
+_Bring in all necessary libraries for deep learning inference, image processing, and GPU management._
 
 - PyCUDA and TensorRT are used for efficient GPU-based inference.
 - PyTorch and TorchVision are used for tensor operations and NMS.
@@ -289,7 +289,7 @@ yield (b'--frame\r\n'
 ### Initialization
 
 **Purpose:**
-*Set up the TensorRT engine, allocate GPU buffers, and prepare the CUDA context for inference.*
+_Set up the TensorRT engine, allocate GPU buffers, and prepare the CUDA context for inference._
 
 - The engine is loaded from a serialized file.
 - CUDA device and context are initialized for GPU operations.
@@ -299,7 +299,7 @@ yield (b'--frame\r\n'
 ### Buffer Allocation
 
 **Purpose:**
-*Allocate pagelocked host memory and device memory for all engine bindings.*
+_Allocate pagelocked host memory and device memory for all engine bindings._
 
 - For each binding (input/output), the code determines the required size and data type.
 - Host and device memory are allocated and tracked for later use.
@@ -307,7 +307,7 @@ yield (b'--frame\r\n'
 ### Preprocessing
 
 **Purpose:**
-*Prepare input images for inference by resizing, normalizing, and reordering channels.*
+_Prepare input images for inference by resizing, normalizing, and reordering channels._
 
 - Images are resized to the expected input shape.
 - Color channels are converted from BGR to RGB.
@@ -317,7 +317,7 @@ yield (b'--frame\r\n'
 ### Inference Execution
 
 **Purpose:**
-*Run the model on the GPU and retrieve the output.*
+_Run the model on the GPU and retrieve the output._
 
 - Input data is copied to the GPU.
 - The engine executes asynchronously.
@@ -327,7 +327,7 @@ yield (b'--frame\r\n'
 ### Cleanup
 
 **Purpose:**
-*Release all GPU resources and contexts to prevent memory leaks.*
+_Release all GPU resources and contexts to prevent memory leaks._
 
 - Streams and device memory are freed.
 - TensorRT objects are deleted.
@@ -336,7 +336,7 @@ yield (b'--frame\r\n'
 ### Non-Maximum Suppression (NMS)
 
 **Purpose:**
-*Filter and refine raw model outputs to produce final object detections.*
+_Filter and refine raw model outputs to produce final object detections._
 
 - The model outputs are converted to PyTorch tensors.
 - Objectness and class confidence scores are combined.
@@ -348,7 +348,7 @@ yield (b'--frame\r\n'
 ### Main Inference Method
 
 **Purpose:**
-*Run the full inference pipeline on a single image and return detections.*
+_Run the full inference pipeline on a single image and return detections._
 
 - The image is preprocessed and copied to the input buffer.
 - Inference is executed and the output is reshaped.
@@ -361,14 +361,14 @@ yield (b'--frame\r\n'
 ### Initialization and Buffer Allocation
 
 **Purpose:**
-*Set up the engine and buffers for batched inference (processing two images at once).*
+_Set up the engine and buffers for batched inference (processing two images at once)._
 
 - Similar to the single-image engine, but input and output shapes are set for batches.
 
 ### Batched Preprocessing
 
 **Purpose:**
-*Prepare two images for batched inference.*
+_Prepare two images for batched inference._
 
 - Each image is preprocessed individually.
 - The two preprocessed images are stacked into a batch.
@@ -376,7 +376,7 @@ yield (b'--frame\r\n'
 ### Batched Inference and NMS
 
 **Purpose:**
-*Run inference on a batch and apply NMS to each image's results.*
+_Run inference on a batch and apply NMS to each image's results._
 
 - The batch is copied to the input buffer and inference is run.
 - The output is reshaped and split for each image.
@@ -389,7 +389,7 @@ yield (b'--frame\r\n'
 ### Initialization
 
 **Purpose:**
-*Set up the inference engine and prepare to process images from the camera.*
+_Set up the inference engine and prepare to process images from the camera._
 
 - The worker holds a reference to the camera and initializes the inference engine.
 - It prepares a list to store the latest detections.
@@ -397,7 +397,7 @@ yield (b'--frame\r\n'
 ### Worker Loop
 
 **Purpose:**
-*Continuously process images from the camera and update detections.*
+_Continuously process images from the camera and update detections._
 
 - The CUDA context is pushed to ensure GPU operations are valid in the current thread.
 - The latest color image from the camera is retrieved.
@@ -421,7 +421,7 @@ yield (b'--frame\r\n'
 ### Camera and Conversion Parameters
 
 **Purpose:**
-*Define the necessary constants for projecting image coordinates into the real world.*
+_Define the necessary constants for projecting image coordinates into the real world._
 
 - The focal length and image center are specified in pixels, based on camera calibration.
 - The camera's height above the robot's origin is given in meters.
@@ -434,7 +434,7 @@ yield (b'--frame\r\n'
 ### Function Overview
 
 **Purpose:**
-*Transform a detection from image coordinates and depth to world coordinates, accounting for the robot's current position and orientation.*
+_Transform a detection from image coordinates and depth to world coordinates, accounting for the robot's current position and orientation._
 
 - The function takes the robot's current position (in inches), heading (in radians), and a detection dictionary containing image coordinates and depth.
 - It returns a dictionary with the object's position in the world frame (in inches), including its height above the robot's base plane.
@@ -442,7 +442,7 @@ yield (b'--frame\r\n'
 ### Step 1: Back-Projection to Camera Frame
 
 **Purpose:**
-*Convert the detection's image coordinates and depth into 3D coordinates relative to the camera.*
+_Convert the detection's image coordinates and depth into 3D coordinates relative to the camera._
 
 - The detection's depth and pixel coordinates are used to compute the object's position in the camera's coordinate system.
 - The formulas use the focal length and image center to translate from pixels to meters.
@@ -450,7 +450,7 @@ yield (b'--frame\r\n'
 ### Step 2: Rotation to World Axes
 
 **Purpose:**
-*Rotate the camera-relative coordinates into the world frame, based on the robot's heading.*
+_Rotate the camera-relative coordinates into the world frame, based on the robot's heading._
 
 - A rotation matrix is constructed using the robot's heading angle.
 - The camera-relative vector is rotated to align with the world axes.
@@ -458,7 +458,7 @@ yield (b'--frame\r\n'
 ### Step 3: Translation and Unit Conversion
 
 **Purpose:**
-*Translate the rotated coordinates by the robot's current position and convert from meters to inches.*
+_Translate the rotated coordinates by the robot's current position and convert from meters to inches._
 
 - The rotated X and Y coordinates are scaled from meters to inches.
 - The robot's current X and Y positions are added to get the final world coordinates.
@@ -466,14 +466,14 @@ yield (b'--frame\r\n'
 ### Step 4: Height Calculation
 
 **Purpose:**
-*Compute the object's height above the robot's base plane.*
+_Compute the object's height above the robot's base plane._
 
 - The Z coordinate is adjusted by subtracting the camera's height and converting to inches.
 
 ### Return Value
 
 **Purpose:**
-*Provide the final world coordinates of the detected object.*
+_Provide the final world coordinates of the detected object._
 
 - The function returns a dictionary with the object's X, Y, and Z positions in inches, suitable for use in navigation or manipulation tasks.
 
@@ -492,7 +492,7 @@ yield (b'--frame\r\n'
 ### Importing Dependencies
 
 **Purpose:**
-*Bring in all necessary modules and constants for processing detections and system data.*
+_Bring in all necessary modules and constants for processing detections and system data._
 
 - NumPy is used for numerical operations and array handling.
 - The `copy` module is used for deep copying data structures to avoid side effects.
@@ -506,7 +506,7 @@ yield (b'--frame\r\n'
 ### Placeholder for Localization
 
 **Purpose:**
-*Provide a simple object with a pose attribute for compatibility with other code that expects a detection-like object.*
+_Provide a simple object with a pose attribute for compatibility with other code that expects a detection-like object._
 
 - The class has a `pose` attribute initialized to (0, 0, 0).
 
@@ -517,7 +517,7 @@ yield (b'--frame\r\n'
 ### Initialization
 
 **Purpose:**
-*Set up the processing pipeline with references to the main application, localization, and camera calibration data.*
+_Set up the processing pipeline with references to the main application, localization, and camera calibration data._
 
 - Stores references to the app, localization, and focal length.
 - Initializes detection storage and retrieves the camera's depth scale.
@@ -527,7 +527,7 @@ yield (b'--frame\r\n'
 ### Depth Estimation for Detections
 
 **Purpose:**
-*Estimate the depth of a detected object by analyzing the corresponding region in the depth image.*
+_Estimate the depth of a detected object by analyzing the corresponding region in the depth image._
 
 - The function extracts a region of the depth image based on the detection's bounding box.
 - It flattens the region and computes the 10th percentile of nonzero depth values to estimate object depth.
@@ -538,7 +538,7 @@ yield (b'--frame\r\n'
 ### Jetson System Information
 
 **Purpose:**
-*Gather system information such as CPU temperature, GPU temperature, and system uptime from the Jetson device.*
+_Gather system information such as CPU temperature, GPU temperature, and system uptime from the Jetson device._
 
 - Reads system files to obtain CPU and GPU temperatures.
 - Reads the system uptime from `/proc/uptime`.
@@ -549,7 +549,7 @@ yield (b'--frame\r\n'
 ### Data Conversion for External Systems
 
 **Purpose:**
-*Convert processed data into a format compatible with another system (e.g., V5 robot controller).*
+_Convert processed data into a format compatible with another system (e.g., V5 robot controller)._
 
 - Deep copies the input data to avoid modifying the original.
 - Constructs a new dictionary with pose, filtered detections, and a flag.
@@ -561,7 +561,7 @@ yield (b'--frame\r\n'
 ### Main Update Method
 
 **Purpose:**
-*Process new detections, estimate their depths, transform their coordinates, and package all relevant data.*
+_Process new detections, estimate their depths, transform their coordinates, and package all relevant data._
 
 - Increments an internal counter.
 - Retrieves the latest depth image and raw detections.
@@ -589,7 +589,7 @@ yield (b'--frame\r\n'
 ### Initialization
 
 **Purpose:**
-*Set up all major subsystems and shared state for the application.*
+_Set up all major subsystems and shared state for the application._
 
 - Instantiates the camera worker, inference worker, and initializes storage for results and logs.
 - Prepares for either simulation or serial communication with an external controller.
@@ -599,7 +599,7 @@ yield (b'--frame\r\n'
 ### Simulator Service
 
 **Purpose:**
-*Continuously process detections and update results in simulation mode.*
+_Continuously process detections and update results in simulation mode._
 
 - Creates a `Processing` object for post-processing.
 - In a loop, updates the most recent result using a fixed pose.
@@ -610,7 +610,7 @@ yield (b'--frame\r\n'
 ### Serial Communication Service
 
 **Purpose:**
-*Handle communication with an external controller (e.g., V5 robot) over a serial port.*
+_Handle communication with an external controller (e.g., V5 robot) over a serial port._
 
 - Opens a serial connection to a specified port and baud rate.
 - On the first message, initializes the `Processing` object with the received pose.
@@ -624,7 +624,7 @@ yield (b'--frame\r\n'
 ### Cleanup and Context Management
 
 **Purpose:**
-*Provide methods to cleanly shut down the camera and other resources.*
+_Provide methods to cleanly shut down the camera and other resources._
 
 - The `close` method stops the camera.
 - Implements context manager methods to ensure cleanup on exit.
@@ -636,7 +636,7 @@ yield (b'--frame\r\n'
 ### Mode Selection
 
 **Purpose:**
-*Allow the program to run in either simulation or serial mode based on command-line arguments.*
+_Allow the program to run in either simulation or serial mode based on command-line arguments._
 
 - Defaults to simulation mode.
 - Switches to serial mode if the first argument is `'ser'`.
@@ -646,7 +646,7 @@ yield (b'--frame\r\n'
 ### Thread Management
 
 **Purpose:**
-*Run all major services in parallel using threads and handle graceful shutdown.*
+_Run all major services in parallel using threads and handle graceful shutdown._
 
 - Creates threads for the camera worker, inference worker, either the simulator or serial service, and the dashboard server.
 - Sets up signal handlers for SIGINT and SIGTERM to trigger shutdown.

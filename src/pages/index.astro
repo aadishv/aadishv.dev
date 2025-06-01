@@ -2,9 +2,16 @@
 import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { parseISO, format } from "date-fns";
-import {Image} from "astro:assets";
+import { Image } from "astro:assets";
 
 const isDev = import.meta.env.DEV;
 
@@ -39,7 +46,7 @@ const sortedProjects = allProjects
   .filter((p) => p.frontmatter.hidden !== true);
 ---
 
-<Layout title="Aadish Verma">
+<Layout title="Aadish Verma" hideName={true}>
   <Button variant="ghost" className="-ml-4 mb-3 pb-3 duration-0">
     <h1><a href="/" class="">Aadish Verma</a></h1>
   </Button>
@@ -73,20 +80,35 @@ const sortedProjects = allProjects
       <p>I've built several tools and games:</p>
       <ul>
         <li>
-          <a href="/tools/periodic">Interactive Periodic Table</a>. A modern periodic table with detailed information about each element, designed for chemistry students. It includes properties, electron configurations, oxidation states, and a formula mass calculator.
+          <a href="/tools/periodic">Interactive Periodic Table</a>. A modern
+          periodic table with detailed information about each element, designed
+          for chemistry students. It includes properties, electron
+          configurations, oxidation states, and a formula mass calculator.
         </li>
         <li>
-          <a href="/tools/latex">LaTeX to Image</a>. A tool that converts LaTeX equations into images in SVG, PNG, or GIF format. It includes live preview rendering and easy copy options for image URLs and Markdown.
+          <a href="/tools/latex">LaTeX to Image</a>. A tool that converts LaTeX
+          equations into images in SVG, PNG, or GIF format. It includes live
+          preview rendering and easy copy options for image URLs and Markdown.
         </li>
         <li>
-          <a href="/games/slide">A minimal slide puzzle</a>. It uses a simple design and animated game mechanics to create a seamless puzzle experience. Upload any image to make your own puzzle.
+          <a href="/games/slide">A minimal slide puzzle</a>. It uses a simple
+          design and animated game mechanics to create a seamless puzzle
+          experience. Upload any image to make your own puzzle.
         </li>
         <li>
-            <a href="/tools/chinese">Chinese Practice</a>.  An interactive tool designed to help learners practice Chinese characters and pinyin pronunciation. The application offers two distinct practice modes, comprehensive progress tracking, and an intuitive interface to enhance your Chinese language learning experience.
+          <a href="/tools/chinese">Chinese Practice</a>. An interactive tool
+          designed to help learners practice Chinese characters and pinyin
+          pronunciation. The application offers two distinct practice modes,
+          comprehensive progress tracking, and an intuitive interface to enhance
+          your Chinese language learning experience.
         </li>
       </ul>
 
-      <p>I've also built several open-source tools for other projects, which I'm currently at liberty to explain in depth but will soon write a few blog posts about :)</p>
+      <p>
+        I've also built several open-source tools for other projects, which I'm
+        currently at liberty to explain in depth but will soon write a few blog
+        posts about :)
+      </p>
     </ul>
 
     <p>
@@ -101,39 +123,53 @@ const sortedProjects = allProjects
 
   <h2 class="pb-5">Projects</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    {sortedProjects.map((project) => (
-      <a href={'/' + getSlugFromPath(project.file)} class="aadish-none">
-        <Card className="w-[25rem] transition-shadow h-full flex flex-col hover:shadow-md">
-          {project.frontmatter.image ? (
-            <div class="m-4 mb-0">
-              <img
-                src={project.frontmatter.image}
-                alt={project.frontmatter.title}
-                class="object-cover rounded-lg shadow-sm mx-auto"
-              />
+    {
+      sortedProjects.map((project) => (
+        <a href={"/" + getSlugFromPath(project.file)} class="aadish-none">
+          <Card className="w-[25rem] transition-shadow h-full flex flex-col hover:shadow-md">
+            {project.frontmatter.image ? (
+              <div class="m-4 mb-0">
+                <img
+                  src={project.frontmatter.image}
+                  alt={project.frontmatter.title}
+                  class="object-cover rounded-lg shadow-sm mx-auto"
+                />
+              </div>
+            ) : null}
+            <div class="flex flex-col flex-grow">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">
+                  {project.frontmatter.title}
+                </CardTitle>
+                <CardDescription>
+                  {format(parseISO(project.frontmatter.date), "LLLL d, yyyy")}
+                </CardDescription>
+              </CardHeader>
             </div>
-          ) : null}
-          <div class="flex flex-col flex-grow">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl">{project.frontmatter.title}</CardTitle>
-              <CardDescription>{format(parseISO(project.frontmatter.date), "LLLL d, yyyy")}</CardDescription>
-            </CardHeader>
-          </div>
             <CardContent>
-              <p class="line-clamp-3 text-sm">{project.frontmatter.description}</p>
+              <p class="line-clamp-3 text-sm">
+                {project.frontmatter.description}
+              </p>
             </CardContent>
-        </Card>
-      </a>
-    ))}
+          </Card>
+        </a>
+      ))
+    }
   </div>
 
   <hr class="my-8" />
 
   <h2 class="pb-5">Blog</h2>
-  {sortedPosts.map((post) => (
-  <a href={'/' + getSlugFromPath(post.file)} class="text-xl">
-      {post.frontmatter.title}
-    </a>
-  <div class="mb-5">{format(parseISO(post.frontmatter.date), "LLLL d, yyyy")}</div>
-  ))}
+  {
+    sortedPosts.map((post) => (
+      <>
+        <a href={"/" + getSlugFromPath(post.file)} class="text-xl">
+          {post.frontmatter.title}
+        </a>
+        <div class="mb-5">
+          {format(parseISO(post.frontmatter.date), "LLLL d, yyyy")}
+        </div>
+      </>
+    ))
+  }
 </Layout>

@@ -30,7 +30,9 @@ export function ICPVisualization() {
   const [showCorrespondences, setShowCorrespondences] = useState(false);
 
   // Transform mode and curve selection
-  const [transformMode, setTransformMode] = useState<'none' | 'translate' | 'rotate'>('none');
+  const [transformMode, setTransformMode] = useState<
+    "none" | "translate" | "rotate"
+  >("none");
   const [transformCurveIndex, setTransformCurveIndex] = useState<0 | 1>(0);
 
   const clearCurve = () => {
@@ -61,7 +63,11 @@ export function ICPVisualization() {
     const sourcePoints = samplePoints(curves[0].points, sourcePixelSpacing);
     const targetPoints = samplePoints(curves[1].points, targetPixelSpacing);
 
-    const result = await runICPAlgorithm(sourcePoints, targetPoints, maxIterations);
+    const result = await runICPAlgorithm(
+      sourcePoints,
+      targetPoints,
+      maxIterations,
+    );
 
     setIcpStates(result);
     setCurrentStep(0);
@@ -88,9 +94,12 @@ export function ICPVisualization() {
       const text = await navigator.clipboard.readText();
       let importedPoints = parsePointsFromClipboard(text);
       if (importedPoints.length > 0) {
-        setCurves(prev => {
+        setCurves((prev) => {
           const newCurves = [...prev];
-          newCurves[curveIndex] = { ...newCurves[curveIndex], points: importedPoints };
+          newCurves[curveIndex] = {
+            ...newCurves[curveIndex],
+            points: importedPoints,
+          };
           return newCurves;
         });
         setIcpStates([]);
@@ -129,36 +138,42 @@ export function ICPVisualization() {
       <div className="flex flex-wrap gap-2 mb-4">
         <span className="font-medium">Transform:</span>
         <Button
-          variant={transformMode === 'none' ? 'default' : 'outline'}
-          onClick={() => setTransformMode('none')}
+          variant={transformMode === "none" ? "default" : "outline"}
+          onClick={() => setTransformMode("none")}
           size="sm"
         >
           None
         </Button>
         <Button
-          variant={transformMode === 'translate' ? 'default' : 'outline'}
-          onClick={() => setTransformMode(transformMode === 'translate' ? 'none' : 'translate')}
+          variant={transformMode === "translate" ? "default" : "outline"}
+          onClick={() =>
+            setTransformMode(
+              transformMode === "translate" ? "none" : "translate",
+            )
+          }
           size="sm"
         >
           Translate
         </Button>
         <Button
-          variant={transformMode === 'rotate' ? 'default' : 'outline'}
-          onClick={() => setTransformMode(transformMode === 'rotate' ? 'none' : 'rotate')}
+          variant={transformMode === "rotate" ? "default" : "outline"}
+          onClick={() =>
+            setTransformMode(transformMode === "rotate" ? "none" : "rotate")
+          }
           size="sm"
         >
           Rotate
         </Button>
         <span className="ml-4 font-medium">Curve:</span>
         <Button
-          variant={transformCurveIndex === 0 ? 'default' : 'outline'}
+          variant={transformCurveIndex === 0 ? "default" : "outline"}
           onClick={() => setTransformCurveIndex(0)}
           size="sm"
         >
           Source
         </Button>
         <Button
-          variant={transformCurveIndex === 1 ? 'default' : 'outline'}
+          variant={transformCurveIndex === 1 ? "default" : "outline"}
           onClick={() => setTransformCurveIndex(1)}
           size="sm"
         >

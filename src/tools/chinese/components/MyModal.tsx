@@ -44,7 +44,9 @@ const MyModal: React.FC<MyModalProps> = ({
   relativeTimes,
   history,
 }) => {
-  const [activeTab, setActiveTab] = useState<"character" | "pinyin">("character");
+  const [activeTab, setActiveTab] = useState<"character" | "pinyin">(
+    "character",
+  );
   const numSentences = useSelector(
     store,
     (state) => state.context.sentences.length,

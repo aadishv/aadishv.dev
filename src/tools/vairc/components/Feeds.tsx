@@ -14,9 +14,13 @@ interface FeedProps {
 }
 
 // Define our window components for the layout
-export const ColorFeed: React.FC<FeedProps> = ({latestDetections, serverConfig, replayData}) => {
-  console.log('ColorFeed render:', { replayData: !!replayData, serverConfig });
-  
+export const ColorFeed: React.FC<FeedProps> = ({
+  latestDetections,
+  serverConfig,
+  replayData,
+}) => {
+  console.log("ColorFeed render:", { replayData: !!replayData, serverConfig });
+
   return (
     <div className="w-full h-full flex items-center justify-center">
       <DetectionCanvas
@@ -33,9 +37,13 @@ export const ColorFeed: React.FC<FeedProps> = ({latestDetections, serverConfig, 
   );
 };
 
-export const DepthFeed: React.FC<FeedProps> = ({latestDetections, serverConfig, replayData}) => {
-  console.log('DepthFeed render:', { replayData: !!replayData, serverConfig });
-  
+export const DepthFeed: React.FC<FeedProps> = ({
+  latestDetections,
+  serverConfig,
+  replayData,
+}) => {
+  console.log("DepthFeed render:", { replayData: !!replayData, serverConfig });
+
   return (
     <div className="w-full h-full flex items-center justify-center">
       <DetectionCanvas
@@ -51,4 +59,3 @@ export const DepthFeed: React.FC<FeedProps> = ({latestDetections, serverConfig, 
     </div>
   );
 };
-

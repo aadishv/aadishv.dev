@@ -1,5 +1,11 @@
 import React from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import type { ElementType } from "./types";
 
 type TooltipPlacement = "left" | "right";
@@ -38,23 +44,25 @@ const ElementTooltip: React.FC<ElementTooltipProps> = ({
         pointerEvents: "auto",
       }}
       className="fixed z-50 h-[632px] mt-[16px] element-tooltip-card"
-      onClick={e => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
       tabIndex={-1}
       autoFocus
     >
       <CardHeader className="h-[120px] -mt-2">
-        <p className="font-mono text-xs">PRESS SPACE TO SWITCH LAYOUT, ESC TO HIDE</p>
+        <p className="font-mono text-xs">
+          PRESS SPACE TO SWITCH LAYOUT, ESC TO HIDE
+        </p>
         <CardTitle>
           {el.name} <span className="text-base font-normal">({el.symbol})</span>
         </CardTitle>
-        <CardDescription>
-          Atomic Number: {el.number}
-        </CardDescription>
+        <CardDescription>Atomic Number: {el.number}</CardDescription>
       </CardHeader>
       <CardContent className="h-[512px] overflow-y-auto">
         <div className="">
           <h6 className="underline decoration-blue-500">Electron config</h6>
-          <p>{el.electron_configuration_semantic || el.electron_configuration}</p>
+          <p>
+            {el.electron_configuration_semantic || el.electron_configuration}
+          </p>
         </div>
         <div className="">
           <h6 className="underline decoration-blue-500">Full config</h6>
@@ -62,7 +70,7 @@ const ElementTooltip: React.FC<ElementTooltipProps> = ({
         </div>
         <div className="">
           <h6 className="underline decoration-blue-500">Group</h6>
-          <p>{(el as unknown as  {"group": string})["group"] ?? "N/A"}</p>
+          <p>{(el as unknown as { group: string })["group"] ?? "N/A"}</p>
         </div>
         <div className="">
           <h6 className="underline decoration-blue-500">Atomic mass</h6>
@@ -71,7 +79,8 @@ const ElementTooltip: React.FC<ElementTooltipProps> = ({
         <div className="">
           <h6 className="underline decoration-blue-500">Electronegativity</h6>
           <p>
-            {el.electronegativity_pauling !== undefined && el.electronegativity_pauling !== null
+            {el.electronegativity_pauling !== undefined &&
+            el.electronegativity_pauling !== null
               ? el.electronegativity_pauling
               : "N/A"}
           </p>
@@ -85,9 +94,12 @@ const ElementTooltip: React.FC<ElementTooltipProps> = ({
           </p>
         </div>
         <div className="">
-          <h6 className="underline decoration-blue-500">Oxidation states (extended)</h6>
+          <h6 className="underline decoration-blue-500">
+            Oxidation states (extended)
+          </h6>
           <p>
-            {Array.isArray(el.oxistates_extended) && el.oxistates_extended.length > 0
+            {Array.isArray(el.oxistates_extended) &&
+            el.oxistates_extended.length > 0
               ? el.oxistates_extended.join(", ")
               : "N/A"}
           </p>

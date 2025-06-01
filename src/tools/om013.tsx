@@ -18,7 +18,10 @@ function renderWithKatex(element: HTMLElement, raw: string) {
   // Replace $$...$$ (display math)
   html = html.replace(/\$\$([^$]+)\$\$/g, (_, math) => {
     try {
-      return katex.renderToString(math, { displayMode: true, throwOnError: false });
+      return katex.renderToString(math, {
+        displayMode: true,
+        throwOnError: false,
+      });
     } catch (e: any) {
       return `<span class="text-red-500">${e.message}</span>`;
     }
@@ -27,7 +30,10 @@ function renderWithKatex(element: HTMLElement, raw: string) {
   // Replace $...$ (inline math), but not inside already-rendered display math
   html = html.replace(/\$([^$\n]+)\$/g, (_, math) => {
     try {
-      return katex.renderToString(math, { displayMode: false, throwOnError: false });
+      return katex.renderToString(math, {
+        displayMode: false,
+        throwOnError: false,
+      });
     } catch (e: any) {
       return `<span class="text-red-500">${e.message}</span>`;
     }
@@ -46,83 +52,312 @@ type Flashcard = {
 
 const allFlashcardsData: Flashcard[] = [
   // Definitions
-  { name: "sin⁻¹ or arcsin", detail: "The inverse of the sine function restricted to $$[-\\pi/2, \\pi/2]$$." },
-  { name: "cos⁻¹ or arccos", detail: "The inverse of the cosine function restricted to $$[0, \\pi]$$." },
-  { name: "tan⁻¹ or arctan", detail: "The inverse of the tangent function restricted to $$(-\\pi/2, \\pi/2)$$." },
+  {
+    name: "sin⁻¹ or arcsin",
+    detail:
+      "The inverse of the sine function restricted to $$[-\\pi/2, \\pi/2]$$.",
+  },
+  {
+    name: "cos⁻¹ or arccos",
+    detail: "The inverse of the cosine function restricted to $$[0, \\pi]$$.",
+  },
+  {
+    name: "tan⁻¹ or arctan",
+    detail:
+      "The inverse of the tangent function restricted to $$(-\\pi/2, \\pi/2)$$.",
+  },
   // Values
-  { name: "Asymptotes of csc/cot", detail: "Vertical asymptotes occur at $$x = n\\pi$$, where n is an integer." },
-  { name: "Asymptotes of sec/tan", detail: "Vertical asymptotes occur at $$x = (n+\\frac{1}{2})\\pi$$, where n is an integer." },
+  {
+    name: "Asymptotes of csc/cot",
+    detail:
+      "Vertical asymptotes occur at $$x = n\\pi$$, where n is an integer.",
+  },
+  {
+    name: "Asymptotes of sec/tan",
+    detail:
+      "Vertical asymptotes occur at $$x = (n+\\frac{1}{2})\\pi$$, where n is an integer.",
+  },
   // Translations
-  { name: "General form (sin/cos)", detail: "$$y = a \\sin(b(x-d)) + h$$ or $$y = a \\cos(b(x-d)) + h$$" },
-  { name: "Amplitude", detail: "The amplitude is $$|a|$$. It's half the distance between the maximum and minimum values." },
-  { name: "Vertical shift", detail: "The vertical shift is $$h$$. This is the new midline of the function." },
-  { name: "Period length (sine/cosine/secant/cosecant)", detail: "The period is $$\\frac{2\\pi}{|b|}$$." },
-  { name: "Period length (tangent/cotangent)", detail: "The period is $$\\frac{\\pi}{|b|}$$." },
-  { name: "Phase shift (horizontal shift)", detail: "The phase shift is $$d$$." },
-  { name: "Transformation of points for $y=a f(b(x-d))+h$", detail: "A point $(x,y)$ on $f(x)$ transforms to $$(\\frac{x}{b}+d, ay+h)$$. " },
+  {
+    name: "General form (sin/cos)",
+    detail: "$$y = a \\sin(b(x-d)) + h$$ or $$y = a \\cos(b(x-d)) + h$$",
+  },
+  {
+    name: "Amplitude",
+    detail:
+      "The amplitude is $$|a|$$. It's half the distance between the maximum and minimum values.",
+  },
+  {
+    name: "Vertical shift",
+    detail:
+      "The vertical shift is $$h$$. This is the new midline of the function.",
+  },
+  {
+    name: "Period length (sine/cosine/secant/cosecant)",
+    detail: "The period is $$\\frac{2\\pi}{|b|}$$.",
+  },
+  {
+    name: "Period length (tangent/cotangent)",
+    detail: "The period is $$\\frac{\\pi}{|b|}$$.",
+  },
+  {
+    name: "Phase shift (horizontal shift)",
+    detail: "The phase shift is $$d$$.",
+  },
+  {
+    name: "Transformation of points for $y=a f(b(x-d))+h$",
+    detail:
+      "A point $(x,y)$ on $f(x)$ transforms to $$(\\frac{x}{b}+d, ay+h)$$. ",
+  },
   // Identities
-  { name: "Pythagorean Identity (Primary)", detail: "$$\\sin^2\\theta + \\cos^2\\theta = 1$$" },
-  { name: "Pythagorean Identity (Derived for tan/sec)", detail: "$$\\tan^2\\theta + 1 = \\sec^2\\theta$$" },
-  { name: "Pythagorean Identity (Derived for cot/csc)", detail: "$$1 + \\cot^2\\theta = \\csc^2\\theta$$" },
-  { name: "cos(A+B) Sum Formula", detail: "$$\\cos(A+B) = \\cos A \\cos B - \\sin A \\sin B$$" },
-  { name: "sin(A+B) Sum Formula", detail: "$$\\sin(A+B) = \\sin A \\cos B + \\cos A \\sin B$$" },
-  { name: "tan(A+B) Sum Formula", detail: "$$\\tan(A+B) = \\frac{\\tan A + \\tan B}{1 - \\tan A \\tan B}$$" },
-  { name: "cos(A-B) Difference Formula", detail: "$$\\cos(A-B) = \\cos A \\cos B + \\sin A \\sin B$$" },
-  { name: "sin(A-B) Difference Formula", detail: "$$\\sin(A-B) = \\sin A \\cos B - \\cos A \\sin B$$" },
-  { name: "tan(A-B) Difference Formula", detail: "$$\\tan(A-B) = \\frac{\\tan A - \\tan B}{1 + \\tan A \\tan B}$$" },
-  { name: "sin(2A) Double-Angle Formula", detail: "$$\\sin(2A) = 2 \\sin A \\cos A$$" },
-  { name: "cos(2A) Double-Angle Formula (main)", detail: "$$\\cos(2A) = \\cos^2 A - \\sin^2 A$$" },
-  { name: "cos(2A) Double-Angle Formula (in terms of cos)", detail: "$$\\cos(2A) = 2 \\cos^2 A - 1$$" },
-  { name: "cos(2A) Double-Angle Formula (in terms of sin)", detail: "$$\\cos(2A) = 1 - 2 \\sin^2 A$$" },
-  { name: "tan(2A) Double-Angle Formula", detail: "$$\\tan(2A) = \\frac{2 \\tan A}{1 - \\tan^2 A}$$" },
+  {
+    name: "Pythagorean Identity (Primary)",
+    detail: "$$\\sin^2\\theta + \\cos^2\\theta = 1$$",
+  },
+  {
+    name: "Pythagorean Identity (Derived for tan/sec)",
+    detail: "$$\\tan^2\\theta + 1 = \\sec^2\\theta$$",
+  },
+  {
+    name: "Pythagorean Identity (Derived for cot/csc)",
+    detail: "$$1 + \\cot^2\\theta = \\csc^2\\theta$$",
+  },
+  {
+    name: "cos(A+B) Sum Formula",
+    detail: "$$\\cos(A+B) = \\cos A \\cos B - \\sin A \\sin B$$",
+  },
+  {
+    name: "sin(A+B) Sum Formula",
+    detail: "$$\\sin(A+B) = \\sin A \\cos B + \\cos A \\sin B$$",
+  },
+  {
+    name: "tan(A+B) Sum Formula",
+    detail: "$$\\tan(A+B) = \\frac{\\tan A + \\tan B}{1 - \\tan A \\tan B}$$",
+  },
+  {
+    name: "cos(A-B) Difference Formula",
+    detail: "$$\\cos(A-B) = \\cos A \\cos B + \\sin A \\sin B$$",
+  },
+  {
+    name: "sin(A-B) Difference Formula",
+    detail: "$$\\sin(A-B) = \\sin A \\cos B - \\cos A \\sin B$$",
+  },
+  {
+    name: "tan(A-B) Difference Formula",
+    detail: "$$\\tan(A-B) = \\frac{\\tan A - \\tan B}{1 + \\tan A \\tan B}$$",
+  },
+  {
+    name: "sin(2A) Double-Angle Formula",
+    detail: "$$\\sin(2A) = 2 \\sin A \\cos A$$",
+  },
+  {
+    name: "cos(2A) Double-Angle Formula (main)",
+    detail: "$$\\cos(2A) = \\cos^2 A - \\sin^2 A$$",
+  },
+  {
+    name: "cos(2A) Double-Angle Formula (in terms of cos)",
+    detail: "$$\\cos(2A) = 2 \\cos^2 A - 1$$",
+  },
+  {
+    name: "cos(2A) Double-Angle Formula (in terms of sin)",
+    detail: "$$\\cos(2A) = 1 - 2 \\sin^2 A$$",
+  },
+  {
+    name: "tan(2A) Double-Angle Formula",
+    detail: "$$\\tan(2A) = \\frac{2 \\tan A}{1 - \\tan^2 A}$$",
+  },
   // Law of Sines & Cosines
-  { name: "Law of Sines", detail: "In any triangle ABC, $$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$." },
-  { name: "Area of Triangle (using sine)", detail: "Area $$= \\frac{1}{2}ab \\sin C = \\frac{1}{2}bc \\sin A = \\frac{1}{2}ac \\sin B$$." },
-  { name: "Ambiguous Case (Law of Sines)", detail: "Occurs with SSA (Side-Side-Angle). Zero, one, or two triangles possible. Check height (h = b sin A) against side a. See <a href='https://www.varsitytutors.com/hotmath/hotmath_help/topics/ambiguous-case' target='_blank' rel='noopener noreferrer' class='text-sky-600 hover:text-sky-700 underline font-medium'>details here</a>." },
-  { name: "Law of Cosines (solve for side)", detail: "$$c^2 = a^2 + b^2 - 2ab \\cos C$$" },
-  { name: "Law of Cosines (solve for angle)", detail: "$$\\cos C = \\frac{a^2 + b^2 - c^2}{2ab}$$" },
+  {
+    name: "Law of Sines",
+    detail:
+      "In any triangle ABC, $$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$.",
+  },
+  {
+    name: "Area of Triangle (using sine)",
+    detail:
+      "Area $$= \\frac{1}{2}ab \\sin C = \\frac{1}{2}bc \\sin A = \\frac{1}{2}ac \\sin B$$.",
+  },
+  {
+    name: "Ambiguous Case (Law of Sines)",
+    detail:
+      "Occurs with SSA (Side-Side-Angle). Zero, one, or two triangles possible. Check height (h = b sin A) against side a. See <a href='https://www.varsitytutors.com/hotmath/hotmath_help/topics/ambiguous-case' target='_blank' rel='noopener noreferrer' class='text-sky-600 hover:text-sky-700 underline font-medium'>details here</a>.",
+  },
+  {
+    name: "Law of Cosines (solve for side)",
+    detail: "$$c^2 = a^2 + b^2 - 2ab \\cos C$$",
+  },
+  {
+    name: "Law of Cosines (solve for angle)",
+    detail: "$$\\cos C = \\frac{a^2 + b^2 - c^2}{2ab}$$",
+  },
   // Vectors
-  { name: "Vector Representation (component form)", detail: "A vector from origin to (a,b) is $$\\mathbf{v} = \\langle a, b \\rangle$$." },
-  { name: "Vector Magnitude", detail: "Magnitude of $$\\mathbf{v} = \\langle a, b \\rangle$$ is $$||\\mathbf{v}|| = \\sqrt{a^2 + b^2}$$." },
-  { name: "Vector Direction Angle (θ)", detail: "For $$\\mathbf{v} = \\langle a, b \\rangle$$, $$\\tan \\theta = \\frac{b}{a}$$. Adjust quadrant based on signs of a and b." },
-  { name: "Dot Product (Scalar Product)", detail: "For $$\\mathbf{u} = \\langle u_1, u_2 \\rangle$$ and $$\\mathbf{v} = \\langle v_1, v_2 \\rangle$$, $$\\mathbf{u} \\cdot \\mathbf{v} = u_1 v_1 + u_2 v_2$$." },
-  { name: "Angle Between Two Vectors (u, v)", detail: "$$\\cos\\theta = \\frac{\\mathbf{u} \\cdot \\mathbf{v}}{||\\mathbf{u}|| \\ ||\\mathbf{v}||}$$" },
+  {
+    name: "Vector Representation (component form)",
+    detail:
+      "A vector from origin to (a,b) is $$\\mathbf{v} = \\langle a, b \\rangle$$.",
+  },
+  {
+    name: "Vector Magnitude",
+    detail:
+      "Magnitude of $$\\mathbf{v} = \\langle a, b \\rangle$$ is $$||\\mathbf{v}|| = \\sqrt{a^2 + b^2}$$.",
+  },
+  {
+    name: "Vector Direction Angle (θ)",
+    detail:
+      "For $$\\mathbf{v} = \\langle a, b \\rangle$$, $$\\tan \\theta = \\frac{b}{a}$$. Adjust quadrant based on signs of a and b.",
+  },
+  {
+    name: "Dot Product (Scalar Product)",
+    detail:
+      "For $$\\mathbf{u} = \\langle u_1, u_2 \\rangle$$ and $$\\mathbf{v} = \\langle v_1, v_2 \\rangle$$, $$\\mathbf{u} \\cdot \\mathbf{v} = u_1 v_1 + u_2 v_2$$.",
+  },
+  {
+    name: "Angle Between Two Vectors (u, v)",
+    detail:
+      "$$\\cos\\theta = \\frac{\\mathbf{u} \\cdot \\mathbf{v}}{||\\mathbf{u}|| \\ ||\\mathbf{v}||}$$",
+  },
   // Complex Numbers (Trigonometric Form)
-  { name: "Trigonometric Form of Complex Number", detail: "$$z = r(\\cos\\theta + i\\sin\\theta) = r \\text{ cis } \\theta$$, where r is modulus, θ is argument." },
-  { name: "Product of Complex Numbers (Trig Form)", detail: "$$z_1 z_2 = r_1 r_2 [\\cos(\\theta_1+\\theta_2) + i\\sin(\\theta_1+\\theta_2)] = r_1 r_2 \\text{ cis}(\\theta_1+\\theta_2)$$." },
-  { name: "Quotient of Complex Numbers (Trig Form)", detail: "$$\\frac{z_1}{z_2} = \\frac{r_1}{r_2} [\\cos(\\theta_1-\\theta_2) + i\\sin(\\theta_1-\\theta_2)] = \\frac{r_1}{r_2} \\text{ cis}(\\theta_1-\\theta_2)$$." },
-  { name: "De Moivre's Theorem", detail: "For a complex number $$z = r(\\cos\\theta + i\\sin\\theta)$$, $$z^n = r^n(\\cos(n\\theta) + i\\sin(n\\theta)) = r^n \\text{ cis}(n\\theta)$$." },
-  { name: "nth Roots of a Complex Number", detail: "The n distinct nth roots of $$z = r(\\cos\\theta + i\\sin\\theta)$$ are $$\\sqrt[n]{r} \\left[ \\cos\\left(\\frac{\\theta + 2k\\pi}{n}\\right) + i\\sin\\left(\\frac{\\theta + 2k\\pi}{n}\\right) \\right]$$ for $$k = 0, 1, 2, \\dots, n-1$$." },
+  {
+    name: "Trigonometric Form of Complex Number",
+    detail:
+      "$$z = r(\\cos\\theta + i\\sin\\theta) = r \\text{ cis } \\theta$$, where r is modulus, θ is argument.",
+  },
+  {
+    name: "Product of Complex Numbers (Trig Form)",
+    detail:
+      "$$z_1 z_2 = r_1 r_2 [\\cos(\\theta_1+\\theta_2) + i\\sin(\\theta_1+\\theta_2)] = r_1 r_2 \\text{ cis}(\\theta_1+\\theta_2)$$.",
+  },
+  {
+    name: "Quotient of Complex Numbers (Trig Form)",
+    detail:
+      "$$\\frac{z_1}{z_2} = \\frac{r_1}{r_2} [\\cos(\\theta_1-\\theta_2) + i\\sin(\\theta_1-\\theta_2)] = \\frac{r_1}{r_2} \\text{ cis}(\\theta_1-\\theta_2)$$.",
+  },
+  {
+    name: "De Moivre's Theorem",
+    detail:
+      "For a complex number $$z = r(\\cos\\theta + i\\sin\\theta)$$, $$z^n = r^n(\\cos(n\\theta) + i\\sin(n\\theta)) = r^n \\text{ cis}(n\\theta)$$.",
+  },
+  {
+    name: "nth Roots of a Complex Number",
+    detail:
+      "The n distinct nth roots of $$z = r(\\cos\\theta + i\\sin\\theta)$$ are $$\\sqrt[n]{r} \\left[ \\cos\\left(\\frac{\\theta + 2k\\pi}{n}\\right) + i\\sin\\left(\\frac{\\theta + 2k\\pi}{n}\\right) \\right]$$ for $$k = 0, 1, 2, \\dots, n-1$$.",
+  },
   // Polar Coordinates
-  { name: "Polar Coordinates Representation", detail: "A point P is represented by $$(r, \\theta)$$, where r is distance from origin, θ is angle from polar axis." },
-  { name: "Convert Polar to Rectangular (x)", detail: "$$x = r \\cos\\theta$$" },
-  { name: "Convert Polar to Rectangular (y)", detail: "$$y = r \\sin\\theta$$" },
-  { name: "Convert Rectangular to Polar (r)", detail: "$$r = \\sqrt{x^2+y^2}$$ (modulus)" },
-  { name: "Convert Rectangular to Polar (θ)", detail: "$$\\tan\\theta = \\frac{y}{x}$$ (argument, adjust quadrant)" },
+  {
+    name: "Polar Coordinates Representation",
+    detail:
+      "A point P is represented by $$(r, \\theta)$$, where r is distance from origin, θ is angle from polar axis.",
+  },
+  {
+    name: "Convert Polar to Rectangular (x)",
+    detail: "$$x = r \\cos\\theta$$",
+  },
+  {
+    name: "Convert Polar to Rectangular (y)",
+    detail: "$$y = r \\sin\\theta$$",
+  },
+  {
+    name: "Convert Rectangular to Polar (r)",
+    detail: "$$r = \\sqrt{x^2+y^2}$$ (modulus)",
+  },
+  {
+    name: "Convert Rectangular to Polar (θ)",
+    detail: "$$\\tan\\theta = \\frac{y}{x}$$ (argument, adjust quadrant)",
+  },
   // Conic Sections - Parabolas
-  { name: "Parabola Definition", detail: "Set of all points in a plane equidistant from a fixed point (focus) and a fixed line (directrix)." },
-  { name: "Parabola Equation (Vertical, vertex at origin)", detail: "$$x^2 = 4py$$. Focus: $$(0, p)$$. Directrix: $$y = -p$$." },
-  { name: "Parabola Equation (Horizontal, vertex at origin)", detail: "$$y^2 = 4px$$. Focus: $$(p, 0)$$. Directrix: $$x = -p$$." },
-  { name: "Parabola Equation (Vertical, vertex (h,k))", detail: "$$(x-h)^2 = 4p(y-k)$$. Focus: $$(h, k+p)$$. Directrix: $$y = k-p$$." },
-  { name: "Parabola Equation (Horizontal, vertex (h,k))", detail: "$$(y-k)^2 = 4p(x-h)$$. Focus: $$(h+p, k)$$. Directrix: $$x = h-p$$." },
+  {
+    name: "Parabola Definition",
+    detail:
+      "Set of all points in a plane equidistant from a fixed point (focus) and a fixed line (directrix).",
+  },
+  {
+    name: "Parabola Equation (Vertical, vertex at origin)",
+    detail: "$$x^2 = 4py$$. Focus: $$(0, p)$$. Directrix: $$y = -p$$.",
+  },
+  {
+    name: "Parabola Equation (Horizontal, vertex at origin)",
+    detail: "$$y^2 = 4px$$. Focus: $$(p, 0)$$. Directrix: $$x = -p$$.",
+  },
+  {
+    name: "Parabola Equation (Vertical, vertex (h,k))",
+    detail:
+      "$$(x-h)^2 = 4p(y-k)$$. Focus: $$(h, k+p)$$. Directrix: $$y = k-p$$.",
+  },
+  {
+    name: "Parabola Equation (Horizontal, vertex (h,k))",
+    detail:
+      "$$(y-k)^2 = 4p(x-h)$$. Focus: $$(h+p, k)$$. Directrix: $$x = h-p$$.",
+  },
   // Conic Sections - Ellipses
-  { name: "Ellipse Definition", detail: "Set of all points P in a plane such that the sum of the distances from P to two fixed points (foci) is constant ($$d(P,F_1) + d(P,F_2) = 2a$$)." },
-  { name: "Ellipse Equation (Horizontal major axis, center (h,k))", detail: "$$\\frac{(x-h)^2}{a^2} + \\frac{(y-k)^2}{b^2} = 1$$, where $$a>b$$." },
-  { name: "Ellipse Equation (Vertical major axis, center (h,k))", detail: "$$\\frac{(x-h)^2}{b^2} + \\frac{(y-k)^2}{a^2} = 1$$, where $$a>b$$." },
-  { name: "Ellipse Foci Relationship", detail: "$$c^2 = a^2 - b^2$$, where c is distance from center to focus, a is distance from center to vertex on major axis." },
-  { name: "Ellipse Eccentricity", detail: "$$e = \\frac{c}{a}$$, where $$0 \\le e < 1$$. Closer to 0 is more circular." },
+  {
+    name: "Ellipse Definition",
+    detail:
+      "Set of all points P in a plane such that the sum of the distances from P to two fixed points (foci) is constant ($$d(P,F_1) + d(P,F_2) = 2a$$).",
+  },
+  {
+    name: "Ellipse Equation (Horizontal major axis, center (h,k))",
+    detail:
+      "$$\\frac{(x-h)^2}{a^2} + \\frac{(y-k)^2}{b^2} = 1$$, where $$a>b$$.",
+  },
+  {
+    name: "Ellipse Equation (Vertical major axis, center (h,k))",
+    detail:
+      "$$\\frac{(x-h)^2}{b^2} + \\frac{(y-k)^2}{a^2} = 1$$, where $$a>b$$.",
+  },
+  {
+    name: "Ellipse Foci Relationship",
+    detail:
+      "$$c^2 = a^2 - b^2$$, where c is distance from center to focus, a is distance from center to vertex on major axis.",
+  },
+  {
+    name: "Ellipse Eccentricity",
+    detail:
+      "$$e = \\frac{c}{a}$$, where $$0 \\le e < 1$$. Closer to 0 is more circular.",
+  },
   // Conic Sections - Hyperbolas
-  { name: "Hyperbola Definition", detail: "Set of all points P in a plane such that the absolute difference of the distances from P to two fixed points (foci) is constant ($$|d(P,F_1) - d(P,F_2)| = 2a$$)." },
-  { name: "Hyperbola Equation (Horizontal transverse axis, center (h,k))", detail: "$$\\frac{(x-h)^2}{a^2} - \\frac{(y-k)^2}{b^2} = 1$$." },
-  { name: "Hyperbola Equation (Vertical transverse axis, center (h,k))", detail: "$$\\frac{(y-k)^2}{a^2} - \\frac{(x-h)^2}{b^2} = 1$$." },
-  { name: "Hyperbola Foci Relationship", detail: "$$c^2 = a^2 + b^2$$, where c is distance from center to focus." },
-  { name: "Hyperbola Asymptotes (Horizontal transverse axis)", detail: "$$y-k = \\pm \\frac{b}{a}(x-h)$$." },
-  { name: "Hyperbola Asymptotes (Vertical transverse axis)", detail: "$$y-k = \\pm \\frac{a}{b}(x-h)$$." },
-  { name: "Hyperbola Eccentricity", detail: "$$e = \\frac{c}{a}$$, where $$e > 1$$." },
+  {
+    name: "Hyperbola Definition",
+    detail:
+      "Set of all points P in a plane such that the absolute difference of the distances from P to two fixed points (foci) is constant ($$|d(P,F_1) - d(P,F_2)| = 2a$$).",
+  },
+  {
+    name: "Hyperbola Equation (Horizontal transverse axis, center (h,k))",
+    detail: "$$\\frac{(x-h)^2}{a^2} - \\frac{(y-k)^2}{b^2} = 1$$.",
+  },
+  {
+    name: "Hyperbola Equation (Vertical transverse axis, center (h,k))",
+    detail: "$$\\frac{(y-k)^2}{a^2} - \\frac{(x-h)^2}{b^2} = 1$$.",
+  },
+  {
+    name: "Hyperbola Foci Relationship",
+    detail: "$$c^2 = a^2 + b^2$$, where c is distance from center to focus.",
+  },
+  {
+    name: "Hyperbola Asymptotes (Horizontal transverse axis)",
+    detail: "$$y-k = \\pm \\frac{b}{a}(x-h)$$.",
+  },
+  {
+    name: "Hyperbola Asymptotes (Vertical transverse axis)",
+    detail: "$$y-k = \\pm \\frac{a}{b}(x-h)$$.",
+  },
+  {
+    name: "Hyperbola Eccentricity",
+    detail: "$$e = \\frac{c}{a}$$, where $$e > 1$$.",
+  },
   // Rotation of Axes
-  { name: "Rotation Formula for x", detail: "$$x = x'\\cos\\theta - y'\\sin\\theta$$" },
-  { name: "Rotation Formula for y", detail: "$$y = x'\\sin\\theta + y'\\cos\\theta$$" },
-  { name: "Angle of Rotation to Eliminate xy-term", detail: "For $$Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0$$, find θ such that $$\\cot(2\\theta) = \\frac{A-C}{B}$$ (if B≠0)." }
+  {
+    name: "Rotation Formula for x",
+    detail: "$$x = x'\\cos\\theta - y'\\sin\\theta$$",
+  },
+  {
+    name: "Rotation Formula for y",
+    detail: "$$y = x'\\sin\\theta + y'\\cos\\theta$$",
+  },
+  {
+    name: "Angle of Rotation to Eliminate xy-term",
+    detail:
+      "For $$Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0$$, find θ such that $$\\cot(2\\theta) = \\frac{A-C}{B}$$ (if B≠0).",
+  },
 ];
 
 // Utility: shuffle array in-place
@@ -271,11 +506,7 @@ export function App() {
             <p className="mt-2 text-lg">
               You've reviewed all the trigonometry concepts!
             </p>
-            <Button
-              variant="default"
-              className="mt-6"
-              onClick={handleRestart}
-            >
+            <Button variant="default" className="mt-6" onClick={handleRestart}>
               Study Again
             </Button>
           </div>

@@ -19,7 +19,7 @@ interface CanvasProps {
   showCorrespondences: boolean;
   setIcpStates: React.Dispatch<React.SetStateAction<ICPState[]>>;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  transformMode: 'none' | 'translate' | 'rotate';
+  transformMode: "none" | "translate" | "rotate";
   transformCurveIndex: 0 | 1;
 }
 
@@ -47,7 +47,7 @@ const Canvas: React.FC<CanvasProps> = ({
   const isTransitioning = useRef(false);
 
   // Drag state for transform
-  const dragStart = useRef<{ x: number, y: number } | null>(null);
+  const dragStart = useRef<{ x: number; y: number } | null>(null);
   const originalPoints = useRef<Point[] | null>(null);
   const rotationStartAngle = useRef<number | null>(null);
   const centroid = useRef<Point | null>(null);
@@ -100,7 +100,14 @@ const Canvas: React.FC<CanvasProps> = ({
   // Update canvas when relevant state changes
   useEffect(() => {
     drawCanvas();
-  }, [curves, icpStates, currentStep, sourcePixelSpacing, targetPixelSpacing, showCorrespondences]);
+  }, [
+    curves,
+    icpStates,
+    currentStep,
+    sourcePixelSpacing,
+    targetPixelSpacing,
+    showCorrespondences,
+  ]);
 
   // Safety mechanism to ensure isTransitioning doesn't get stuck
   useEffect(() => {
@@ -117,7 +124,9 @@ const Canvas: React.FC<CanvasProps> = ({
   }, [icpStates]); // Only depend on `icpStates` because `currentStep` will rerender it anyway
 
   // Map mouse coordinates to logical [-80, 80] coordinates
-  const getMouseCoordinates = (e: React.MouseEvent<HTMLCanvasElement>): Point => {
+  const getMouseCoordinates = (
+    e: React.MouseEvent<HTMLCanvasElement>,
+  ): Point => {
     if (!canvasRef.current) return { x: 0, y: 0 };
 
     const canvas = canvasRef.current;
@@ -137,7 +146,7 @@ const Canvas: React.FC<CanvasProps> = ({
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current) return;
 
-    if (transformMode === 'none') {
+    if (transformMode === "none") {
       setIsDrawing(true);
       const point = getMouseCoordinates(e);
 
@@ -153,13 +162,18 @@ const Canvas: React.FC<CanvasProps> = ({
     }
 
     // Transform mode
-    if (transformMode === 'translate' || transformMode === 'rotate') {
+    if (transformMode === "translate" || transformMode === "rotate") {
       dragStart.current = getMouseCoordinates(e);
-      originalPoints.current = curves[transformCurveIndex].points.map(p => ({ ...p }));
-      if (transformMode === 'rotate') {
+      originalPoints.current = curves[transformCurveIndex].points.map((p) => ({
+        ...p,
+      }));
+      if (transformMode === "rotate") {
         centroid.current = calculateCentroid(originalPoints.current);
         const start = dragStart.current;
-        rotationStartAngle.current = Math.atan2(start.y - centroid.current.y, start.x - centroid.current.x);
+        rotationStartAngle.current = Math.atan2(
+          start.y - centroid.current.y,
+          start.x - centroid.current.x,
+        );
       }
       setIsDrawing(true);
     }
@@ -168,7 +182,7 @@ const Canvas: React.FC<CanvasProps> = ({
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDrawing || !canvasRef.current) return;
 
-    if (transformMode === 'none') {
+    if (transformMode === "none") {
       const point = getMouseCoordinates(e);
 
       setCurves((prev) => {
@@ -186,27 +200,43 @@ const Canvas: React.FC<CanvasProps> = ({
     if (!dragStart.current || !originalPoints.current) return;
     const current = getMouseCoordinates(e);
 
-    if (transformMode === 'translate') {
+    if (transformMode === "translate") {
       const dx = current.x - dragStart.current.x;
       const dy = current.y - dragStart.current.y;
-      setCurves(prev => {
+      setCurves((prev) => {
         const newCurves = [...prev];
         newCurves[transformCurveIndex] = {
           ...newCurves[transformCurveIndex],
-          points: originalPoints.current!.map(p => ({ x: p.x + dx, y: p.y + dy })),
+          points: originalPoints.current!.map((p) => ({
+            x: p.x + dx,
+            y: p.y + dy,
+          })),
         };
         return newCurves;
       });
-    } else if (transformMode === 'rotate' && centroid.current && rotationStartAngle.current !== null) {
-      const angleNow = Math.atan2(current.y - centroid.current.y, current.x - centroid.current.y + centroid.current.x - centroid.current.x);
+    } else if (
+      transformMode === "rotate" &&
+      centroid.current &&
+      rotationStartAngle.current !== null
+    ) {
+      const angleNow = Math.atan2(
+        current.y - centroid.current.y,
+        current.x -
+          centroid.current.y +
+          centroid.current.x -
+          centroid.current.x,
+      );
       // Correction: should be Math.atan2(current.y - centroid.current.y, current.x - centroid.current.x)
-      const correctedAngleNow = Math.atan2(current.y - centroid.current.y, current.x - centroid.current.x);
+      const correctedAngleNow = Math.atan2(
+        current.y - centroid.current.y,
+        current.x - centroid.current.x,
+      );
       const deltaAngle = correctedAngleNow - rotationStartAngle.current;
-      setCurves(prev => {
+      setCurves((prev) => {
         const newCurves = [...prev];
         newCurves[transformCurveIndex] = {
           ...newCurves[transformCurveIndex],
-          points: originalPoints.current!.map(p => {
+          points: originalPoints.current!.map((p) => {
             const dx = p.x - centroid.current!.x;
             const dy = p.y - centroid.current!.y;
             const cos = Math.cos(deltaAngle);
@@ -258,7 +288,12 @@ const Canvas: React.FC<CanvasProps> = ({
   };
 
   // Map logical [-80, 80] coordinates to canvas pixel coordinates
-  const logicalToCanvas = (x: number, y: number, width: number, height: number): { cx: number, cy: number } => {
+  const logicalToCanvas = (
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+  ): { cx: number; cy: number } => {
     const cx = ((x + 80) / 160) * width;
     const cy = height - ((y + 80) / 160) * height;
     return { cx, cy };
@@ -290,11 +325,21 @@ const Canvas: React.FC<CanvasProps> = ({
         ctx.strokeStyle = curve.color;
         ctx.lineWidth = curveLineWidth;
         ctx.beginPath();
-        const { cx: x0, cy: y0 } = logicalToCanvas(curve.points[0].x, curve.points[0].y, canvas.width, canvas.height);
+        const { cx: x0, cy: y0 } = logicalToCanvas(
+          curve.points[0].x,
+          curve.points[0].y,
+          canvas.width,
+          canvas.height,
+        );
         ctx.moveTo(x0, y0);
 
         for (let i = 1; i < curve.points.length; i++) {
-          const { cx, cy } = logicalToCanvas(curve.points[i].x, curve.points[i].y, canvas.width, canvas.height);
+          const { cx, cy } = logicalToCanvas(
+            curve.points[i].x,
+            curve.points[i].y,
+            canvas.width,
+            canvas.height,
+          );
           ctx.lineTo(cx, cy);
         }
         ctx.stroke();
@@ -307,7 +352,12 @@ const Canvas: React.FC<CanvasProps> = ({
           // Draw circles at each sample point
           ctx.fillStyle = curve.color;
           sampledPoints.forEach((point) => {
-            const { cx, cy } = logicalToCanvas(point.x, point.y, canvas.width, canvas.height);
+            const { cx, cy } = logicalToCanvas(
+              point.x,
+              point.y,
+              canvas.width,
+              canvas.height,
+            );
             ctx.beginPath();
             ctx.arc(cx, cy, circleRadius, 0, Math.PI * 2);
             ctx.fill();
@@ -363,11 +413,21 @@ const Canvas: React.FC<CanvasProps> = ({
       ctx.lineWidth = transformedCurveLineWidth;
       ctx.beginPath();
       if (curves[1].points.length > 0) {
-        const { cx: x0, cy: y0 } = logicalToCanvas(curves[1].points[0].x, curves[1].points[0].y, canvas.width, canvas.height);
+        const { cx: x0, cy: y0 } = logicalToCanvas(
+          curves[1].points[0].x,
+          curves[1].points[0].y,
+          canvas.width,
+          canvas.height,
+        );
         ctx.moveTo(x0, y0);
 
         for (let i = 1; i < curves[1].points.length; i++) {
-          const { cx, cy } = logicalToCanvas(curves[1].points[i].x, curves[1].points[i].y, canvas.width, canvas.height);
+          const { cx, cy } = logicalToCanvas(
+            curves[1].points[i].x,
+            curves[1].points[i].y,
+            canvas.width,
+            canvas.height,
+          );
           ctx.lineTo(cx, cy);
         }
       }
@@ -377,7 +437,12 @@ const Canvas: React.FC<CanvasProps> = ({
       const targetPoints = state.targetPoints;
       ctx.fillStyle = curves[1].color;
       targetPoints.forEach((point) => {
-        const { cx, cy } = logicalToCanvas(point.x, point.y, canvas.width, canvas.height);
+        const { cx, cy } = logicalToCanvas(
+          point.x,
+          point.y,
+          canvas.width,
+          canvas.height,
+        );
         ctx.beginPath();
         ctx.arc(cx, cy, circleRadius, 0, Math.PI * 2);
         ctx.fill();
@@ -396,11 +461,21 @@ const Canvas: React.FC<CanvasProps> = ({
       ctx.beginPath();
 
       if (transformedSourceCurve.length > 0) {
-        const { cx: x0, cy: y0 } = logicalToCanvas(transformedSourceCurve[0].x, transformedSourceCurve[0].y, canvas.width, canvas.height);
+        const { cx: x0, cy: y0 } = logicalToCanvas(
+          transformedSourceCurve[0].x,
+          transformedSourceCurve[0].y,
+          canvas.width,
+          canvas.height,
+        );
         ctx.moveTo(x0, y0);
 
         for (let i = 1; i < transformedSourceCurve.length; i++) {
-          const { cx, cy } = logicalToCanvas(transformedSourceCurve[i].x, transformedSourceCurve[i].y, canvas.width, canvas.height);
+          const { cx, cy } = logicalToCanvas(
+            transformedSourceCurve[i].x,
+            transformedSourceCurve[i].y,
+            canvas.width,
+            canvas.height,
+          );
           ctx.lineTo(cx, cy);
         }
       }
@@ -410,7 +485,12 @@ const Canvas: React.FC<CanvasProps> = ({
       const sourcePoints = state.transformedPoints;
       ctx.fillStyle = curves[0].color;
       sourcePoints.forEach((point) => {
-        const { cx, cy } = logicalToCanvas(point.x, point.y, canvas.width, canvas.height);
+        const { cx, cy } = logicalToCanvas(
+          point.x,
+          point.y,
+          canvas.width,
+          canvas.height,
+        );
         ctx.beginPath();
         ctx.arc(cx, cy, circleRadius, 0, Math.PI * 2);
         ctx.fill();
@@ -431,8 +511,18 @@ const Canvas: React.FC<CanvasProps> = ({
           if (srcIdx < sourcePoints.length && tgtIdx < targetPoints.length) {
             const srcPoint = sourcePoints[srcIdx];
             const tgtPoint = targetPoints[tgtIdx];
-            const { cx: srcX, cy: srcY } = logicalToCanvas(srcPoint.x, srcPoint.y, canvas.width, canvas.height);
-            const { cx: tgtX, cy: tgtY } = logicalToCanvas(tgtPoint.x, tgtPoint.y, canvas.width, canvas.height);
+            const { cx: srcX, cy: srcY } = logicalToCanvas(
+              srcPoint.x,
+              srcPoint.y,
+              canvas.width,
+              canvas.height,
+            );
+            const { cx: tgtX, cy: tgtY } = logicalToCanvas(
+              tgtPoint.x,
+              tgtPoint.y,
+              canvas.width,
+              canvas.height,
+            );
 
             ctx.beginPath();
             ctx.moveTo(srcX, srcY);
@@ -451,12 +541,24 @@ const Canvas: React.FC<CanvasProps> = ({
     <div
       ref={canvasContainerRef}
       className="relative border rounded-md overflow-hidden flex items-center justify-center"
-      style={{ aspectRatio: "1 / 1", width: "100%", maxWidth: "700px", maxHeight: "700px", minHeight: "400px", margin: "0 auto" }}
+      style={{
+        aspectRatio: "1 / 1",
+        width: "100%",
+        maxWidth: "700px",
+        maxHeight: "700px",
+        minHeight: "400px",
+        margin: "0 auto",
+      }}
     >
       <canvas
         ref={canvasRef}
         className="bg-background cursor-crosshair"
-        style={{ display: "block", width: "100%", height: "100%", aspectRatio: "1 / 1" }}
+        style={{
+          display: "block",
+          width: "100%",
+          height: "100%",
+          aspectRatio: "1 / 1",
+        }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}

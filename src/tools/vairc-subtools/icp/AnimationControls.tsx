@@ -40,14 +40,20 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
 
       if (frame < icpStates.length - 1) {
         // Faster playback: 60ms per frame
-        animationRef.current = window.setTimeout(animate, 60) as unknown as number;
+        animationRef.current = window.setTimeout(
+          animate,
+          60,
+        ) as unknown as number;
       } else {
         setIsRunning(false);
       }
     };
 
     if (frame < icpStates.length - 1) {
-      animationRef.current = window.setTimeout(animate, 60) as unknown as number;
+      animationRef.current = window.setTimeout(
+        animate,
+        60,
+      ) as unknown as number;
     }
   };
 
@@ -109,7 +115,12 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
           />
 
           <div className="flex justify-center space-x-2">
-            <Button variant="outline" size="icon" onClick={resetAnimation} disabled={icpStates.length === 0}>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={resetAnimation}
+              disabled={icpStates.length === 0}
+            >
               <RotateCcw className="h-4 w-4" />
             </Button>
             <Button
@@ -126,13 +137,19 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
               onClick={isRunning ? stopAnimation : startAnimation}
               disabled={icpStates.length === 0}
             >
-              {isRunning ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+              {isRunning ? (
+                <Pause className="h-4 w-4" />
+              ) : (
+                <Play className="h-4 w-4" />
+              )}
             </Button>
             <Button
               variant="outline"
               size="icon"
               onClick={stepForward}
-              disabled={currentStep === icpStates.length - 1 || icpStates.length === 0}
+              disabled={
+                currentStep === icpStates.length - 1 || icpStates.length === 0
+              }
             >
               <StepForward className="h-4 w-4" />
             </Button>

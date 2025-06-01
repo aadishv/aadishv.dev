@@ -3,7 +3,7 @@ import type { Point } from "./types";
 
 export function copyToClipboard(data: Point[]) {
   const header = "x\ty\n";
-  const csv = data.map(row => `${row.x}\t${row.y}`).join('\n');
+  const csv = data.map((row) => `${row.x}\t${row.y}`).join("\n");
   const text = header + csv;
   navigator.clipboard.writeText(text);
 }
@@ -20,13 +20,13 @@ export const samplePoints = (curve: Point[], pixelSpacing: number): Point[] => {
 
   // Iterate through each segment of the curve
   for (let i = 1; i < curve.length; i++) {
-    const segmentStart = curve[i-1];
+    const segmentStart = curve[i - 1];
     const segmentEnd = curve[i];
 
     // Calculate segment length
     const segmentLength = Math.sqrt(
       Math.pow(segmentEnd.x - segmentStart.x, 2) +
-      Math.pow(segmentEnd.y - segmentStart.y, 2)
+        Math.pow(segmentEnd.y - segmentStart.y, 2),
     );
 
     let remainingDistanceInSegment = segmentLength;
@@ -66,16 +66,16 @@ export const samplePoints = (curve: Point[], pixelSpacing: number): Point[] => {
   const lastPoint = curve[curve.length - 1];
   const lastAddedIndex = result.length - 1;
 
-  if (lastAddedIndex >= 0 &&
+  if (
+    lastAddedIndex >= 0 &&
     (Math.abs(result[lastAddedIndex].x - lastPoint.x) > 0.001 ||
-     Math.abs(result[lastAddedIndex].y - lastPoint.y) > 0.001)) {
+      Math.abs(result[lastAddedIndex].y - lastPoint.y) > 0.001)
+  ) {
     result.push({ ...lastPoint });
   }
 
   return result;
 };
-
-
 
 // Find closest point
 export const findClosestPoint = (point: Point, points: Point[]): number => {
@@ -83,7 +83,9 @@ export const findClosestPoint = (point: Point, points: Point[]): number => {
   let minIndex = 0;
 
   for (let i = 0; i < points.length; i++) {
-    const dist = Math.sqrt(Math.pow(point.x - points[i].x, 2) + Math.pow(point.y - points[i].y, 2));
+    const dist = Math.sqrt(
+      Math.pow(point.x - points[i].x, 2) + Math.pow(point.y - points[i].y, 2),
+    );
 
     if (dist < minDist) {
       minDist = dist;
@@ -98,7 +100,10 @@ export const findClosestPoint = (point: Point, points: Point[]): number => {
 export const calculateCentroid = (points: Point[]): Point => {
   if (points.length === 0) return { x: 0, y: 0 };
 
-  const sum = points.reduce((acc, point) => ({ x: acc.x + point.x, y: acc.y + point.y }), { x: 0, y: 0 });
+  const sum = points.reduce(
+    (acc, point) => ({ x: acc.x + point.x, y: acc.y + point.y }),
+    { x: 0, y: 0 },
+  );
 
   return {
     x: sum.x / points.length,
@@ -107,7 +112,11 @@ export const calculateCentroid = (points: Point[]): Point => {
 };
 
 // Apply transformation to a single point
-export const applyTransformationToPoint = (point: Point, rotation: number, translation: Point): Point => {
+export const applyTransformationToPoint = (
+  point: Point,
+  rotation: number,
+  translation: Point,
+): Point => {
   const cos = Math.cos(rotation);
   const sin = Math.sin(rotation);
 
@@ -118,8 +127,14 @@ export const applyTransformationToPoint = (point: Point, rotation: number, trans
 };
 
 // Apply transformation to an array of points
-export const applyTransformation = (points: Point[], rotation: number, translation: Point): Point[] => {
-  return points.map((point) => applyTransformationToPoint(point, rotation, translation));
+export const applyTransformation = (
+  points: Point[],
+  rotation: number,
+  translation: Point,
+): Point[] => {
+  return points.map((point) =>
+    applyTransformationToPoint(point, rotation, translation),
+  );
 };
 
 // Calculate mean squared error
@@ -129,7 +144,9 @@ export const calculateError = (points1: Point[], points2: Point[]): number => {
 
   let sum = 0;
   for (let i = 0; i < points1.length; i++) {
-    sum += Math.pow(points1[i].x - points2[i].x, 2) + Math.pow(points1[i].y - points2[i].y, 2);
+    sum +=
+      Math.pow(points1[i].x - points2[i].x, 2) +
+      Math.pow(points1[i].y - points2[i].y, 2);
   }
 
   return sum / points1.length;

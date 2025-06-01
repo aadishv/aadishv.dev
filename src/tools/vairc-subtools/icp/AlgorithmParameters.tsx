@@ -68,7 +68,9 @@ const AlgorithmParameters: React.FC<AlgorithmParametersProps> = ({
 
       {/* Source Pixel Spacing */}
       <div className="flex flex-col items-start gap-2 min-w-[180px]">
-        <label className="text-sm font-medium">Source Spacing: {sourcePixelSpacing}px</label>
+        <label className="text-sm font-medium">
+          Source Spacing: {sourcePixelSpacing}px
+        </label>
         <Slider
           value={[sourcePixelSpacing]}
           min={2}
@@ -80,7 +82,9 @@ const AlgorithmParameters: React.FC<AlgorithmParametersProps> = ({
 
       {/* Target Pixel Spacing */}
       <div className="flex flex-col items-start gap-2 min-w-[180px]">
-        <label className="text-sm font-medium">Target Spacing: {targetPixelSpacing}px</label>
+        <label className="text-sm font-medium">
+          Target Spacing: {targetPixelSpacing}px
+        </label>
         <Slider
           value={[targetPixelSpacing]}
           min={2}
@@ -92,7 +96,9 @@ const AlgorithmParameters: React.FC<AlgorithmParametersProps> = ({
 
       {/* Max Iterations */}
       <div className="flex flex-col items-start gap-2 min-w-[150px]">
-        <label className="text-sm font-medium">Max Iterations: {maxIterations}</label>
+        <label className="text-sm font-medium">
+          Max Iterations: {maxIterations}
+        </label>
         <Slider
           value={[maxIterations]}
           min={5}
@@ -123,11 +129,21 @@ const AlgorithmParameters: React.FC<AlgorithmParametersProps> = ({
       <div className="flex flex-col items-start gap-2 min-w-[320px] flex-1">
         <label className="text-sm font-medium">Actions</label>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={clearCurve} className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={clearCurve}
+            className="flex items-center gap-2"
+          >
             <Trash2 className="h-4 w-4" />
             Clear Current
           </Button>
-          <Button variant="outline" size="sm" onClick={clearAll} className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={clearAll}
+            className="flex items-center gap-2"
+          >
             <RotateCcw className="h-4 w-4" />
             Clear All
           </Button>
@@ -135,24 +151,46 @@ const AlgorithmParameters: React.FC<AlgorithmParametersProps> = ({
             onClick={runICP}
             className="flex items-center gap-2"
             size="sm"
-            disabled={curves[0].points.length < 2 || curves[1].points.length < 2}
+            disabled={
+              curves[0].points.length < 2 || curves[1].points.length < 2
+            }
           >
             <PenLine className="h-4 w-4" />
             Run ICP
           </Button>
-          <Button variant="outline" size="sm" onClick={() => copyToClipboard(curves[0].points)} className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => copyToClipboard(curves[0].points)}
+            className="flex items-center gap-2"
+          >
             <Copy className="h-4 w-4" />
             Copy Source
           </Button>
-          <Button variant="outline" size="sm" onClick={() => importFromClipboard(0)} className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => importFromClipboard(0)}
+            className="flex items-center gap-2"
+          >
             <ClipboardCheck className="h-4 w-4" />
             Import Source
           </Button>
-          <Button variant="outline" size="sm" onClick={() => copyToClipboard(curves[1].points)} className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => copyToClipboard(curves[1].points)}
+            className="flex items-center gap-2"
+          >
             <Copy className="h-4 w-4" />
             Copy Target
           </Button>
-          <Button variant="outline" size="sm" onClick={() => importFromClipboard(1)} className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => importFromClipboard(1)}
+            className="flex items-center gap-2"
+          >
             <ClipboardCheck className="h-4 w-4" />
             Import Target
           </Button>

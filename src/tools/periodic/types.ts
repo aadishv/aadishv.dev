@@ -84,7 +84,8 @@ export const parseFormula = (formula: string): ElementsDict => {
         const match = /^([A-Z][a-z]?)(\d*)/.exec(str.slice(i));
         if (!match) break;
         const [, element, count] = match;
-        elements[element] = (elements[element] || 0) + (count ? parseInt(count) : 1);
+        elements[element] =
+          (elements[element] || 0) + (count ? parseInt(count) : 1);
         i += element.length + (count ? count.length : 0);
       }
     }

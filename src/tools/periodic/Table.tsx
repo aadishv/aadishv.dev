@@ -4,7 +4,6 @@ import originalElements from "./periodic.json";
 import ElementSquare from "./ElementSquare";
 import ElementTooltip from "./ElementTooltip";
 
-
 const elements = originalElements as ElementType[];
 // Find the max xpos and ypos for grid sizing
 const maxX = Math.max(...elements.map((el: ElementType) => el.xpos));
@@ -35,12 +34,13 @@ const Table: React.FC<TableProps> = ({ elementRefs }) => {
 
   const handleElementClick = (
     e: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>,
-    el: ElementType
+    el: ElementType,
   ) => {
     const rect = (e.target as HTMLElement).getBoundingClientRect();
     const spaceLeft = rect.left;
     const spaceRight = window.innerWidth - rect.right;
-    let placement: "left" | "right" = spaceRight >= spaceLeft ? "right" : "left";
+    let placement: "left" | "right" =
+      spaceRight >= spaceLeft ? "right" : "left";
 
     // Use viewport coordinates for fixed positioning
     const top = rect.top;
@@ -55,14 +55,17 @@ const Table: React.FC<TableProps> = ({ elementRefs }) => {
   // Prevent tooltip from closing if focus moves into the tooltip
   const handleElementBlur = (e: React.FocusEvent<HTMLDivElement>) => {
     const nextFocused = e.relatedTarget as HTMLElement | null;
-    if (nextFocused && nextFocused.closest('.element-tooltip-card')) {
+    if (nextFocused && nextFocused.closest(".element-tooltip-card")) {
       // Focus is moving into the tooltip, don't close it
       return;
     }
     setTooltip(null);
   };
 
-  const handleElementKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, el: ElementType) => {
+  const handleElementKeyDown = (
+    e: React.KeyboardEvent<HTMLDivElement>,
+    el: ElementType,
+  ) => {
     if (e.key === "Escape") {
       setTooltip(null);
       if (gridRef.current) gridRef.current.focus();
@@ -70,11 +73,11 @@ const Table: React.FC<TableProps> = ({ elementRefs }) => {
     // Switch card position with spacebar if tooltip is open and focused
     if (e.key === " " && tooltip && tooltip.el.number === el.number) {
       e.preventDefault();
-      setTooltip(prev => {
+      setTooltip((prev) => {
         if (!prev) return prev;
         return {
           ...prev,
-          placement: prev.placement === "right" ? "left" : "right"
+          placement: prev.placement === "right" ? "left" : "right",
         };
       });
     }
@@ -102,14 +105,16 @@ const Table: React.FC<TableProps> = ({ elementRefs }) => {
             key={el.symbol}
             el={el}
             tabIndex={el.number}
-            elementRef={ref => { elementRefs.current[el.number] = ref; }}
+            elementRef={(ref) => {
+              elementRefs.current[el.number] = ref;
+            }}
             onClick={handleElementClick}
             onFocus={handleElementClick}
             onBlur={handleElementBlur as any} // Fix diagnostic by casting, assuming ElementSquare passes event
-            onKeyDown={e => handleElementKeyDown(e, el)}
+            onKeyDown={(e) => handleElementKeyDown(e, el)}
           />
         ))}
-        {tooltip &&
+        {tooltip && (
           <ElementTooltip
             el={tooltip.el}
             placement={tooltip.placement}
@@ -118,7 +123,7 @@ const Table: React.FC<TableProps> = ({ elementRefs }) => {
             elemHeight={tooltip.elemHeight}
             onClose={handleCloseTooltip}
           />
-        }
+        )}
       </div>
     </>
   );

@@ -5,8 +5,8 @@ import { ColorFeed, DepthFeed } from "./components/Feeds";
 import { JsonRenderer } from "./components/InfoPanels";
 import DetailsPanel from "./components/DetailsPanel";
 import FieldView from "./components/FieldView";
-import 'react-mosaic-component/react-mosaic-component.css';
-import './app.css';
+import "react-mosaic-component/react-mosaic-component.css";
+import "./app.css";
 
 // Create the map of window IDs to components
 const windowComponents = {
@@ -23,7 +23,7 @@ const windowTitles = {
   2: "Depth Feed",
   3: "Raw Data",
   4: "Details",
-  5: "Field View"
+  5: "Field View",
 };
 
 // Main App Component

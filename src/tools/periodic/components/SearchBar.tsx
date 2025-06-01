@@ -48,10 +48,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ focusElementByNumber }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSearch}
-      className="flex items-center gap-2 w-full"
-    >
+    <form onSubmit={handleSearch} className="flex items-center gap-2 w-full">
       <Input
         ref={searchInputRef}
         type="text"

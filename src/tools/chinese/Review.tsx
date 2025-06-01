@@ -11,13 +11,13 @@ function convertNumberTonesToMarks(pinyin: string): string {
 
   // Map of vowels and their tone variants
   const toneMap: Record<string, string[]> = {
-    "a": ["ā", "á", "ǎ", "à"],
-    "e": ["ē", "é", "ě", "è"],
-    "i": ["ī", "í", "ǐ", "ì"],
-    "o": ["ō", "ó", "ǒ", "ò"],
-    "u": ["ū", "ú", "ǔ", "ù"],
-    "ü": ["ǖ", "ǘ", "ǚ", "ǜ"],
-    "v": ["ǖ", "ǘ", "ǚ", "ǜ"], // v is often used as a substitute for ü
+    a: ["ā", "á", "ǎ", "à"],
+    e: ["ē", "é", "ě", "è"],
+    i: ["ī", "í", "ǐ", "ì"],
+    o: ["ō", "ó", "ǒ", "ò"],
+    u: ["ū", "ú", "ǔ", "ù"],
+    ü: ["ǖ", "ǘ", "ǚ", "ǜ"],
+    v: ["ǖ", "ǘ", "ǚ", "ǜ"], // v is often used as a substitute for ü
   };
 
   // No tone number found, return as is
@@ -237,16 +237,21 @@ export function Review({
   const writerRef = useRef<HTMLDivElement>(null);
   const [writer, setWriter] = useState<HanziWriter | null>(null);
   useEffect(() => {
-    const localWriter = HanziWriter.create(writerRef!.current as HTMLElement, character, {
-      padding: 5,
-      strokeColor: mode == "character" ? "#0851D0" : "#000000",
-      drawingColor: mode == "character" ? "#0851D0" : "#000000",
-      outlineColor: mode === "pinyin" ? "#000000" : "rgba(130, 169, 229, 0.5)",
-      acceptBackwardsStrokes: true,
-      showHintAfterMisses: false,
-      showOutline: mode === "pinyin",
-      strokeFadeDuration: 0,
-    });
+    const localWriter = HanziWriter.create(
+      writerRef!.current as HTMLElement,
+      character,
+      {
+        padding: 5,
+        strokeColor: mode == "character" ? "#0851D0" : "#000000",
+        drawingColor: mode == "character" ? "#0851D0" : "#000000",
+        outlineColor:
+          mode === "pinyin" ? "#000000" : "rgba(130, 169, 229, 0.5)",
+        acceptBackwardsStrokes: true,
+        showHintAfterMisses: false,
+        showOutline: mode === "pinyin",
+        strokeFadeDuration: 0,
+      },
+    );
     setWriter(localWriter);
     if (mode == "character") {
       localWriter.quiz({

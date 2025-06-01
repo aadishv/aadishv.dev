@@ -35,7 +35,9 @@ export async function getStaticPaths({
 }: GetStaticPathsOptions): Promise<PostGetStaticPathsResult> {
   // allPosts is an array of MarkdownPost instances
   const allPosts: MarkdownPost[] = await Astro.glob("@/content/posts/*.md");
-  const projectPosts: MarkdownPost[] = await Astro.glob("@/content/projects/*.md");
+  const projectPosts: MarkdownPost[] = await Astro.glob(
+    "@/content/projects/*.md",
+  );
 
   // Gather all posts and projects
   const allContent = [...allPosts, ...projectPosts];
@@ -44,7 +46,9 @@ export async function getStaticPaths({
     // post.file is guaranteed to be a string by Astro.glob
     const slug = getSlugFromPath(post.file);
     // For project posts, prepend "project-" to the slug
-    const finalSlug = post.file.includes("/content/projects/") ? `project-${slug}` : slug;
+    const finalSlug = post.file.includes("/content/projects/")
+      ? `project-${slug}`
+      : slug;
     return {
       params: {
         slug: finalSlug, // slug is string
@@ -82,36 +86,39 @@ const date: Date = parseISO(post.frontmatter.date); // parseISO returns Date
 const formatted: string = format(date, "LLLL d, yyyy"); // format returns string
 
 // Check if this is a project post based on the file path
-const isProject = post.file.includes('/content/projects/');
+const isProject = post.file.includes("/content/projects/");
 ---
 
 <Layout title={post.frontmatter.title}>
   <article>
-    {isProject && post.frontmatter.image && (
-      <div>
-        <img
-          src={post.frontmatter.image}
-          alt={post.frontmatter.title}
-          class="w-full h-auto max-h-[400px] object-contain mx-auto"
-        />
-      </div>
-    )}
+    {
+      isProject && post.frontmatter.image && (
+        <div>
+          <img
+            src={post.frontmatter.image}
+            alt={post.frontmatter.title}
+            class="w-full h-auto max-h-[400px] object-contain mx-auto"
+          />
+        </div>
+      )
+    }
     <main>
-
       <div class="text-xl">
-        {isProject && post.frontmatter.link ? (
-          <a href={post.frontmatter.link} target="_blank" rel="noopener noreferrer">
-            <h1>
-              {post.frontmatter.title}
-            </h1>
-          </a>
-        ) : (
-          <a href="">
-            <h1>
-              {post.frontmatter.title}
-            </h1>
-          </a>
-        )}
+        {
+          isProject && post.frontmatter.link ? (
+            <a
+              href={post.frontmatter.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <h1>{post.frontmatter.title}</h1>
+            </a>
+          ) : (
+            <a href="">
+              <h1>{post.frontmatter.title}</h1>
+            </a>
+          )
+        }
         <h4>
           <time datetime={date.toString()}>{formatted}</time>
         </h4>
@@ -122,7 +129,9 @@ const isProject = post.file.includes('/content/projects/');
             <Card>
               <div class="-m-3 flex flex-col">
                 <CardHeader>
-                  <h6 class="-mb-5 -mt-1">{isProject ? "In this project" : "In this post"}</h6>
+                  <h6 class="-mb-5 -mt-1">
+                    {isProject ? "In this project" : "In this post"}
+                  </h6>
                 </CardHeader>
                 <CardContent>
                   {headings.map((heading) => (

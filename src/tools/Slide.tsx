@@ -12,7 +12,7 @@ const MAX_IMAGE_SIZE = 600; // Maximum width/height for puzzle images
 
 function generateSolvedTiles() {
   return Array.from({ length: TILE_COUNT }, (_, i) =>
-    i === EMPTY_INDEX ? null : i + 1
+    i === EMPTY_INDEX ? null : i + 1,
   );
 }
 
@@ -30,7 +30,7 @@ function formatTime(ms: number) {
   const hundredths = Math.floor((ms % 1000) / 10);
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
     2,
-    "0"
+    "0",
   )}.${String(hundredths).padStart(2, "0")}`;
 }
 
@@ -58,8 +58,13 @@ export default function Slide() {
   const [showConfirm, setShowConfirm] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [tileImages, setTileImages] = useState<string[]>([]);
-  const [tileRects, setTileRects] = useState<{x: number, y: number, width: number, height: number}[]>([]);
-  const [imgDims, setImgDims] = useState<{width: number, height: number} | null>(null);
+  const [tileRects, setTileRects] = useState<
+    { x: number; y: number; width: number; height: number }[]
+  >([]);
+  const [imgDims, setImgDims] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
   const [useCustomImage, setUseCustomImage] = useState(false);
   const [customImageUrl, setCustomImageUrl] = useState<string | null>(null);
 
@@ -164,8 +169,8 @@ export default function Slide() {
     if (!file) return;
 
     // Validate file type
-    if (!file.type.startsWith('image/')) {
-      alert('Please select a valid image file.');
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image file.");
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
@@ -182,23 +187,26 @@ export default function Slide() {
       }
     };
     reader.readAsDataURL(file);
-    
+
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   // Image loading and tile generation
   function loadImageAndGenerateTiles(imageUrl: string) {
-    function resizeImage(img: HTMLImageElement): { width: number; height: number } {
+    function resizeImage(img: HTMLImageElement): {
+      width: number;
+      height: number;
+    } {
       let { width, height } = img;
-      
+
       // Calculate scale factor to fit within MAX_IMAGE_SIZE while maintaining aspect ratio
       const scale = Math.min(MAX_IMAGE_SIZE / width, MAX_IMAGE_SIZE / height);
-      
+
       if (scale < 1) {
         width = Math.floor(width * scale);
         height = Math.floor(height * scale);
       }
-      
+
       return { width, height };
     }
 
@@ -231,38 +239,28 @@ export default function Slide() {
     img.src = imageUrl;
     img.onload = () => {
       const { width: resizedWidth, height: resizedHeight } = resizeImage(img);
-      
+
       // Create a canvas to resize the image
       const resizeCanvas = document.createElement("canvas");
       const resizeCtx = resizeCanvas.getContext("2d");
       resizeCanvas.width = resizedWidth;
       resizeCanvas.height = resizedHeight;
       resizeCtx!.drawImage(img, 0, 0, resizedWidth, resizedHeight);
-      
+
       const rects = getTileRects(resizedWidth, resizedHeight);
       setTileRects(rects);
       setImgDims({ width: resizedWidth, height: resizedHeight });
-      
+
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       const images: string[] = [];
-      
+
       for (let i = 0; i < TILE_COUNT - 1; i++) {
         const { x, y, width, height } = rects[i];
         canvas.width = width;
         canvas.height = height;
         ctx!.clearRect(0, 0, width, height);
-        ctx!.drawImage(
-          resizeCanvas,
-          x,
-          y,
-          width,
-          height,
-          0,
-          0,
-          width,
-          height
-        );
+        ctx!.drawImage(resizeCanvas, x, y, width, height, 0, 0, width, height);
         images[i] = canvas.toDataURL();
       }
       setTileImages(images);
@@ -274,7 +272,7 @@ export default function Slide() {
   function toggleImageSource() {
     const newUseCustomImage = !useCustomImage;
     setUseCustomImage(newUseCustomImage);
-    
+
     if (newUseCustomImage && customImageUrl) {
       loadImageAndGenerateTiles(customImageUrl);
     } else {
@@ -375,11 +373,16 @@ export default function Slide() {
       </div>
       <div className="flex flex-col items-stretch">
         <div className="w-full" style={{ minWidth: 340, width: 340 }}>
-          <div className="rounded-xl border bg-card p-8 flex flex-col gap-8 items-center" style={{ minWidth: 300, width: "100%" }}>
+          <div
+            className="rounded-xl border bg-card p-8 flex flex-col gap-8 items-center"
+            style={{ minWidth: 300, width: "100%" }}
+          >
             <div className="flex flex-col gap-8 w-full">
               <div className="flex flex-col gap-4 w-full">
                 <span className="text-3xl font-bold">Moves: {moves}</span>
-                <span className="text-3xl font-bold">Time: {formatTime(timeElapsed)}</span>
+                <span className="text-3xl font-bold">
+                  Time: {formatTime(timeElapsed)}
+                </span>
               </div>
               <div className="flex gap-2 w-full">
                 <Button
@@ -392,7 +395,7 @@ export default function Slide() {
                   Reset / Shuffle
                 </Button>
               </div>
-              
+
               <div className="flex flex-col gap-3 w-full">
                 <Label htmlFor="image-upload" className="text-lg font-semibold">
                   Custom Image

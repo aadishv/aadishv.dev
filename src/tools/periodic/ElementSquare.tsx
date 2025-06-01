@@ -27,13 +27,16 @@ const ElementSquare: React.FC<ElementSquareProps> = ({
 
   useEffect(() => {
     const checkDarkMode = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'));
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
     };
 
     checkDarkMode(); // Initial check
 
     const observer = new MutationObserver(checkDarkMode);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     return () => {
       observer.disconnect();
@@ -41,69 +44,71 @@ const ElementSquare: React.FC<ElementSquareProps> = ({
   }, []);
 
   return (
-  <div
-    key={el.symbol}
-    tabIndex={tabIndex}
-    aria-label={el.name}
-    ref={elementRef}
-    style={{
-      gridColumn: el.xpos,
-      gridRow: el.ypos,
-      cursor: "pointer",
-      position: "relative",
-      zIndex: 1,
-      outline: "none",
-      borderRadius: 12,
-    } as React.CSSProperties}
-    className="focus:ring-2 ring-black ring-ring"
-    onClick={e => {
-      e.stopPropagation();
-      onClick(e, el);
-    }}
-    onFocus={e => {
-      e.stopPropagation();
-      onFocus(e, el);
-    }}
-    onBlur={onBlur}
-    onKeyDown={onKeyDown}
-  >
     <div
-      className="rounded-xl flex flex-col justify-between h-full w-full"
-      style={{
-        background: isDarkMode ? TEXT_COLORS[el.type] : BG_COLORS[el.type],
-        height: SQUARE_SIZE,
-        width: SQUARE_SIZE,
-        padding: PADDING,
+      key={el.symbol}
+      tabIndex={tabIndex}
+      aria-label={el.name}
+      ref={elementRef}
+      style={
+        {
+          gridColumn: el.xpos,
+          gridRow: el.ypos,
+          cursor: "pointer",
+          position: "relative",
+          zIndex: 1,
+          outline: "none",
+          borderRadius: 12,
+        } as React.CSSProperties
+      }
+      className="focus:ring-2 ring-black ring-ring"
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick(e, el);
       }}
+      onFocus={(e) => {
+        e.stopPropagation();
+        onFocus(e, el);
+      }}
+      onBlur={onBlur}
+      onKeyDown={onKeyDown}
     >
-      <span
-        className="font-mono"
+      <div
+        className="rounded-xl flex flex-col justify-between h-full w-full"
         style={{
-          color: isDarkMode ? BG_COLORS[el.type] : TEXT_COLORS[el.type],
-          fontSize: SQUARE_SIZE * 0.36,
-          textAlign: "left",
-          lineHeight: 1,
-          fontWeight: 350,
-          whiteSpace: "nowrap",
+          background: isDarkMode ? TEXT_COLORS[el.type] : BG_COLORS[el.type],
+          height: SQUARE_SIZE,
+          width: SQUARE_SIZE,
+          padding: PADDING,
         }}
       >
-        {el.number}
-      </span>
-      <span
-        className="font-serif"
-        style={{
-          color: isDarkMode ? BG_COLORS[el.type] : TEXT_COLORS[el.type],
-          fontSize: SQUARE_SIZE * 0.36,
-          textAlign: "right",
-          lineHeight: 1,
-          fontWeight: "normal",
-          whiteSpace: "nowrap",
-        }}
-      >
-        {el.symbol}
-      </span>
+        <span
+          className="font-mono"
+          style={{
+            color: isDarkMode ? BG_COLORS[el.type] : TEXT_COLORS[el.type],
+            fontSize: SQUARE_SIZE * 0.36,
+            textAlign: "left",
+            lineHeight: 1,
+            fontWeight: 350,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {el.number}
+        </span>
+        <span
+          className="font-serif"
+          style={{
+            color: isDarkMode ? BG_COLORS[el.type] : TEXT_COLORS[el.type],
+            fontSize: SQUARE_SIZE * 0.36,
+            textAlign: "right",
+            lineHeight: 1,
+            fontWeight: "normal",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {el.symbol}
+        </span>
+      </div>
     </div>
-  </div>
   );
 };
 

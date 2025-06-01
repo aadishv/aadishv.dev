@@ -9,8 +9,7 @@ This is the second part of what will soon become a four- or five-part series. Th
 
 Here are the previous posts:
 
-* [Robotics 1: 315P (Over Under)](/robotics-1)
-
+- [Robotics 1: 315P (Over Under)](/robotics-1)
 
 _Preface_: For much of the Over Under and High Stakes seasons of the VEX V5 Robotics Competition, I served as the lead coder for the middle school team 315P. This post is a collection of my thoughts about working on it :)
 

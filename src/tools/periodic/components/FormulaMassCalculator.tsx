@@ -9,7 +9,10 @@ interface FormulaMassCalculatorProps {
   periodicData: ElementType[];
 }
 
-const calculateMass = (formula: string, periodicData: ElementType[]): string => {
+const calculateMass = (
+  formula: string,
+  periodicData: ElementType[],
+): string => {
   const elementsFound = parseFormula(formula);
   let totalMass = 0;
 

@@ -6,6 +6,7 @@ import ThemeToggleIsland from "@/components/ThemeToggleIsland.tsx";
 const { title, nothing, light } = Astro.props;
 const isDev = import.meta.env.DEV;
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -15,11 +16,13 @@ const isDev = import.meta.env.DEV;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body class={light ? "light" : undefined}>
-    {!light && (
-      <div style="position: fixed; top: 1rem; right: 1rem; z-index: 1000;">
-        <ThemeToggleIsland client:only="react" />
-      </div>
-    )}
+    {
+      !light && (
+        <div style="position: fixed; top: 1rem; right: 1rem; z-index: 1000;">
+          <ThemeToggleIsland client:only="react" />
+        </div>
+      )
+    }
     <VAIRCApp client:only="react" />
   </body>
 </html>

@@ -55,7 +55,11 @@ const ReferenceModal: React.FC<ReferenceModalProps> = ({ isOpen, onClose }) => {
       ariaHideApp={false}
     >
       <div className="rounded-lg bg-background w-[80vw] h-[80vh] max-w-[1200px] flex flex-col">
-        <Tabs value={tab} onValueChange={setTab} className="flex flex-col h-full">
+        <Tabs
+          value={tab}
+          onValueChange={setTab}
+          className="flex flex-col h-full"
+        >
           {/* Header for TabsList and Close Button */}
           <div className="flex items-center justify-between px-6 pt-6 pb-4">
             <TabsList>
@@ -65,14 +69,23 @@ const ReferenceModal: React.FC<ReferenceModalProps> = ({ isOpen, onClose }) => {
                 </TabsTrigger>
               ))}
             </TabsList>
-            <Button variant="outline" size="sm" onClick={onClose} className="ml-4 flex-shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onClose}
+              className="ml-4 flex-shrink-0"
+            >
               Close
             </Button>
           </div>
 
           {/* Content Area */}
           {tabData.map((t) => (
-            <TabsContent key={t.value} value={t.value} className="flex-1 mt-0 overflow-y-auto">
+            <TabsContent
+              key={t.value}
+              value={t.value}
+              className="flex-1 mt-0 overflow-y-auto"
+            >
               {/* Inner div for padding and centering content */}
               <div className="flex items-center justify-center w-full h-full p-4">
                 <img

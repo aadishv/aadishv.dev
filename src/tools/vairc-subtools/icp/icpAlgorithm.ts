@@ -5,7 +5,7 @@ import { findClosestPoint, calculateCentroid, calculateError } from "./utils";
 export const runICPAlgorithm = async (
   sourcePoints: Point[],
   targetPoints: Point[],
-  maxIterations: number
+  maxIterations: number,
 ): Promise<ICPState[]> => {
   return new Promise((resolve) => {
     // Initialize ICP states
@@ -21,14 +21,19 @@ export const runICPAlgorithm = async (
       sourcePoints: sourcePoints.map((p) => ({ ...p })),
       targetPoints: targetPoints.map((p) => ({ ...p })),
       transformedPoints: currentSourcePoints.map((p) => ({ ...p })),
-      correspondences: sourcePoints.map((p, i) => [i, findClosestPoint(p, targetPoints)]),
+      correspondences: sourcePoints.map((p, i) => [
+        i,
+        findClosestPoint(p, targetPoints),
+      ]),
       transformation: {
         rotation: 0,
         translation: { x: 0, y: 0 },
       },
       error: calculateError(
         sourcePoints,
-        sourcePoints.map((p) => targetPoints[findClosestPoint(p, targetPoints)])
+        sourcePoints.map(
+          (p) => targetPoints[findClosestPoint(p, targetPoints)],
+        ),
       ),
     });
 
@@ -36,14 +41,17 @@ export const runICPAlgorithm = async (
       // Find correspondences
       const correspondences: [number, number][] = [];
       for (let i = 0; i < currentSourcePoints.length; i++) {
-        const closestIdx = findClosestPoint(currentSourcePoints[i], targetPoints);
+        const closestIdx = findClosestPoint(
+          currentSourcePoints[i],
+          targetPoints,
+        );
         correspondences.push([i, closestIdx]);
       }
 
       // Calculate centroids
       const sourceCentroid = calculateCentroid(currentSourcePoints);
       const targetCentroid = calculateCentroid(
-        correspondences.map(([srcIdx, tgtIdx]) => targetPoints[tgtIdx])
+        correspondences.map(([srcIdx, tgtIdx]) => targetPoints[tgtIdx]),
       );
 
       // Calculate optimal rotation
@@ -102,11 +110,12 @@ export const runICPAlgorithm = async (
       // Calculate error
       const error = calculateError(
         currentSourcePoints,
-        correspondences.map(([srcIdx, tgtIdx]) => targetPoints[tgtIdx])
+        correspondences.map(([srcIdx, tgtIdx]) => targetPoints[tgtIdx]),
       );
 
       // Save state with the current transformation and deep copies to avoid reference issues
-      const prevError = states.length > 0 ? states[states.length - 1].error : error;
+      const prevError =
+        states.length > 0 ? states[states.length - 1].error : error;
       states.push({
         sourcePoints: sourcePoints.map((p) => ({ ...p })),
         targetPoints: targetPoints.map((p) => ({ ...p })),

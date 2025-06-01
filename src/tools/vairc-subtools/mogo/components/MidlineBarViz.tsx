@@ -1,6 +1,9 @@
 import React from "react";
 
-export type MidlineReading = { colorType: string; rgb: [number, number, number] };
+export type MidlineReading = {
+  colorType: string;
+  rgb: [number, number, number];
+};
 
 export function MidlineBarViz({ readings }: { readings: MidlineReading[] }) {
   // Flip readings horizontally
