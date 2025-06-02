@@ -6,10 +6,8 @@ import {
   type Detection,
 } from "../Layout";
 import { getDetectionColor } from "../utils/colors";
-import { safeGetStuff, isValidDetectionPayload } from "../utils/validation";
+import { safeGetStuff } from "../utils/validation";
 import { Switch } from "../../../components/ui/switch";
-import { Button } from "../../../components/ui/button";
-import { Card, CardContent } from "../../../components/ui/card";
 
 interface DetectionCanvasProps {
   /** The object containing detection data, or null if none */
@@ -46,7 +44,6 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // State for image loading and errors
-  const [imageError, setImageError] = useState(false);
 
   // State for bounding box toggle with localStorage persistence
   const [showBoundingBoxes, setShowBoundingBoxes] = useState(() => {
@@ -225,7 +222,6 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
 
     // When image loads
     const handleImageLoad = () => {
-      setImageError(false);
       updateCanvas();
     };
 
@@ -276,26 +272,7 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
     updateCanvas();
   }, [detections, showBoundingBoxes, updateCanvas]);
 
-  // Handle image error
-  const handleImageError = () => {
-    console.error("Failed to load image stream:", effectiveImageUrl);
-    setImageError(true);
-  };
 
-  // Handle image load success
-  const handleImageLoad = () => {
-    console.log("Image loaded successfully:", effectiveImageUrl);
-    setImageError(false);
-  };
-
-  // Reload the image
-  const reloadImage = () => {
-    setImageError(false);
-    if (imageRef.current && effectiveImageUrl) {
-      const refreshedUrl = `${effectiveImageUrl}?t=${Date.now()}`;
-      imageRef.current.src = refreshedUrl;
-    }
-  };
 
   // Toggle bounding boxes
   const toggleBoundingBoxes = () => {
@@ -351,8 +328,6 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
                 src={effectiveImageUrl}
                 alt="Live stream"
                 className="absolute top-0 left-0 w-full h-full object-contain"
-                onError={handleImageError}
-                onLoad={handleImageLoad}
               />
 
               {/* Canvas for bounding boxes */}
@@ -360,120 +335,6 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
                 ref={canvasRef}
                 className="absolute top-0 left-0 w-full h-full pointer-events-none"
               />
-
-              {/* Mixed content warning */}
-              {isMixedContent && (
-                <div className="absolute inset-0 bg-white z-10 flex flex-col items-center justify-center p-4 text-center">
-                  <Card className="max-w-md border border-gray-300 bg-gray-50">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-center mb-4">
-                        <svg
-                          className="h-10 w-10 text-gray-500"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                          />
-                        </svg>
-                      </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        Mixed Content Blocked
-                      </h3>
-                      <p className="mb-4 text-gray-600">
-                        Your browser is blocking the HTTP camera stream because
-                        this page is loaded over HTTPS.
-                      </p>
-                      <div className="text-sm bg-gray-100 p-3 rounded-md text-left mb-4 border border-gray-200">
-                        <p className="font-medium text-gray-700 mb-1">
-                          Solutions:
-                        </p>
-                        <ol className="list-decimal list-inside space-y-1 text-gray-600">
-                          <li>Access this page with HTTP instead of HTTPS</li>
-                          <li>
-                            In Chrome, click the shield icon and allow insecure
-                            content
-                          </li>
-                          <li>
-                            Consider setting up a secure proxy for your camera
-                            streams
-                          </li>
-                        </ol>
-                      </div>
-                      <Button
-                        onClick={() => {
-                          const currentUrl = window.location.href;
-                          const httpUrl = currentUrl.replace(
-                            "https://",
-                            "http://",
-                          );
-                          window.location.href = httpUrl;
-                        }}
-                      >
-                        Switch to HTTP Version
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-
-              {/* Image load error */}
-              {imageError && !isMixedContent && (
-                <div className="absolute inset-0 bg-white z-10 flex flex-col items-center justify-center p-4 text-center">
-                  <Card className="max-w-md border border-gray-300 bg-gray-50">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-center mb-4">
-                        <svg
-                          className="h-10 w-10 text-gray-500"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        Camera Stream Error
-                      </h3>
-                      <p className="mb-4 text-gray-600">
-                        Failed to load the stream from:
-                      </p>
-                      <div className="bg-gray-100 p-2 rounded-md border border-gray-200 mb-4 font-mono text-sm overflow-auto">
-                        {effectiveImageUrl}
-                      </div>
-
-                      <Button
-                        onClick={reloadImage}
-                        className="flex items-center mx-auto"
-                      >
-                        <svg
-                          className="h-4 w-4 mr-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                          />
-                        </svg>
-                        Retry Connection
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
             </>
           ) : (
             // Placeholder when no image URL

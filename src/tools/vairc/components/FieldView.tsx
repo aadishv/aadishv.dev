@@ -357,35 +357,18 @@ const FieldView: React.FC<{
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="bg-gray-100 p-2 border-b border-gray-200 text-sm font-medium text-gray-700">
-        <span>VEX High Stakes Field</span>
-      </div>
       <div
         className="flex-1 relative overflow-hidden bg-white"
         ref={containerRef}
       >
-        {/* Field container - using a single centered container */}
         <div className="absolute inset-0 flex items-center justify-center">
-          {/* Image and canvas container with fixed aspect ratio */}
           <div className="relative w-full h-full">
-            {/* Image element - ensure it's properly sized and centered */}
             <img
               ref={imageRef}
               src={"/tools/vairc/field.png"}
               alt="VEX Field View"
-              className={`absolute top-0 left-0 w-full h-full object-contain ${!imageLoaded ? "opacity-0" : "opacity-100"}`}
+              className="absolute top-0 left-0 w-full h-full object-contain"
             />
-
-            {/* Placeholder while image is loading */}
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
-                <div className="animate-pulse text-gray-500">
-                  Loading field view...
-                </div>
-              </div>
-            )}
-
-            {/* Canvas overlay perfectly aligned with image */}
             <canvas
               ref={canvasRef}
               className="absolute top-0 left-0 w-full h-full"

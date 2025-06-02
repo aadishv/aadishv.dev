@@ -321,16 +321,32 @@ const Header: React.FC<{
     onStepBackward: () => void;
     onStepForward: () => void;
   };
+  jetsonStats?: {
+    cpu_temp: number;
+    gpu_temp: number;
+    uptime: number;
+  } | null;
 }> = ({
   onToggleSettings,
   connectionError,
   serverConfig,
   appMode,
   replayControls,
+  jetsonStats,
 }) => {
   // Function to reload the page
   const handleReload = () => {
     window.location.reload();
+  };
+
+  // Format uptime in DD:HH:MM:SS
+  const formatUptime = (uptime: number) => {
+    const days = Math.floor(uptime / (24 * 3600));
+    const hours = Math.floor((uptime % (24 * 3600)) / 3600);
+    const minutes = Math.floor((uptime % 3600) / 60);
+    const seconds = Math.floor(uptime % 60);
+    const pad = (num: number) => String(num).padStart(2, "0");
+    return `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
   };
 
   return (
@@ -349,6 +365,26 @@ const Header: React.FC<{
             className="h-full"
           />
         </div>
+
+        {/* Jetson stats for live mode */}
+        {appMode === "server" && jetsonStats && (
+          <div className="flex-1 flex justify-center mx-4">
+            <div className="flex gap-6 items-center bg-white border border-gray-200 rounded-lg px-4 py-2 shadow-sm">
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-gray-500">CPU Temp</span>
+                <span className="text-lg font-mono font-semibold">{jetsonStats.cpu_temp.toFixed(1)}°C</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-gray-500">GPU Temp</span>
+                <span className="text-lg font-mono font-semibold">{jetsonStats.gpu_temp.toFixed(1)}°C</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-gray-500">Uptime</span>
+                <span className="text-lg font-mono font-semibold">{formatUptime(jetsonStats.uptime)}</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Playback controls for replay mode */}
         {appMode === "replay" && replayControls && (
@@ -1225,6 +1261,11 @@ export const Layout: React.FC<LayoutProps> = ({
                 onStepBackward: handleStepBackward,
                 onStepForward: handleStepForward,
               }
+            : undefined
+        }
+        jetsonStats={
+          appMode === "server" && latestDetections && latestDetections.jetson
+            ? latestDetections.jetson
             : undefined
         }
       />
