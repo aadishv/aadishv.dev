@@ -1,5 +1,5 @@
 // aadishv.github.io/src/components/vairc/components/DetectionCanvas.tsx
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   DEFAULT_SERVER,
   type DetectionPayload,
@@ -62,8 +62,6 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
     : imageEndpoint
       ? `http://${serverConfig}/${imageEndpoint}`
       : null;
-  const isMixedContent =
-    isHttps && !!effectiveImageUrl && effectiveImageUrl.startsWith("http:");
 
   console.log("DetectionCanvas:", {
     imageUrl,

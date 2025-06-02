@@ -1,5 +1,5 @@
 // src/tools/icp/AnimationControls.tsx
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, StepForward, StepBack } from "lucide-react";
 import { Slider } from "@/components/ui/slider";

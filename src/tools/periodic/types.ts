@@ -1,5 +1,3 @@
-import elements from "./periodic.json";
-
 export type ElementTypeString =
   | "Alkali Metal"
   | "Alkaline Earth Metal"

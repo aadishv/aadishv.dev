@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Table from "./Table";
 import SearchBar from "./components/SearchBar";
 import { FormulaMassModal } from "./components/FormulaMassCalculator";

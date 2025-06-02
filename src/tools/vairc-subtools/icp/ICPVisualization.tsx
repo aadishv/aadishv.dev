@@ -1,5 +1,5 @@
 // src/tools/icp/ICPVisualization.tsx
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, PenLine, RotateCcw, Trash2 } from "lucide-react";
 import Canvas from "./Canvas";

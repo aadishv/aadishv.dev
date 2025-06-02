@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState } from "react";
 import Modal from "react-modal";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";

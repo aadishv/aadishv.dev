@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "@xstate/store/react";
 import { Review } from "../Review";
 import { store, type AppMode } from "../Store";

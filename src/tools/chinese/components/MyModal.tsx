@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector } from "@xstate/store/react";
 import Modal from "react-modal";
 import { TrafficLights } from "../Review";

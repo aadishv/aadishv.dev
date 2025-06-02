@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "@xstate/store/react";
 import { store, type AppMode, getAllLessons } from "../Store";
 import Modal from "react-modal";

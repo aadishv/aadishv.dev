@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, type MouseEvent } from "react";
+import { useRef, useEffect, useState, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { MidlineBarViz, type MidlineReading } from "./components/MidlineBarViz";

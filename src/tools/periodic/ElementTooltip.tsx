@@ -24,10 +24,7 @@ const SQUARE_SIZE = 56; // px
 const ElementTooltip: React.FC<ElementTooltipProps> = ({
   el,
   placement,
-  top,
   left,
-  elemHeight,
-  onClose,
 }) => {
   // Calculate vertical position and clamp so card never overflows viewport
   const CARD_WIDTH = SQUARE_SIZE * 4 * 1.5;

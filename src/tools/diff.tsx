@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
-import * as React from "react";
+import { useState } from "react";
 import { calcSlices } from "fast-myers-diff";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 
 function App() {
@@ -27,14 +26,6 @@ function App() {
       return text.split("");
     }
     return text.split("\n");
-  };
-
-  // Join the text back based on diffMode
-  const joinText = (segments: string[]) => {
-    if (diffMode === "character") {
-      return segments.join("");
-    }
-    return segments.join("\n");
   };
 
   const computeDiff = () => {

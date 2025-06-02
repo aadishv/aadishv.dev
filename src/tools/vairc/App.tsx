@@ -1,7 +1,6 @@
 // aadishv.github.io/src/components/vairc/App.tsx
-import React from "react";
 import { Layout } from "./Layout";
-import { ColorFeed, DepthFeed } from "./components/Feeds";
+import { Feed } from "./components/Feeds";
 import { JsonRenderer } from "./components/InfoPanels";
 import FieldView from "./components/FieldView";
 import "react-mosaic-component/react-mosaic-component.css";
@@ -9,8 +8,8 @@ import "./app.css";
 
 // Create the map of window IDs to components
 const windowComponents = {
-  1: ColorFeed,
-  2: DepthFeed,
+  1: (props: any) => <Feed {...props} type="color" />,
+  2: (props: any) => <Feed {...props} type="depth" />,
   3: JsonRenderer,
   4: FieldView,
 };

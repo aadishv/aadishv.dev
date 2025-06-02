@@ -6,14 +6,10 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { parseISO, format } from "date-fns";
-import { Image } from "astro:assets";
-
-const isDev = import.meta.env.DEV;
 
 export const getSlugFromPath = (path: string): string => {
   const filename = path.split("/").at(-1)!.replace(".md", "");

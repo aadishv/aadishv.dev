@@ -1,4 +1,4 @@
-import React, {
+import {
   useState,
   useEffect,
   useRef,
@@ -25,13 +25,6 @@ const styleCache: { [key: string]: React.CSSProperties } = {
   "default-style-inherit": { color: "inherit" },
 };
 
-/**
- * Generates or retrieves a cached CSS style object for a given character.
- * For alphabetic characters, it assigns a color from the rainbow.
- * Other characters get a default style.
- * @param {string} char - The character to style.
- * @returns {object} A CSS style object (e.g., { color: 'red' }).
- */
 const getCharacterStyle = (char: string) => {
   const lowerChar = char.toLowerCase();
 
@@ -81,54 +74,6 @@ function App() {
     // if a character's style hasn't actually changed (i.e., it receives the same
     // style object instance), React can optimize DOM updates for that specific span's style.
   }, [text, calculateStylesForText]);
-
-  // Helper function to get cursor position in text
-  const getCursorPosition = (element: HTMLElement): number => {
-    const selection = window.getSelection();
-    if (!selection || selection.rangeCount === 0) return 0;
-
-    const range = selection.getRangeAt(0);
-    const preCaretRange = range.cloneRange();
-    preCaretRange.selectNodeContents(element);
-    preCaretRange.setEnd(range.endContainer, range.endOffset);
-    return preCaretRange.toString().length;
-  };
-
-  // Helper function to set cursor position
-  const setCursorPosition = (element: HTMLElement, offset: number) => {
-    const selection = window.getSelection();
-    if (!selection) return;
-
-    let currentOffset = 0;
-    const walker = document.createTreeWalker(
-      element,
-      NodeFilter.SHOW_TEXT,
-      null,
-    );
-
-    let node;
-    while ((node = walker.nextNode())) {
-      const textNode = node as Text;
-      const textLength = textNode.textContent?.length || 0;
-
-      if (currentOffset + textLength >= offset) {
-        const range = document.createRange();
-        range.setStart(textNode, offset - currentOffset);
-        range.collapse(true);
-        selection.removeAllRanges();
-        selection.addRange(range);
-        return;
-      }
-      currentOffset += textLength;
-    }
-
-    // If we get here, set cursor at the end
-    const range = document.createRange();
-    range.selectNodeContents(element);
-    range.collapse(false);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  };
 
   // Handles the input event from the contentEditable div.
   const handleInput = (event: React.FormEvent<HTMLDivElement>) => {

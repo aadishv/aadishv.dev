@@ -1,5 +1,5 @@
 // aadishv.github.io/src/components/vairc/components/Feeds.tsx
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import DetectionCanvas from "./DetectionCanvas";
 import { type DetectionPayload } from "../Layout";
 import { ensureValidPayload } from "../utils/validation";
@@ -11,46 +11,29 @@ interface FeedProps {
     colorImageUrl?: string;
     depthImageUrl?: string;
   };
+  type: "color" | "depth";
 }
 
-// Define our window components for the layout
-export const ColorFeed: React.FC<FeedProps> = ({
+export const Feed: React.FC<FeedProps> = ({
   latestDetections,
   serverConfig,
   replayData,
+  type,
 }) => {
-  console.log("ColorFeed render:", { replayData: !!replayData, serverConfig });
+  const imageUrl = replayData
+    ? type === "color"
+      ? replayData.colorImageUrl
+      : replayData.depthImageUrl
+    : undefined;
+  const imageEndpoint = replayData ? undefined : `${type}.mjpg`;
 
   return (
     <div className="w-full h-full flex items-center justify-center">
       <DetectionCanvas
         detections={ensureValidPayload(latestDetections)}
         serverConfig={serverConfig}
-        imageUrl={replayData ? replayData.colorImageUrl : undefined}
-        imageEndpoint={replayData ? undefined : "color.mjpg"}
-        originalImageWidth={640}
-        originalImageHeight={480}
-        className="h-full"
-        hideWhenNoUrl={false}
-      />
-    </div>
-  );
-};
-
-export const DepthFeed: React.FC<FeedProps> = ({
-  latestDetections,
-  serverConfig,
-  replayData,
-}) => {
-  console.log("DepthFeed render:", { replayData: !!replayData, serverConfig });
-
-  return (
-    <div className="w-full h-full flex items-center justify-center">
-      <DetectionCanvas
-        detections={ensureValidPayload(latestDetections)}
-        serverConfig={serverConfig}
-        imageUrl={replayData ? replayData.depthImageUrl : undefined}
-        imageEndpoint={replayData ? undefined : "depth.mjpg"}
+        imageUrl={imageUrl}
+        imageEndpoint={imageEndpoint}
         originalImageWidth={640}
         originalImageHeight={480}
         className="h-full"

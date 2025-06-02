@@ -2,7 +2,6 @@
 import type {
   MarkdownInstance,
   GetStaticPathsOptions,
-  GetStaticPathsResult,
 } from "astro";
 import Layout from "@/layouts/Layout.astro";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -30,9 +29,7 @@ type PostProps = { post: MarkdownPost };
 // Type for the return value of getStaticPaths for this specific case
 type PostGetStaticPathsResult = Array<{ params: PostParams; props: PostProps }>;
 
-export async function getStaticPaths({
-  paginate,
-}: GetStaticPathsOptions): Promise<PostGetStaticPathsResult> {
+export async function getStaticPaths({}: GetStaticPathsOptions): Promise<PostGetStaticPathsResult> {
   // allPosts is an array of MarkdownPost instances
   const allPosts: MarkdownPost[] = await Astro.glob("@/content/posts/*.md");
   const projectPosts: MarkdownPost[] = await Astro.glob(
@@ -76,7 +73,6 @@ interface Props {
 
 // Cast Astro.props to the defined Props interface for type safety
 const { post } = Astro.props as Props;
-const myProseSetup = ""; // Still unused, but typed implicitly as string
 
 const headings = post.getHeadings();
 

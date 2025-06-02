@@ -1,7 +1,6 @@
 // aadishv.github.io/src/components/vairc/components/FieldView.tsx
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { DetectionPayload, Pose } from "../Layout";
-import { Card, CardContent } from "../../../components/ui/card";
 import { safeGetStuff, isValidDetectionPayload } from "../utils/validation";
 
 // Field View Panel Component

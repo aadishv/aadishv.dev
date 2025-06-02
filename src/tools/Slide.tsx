@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -115,9 +115,6 @@ export default function Slide() {
     if ((er === tr || ec === tc) && idx !== emptyIdx) {
       let newTiles = [...tiles];
       if (er === tr) {
-        // Same row: slide horizontally
-        const start = Math.min(ec, tc);
-        const end = Math.max(ec, tc);
         if (ec < tc) {
           // Move left to right
           for (let c = ec; c < tc; c++) {
@@ -132,8 +129,7 @@ export default function Slide() {
         newTiles[getIndex(er, tc)] = null;
       } else if (ec === tc) {
         // Same column: slide vertically
-        const start = Math.min(er, tr);
-        const end = Math.max(er, tr);
+
         if (er < tr) {
           // Move top to bottom
           for (let r = er; r < tr; r++) {

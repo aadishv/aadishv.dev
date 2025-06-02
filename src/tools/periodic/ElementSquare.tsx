@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { BG_COLORS, TEXT_COLORS, type ElementType } from "./types";
 
 const SQUARE_SIZE = 56; // px, adjust as needed

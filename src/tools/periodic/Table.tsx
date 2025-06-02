@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { type ElementType } from "./types";
 import originalElements from "./periodic.json";
 import ElementSquare from "./ElementSquare";

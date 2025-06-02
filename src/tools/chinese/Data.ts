@@ -68,7 +68,6 @@ function transformLessonData(
 }
 
 export function getSentences(): Sentence[] {
-  const lessonData = lessonData11;
   return [
     ...transformLessonData(lessonData11, "ic lesson 1-1"),
     ...transformLessonData(lessonData12, "ic lesson 1-2"),

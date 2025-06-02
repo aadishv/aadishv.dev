@@ -4,11 +4,7 @@ import { getSentences, CharState, type Sentence } from "./Data";
 // Single storage key for all Chinese app data
 const CHINESE_APP_STORAGE_KEY = "chinese_app_data";
 
-/**
- * Loads saved application state from localStorage
- * @returns {Object|null} Parsed stored data or null if none exists
- */
-export const loadFromStorage = () => {
+export const loadFromStorage = (): Object | null => {
   try {
     const storedData = localStorage.getItem(CHINESE_APP_STORAGE_KEY);
     if (storedData) {
@@ -51,20 +47,27 @@ export const getAllLessons = (): string[] => {
 };
 
 // Load stored data and initialize context
-const storedData = loadFromStorage();
+const storedData = loadFromStorage() as
+  | {
+      history?: HistoryType;
+      sentences?: Sentence[];
+      sessions?: Record<string, string>;
+      enabledLessons?: string[];
+    }
+  | null;
 const allLessons = getAllLessons();
 
 const initialContext = {
-  history: (storedData?.history || {
+  history: (storedData?.history ?? {
     character: {},
     pinyin: {},
   }) as HistoryType,
   sentences:
-    storedData?.sentences ||
+    storedData?.sentences ??
     ([...getSentences()].sort(() => 0.5 - Math.random()) as Sentence[]),
-  sessions: (storedData?.sessions || {}) as Record<string, string>,
+  sessions: (storedData?.sessions ?? {}) as Record<string, string>,
   completedCount: 0, // Always starts at 0 and is not persisted
-  enabledLessons: storedData?.enabledLessons || allLessons, // Default to all lessons enabled
+  enabledLessons: storedData?.enabledLessons ?? allLessons, // Default to all lessons enabled
 };
 
 export const store = createStore({
@@ -78,7 +81,6 @@ export const store = createStore({
         id: string;
         mode: AppMode;
       },
-      enqueue,
     ) => {
       const lastState = context.history[event.mode][event.character];
       const noChange = lastState && lastState[0] === event.newState;
@@ -97,7 +99,7 @@ export const store = createStore({
             } as HistoryType),
       };
     },
-    resetCompletedCount: (context, _, enqueue) => {
+    resetCompletedCount: (context, _) => {
       const newContext = {
         ...context,
         completedCount: 0,

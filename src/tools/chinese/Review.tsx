@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import HanziWriter from "hanzi-writer";
 import { useSelector, useStore } from "@xstate/store/react";
 import { store, type AppMode } from "./Store";
@@ -148,7 +148,7 @@ export function Review({
       showPartialSolution: () => {},
     },
     on: {
-      solved: (context, event: {}, enqueue) => {
+      solved: (context, _: {}, enqueue) => {
         setTimeout(() => enqueue.emit.showSolution(), 400);
         store.trigger.updateCharacter({
           character: context.parentData.char,
@@ -185,7 +185,7 @@ export function Review({
 
         return { ...context, mistakes: newMistakes };
       },
-      button: (context, event: {}, enqueue) => {
+      button: (context, _: {}, enqueue) => {
         if (context.isCompleted) {
           return context;
         } else if (context.state2 === CharState.green) {

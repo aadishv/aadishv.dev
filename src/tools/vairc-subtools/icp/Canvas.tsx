@@ -1,6 +1,6 @@
 // src/tools/icp-visualization/Canvas.tsx
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { Point, Curve, ICPState } from "./types";
 
 interface CanvasProps {

@@ -1,5 +1,6 @@
 // aadishv.github.io/src/components/vairc/Layout.tsx
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useReplayData, useLocalStorageState } from "./hooks";
 import {
   Mosaic,
   MosaicWindow,
@@ -761,24 +762,30 @@ export const Layout: React.FC<LayoutProps> = ({
     null,
   );
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [serverConfig, setServerConfig] = useState<string>(() => {
-    // Try to load server config from localStorage
-    const savedConfig = localStorage.getItem(SERVER_CONFIG_KEY);
-    return savedConfig || DEFAULT_SERVER;
-  });
+  const [serverConfig, setServerConfig] = useLocalStorageState<string>(
+    SERVER_CONFIG_KEY,
+    DEFAULT_SERVER,
+  );
 
-  // App mode state
-  const [appMode, setAppMode] = useState<AppMode>(() => {
-    const savedMode = localStorage.getItem(APP_MODE_KEY);
-    return (savedMode as AppMode) || "server";
-  });
+  const [appMode, setAppMode] = useLocalStorageState<AppMode>(
+    APP_MODE_KEY,
+    "server",
+  );
 
-  // Replay mode state
-  const [replayData, setReplayData] = useState<ReplayData | null>(null);
-  const [currentReplayIndex, setCurrentReplayIndex] = useState(0);
-  const [isReplayPlaying, setIsReplayPlaying] = useState(false);
-  const [replayIntervalId, setReplayIntervalId] =
-    useState<NodeJS.Timeout | null>(null);
+  const {
+    replayData,
+    currentReplayIndex,
+    isReplayPlaying,
+    handleReplayPlay,
+    handleReplayPause,
+    handleReplaySeekToFrame,
+    handleStepBackward,
+    handleStepForward,
+    handleReplayDataUpload,
+    currentReplayImages,
+    latestDetections,
+    setLatestDetections,
+  } = useReplayData(appMode);
 
   // SSE detections (only used in server mode)
   const { detections: sseDetections, connectionError } = useSSEDetections(
@@ -787,190 +794,29 @@ export const Layout: React.FC<LayoutProps> = ({
     { stuff: [] }, // Provide a default with empty stuff array
   );
 
-  // Current detections (from SSE or replay)
-  const [latestDetections, setLatestDetections] =
-    useState<DetectionPayload | null>(null);
-  const [currentReplayImages, setCurrentReplayImages] = useState<{
-    colorImageUrl?: string;
-    depthImageUrl?: string;
-  }>({});
-
-  const [windowVisibility, setWindowVisibility] = useState<
-    Record<number, boolean>
-  >(() => {
-    // Try to load visibility state from localStorage
-    try {
-      const savedVisibility = localStorage.getItem(VISIBILITY_STORAGE_KEY);
-      if (savedVisibility) {
-        const parsed = JSON.parse(savedVisibility);
-        // Validate the parsed data
-        if (parsed && typeof parsed === "object") {
-          console.log("Restored window visibility from localStorage");
-          return parsed;
-        }
+  const [windowVisibility, setWindowVisibility] = useLocalStorageState<Record<number, boolean>>(
+    VISIBILITY_STORAGE_KEY,
+    (() => {
+      const initialVisibility: Record<number, boolean> = {};
+      const componentKeys = Object.keys(windowComponents)
+        .map(Number)
+        .sort((a, b) => a - b);
+      for (const id of componentKeys) {
+        initialVisibility[id] = false;
       }
-    } catch (error) {
-      console.warn(
-        "Failed to load or parse window visibility from localStorage:",
-        error,
-      );
-    }
-
-    // Fall back to default initialization if no saved state or error
-    const initialVisibility: Record<number, boolean> = {};
-    const componentKeys = Object.keys(windowComponents)
-      .map(Number)
-      .sort((a, b) => a - b);
-
-    // Initialize all windows to hidden initially
-    for (const id of componentKeys) {
-      initialVisibility[id] = false;
-    }
-
-    // Show the first window by default if components exist
-    if (componentKeys.length > 0) {
-      initialVisibility[componentKeys[0]] = true;
-    }
-    console.log("Initializing window visibility:", initialVisibility);
-    return initialVisibility;
-  });
+      if (componentKeys.length > 0) {
+        initialVisibility[componentKeys[0]] = true;
+      }
+      return initialVisibility;
+    })(),
+  );
 
   // Update detections based on app mode
   useEffect(() => {
     if (appMode === "server") {
       setLatestDetections(sseDetections);
-      // Clear replay images when in server mode
-      setCurrentReplayImages({});
     }
-  }, [appMode, sseDetections]);
-
-  // Replay mode utilities
-  const findFileAtTimestamp = (
-    files: ReplayFile[],
-    timestamp: number,
-  ): ReplayFile | null => {
-    return files.find((file) => file.timestamp === timestamp) || null;
-  };
-
-  const updateReplayState = useCallback(
-    async (index: number) => {
-      if (
-        !replayData ||
-        index < 0 ||
-        index >= replayData.allTimestamps.length
-      ) {
-        return;
-      }
-
-      const timestamp = replayData.allTimestamps[index];
-
-      // Find exact log file for detections
-      const logFile = findFileAtTimestamp(replayData.logFiles, timestamp);
-      if (logFile) {
-        try {
-          const text = await logFile.file.text();
-          const detectionData = JSON.parse(text);
-          setLatestDetections(detectionData);
-        } catch (error) {
-          console.error("Failed to parse log file:", error);
-        }
-      } else {
-        setLatestDetections({ stuff: [] });
-      }
-
-      // Find exact image files
-      const colorFile = findFileAtTimestamp(replayData.colorImages, timestamp);
-      const depthFile = findFileAtTimestamp(replayData.depthImages, timestamp);
-
-      setCurrentReplayImages({
-        colorImageUrl: colorFile?.url,
-        depthImageUrl: depthFile?.url,
-      });
-    },
-    [replayData],
-  );
-
-  // Update replay state when currentReplayIndex changes
-  useEffect(() => {
-    if (appMode === "replay" && replayData) {
-      updateReplayState(currentReplayIndex);
-    }
-  }, [appMode, currentReplayIndex, updateReplayState, replayData]);
-
-  // Playback controls
-  const handleReplayPlay = useCallback(() => {
-    if (
-      !replayData ||
-      isReplayPlaying ||
-      currentReplayIndex >= replayData.allTimestamps.length - 1
-    )
-      return;
-
-    setIsReplayPlaying(true);
-    const intervalId = setInterval(() => {
-      setCurrentReplayIndex((prevIndex) => {
-        const newIndex = prevIndex + 1;
-        if (newIndex >= replayData.allTimestamps.length) {
-          setIsReplayPlaying(false);
-          clearInterval(intervalId);
-          return replayData.allTimestamps.length - 1;
-        }
-        return newIndex;
-      });
-    }, 100); // 10fps playback
-
-    setReplayIntervalId(intervalId);
-  }, [replayData, isReplayPlaying, currentReplayIndex]);
-
-  const handleReplayPause = useCallback(() => {
-    setIsReplayPlaying(false);
-    if (replayIntervalId) {
-      clearInterval(replayIntervalId);
-      setReplayIntervalId(null);
-    }
-  }, [replayIntervalId]);
-
-  const handleReplaySeekToFrame = useCallback(
-    (frameIndex: number) => {
-      if (
-        !replayData ||
-        frameIndex < 0 ||
-        frameIndex >= replayData.allTimestamps.length
-      )
-        return;
-
-      setCurrentReplayIndex(frameIndex);
-      if (isReplayPlaying) {
-        handleReplayPause();
-        // Restart playback after a brief delay
-        setTimeout(handleReplayPlay, 100);
-      }
-    },
-    [isReplayPlaying, handleReplayPause, handleReplayPlay],
-  );
-
-  const handleStepBackward = useCallback(() => {
-    if (!replayData || currentReplayIndex <= 0) return;
-    setCurrentReplayIndex(currentReplayIndex - 1);
-  }, [replayData, currentReplayIndex]);
-
-  const handleStepForward = useCallback(() => {
-    if (
-      !replayData ||
-      currentReplayIndex >= replayData.allTimestamps.length - 1
-    )
-      return;
-    setCurrentReplayIndex(currentReplayIndex + 1);
-  }, [replayData, currentReplayIndex]);
-
-  // Cleanup replay interval on unmount
-  useEffect(() => {
-    return () => {
-      if (replayIntervalId) {
-        clearInterval(replayIntervalId);
-      }
-    };
-  }, [replayIntervalId]);
+  }, [appMode, sseDetections, setLatestDetections]);
 
   // Try to restore layout from localStorage on component mount
   useEffect(() => {
@@ -978,83 +824,44 @@ export const Layout: React.FC<LayoutProps> = ({
       const savedLayout = localStorage.getItem(LAYOUT_STORAGE_KEY);
       if (savedLayout) {
         const layout = JSON.parse(savedLayout);
-        // Only set if not null (empty state is null)
         if (layout !== null) {
           setCurrentNode(layout);
-          console.log("Restored layout from localStorage");
         } else {
-          // If saved layout was explicitly null, ensure state is null
           setCurrentNode(null);
-          console.log("Restored null layout from localStorage");
         }
-      } else {
-        console.log(
-          "No saved layout found. Initializing from visibility state via effect.",
-        );
       }
-    } catch (error) {
-      console.warn("Failed to load or parse layout from localStorage:", error);
-    }
-  }, []); // Empty dependency array means this runs only once on mount
+    } catch {}
+  }, []);
 
   // Update the mosaic layout when window visibility changes
   const updateNodeStructure = useCallback(() => {
     const visibleWindows = Object.entries(windowVisibility)
       .filter(([, isVisible]) => isVisible)
       .map(([idStr]) => parseInt(idStr))
-      .filter((id) => windowComponents[id]); // Ensure component exists for the ID
-
-    console.log("Visible windows:", visibleWindows);
-
+      .filter((id) => windowComponents[id]);
     const newNode =
       visibleWindows.length === 0
         ? null
         : createBalancedTreeFromLeaves(visibleWindows);
-    console.log("Generated new layout node:", newNode);
     setCurrentNode(newNode);
+  }, [windowVisibility, windowComponents]);
 
-    // Save visibility state to localStorage whenever it changes
-    try {
-      localStorage.setItem(
-        VISIBILITY_STORAGE_KEY,
-        JSON.stringify(windowVisibility),
-      );
-      console.log("Saved window visibility to localStorage");
-    } catch (error) {
-      console.warn("Failed to save window visibility to localStorage:", error);
-    }
-  }, [windowVisibility, windowComponents]); // Dependencies for useCallback
-
-  // Effect to update layout whenever visibility changes or on initial mount if no layout restored
   useEffect(() => {
     updateNodeStructure();
-    // Only generate layout from windowVisibility; do not sync windowVisibility from layout
   }, [windowVisibility, updateNodeStructure]);
 
   // Toggle window visibility
   const toggleWindowVisibility = useCallback(
     (windowId: number) => {
-      // Only toggle if the component for this ID exists
       if (windowComponents[windowId]) {
-        setWindowVisibility((prevState) => {
-          const newState = {
-            ...prevState,
-            [windowId]: !prevState[windowId],
-          };
-          console.log(
-            `Toggling window ${windowId} visibility to ${newState[windowId]}`,
-          );
-          // Saving to localStorage is handled by the useEffect watching windowVisibility
-          return newState;
+        setWindowVisibility({
+          ...windowVisibility,
+          [windowId]: !windowVisibility[windowId],
         });
-      } else {
-        console.warn(
-          `Attempted to toggle visibility for non-existent window ID: ${windowId}`,
-        );
       }
     },
-    [windowComponents],
-  ); // Dependency on windowComponents
+    [windowComponents, setWindowVisibility, windowVisibility],
+  );
 
   // Toggle settings modal
   const toggleSettings = useCallback(() => {
@@ -1063,91 +870,15 @@ export const Layout: React.FC<LayoutProps> = ({
 
   // Update server configuration
   const handleServerConfigChange = useCallback(
-    (newConfig: string) => {
-      if (newConfig !== serverConfig) {
-        setServerConfig(newConfig);
-        // Save server config to localStorage
-        try {
-          localStorage.setItem(SERVER_CONFIG_KEY, newConfig);
-          console.log(
-            `Server configuration updated and saved to: ${newConfig}`,
-          );
-        } catch (error) {
-          console.warn("Failed to save server config to localStorage:", error);
-        }
-      }
-    },
-    [serverConfig],
-  ); // Dependency on serverConfig
+    (newConfig: string) => setServerConfig(newConfig),
+    [setServerConfig],
+  );
 
   // Handle app mode change
   const handleAppModeChange = useCallback(
-    (newMode: AppMode) => {
-      setAppMode(newMode);
-      try {
-        localStorage.setItem(APP_MODE_KEY, newMode);
-        console.log(`App mode changed to: ${newMode}`);
-      } catch (error) {
-        console.warn("Failed to save app mode to localStorage:", error);
-      }
-
-      // Reset state when switching modes
-      if (newMode === "server") {
-        setReplayData(null);
-        setCurrentReplayIndex(0);
-        setIsReplayPlaying(false);
-        setCurrentReplayImages({});
-        setLatestDetections(null);
-        if (replayIntervalId) {
-          clearInterval(replayIntervalId);
-          setReplayIntervalId(null);
-        }
-      } else if (newMode === "replay") {
-        // Clear server-based detections when switching to replay mode
-        setLatestDetections(null);
-      }
-    },
-    [appMode, replayIntervalId],
+    (newMode: AppMode) => setAppMode(newMode),
+    [setAppMode],
   );
-
-  // Handle replay data upload
-  const handleReplayDataUpload = useCallback((data: ReplayData) => {
-    setReplayData(data);
-    setCurrentReplayIndex(0);
-    setIsReplayPlaying(false);
-
-    // Initialize with first timestamp
-    const firstTimestamp = data.allTimestamps[0];
-    const initialColorFile = data.colorImages.find(
-      (f) => f.timestamp === firstTimestamp,
-    );
-    const initialDepthFile = data.depthImages.find(
-      (f) => f.timestamp === firstTimestamp,
-    );
-    const initialLogFile = data.logFiles.find(
-      (f) => f.timestamp === firstTimestamp,
-    );
-
-    setCurrentReplayImages({
-      colorImageUrl: initialColorFile?.url,
-      depthImageUrl: initialDepthFile?.url,
-    });
-
-    // Load initial detection data
-    if (initialLogFile) {
-      initialLogFile.file.text().then((text) => {
-        try {
-          const detectionData = JSON.parse(text);
-          setLatestDetections(detectionData);
-        } catch (error) {
-          console.error("Failed to parse initial log file:", error);
-          setLatestDetections({ stuff: [] });
-        }
-      });
-    } else {
-      setLatestDetections({ stuff: [] });
-    }
-  }, []);
 
   // Create a new window from the zero state
   // This function is called by react-mosaic when the zero state button is clicked.
@@ -1288,13 +1019,6 @@ export const Layout: React.FC<LayoutProps> = ({
           renderTile={(id, path) => {
             const WindowComponent = windowComponents[id];
             const title = windowTitles[id] ?? `Window ${id}`;
-
-            // Note: We removed the check for windowVisibility[id] here.
-            // The assumption is that react-mosaic-component only calls renderTile
-            // for IDs that are present in the 'value' prop (currentNode).
-            // The 'currentNode' is kept in sync with 'windowVisibility' by
-            // the updateNodeStructure function and its useEffect triggers.
-
             return WindowComponent ? (
               <Window
                 path={path}
@@ -1307,7 +1031,6 @@ export const Layout: React.FC<LayoutProps> = ({
                 }
               />
             ) : (
-              // Render placeholder for unknown components
               <MosaicWindow path={path} title={`Unknown Window ${id}`}>
                 <div>Component not found for ID {id}</div>
               </MosaicWindow>
@@ -1316,9 +1039,6 @@ export const Layout: React.FC<LayoutProps> = ({
           zeroStateView={<MosaicZeroState createNode={createNewWindow} />}
           value={currentNode}
           onChange={handleLayoutChange}
-          // Additional Mosaic props if needed:
-          // onRelease={(nodes) => { ... }}
-          // dragElementContainedWithin={...}
         />
       </div>
     </div>

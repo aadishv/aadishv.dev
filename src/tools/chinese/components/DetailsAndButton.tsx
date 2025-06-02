@@ -3,11 +3,6 @@ import { useSelector } from "@xstate/store/react";
 import { store } from "../Store";
 import type { Sentence } from "../Data";
 
-/**
- * Simple button component that renders a clickable button with underline decoration
- * @param {string} name - The text to display on the button
- * @param {() => void} onClick - Click handler function
- */
 export function Button({
   name,
   onClick,

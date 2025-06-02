@@ -1,5 +1,5 @@
 // aadishv.github.io/src/components/vairc/context/DetectionContext.tsx
-import React, { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext } from "react";
 import type { Detection } from "../Layout";
 
 // Define source types for highlighted detections

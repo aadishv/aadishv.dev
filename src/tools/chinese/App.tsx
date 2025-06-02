@@ -5,7 +5,7 @@ import { store, type AppMode } from "./Store";
 import MyModal from "./components/MyModal";
 import SettingsModal from "./components/SettingsModal";
 import { SentenceReview, Footer } from "./components/SentenceReviewAndFooter";
-import { Button, SentenceDetails } from "./components/DetailsAndButton";
+import { SentenceDetails } from "./components/DetailsAndButton";
 
 export default function App() {
   const [historyModalIsOpen, setHistoryModalIsOpen] = useState(false);

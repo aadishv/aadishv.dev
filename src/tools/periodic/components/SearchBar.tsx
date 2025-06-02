@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import Fuse from "fuse.js";
 import elements from "../periodic.json";
 import { Input } from "@/components/ui/input";
