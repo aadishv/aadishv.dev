@@ -48,7 +48,7 @@ const DropTarget = ({
     }
   };
 
-  const handleDragLeave = (_) => {
+  const handleDragLeave = () => {
     setDragOverIndex(null);
   };
 
