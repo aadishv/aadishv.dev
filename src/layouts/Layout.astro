@@ -20,9 +20,9 @@ const { title, nothing, light, hideName } = Astro.props;
       rel="stylesheet"
     />
   </head>
-  <body class={light ? "light" : undefined}>
+  <body class={light ? "light" : ""}>
     <div
-      class={`fixed pt-4 left-4 right-4 z-[1000] flex max-lg:backdrop-blur-sm ${nothing && "backdrop-blur-sm"}`}
+      class={`fixed pt-4 left-4 right-4 z-[1000] flex`}
     >
       {
         !hideName && !light && (
