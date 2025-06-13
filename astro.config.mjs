@@ -12,8 +12,5 @@ export default defineConfig({
     }),
   ],
   site: 'https://aadishv.github.io',
-  base: '',
-  redirects: {
-      "/dishpy": "/DishPy",
-    }
+  base: ''
 });
