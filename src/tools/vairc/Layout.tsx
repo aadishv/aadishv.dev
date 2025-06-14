@@ -361,7 +361,7 @@ const Header: React.FC<{
             style={{ mixBlendMode: "multiply" }}
           />
           <img
-            src="https://recf.org/wp-content/uploads/2024/10/VEX-AI-Robotics-Competition-Element-Sidebar.png"
+            src="/tools/vairc/vairc.png"
             alt="VAIRC Logo"
             className="h-full"
           />
