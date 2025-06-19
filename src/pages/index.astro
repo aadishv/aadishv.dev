@@ -2,30 +2,22 @@
 import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { parseISO, format } from "date-fns";
+import EntryList from "@/components/EntryList";
 
-export const getSlugFromPath = (path: string): string => {
-  const filename = path.split("/").at(-1)!.replace(".md", "");
-
-  // If this is from the projects directory, prefix with "project-"
-  if (path.includes("/projects/")) {
-    return `project-${filename}`;
-  }
-
-  return filename;
+// getSlugFromPath needs to be defined at the top level if used by clientEntries mapping
+// or ensure it's correctly scoped if only used in the template section further down.
+// For clientEntries, it needs to be available here.
+const getSlugFromPath = (path: string): string => {
+  // Adjusted to be robust against paths not containing "/" or being undefined
+  const parts = path.split("/");
+  const filename = parts.pop() || ""; // Get last part or empty string
+  return filename.replace(".md", "");
 };
 
-const allPosts = await Astro.glob("../content/posts/*.md");
-const allProjects = await Astro.glob("../content/projects/*.md");
+const allEntries = await Astro.glob("../content/posts/*.md"); // Corrected glob path as per instructions
 
-const sortedPosts = allPosts
+const sortedEntries = allEntries
   .sort(
     (a, b) =>
       new Date(b.frontmatter.date).valueOf() -
@@ -33,16 +25,19 @@ const sortedPosts = allPosts
   )
   .filter((p) => p.frontmatter.hidden !== true);
 
-const sortedProjects = allProjects
-  .sort(
-    (a, b) =>
-      new Date(b.frontmatter.date).valueOf() -
-      new Date(a.frontmatter.date).valueOf(),
-  )
-  .filter((p) => p.frontmatter.hidden !== true);
+const clientEntries = sortedEntries.map(entry => ({
+  slug: getSlugFromPath(entry.file), // Ensure getSlugFromPath is correctly defined and scoped
+  title: entry.frontmatter.title,
+  date: entry.frontmatter.date,
+  description: entry.frontmatter.description || '',
+  categories: entry.frontmatter.categories || [],
+  rawContent: entry.rawContent() // This is a function call
+}));
+
 ---
 
 <Layout title="Aadish Verma" hideName={true}>
+    <main class="container mx-auto py-10 lg:px-52">
   <Button variant="ghost" className="-ml-4 mb-3 pb-3 duration-0">
     <h1><a href="/" class="">Aadish Verma</a></h1>
   </Button>
@@ -76,26 +71,7 @@ const sortedProjects = allProjects
         > of my High Stakes code available.
       </li>
 
-      <p>I've built several tools and games:</p>
-      <ul>
-        <li>
-          <a href="/tools/latex">LaTeX to Image</a>. A tool that converts LaTeX
-          equations into images in SVG, PNG, or GIF format. It includes live
-          preview rendering and easy copy options for image URLs and Markdown.
-        </li>
-        <li>
-          <a href="/games/slide">A minimal slide puzzle</a>. It uses a simple
-          design and animated game mechanics to create a seamless puzzle
-          experience. Upload any image to make your own puzzle.
-        </li>
-        <li>
-          <a href="/tools/chinese">Chinese Practice</a>. An interactive tool
-          designed to help learners practice Chinese characters and pinyin
-          pronunciation. The application offers two distinct practice modes,
-          comprehensive progress tracking, and an intuitive interface to enhance
-          your Chinese language learning experience.
-        </li>
-      </ul>
+      <p>I've built <a href="/tools">several tools</a> and games.</p>
 
       <p>
         I've also built several open-source tools for other projects, which I'm
@@ -118,57 +94,8 @@ const sortedProjects = allProjects
   </span>
 
   <!-- divider -->
-  <hr class="my-8" />
+  <hr class="my-4" />
 
-  <h2 class="pb-5">Projects</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    {
-      sortedProjects.map((project) => (
-        <a href={"/" + getSlugFromPath(project.file)} class="aadish-none">
-          <Card className="w-[25rem] transition-shadow h-full flex flex-col hover:shadow-md">
-            {project.frontmatter.image ? (
-              <div class="m-4 mb-0">
-                <img
-                  src={project.frontmatter.image}
-                  alt={project.frontmatter.title}
-                  class="object-cover rounded-lg shadow-sm mx-auto"
-                />
-              </div>
-            ) : null}
-            <div class="flex flex-col flex-grow">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-xl">
-                  {project.frontmatter.title}
-                </CardTitle>
-                <CardDescription>
-                  {format(parseISO(project.frontmatter.date), "LLLL d, yyyy")}
-                </CardDescription>
-              </CardHeader>
-            </div>
-            <CardContent>
-              <p class="line-clamp-3 text-sm">
-                {project.frontmatter.description}
-              </p>
-            </CardContent>
-          </Card>
-        </a>
-      ))
-    }
-  </div>
-
-  <hr class="my-8" />
-
-  <h2 class="pb-5">Blog</h2>
-  {
-    sortedPosts.map((post) => (
-      <>
-        <a href={"/" + getSlugFromPath(post.file)} class="text-xl">
-          {post.frontmatter.title}
-        </a>
-        <div class="mb-5">
-          {format(parseISO(post.frontmatter.date), "LLLL d, yyyy")}
-        </div>
-      </>
-    ))
-  }
+  <EntryList entries={clientEntries} client:load />
+    </main>
 </Layout>

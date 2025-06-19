@@ -2,7 +2,8 @@
 date: "2025-04-10"
 title: "Using Aadish's Chinese practice"
 description: "A comprehensive guide to using the Chinese practice application"
-# hidden: true
+hidden: true
+categories: ["blog"]
 ---
 
 _Aadish's Chinese practice_ is a little tool I've created to help me practice my Chinese.

@@ -1,6 +1,8 @@
 ---
 date: "2025-03-24"
 title: "Using code to simplify a repetitive task"
+categories: ["blog"]
+description: ""
 ---
 
 The post I wrote yesterday was quite the beast, so today I'll keep it short :)

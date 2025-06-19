@@ -1,6 +1,8 @@
 ---
 date: "2025-05-16"
 title: "Privacy Policy for OHS AC Utilities"
+categories: ["blog"]
+description: ""
 ---
 
 **Last Updated:** May 16, 2025

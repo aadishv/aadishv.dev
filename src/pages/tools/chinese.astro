@@ -3,6 +3,6 @@ import Layout from "@/layouts/Layout.astro";
 import App from "@/tools/chinese/App.tsx";
 ---
 
-<Layout nothing title="chinese practice">
-  <App client:only="react" />
+<Layout title="chinese practice">
+  <div class="-mt-8"><App client:only="react" /></div>
 </Layout>

@@ -4,6 +4,7 @@ import type {
   GetStaticPathsOptions,
 } from "astro";
 import Layout from "@/layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { parseISO, format } from "date-fns";
 
@@ -15,6 +16,7 @@ interface PostFrontmatter {
   image?: string; // Optional image field for project posts
   description?: string; // Optional description field for project posts
   link?: string; // Optional link field for project posts
+  categories?: string[]; // Added categories for type safety
 }
 
 // Type for a markdown post instance from Astro.glob
@@ -30,25 +32,15 @@ type PostProps = { post: MarkdownPost };
 type PostGetStaticPathsResult = Array<{ params: PostParams; props: PostProps }>;
 
 export async function getStaticPaths({}: GetStaticPathsOptions): Promise<PostGetStaticPathsResult> {
-  // allPosts is an array of MarkdownPost instances
-  const allPosts: MarkdownPost[] = await Astro.glob("@/content/posts/*.md");
-  const projectPosts: MarkdownPost[] = await Astro.glob(
-    "@/content/projects/*.md",
-  );
-
-  // Gather all posts and projects
-  const allContent = [...allPosts, ...projectPosts];
+  // allContent is an array of MarkdownPost instances
+  const allContent: MarkdownPost[] = await Astro.glob("@/content/posts/*.md");
 
   const paths: PostGetStaticPathsResult = allContent.map((post) => {
     // post.file is guaranteed to be a string by Astro.glob
     const slug = getSlugFromPath(post.file);
-    // For project posts, prepend "project-" to the slug
-    const finalSlug = post.file.includes("/content/projects/")
-      ? `project-${slug}`
-      : slug;
     return {
       params: {
-        slug: finalSlug, // slug is string
+        slug: slug, // slug is string
       },
       props: { post }, // post is MarkdownPost
     };
@@ -81,14 +73,13 @@ const headings = post.getHeadings();
 const date: Date = parseISO(post.frontmatter.date); // parseISO returns Date
 const formatted: string = format(date, "LLLL d, yyyy"); // format returns string
 
-// Check if this is a project post based on the file path
-const isProject = post.file.includes("/content/projects/");
+const isProject = post.frontmatter.categories && post.frontmatter.categories.includes('project');
 ---
 
 <Layout title={post.frontmatter.title}>
-  <article>
+    <article class="container mx-auto py-10 lg:px-52">
     {
-      isProject && post.frontmatter.image && (
+      post.frontmatter.image && (
         <div>
           <img
             src={post.frontmatter.image}
@@ -101,7 +92,7 @@ const isProject = post.file.includes("/content/projects/");
     <main>
       <div class="text-xl">
         {
-          isProject && post.frontmatter.link ? (
+          post.frontmatter.link ? (
             <a
               href={post.frontmatter.link}
               target="_blank"
@@ -110,7 +101,7 @@ const isProject = post.file.includes("/content/projects/");
               <h1>{post.frontmatter.title}</h1>
             </a>
           ) : (
-            <a href="">
+            <a href={`/${getSlugFromPath(post.file)}`}> {/* Point to the page itself if no external link */}
               <h1>{post.frontmatter.title}</h1>
             </a>
           )
@@ -119,6 +110,17 @@ const isProject = post.file.includes("/content/projects/");
           <time datetime={date.toString()}>{formatted}</time>
         </h4>
       </div>
+
+      {isProject && post.frontmatter.link && (
+        <div class="my-4">
+          <a href={post.frontmatter.link} target="_blank" rel="noopener noreferrer">
+            <Button variant="outline">
+              View Live Project / Tool
+            </Button>
+          </a>
+        </div>
+      )}
+
       {
         headings.length != 0 && (
           <div class="mt-3">
@@ -126,7 +128,7 @@ const isProject = post.file.includes("/content/projects/");
               <div class="-m-3 flex flex-col">
                 <CardHeader>
                   <h6 class="-mb-5 -mt-1">
-                    {isProject ? "In this project" : "In this post"}
+                    Contents
                   </h6>
                 </CardHeader>
                 <CardContent>
