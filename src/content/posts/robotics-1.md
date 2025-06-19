@@ -1,6 +1,8 @@
 ---
 date: "2024-09-08"
 title: "Robotics 1: 315P (Over Under)"
+categories: ["blog"]
+description: ""
 ---
 
 This is the first part of what will soon become a four- or five-part series. The first two parts are about my time on the robotics team 315P.

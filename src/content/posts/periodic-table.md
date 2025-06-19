@@ -4,6 +4,7 @@ title: "Periodic Table"
 description: "A modern, interactive periodic table with detailed element information designed for chemistry students"
 link: "/tools/periodic"
 image: "/projects/periodic/thumbnail.png"
+categories: ["project"]
 ---
 
 ## Demo
