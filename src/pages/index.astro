@@ -2,9 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input"; // Assuming shadcn/ui input is available or will be added
 import { parseISO, format } from "date-fns";
+import EntryList from "@/components/EntryList";
 
 // getSlugFromPath needs to be defined at the top level if used by clientEntries mapping
 // or ensure it's correctly scoped if only used in the template section further down.
@@ -38,6 +37,7 @@ const clientEntries = sortedEntries.map(entry => ({
 ---
 
 <Layout title="Aadish Verma" hideName={true}>
+    <main class="container mx-auto py-10 lg:px-52">
   <Button variant="ghost" className="-ml-4 mb-3 pb-3 duration-0">
     <h1><a href="/" class="">Aadish Verma</a></h1>
   </Button>
@@ -94,184 +94,8 @@ const clientEntries = sortedEntries.map(entry => ({
   </span>
 
   <!-- divider -->
-  <hr class="my-8" />
+  <hr class="my-4" />
 
-  <div class="flex space-x-2 mb-4">
-    <Button id="filter-blog-btn" variant="outline">Blog</Button>
-    <Button id="filter-project-btn" variant="outline">Projects</Button>
-  </div>
-  <Input type="text" id="search-bar" placeholder="Search entries (e.g., 'periodic' or 'is:project table')" class="w-full mb-6" />
-
-
-  <div id="entries-list-container">
-    <ul id="entries-list" class="space-y-6">
-      {sortedEntries.map((entry) => (
-      <div class="">
-          <a href={"/" + getSlugFromPath(entry.file)} class="text-xl decoration-none aadish-none">
-              <span class="underline hover:decoration-none">{entry.frontmatter.title}</span>
-            {entry.frontmatter.categories.map((c: string) => <Badge variant="outline" className="ml-2 font-normal">{c}</Badge>)}
-          </a>
-        <div class="">
-            {format(parseISO(entry.frontmatter.date), "LLLL d, yyyy")}
-        </div>
-      </div>
-      ))}
-    </ul>
-  </div>
+  <EntryList entries={clientEntries} client:load />
+    </main>
 </Layout>
-
-<script define:vars={{ initialEntries: clientEntries }}>
-  // This script is inside the <script define:vars ...> in index.astro
-  // initialEntries is available directly as an object from define:vars
-
-  window.clientEntries = initialEntries; // Use the already available object
-
-  console.log('Client-side entries loaded:', window.clientEntries);
-
-  // Dynamically import Fuse.js
-  import('fuse.js').then(FuseModule => {
-    const Fuse = FuseModule.default;
-    if (!window.clientEntries || window.clientEntries.length === 0) {
-      console.warn("No entries available for Fuse.js initialization.");
-      return;
-    }
-
-    const fuse = new Fuse(window.clientEntries, {
-      keys: ['title', 'description', 'rawContent', 'categories'], // Search in title, desc, content, and categories
-      includeScore: true,
-      threshold: 0.35, // Adjusted threshold
-      ignoreLocation: true, // Good for free-form text
-    });
-
-    const searchBar = document.getElementById('search-bar');
-    const entriesList = document.getElementById('entries-list');
-    const filterBlogBtn = document.getElementById('filter-blog-btn');
-    const filterProjectBtn = document.getElementById('filter-project-btn');
-
-    // Date formatting utility (simplified, consider date-fns/esm for full client-side date-fns)
-    function formatDate(dateString) {
-      try {
-        return new Date(dateString).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-      } catch (e) {
-        return dateString; // Fallback
-      }
-    }
-
-    function renderEntries(resultsOrItems) {
-      if (!entriesList) return;
-      entriesList.innerHTML = ''; // Clear current list
-
-      // Determine if we have Fuse results (objects with `item` key) or direct items
-      const entriesToRender = resultsOrItems.length > 0 && resultsOrItems[0].hasOwnProperty('item')
-        ? resultsOrItems.map(result => result.item)
-        : resultsOrItems;
-
-      if (entriesToRender.length === 0 && searchBar.value.trim() !== '') {
-         const li = document.createElement('li');
-         li.textContent = "No results found.";
-         entriesList.appendChild(li);
-         return;
-      }
-
-      entriesToRender.forEach(entry => {
-          const li = document.createElement('li');
-          li.className = 'flex flex-col';
-
-          const badgeDiv = document.createElement('div');
-          badgeDiv.className = 'flex items-center mb-1';
-
-          const badge = document.createElement('span');
-          const isProject = entry.categories.includes('project');
-
-          // Base classes from badgeVariants
-          const baseBadgeClasses = "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2";
-
-          let variantBadgeClasses = "";
-          if (isProject) {
-            // Variant "secondary" classes
-            variantBadgeClasses = "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80";
-            badge.textContent = 'Project';
-          } else {
-            // Variant "outline" classes
-            variantBadgeClasses = "text-foreground border"; // text-foreground and border (assuming border-border is implied or default)
-            // For outline, the border color usually comes from the border class itself or default border color.
-            // If border-border is specific, it should be `border-border`. The component uses `text-foreground` and relies on the base `border` class.
-            badge.textContent = 'Blog';
-          }
-          badge.className = `mr-2 ${baseBadgeClasses} ${variantBadgeClasses}`;
-          badgeDiv.appendChild(badge);
-
-          const titleLink = document.createElement('a');
-          titleLink.href = '/' + entry.slug;
-          titleLink.className = 'text-xl font-semibold hover:underline';
-          titleLink.textContent = entry.title;
-          badgeDiv.appendChild(titleLink);
-          li.appendChild(badgeDiv);
-
-          const dateSpan = document.createElement('span');
-          dateSpan.className = 'text-sm text-muted-foreground mb-1';
-          dateSpan.textContent = formatDate(entry.date);
-          li.appendChild(dateSpan);
-
-          if (entry.description) {
-            const descriptionP = document.createElement('p');
-            descriptionP.className = 'text-sm text-muted-foreground line-clamp-3';
-            descriptionP.textContent = entry.description;
-            li.appendChild(descriptionP);
-          }
-          entriesList.appendChild(li);
-      });
-    }
-
-    let currentFilter = 'all'; // 'all', 'blog', 'project'
-
-    function applyFiltersAndSearch() {
-      const query = searchBar.value.trim().toLowerCase();
-      let filteredEntries = window.clientEntries;
-
-      // Apply category filter first
-      if (currentFilter === 'blog') {
-        filteredEntries = window.clientEntries.filter(entry => !entry.categories.includes('project'));
-      } else if (currentFilter === 'project') {
-        filteredEntries = window.clientEntries.filter(entry => entry.categories.includes('project'));
-      }
-
-      // Then apply search query
-      if (query === '') {
-        renderEntries(filteredEntries); // Render filtered entries if no search query
-      } else {
-        // If there's a search query, use Fuse on the filtered subset
-        const fuseInstance = new Fuse(filteredEntries, {
-          keys: ['title', 'description', 'rawContent', 'categories'],
-          includeScore: true,
-          threshold: 0.35,
-          ignoreLocation: true,
-        });
-        const searchResults = fuseInstance.search(query);
-        renderEntries(searchResults); // Render search results (these are {item, score} objects)
-      }
-    }
-
-    searchBar.addEventListener('input', applyFiltersAndSearch);
-
-    filterBlogBtn.addEventListener('click', () => {
-      currentFilter = 'blog';
-      filterBlogBtn.classList.add('bg-accent'); // Style for active filter
-      filterProjectBtn.classList.remove('bg-accent');
-      applyFiltersAndSearch();
-    });
-
-    filterProjectBtn.addEventListener('click', () => {
-      currentFilter = 'project';
-      filterProjectBtn.classList.add('bg-accent');
-      filterBlogBtn.classList.remove('bg-accent');
-      applyFiltersAndSearch();
-    });
-
-    // Initial render of all entries
-    renderEntries(window.clientEntries);
-
-  }).catch(error => {
-    console.error("Failed to load Fuse.js or error in search script:", error);
-  });
-</script>
