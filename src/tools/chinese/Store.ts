@@ -47,14 +47,12 @@ export const getAllLessons = (): string[] => {
 };
 
 // Load stored data and initialize context
-const storedData = loadFromStorage() as
-  | {
-      history?: HistoryType;
-      sentences?: Sentence[];
-      sessions?: Record<string, string>;
-      enabledLessons?: string[];
-    }
-  | null;
+const storedData = loadFromStorage() as {
+  history?: HistoryType;
+  sentences?: Sentence[];
+  sessions?: Record<string, string>;
+  enabledLessons?: string[];
+} | null;
 const allLessons = getAllLessons();
 
 const initialContext = {

@@ -13,11 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  robustColor,
-  rgbToHsl,
-  classifyColor,
-} from "./components/colorUtils";
+import { robustColor, rgbToHsl, classifyColor } from "./components/colorUtils";
 
 type Point = { x: number; y: number };
 type SliceDebug = { colorType: string; rgb: [number, number, number] };
@@ -25,9 +21,6 @@ type SliceDebug = { colorType: string; rgb: [number, number, number] };
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 360;
 const NUM_SLICES = 6;
-
-
-
 
 export function App() {
   const imgRef = useRef<HTMLImageElement>(null);

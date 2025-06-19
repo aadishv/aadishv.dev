@@ -55,16 +55,16 @@ export function EntryList({ entries }: EntryListProps) {
     filters.forEach((filter) => {
       if (filter === "blog") {
         filteredEntries = filteredEntries.filter(
-          (e) => !e.categories.includes("project")
+          (e) => !e.categories.includes("project"),
         );
       } else if (filter === "project") {
         filteredEntries = filteredEntries.filter((e) =>
-          e.categories.includes("project")
+          e.categories.includes("project"),
         );
       } else {
         // Generic is:category filter
         filteredEntries = filteredEntries.filter((e) =>
-          e.categories.map((c) => c.toLowerCase()).includes(filter)
+          e.categories.map((c) => c.toLowerCase()).includes(filter),
         );
       }
     });
@@ -135,7 +135,9 @@ export function EntryList({ entries }: EntryListProps) {
                   href={"/" + entry.slug}
                   className="text-xl decoration-none aadish-none"
                 >
-                  <span className="underline hover:decoration-none">{entry.title}</span>
+                  <span className="underline hover:decoration-none">
+                    {entry.title}
+                  </span>
                   {entry.categories.map((c) => (
                     <Badge
                       key={c}
@@ -146,9 +148,7 @@ export function EntryList({ entries }: EntryListProps) {
                     </Badge>
                   ))}
                 </a>
-                <div className="">
-                  {formatDate(entry.date)}
-                </div>
+                <div className="">{formatDate(entry.date)}</div>
                 {entry.description && (
                   <p className="text-sm text-muted-foreground line-clamp-3">
                     {entry.description}

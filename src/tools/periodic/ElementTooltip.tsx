@@ -21,7 +21,13 @@ interface ElementTooltipProps {
 
 const SQUARE_SIZE = 56; // px
 
-const PropertyRow = ({ label, value }: { label: string; value: string | number }) => (
+const PropertyRow = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) => (
   <div className="">
     <h6 className="underline decoration-blue-500">{label}</h6>
     <p>{value}</p>
@@ -62,38 +68,45 @@ const ElementTooltip: React.FC<ElementTooltipProps> = ({
         <CardDescription>Atomic Number: {el.number}</CardDescription>
       </CardHeader>
       <CardContent className="h-[512px] overflow-y-auto">
-        <PropertyRow 
-          label="Electron config" 
-          value={el.electron_configuration_semantic || el.electron_configuration} 
+        <PropertyRow
+          label="Electron config"
+          value={
+            el.electron_configuration_semantic || el.electron_configuration
+          }
         />
-        <PropertyRow 
-          label="Full config" 
-          value={el.electron_configuration} 
+        <PropertyRow label="Full config" value={el.electron_configuration} />
+        <PropertyRow
+          label="Group"
+          value={(el as unknown as { group: string })["group"] ?? "N/A"}
         />
-        <PropertyRow 
-          label="Group" 
-          value={(el as unknown as { group: string })["group"] ?? "N/A"} 
+        <PropertyRow label="Atomic mass" value={el.atomic_mass.toFixed(2)} />
+        <PropertyRow
+          label="Electronegativity"
+          value={
+            el.electronegativity_pauling !== undefined &&
+            el.electronegativity_pauling !== null
+              ? el.electronegativity_pauling
+              : "N/A"
+          }
         />
-        <PropertyRow 
-          label="Atomic mass" 
-          value={el.atomic_mass.toFixed(2)} 
+        <PropertyRow
+          label="Oxidation states"
+          value={
+            Array.isArray(el.oxistates) && el.oxistates.length > 0
+              ? el.oxistates.join(", ")
+              : "N/A"
+          }
         />
-        <PropertyRow 
-          label="Electronegativity" 
-          value={el.electronegativity_pauling !== undefined && el.electronegativity_pauling !== null ? el.electronegativity_pauling : "N/A"} 
+        <PropertyRow
+          label="Oxidation states (extended)"
+          value={
+            Array.isArray(el.oxistates_extended) &&
+            el.oxistates_extended.length > 0
+              ? el.oxistates_extended.join(", ")
+              : "N/A"
+          }
         />
-        <PropertyRow 
-          label="Oxidation states" 
-          value={Array.isArray(el.oxistates) && el.oxistates.length > 0 ? el.oxistates.join(", ") : "N/A"} 
-        />
-        <PropertyRow 
-          label="Oxidation states (extended)" 
-          value={Array.isArray(el.oxistates_extended) && el.oxistates_extended.length > 0 ? el.oxistates_extended.join(", ") : "N/A"} 
-        />
-        <PropertyRow 
-          label="Fun fact" 
-          value={el.fun_fact} 
-        />
+        <PropertyRow label="Fun fact" value={el.fun_fact} />
         <div className="mt-4">
           <a
             href={`https://www.google.com/search?q=${encodeURIComponent(el.name + " element")}`}

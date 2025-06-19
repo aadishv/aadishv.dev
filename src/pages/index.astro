@@ -24,77 +24,76 @@ const sortedEntries = allEntries
   )
   .filter((p) => p.frontmatter.hidden !== true);
 
-const clientEntries = sortedEntries.map(entry => ({
+const clientEntries = sortedEntries.map((entry) => ({
   slug: getSlugFromPath(entry.file), // Ensure getSlugFromPath is correctly defined and scoped
   title: entry.frontmatter.title,
   date: entry.frontmatter.date,
-  description: entry.frontmatter.description || '',
+  description: entry.frontmatter.description || "",
   categories: entry.frontmatter.categories || [],
-  rawContent: entry.rawContent() // This is a function call
+  rawContent: entry.rawContent(), // This is a function call
 }));
-
 ---
 
 <Layout title="Aadish Verma" hideName={true}>
-    <main class="container mx-auto py-10 lg:px-52">
-  <Button variant="ghost" className="-ml-4 mb-3 pb-3 duration-0">
-    <h1><a href="/" class="">Aadish Verma</a></h1>
-  </Button>
-  <br />
-  <span>
-    <p>
-      Student at Stanford Online High School, passionate about really anything
-      [but especially STEM]. A few notable things I've done:
-    </p>
+  <main class="container mx-auto py-10 lg:px-52">
+    <Button variant="ghost" className="-ml-4 mb-3 pb-3 duration-0">
+      <h1><a href="/" class="">Aadish Verma</a></h1>
+    </Button>
+    <br />
+    <span>
+      <p>
+        Student at Stanford Online High School, passionate about really anything
+        [but especially STEM]. A few notable things I've done:
+      </p>
 
-    <ul>
-      <li>
-        <em>Hackathons.</em>
-        Won the OHS 2024 Labor Day Hackathon. I might write a blog post about it
-        later :) [<a href="https://github.com/aadishv/doleofdoves">code</a>]
-      </li>
+      <ul>
+        <li>
+          <em>Hackathons.</em>
+          Won the OHS 2024 Labor Day Hackathon. I might write a blog post about it
+          later :) [<a href="https://github.com/aadishv/doleofdoves">code</a>]
+        </li>
 
-      <li>
-        <em>Competitive programming.</em>
-        <a href="https://adventofcode.com/2024">Advent of Code</a> 2024 participant.
-        [<a href="https://github.com/aadishv/aoc">code</a>]
-      </li>
+        <li>
+          <em>Competitive programming.</em>
+          <a href="https://adventofcode.com/2024">Advent of Code</a> 2024 participant.
+          [<a href="https://github.com/aadishv/aoc">code</a>]
+        </li>
 
-      <li>
-        <em>Robotics.</em>
-        Lead coder for VEX V5 Robotics Competition team <a
-          href="https://www.robotevents.com/teams/V5RC/315P">315P</a
-        > for Over Under and part of the High Stakes seasons. My code is unfortunately
-        private, but I have made a <a
-          href="https://github.com/aadishv/highstakes">public mirror</a
-        > of my High Stakes code available.
-      </li>
+        <li>
+          <em>Robotics.</em>
+          Lead coder for VEX V5 Robotics Competition team <a
+            href="https://www.robotevents.com/teams/V5RC/315P">315P</a
+          > for Over Under and part of the High Stakes seasons. My code is unfortunately
+          private, but I have made a <a
+            href="https://github.com/aadishv/highstakes">public mirror</a
+          > of my High Stakes code available.
+        </li>
 
-      <p>I've built <a href="/tools">several tools</a> and games.</p>
+        <p>I've built <a href="/tools">several tools</a> and games.</p>
+
+        <p>
+          I've also built several open-source tools for other projects, which
+          I'm currently at liberty to explain in depth but will soon write a few
+          blog posts about :)
+        </p>
+      </ul>
 
       <p>
-        I've also built several open-source tools for other projects, which I'm
-        currently at liberty to explain in depth but will soon write a few blog
-        posts about :)
+        Contact me!
+        <br /><a href="mailto:aadish@ohs.stanford.edu">email</a>
+        <br /><a href="https://github.com/aadishv" target="_blank">github</a>
       </p>
-    </ul>
 
-    <p>
-      Contact me!
-      <br /><a href="mailto:aadish@ohs.stanford.edu">email</a>
-      <br /><a href="https://github.com/aadishv" target="_blank">github</a>
-    </p>
+      <p>
+        {"If I've built something else, you might find it"}
+        <a href="/tools">here</a>
+        {"or in my blog/projects ↓"}
+      </p>
+    </span>
 
-    <p>
-      {"If I've built something else, you might find it"}
-      <a href="/tools">here</a>
-      {"or in my blog/projects ↓"}
-    </p>
-  </span>
+    <!-- divider -->
+    <hr class="my-4" />
 
-  <!-- divider -->
-  <hr class="my-4" />
-
-  <EntryList entries={clientEntries} client:load />
-    </main>
+    <EntryList entries={clientEntries} client:load />
+  </main>
 </Layout>

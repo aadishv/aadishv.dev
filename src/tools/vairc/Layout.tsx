@@ -373,15 +373,21 @@ const Header: React.FC<{
             <div className="flex gap-6 items-center bg-white border border-gray-200 rounded-lg px-4 py-2 shadow-sm">
               <div className="flex flex-col items-center">
                 <span className="text-xs text-gray-500">CPU Temp</span>
-                <span className="text-lg font-mono font-semibold">{jetsonStats.cpu_temp.toFixed(1)}°C</span>
+                <span className="text-lg font-mono font-semibold">
+                  {jetsonStats.cpu_temp.toFixed(1)}°C
+                </span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-xs text-gray-500">GPU Temp</span>
-                <span className="text-lg font-mono font-semibold">{jetsonStats.gpu_temp.toFixed(1)}°C</span>
+                <span className="text-lg font-mono font-semibold">
+                  {jetsonStats.gpu_temp.toFixed(1)}°C
+                </span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-xs text-gray-500">Uptime</span>
-                <span className="text-lg font-mono font-semibold">{formatUptime(jetsonStats.uptime)}</span>
+                <span className="text-lg font-mono font-semibold">
+                  {formatUptime(jetsonStats.uptime)}
+                </span>
               </div>
             </div>
           </div>
@@ -794,7 +800,9 @@ export const Layout: React.FC<LayoutProps> = ({
     { stuff: [] }, // Provide a default with empty stuff array
   );
 
-  const [windowVisibility, setWindowVisibility] = useLocalStorageState<Record<number, boolean>>(
+  const [windowVisibility, setWindowVisibility] = useLocalStorageState<
+    Record<number, boolean>
+  >(
     VISIBILITY_STORAGE_KEY,
     (() => {
       const initialVisibility: Record<number, boolean> = {};

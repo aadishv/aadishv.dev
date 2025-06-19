@@ -269,8 +269,6 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
     updateCanvas();
   }, [detections, showBoundingBoxes, updateCanvas]);
 
-
-
   // Toggle bounding boxes
   const toggleBoundingBoxes = () => {
     const newValue = !showBoundingBoxes;

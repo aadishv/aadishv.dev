@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import type { AppMode, ReplayData, ReplayFile, DetectionPayload } from "./Layout";
+import type {
+  AppMode,
+  ReplayData,
+  ReplayFile,
+  DetectionPayload,
+} from "./Layout";
 
 /**
  * useLocalStorageState
@@ -7,7 +12,7 @@ import type { AppMode, ReplayData, ReplayFile, DetectionPayload } from "./Layout
  */
 export function useLocalStorageState<T>(
   key: string,
-  initialValue: T
+  initialValue: T,
 ): [T, (value: T) => void] {
   const [state, setState] = useState<T>(() => {
     try {
@@ -37,21 +42,27 @@ export function useReplayData(appMode: AppMode) {
   const [replayData, setReplayData] = useState<ReplayData | null>(null);
   const [currentReplayIndex, setCurrentReplayIndex] = useState(0);
   const [isReplayPlaying, setIsReplayPlaying] = useState(false);
-  const [replayIntervalId, setReplayIntervalId] = useState<NodeJS.Timeout | null>(null);
+  const [replayIntervalId, setReplayIntervalId] =
+    useState<NodeJS.Timeout | null>(null);
   const [currentReplayImages, setCurrentReplayImages] = useState<{
     colorImageUrl?: string;
     depthImageUrl?: string;
   }>({});
-  const [latestDetections, setLatestDetections] = useState<DetectionPayload | null>(null);
+  const [latestDetections, setLatestDetections] =
+    useState<DetectionPayload | null>(null);
 
   // Find file by timestamp helper
-  const findFileAtTimestamp = (files: ReplayFile[], timestamp: number): ReplayFile | null =>
+  const findFileAtTimestamp = (
+    files: ReplayFile[],
+    timestamp: number,
+  ): ReplayFile | null =>
     files.find((file) => file.timestamp === timestamp) || null;
 
   // Update replay state for a given index
   const updateReplayState = useCallback(
     async (index: number) => {
-      if (!replayData || index < 0 || index >= replayData.allTimestamps.length) return;
+      if (!replayData || index < 0 || index >= replayData.allTimestamps.length)
+        return;
       const timestamp = replayData.allTimestamps[index];
 
       // Detections
@@ -75,7 +86,7 @@ export function useReplayData(appMode: AppMode) {
         depthImageUrl: depthFile?.url,
       });
     },
-    [replayData]
+    [replayData],
   );
 
   // Update replay state when index changes
@@ -134,7 +145,7 @@ export function useReplayData(appMode: AppMode) {
         setTimeout(handleReplayPlay, 100);
       }
     },
-    [isReplayPlaying, handleReplayPause, handleReplayPlay, replayData]
+    [isReplayPlaying, handleReplayPause, handleReplayPlay, replayData],
   );
 
   // Step backward
@@ -186,9 +197,15 @@ export function useReplayData(appMode: AppMode) {
 
     // Initialize with first timestamp
     const firstTimestamp = data.allTimestamps[0];
-    const initialColorFile = data.colorImages.find((f) => f.timestamp === firstTimestamp);
-    const initialDepthFile = data.depthImages.find((f) => f.timestamp === firstTimestamp);
-    const initialLogFile = data.logFiles.find((f) => f.timestamp === firstTimestamp);
+    const initialColorFile = data.colorImages.find(
+      (f) => f.timestamp === firstTimestamp,
+    );
+    const initialDepthFile = data.depthImages.find(
+      (f) => f.timestamp === firstTimestamp,
+    );
+    const initialLogFile = data.logFiles.find(
+      (f) => f.timestamp === firstTimestamp,
+    );
 
     setCurrentReplayImages({
       colorImageUrl: initialColorFile?.url,

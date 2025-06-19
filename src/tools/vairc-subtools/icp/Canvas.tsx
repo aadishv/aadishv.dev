@@ -258,7 +258,6 @@ const Canvas: React.FC<CanvasProps> = ({
     centroid.current = null;
   };
 
-
   // Map logical [-80, 80] coordinates to canvas pixel coordinates
   const logicalToCanvas = (
     x: number,

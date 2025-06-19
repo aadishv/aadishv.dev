@@ -1,8 +1,5 @@
 ---
-import type {
-  MarkdownInstance,
-  GetStaticPathsOptions,
-} from "astro";
+import type { MarkdownInstance, GetStaticPathsOptions } from "astro";
 import Layout from "@/layouts/Layout.astro";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -73,11 +70,13 @@ const headings = post.getHeadings();
 const date: Date = parseISO(post.frontmatter.date); // parseISO returns Date
 const formatted: string = format(date, "LLLL d, yyyy"); // format returns string
 
-const isProject = post.frontmatter.categories && post.frontmatter.categories.includes('project');
+const isProject =
+  post.frontmatter.categories &&
+  post.frontmatter.categories.includes("project");
 ---
 
 <Layout title={post.frontmatter.title}>
-    <article class="container mx-auto py-10 lg:px-52">
+  <article class="container mx-auto py-10 lg:px-52">
     {
       post.frontmatter.image && (
         <div>
@@ -101,7 +100,9 @@ const isProject = post.frontmatter.categories && post.frontmatter.categories.inc
               <h1>{post.frontmatter.title}</h1>
             </a>
           ) : (
-            <a href={`/${getSlugFromPath(post.file)}`}> {/* Point to the page itself if no external link */}
+            <a href={`/${getSlugFromPath(post.file)}`}>
+              {" "}
+              {/* Point to the page itself if no external link */}
               <h1>{post.frontmatter.title}</h1>
             </a>
           )
@@ -111,15 +112,19 @@ const isProject = post.frontmatter.categories && post.frontmatter.categories.inc
         </h4>
       </div>
 
-      {isProject && post.frontmatter.link && (
-        <div class="my-4">
-          <a href={post.frontmatter.link} target="_blank" rel="noopener noreferrer">
-            <Button variant="outline">
-              View Live Project / Tool
-            </Button>
-          </a>
-        </div>
-      )}
+      {
+        isProject && post.frontmatter.link && (
+          <div class="my-4">
+            <a
+              href={post.frontmatter.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline">View Live Project / Tool</Button>
+            </a>
+          </div>
+        )
+      }
 
       {
         headings.length != 0 && (
@@ -127,9 +132,7 @@ const isProject = post.frontmatter.categories && post.frontmatter.categories.inc
             <Card>
               <div class="-m-3 flex flex-col">
                 <CardHeader>
-                  <h6 class="-mb-5 -mt-1">
-                    Contents
-                  </h6>
+                  <h6 class="-mb-5 -mt-1">Contents</h6>
                 </CardHeader>
                 <CardContent>
                   {headings.map((heading) => (
