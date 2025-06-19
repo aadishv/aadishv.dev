@@ -1,5 +1,3 @@
-import React from "react";
-
 type SliceDebug = { colorType: string; rgb: [number, number, number] };
 
 // New visualization: rounded rectangles for each slice
@@ -9,7 +7,6 @@ export function SliceRectangles({ slices }: { slices: SliceDebug[] }) {
   const IMG_WIDTH = 210 * SCALE;
   const IMG_HEIGHT = 60 * SCALE;
   // Rectangles collectively are 0.8x image width/height
-  const totalRectWidth = IMG_WIDTH * 0.8;
   const totalRectHeight = IMG_HEIGHT * 0.8;
   const rectCount = slices.length;
   const rectHeight = totalRectHeight / rectCount;

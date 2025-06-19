@@ -51,7 +51,7 @@ export const runICPAlgorithm = async (
       // Calculate centroids
       const sourceCentroid = calculateCentroid(currentSourcePoints);
       const targetCentroid = calculateCentroid(
-        correspondences.map(([srcIdx, tgtIdx]) => targetPoints[tgtIdx]),
+        correspondences.map(([_, tgtIdx]) => targetPoints[tgtIdx]),
       );
 
       // Calculate optimal rotation
@@ -110,7 +110,7 @@ export const runICPAlgorithm = async (
       // Calculate error
       const error = calculateError(
         currentSourcePoints,
-        correspondences.map(([srcIdx, tgtIdx]) => targetPoints[tgtIdx]),
+        correspondences.map(([_, tgtIdx]) => targetPoints[tgtIdx]),
       );
 
       // Save state with the current transformation and deep copies to avoid reference issues

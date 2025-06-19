@@ -56,7 +56,6 @@ const DetectionCanvas: React.FC<DetectionCanvasProps> = ({
   });
 
   // URL construction
-  const isHttps = window.location.protocol === "https:";
   const effectiveImageUrl = imageUrl
     ? imageUrl
     : imageEndpoint

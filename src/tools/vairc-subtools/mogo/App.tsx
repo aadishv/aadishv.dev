@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { MidlineBarViz, type MidlineReading } from "./components/MidlineBarViz";
+import { type MidlineReading } from "./components/MidlineBarViz";
 import { SliceRectangles } from "./components/SliceRectangles";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,12 +14,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  colorDistance,
-  median,
   robustColor,
   rgbToHsl,
   classifyColor,
-  rgbToHex,
 } from "./components/colorUtils";
 
 type Point = { x: number; y: number };
@@ -29,92 +26,8 @@ const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 360;
 const NUM_SLICES = 6;
 
-function pointInPoly(px: number, py: number, poly: [number, number][]) {
-  let inside = false;
-  for (let j = 0, k = poly.length - 1; j < poly.length; k = j++) {
-    let xi = poly[j][0],
-      yi = poly[j][1];
-    let xj = poly[k][0],
-      yj = poly[k][1];
-    let intersect =
-      yi > py !== yj > py &&
-      px < ((xj - xi) * (py - yi)) / (yj - yi + 1e-10) + xi;
-    if (intersect) inside = !inside;
-  }
-  return inside;
-}
 
-const sliceColorVars: Record<string, string> = {
-  red: "var(--slice-red)",
-  blue: "var(--slice-blue)",
-  grey: "var(--slice-grey)",
-  unknown: "var(--slice-unknown)",
-};
 
-const sliceColorLabels: Record<string, string> = {
-  red: "Red",
-  blue: "Blue",
-  grey: "Grey",
-  unknown: "Unknown",
-};
-
-function DebugSlices({ slices }: { slices: SliceDebug[] }) {
-  return (
-    <div style={{ display: "flex", gap: 12, marginTop: 0 }}>
-      {slices.map((slice, i) => {
-        const swatchColor =
-          sliceColorVars[slice.colorType] || sliceColorVars.unknown;
-        const label =
-          sliceColorLabels[slice.colorType] || sliceColorLabels.unknown;
-        const hex = rgbToHex(slice.rgb);
-        return (
-          <div
-            key={i}
-            style={{
-              width: 60,
-              height: 38,
-              borderRadius: "0.5rem",
-              border: "1.5px solid var(--muted)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "0.98rem",
-              fontWeight: 500,
-              letterSpacing: "-0.01em",
-              boxShadow: "0 1px 2px 0 rgba(16, 30, 54, 0.04)",
-              background: "#f1f5f9",
-              position: "relative",
-            }}
-          >
-            <div
-              style={{
-                width: 32,
-                height: 16,
-                borderRadius: "0.3rem",
-                marginBottom: 2,
-                border: "1px solid #e5e7eb",
-                boxShadow: "0 1px 2px 0 rgba(16, 30, 54, 0.04)",
-                background: swatchColor,
-              }}
-            />
-            <div
-              style={{
-                fontSize: "0.92rem",
-                fontWeight: 500,
-                color: "#475569",
-                marginTop: 1,
-              }}
-            >
-              {label}
-            </div>
-            <div style={{ fontSize: "0.82rem", color: "#64748b" }}>{hex}</div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 export function App() {
   const imgRef = useRef<HTMLImageElement>(null);
@@ -185,12 +98,6 @@ export function App() {
         let dy = y2 - y1;
         let segLen = Math.sqrt(dx * dx + dy * dy);
         if (segLen > 1e-3 && videoSource) {
-          let perp_dx = -dy / segLen;
-          let perp_dy = dx / segLen;
-          let rectWidth = (20 / 29) * segLen;
-          let halfWidth = rectWidth / 2;
-
-          // Get video frame pixels
           let tempCanvas = document.createElement("canvas");
           tempCanvas.width = CANVAS_WIDTH;
           tempCanvas.height = CANVAS_HEIGHT;
@@ -218,15 +125,6 @@ export function App() {
             let my0 = y1 + dy * t0;
             let mx1 = x1 + dx * t1;
             let my1 = y1 + dy * t1;
-
-            let p1x = mx0 + perp_dx * halfWidth;
-            let p1y = my0 + perp_dy * halfWidth;
-            let p2x = mx1 + perp_dx * halfWidth;
-            let p2y = my1 + perp_dy * halfWidth;
-            let p3x = mx1 - perp_dx * halfWidth;
-            let p3y = my1 - perp_dy * halfWidth;
-            let p4x = mx0 - perp_dx * halfWidth;
-            let p4y = my0 - perp_dy * halfWidth;
 
             // Sample pixels along the midline only
             let pixels: number[][] = [];
@@ -793,7 +691,7 @@ export function App() {
                         Yellow pixels in top bar: <b>{yellowCount}</b>
                         <br />
                         {midlineReadings.slice(0, 8).map((r, i) => {
-                          const [h, s, l] = rgbToHsl(r.rgb);
+                          const [h, s, _] = rgbToHsl(r.rgb);
                           return (
                             <span
                               key={i}

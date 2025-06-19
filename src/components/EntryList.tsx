@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Input } from "./ui/input";
@@ -35,18 +34,6 @@ function formatDate(dateString: string) {
 export function EntryList({ entries }: EntryListProps) {
   const [search, setSearch] = useState("");
   const [filtered, setFiltered] = useState<Entry[]>(entries);
-
-  // Memoize Fuse instance for performance
-  const fuse = useMemo(
-    () =>
-      new Fuse(entries, {
-        keys: ["title", "description", "rawContent", "categories"],
-        includeScore: true,
-        threshold: 0.35,
-        ignoreLocation: true,
-      }),
-    [entries]
-  );
 
   useEffect(() => {
     // Parse is: filters from the search query

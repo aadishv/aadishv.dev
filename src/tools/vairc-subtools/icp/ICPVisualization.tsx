@@ -1,14 +1,12 @@
 // src/tools/icp/ICPVisualization.tsx
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, PenLine, RotateCcw, Trash2 } from "lucide-react";
 import Canvas from "./Canvas";
 import AlgorithmParameters from "./AlgorithmParameters";
 import AnimationControls from "./AnimationControls";
 import HowItWorks from "./HowItWorks";
 import type { ICPState, Curve, Point } from "./types";
 import { copyToClipboard } from "./utils";
-import { ClipboardCheck } from "lucide-react";
 import { samplePoints } from "./utils";
 import { runICPAlgorithm } from "./icpAlgorithm"; // Import the ICP algorithm
 

@@ -31,7 +31,6 @@ const Canvas: React.FC<CanvasProps> = ({
   isDrawing,
   setIsDrawing,
   setCurves,
-  setActiveIndex,
   canvasRef,
   canvasContainerRef,
   icpStates,
@@ -39,8 +38,6 @@ const Canvas: React.FC<CanvasProps> = ({
   sourcePixelSpacing,
   targetPixelSpacing,
   showCorrespondences,
-  setIcpStates,
-  setCurrentStep,
   transformMode,
   transformCurveIndex,
 }) => {
@@ -219,13 +216,6 @@ const Canvas: React.FC<CanvasProps> = ({
       centroid.current &&
       rotationStartAngle.current !== null
     ) {
-      const angleNow = Math.atan2(
-        current.y - centroid.current.y,
-        current.x -
-          centroid.current.y +
-          centroid.current.x -
-          centroid.current.x,
-      );
       // Correction: should be Math.atan2(current.y - centroid.current.y, current.x - centroid.current.x)
       const correctedAngleNow = Math.atan2(
         current.y - centroid.current.y,
@@ -268,24 +258,6 @@ const Canvas: React.FC<CanvasProps> = ({
     centroid.current = null;
   };
 
-  const clearCurve = () => {
-    setCurves((prev) => {
-      const newCurves = [...prev];
-      newCurves[activeIndex] = { ...newCurves[activeIndex], points: [] };
-      return newCurves;
-    });
-    setIcpStates([]);
-    setCurrentStep(0);
-  };
-
-  const clearAll = () => {
-    setCurves([
-      { points: [], color: "#3b82f6" },
-      { points: [], color: "#ef4444" },
-    ]);
-    setIcpStates([]);
-    setCurrentStep(0);
-  };
 
   // Map logical [-80, 80] coordinates to canvas pixel coordinates
   const logicalToCanvas = (

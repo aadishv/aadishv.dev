@@ -1,5 +1,4 @@
 // App.tsx
-import React from "react";
 import ICPVisualization from "./ICPVisualization";
 
 export default function App() {
