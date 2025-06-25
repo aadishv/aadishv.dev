@@ -5,7 +5,7 @@ categories: ["note"]
 description: ""
 ---
 
-**Updated up to Chapter 5**
+**Updated up to Chapter 6**
 
 Things to understand:
 
@@ -98,8 +98,8 @@ These are pretty tricky to understand, mainly because the textbook uses a lot of
     </td>
     <td>
         <ul>
-            <li>\(f_s\) is the coefficient of static friction</li>
-            <li>\(f_k\) is the coefficient of kinetic friction</li>
+            <li>\(\mu_s\) is the coefficient of static friction</li>
+            <li>\(\mu_k\) is the coefficient of kinetic friction</li>
             <br>
             \(N\) is the normal force, the contact force exerted by a surface on an object perpendicular to that surface.<br> When the only force in this direction is gravity, \(N\) is the component of the gravitational force perpendicular to the surface.
         </ul>
@@ -131,7 +131,7 @@ These are pretty tricky to understand, mainly because the textbook uses a lot of
         Hooke's law: amount of deformation is proportional to applied force
         $$
         \begin{aligned}
-        \Delta L = \frac 1Y \frac FA L_0
+        \Delta L = \frac 1C \frac FA L_0
         \end{aligned}
         $$
     </td>
@@ -144,18 +144,56 @@ These are pretty tricky to understand, mainly because the textbook uses a lot of
             <li>...so that \(\text{stress} = \text{strain} \times Y\)</li>
         </ul>
         <br>
-       \(Y\) is the Young's modulus, a constant depending on kind of force and material.
-       For change in volume, replace \(\Delta L\) with \(\Delta V\) and \(L_0\) with \(V_0\). In this case, \(\dfrac FA\) is the force per unit area on all surfaces.
+       \(C\) is a constant depending on kind of force and material.
        Kinds of forces:
         <ul>
             <li>
-            Tensile forces (perpendicular to the surface in both axes),
-            \(\Delta L > 0\)
-            <br>
-            \(Y = )
+            Tensile/compressive forces (perpendicular to the surface in both axes).
+            <br>Tensile: \(\Delta L > 0\).<br>Compressive: \(\Delta L < 0\).
+                <br>\(C = Y\), the Young's modulus.
             </li>
-            <li>Compressive forces (perpendicular to the surface in both axes),
-                \(\Delta L < 0\)</li>
+            <li>
+                Shear forces (perpendicular to \(L_0\)). In this case \(\Delta L = \Delta x\), where \(\Delta x\) is perpendicular to \(L_0\).
+                <br>\(C = S\), the shear modulus.
+            </li>
+            <li>
+                Bulk forces (pushing inwards on all surfaces). In this case \(\Delta L = \Delta V\) and \(L_0 = V_0\).
+                <br> \(\Delta V < 0\). \(C = B\), the bulk modulus.
+                    \(B\) is often written with a negative sign to indicate that an increase in force results in a decrease in volume. <br>
+                For bulk force calculation,
+            </li>
+        </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>Angular motion</td>
+    <td>
+        $$\begin{aligned}
+        \omega &= \frac{\Delta \theta}{\Delta t} \\
+        v &= r\omega \\
+        a_c &= \frac{v^2}r = r\omega^2 \\
+        F_c &= ma_c = mr\omega^2= m\frac{v^2}r
+        \end{aligned}$$
+    </td>
+    <td>
+        <ul>
+            <li>\(\theta\) current angle</li>
+            <li>\(\omega\) angular velocity</li>
+            <li>centripetal acceleration \(a_c\) and centripetal force \(F_c\) point towards the center of rotation and are perpendicular to \(v\)</li>
+        </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>Newton's universal law of gravitation</td>
+    <td>
+        $$\begin{aligned}
+        F = G\frac{m_1m_2}{r^2}
+        \end{aligned}$$
+    </td>
+    <td>
+        <ul>
+            <li>\(r\) distance between masses \(m_1\) and \(m_2\)</li>
+            <li>gravitational constant \(G = 6.674 \times 10^{-11} \dfrac{\text{Nm}^2}{\text{kg}^2}\)</li>
         </ul>
     </td>
   </tr>
