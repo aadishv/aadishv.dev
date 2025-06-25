@@ -4,6 +4,7 @@ title: "DishPy: better Python development for VEX V5"
 categories: ["blog"]
 description: ""
 ---
+
 ## Prelude
 
 As you [probably](/robotics-1) [know](/robotics-3), I am quite involved with the VEX robotics community. In fact, I have 4-5 more upcoming blog posts queued up just about robotics (not even including this one)!
@@ -48,3 +49,5 @@ I hope you’ll try out DishPy and maybe even open an issue if you find one (or 
 
 Thanks,
 Aadish (315P V5RC; 3151A VAIRC)
+
+![DishPy logo](https://raw.githubusercontent.com/aadishv/dishpy/refs/heads/main/logo.png)
