@@ -1,9 +1,13 @@
 ---
 date: "2025-05-16"
 title: "Privacy Policy for OHS AC Utilities"
-categories: ["blog"]
+categories: []
 description: ""
 ---
+
+(Note from Aadish: this is the privacy policy for OHS AC Utilities, a small open-source Chrome extension I created to help Stanford Online High School students download Adobe Connect recordings for their studies. I am still contributing to it and adding features, including AI!)
+
+**[Chrome Web Store](https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne) [Github](https://github.com/aadishv/ohs-ac-utils)**
 
 **Last Updated:** May 16, 2025
 
