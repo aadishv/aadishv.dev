@@ -18,29 +18,17 @@ These are pretty tricky to understand, mainly because the textbook uses a lot of
 
 ### Core ideas
 
-1. _Everything_ depends on how you define your boundaries between systems.
-2. Force, acceleration, velocity, and displacement are all vectors.
-3. Work is a change in energy. Net work is a change in kinetic energy.
-4. Entropy is how “spread out” energy is.
-
-### Definitions
-
-- Mechanical energy is the combination of kinetic and potential energy.
-- Conservative forces convert between kinetic and potential energy (they do not increase entropy).
-- Nonconservative forces increase entropy (they convert between mechanical energy and unusable/thermal energy).
+* _Everything_ depends on how you define your boundaries between systems.
+* Energy is never created or destroyed.
+  * The transfer of energy between systems by forces is work.
+  * Internal work is also done within systems to transform energy between forms.
+* Heat is the transfer of thermal energy between systems due to temperature difference.
+* Because work is defined in terms of force, net work is the change in kinetic energy.
 
 ### Derivative ideas
 
-1. An increase in entropy lessens the difference in energy between any two states, decreasing the amount of energy available to do work.
-2. Gravity: when something falls onto the ground, the following happens. (This seems obviously but took me a long time to understand.)
-   1. This thing has gravitational potential energy.
-   2. Its GPE is converted to kinetic energy. It begins to accelerate.
-   3. The ground begins to sag.
-   4. This continues until an equilibrium is reached where the normal force contributed upwards by the elastic nature of the ground equals the gravitational force.
-   5. At this point, no more work is done as no further displacement occurs.
-3. In an <u>ideal system in which only conservative work is done,</u> mechanical energy is conserved (the energy available to do work remains the same, as described in derivative idea 1).
-4. In a system that is not this ideal, mechanical energy decreases as work is done due to nonconservative forces.
-5. When only work that affects potential energy is done (that is, an external force acts against a conservative force) and there is no change in kinetic energy, net work is zero, because work occurs internally to convert between the original form of energy to potential energy. This work cancels with the original work done by an external force.
+1. Work done to transform energy into potential energy cancels with the corresponding original transfer of energy into the system. (If kinetic energy is affected, that does contribute to net work.)
+2. Nonconservative forces do work to convert useful energy into thermal energy. This thermal energy is dissipated into an unusable form through heat.
 
 ## Equations
 
@@ -49,6 +37,9 @@ These are pretty tricky to understand, mainly because the textbook uses a lot of
     <th>Law</th>
     <th>Equations</th>
     <th>Variables</th>
+  </tr>
+  <tr>
+  <th colspan="3">Chapter 2</th>
   </tr>
   <tr>
     <td>1D kinematics</td>
@@ -67,6 +58,7 @@ These are pretty tricky to understand, mainly because the textbook uses a lot of
         </ul>
     </td>
   </tr>
+  <th colspan="3">Chapter 4</th>
   <tr>
     <td>Newton's laws (not including inertia)</td>
     <td>
@@ -85,6 +77,7 @@ These are pretty tricky to understand, mainly because the textbook uses a lot of
         </ul>
     </td>
   </tr>
+  <th colspan="3">Chapter 5</th>
   <tr>
     <td>Friction between two objects (static & kinetic)</td>
     <td>
@@ -165,6 +158,7 @@ These are pretty tricky to understand, mainly because the textbook uses a lot of
         </ul>
     </td>
   </tr>
+  <th colspan="3">Chapter 6</th>
   <tr>
     <td>Angular motion</td>
     <td>
@@ -194,6 +188,68 @@ These are pretty tricky to understand, mainly because the textbook uses a lot of
         <ul>
             <li>\(r\) distance between masses \(m_1\) and \(m_2\)</li>
             <li>gravitational constant \(G = 6.674 \times 10^{-11} \dfrac{\text{Nm}^2}{\text{kg}^2}\)</li>
+        </ul>
+    </td>
+  </tr>
+  <th colspan="3">Chapter 7</th>
+  <tr>
+    <td>Work</td>
+    <td>
+        $$\begin{aligned}
+        W &= fd &&&(1) \\
+        W &= fd\cos\theta &&&(2) \\
+        W_{net} &= \Delta KE &&& (3) \\
+        KE + PE &= \text{constant} &&& (4)
+        \end{aligned}$$
+    </td>
+    <td>
+        <ul>
+            <li>\(d\) distance over which force was applied</li>
+            <li>\((1)\) for work causing acceleration in same direction as force</li>
+            <li>\((2)\) for work causing acceleration in different direction to force (\(\theta\) is the angle between force and displacement)</li>
+            <li>\((3)\) as noted in the fundamental ideas</li>
+            <li>\((4)\) assuming no nonconservative forces act</li>
+        </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>Energy</td>
+    <td>
+        $$\begin{aligned}
+        KE &= \frac{1}{2}mv^2 \\
+        \Delta PE_g &= mgh \\
+        \Delta PE_s &= \frac{1}{2}kx^2 \\
+        KE_i + PE_i + OE_i + W_{nc} &= KE_f + PE_f + OE_f + W_{nc} &&& (5)
+        \end{aligned}$$
+    </td>
+    <td>
+        <ul>
+            <li>\(h\) height change</li>
+            <li>\(x\) displacement from equilibrium</li>
+            <li>\(k\) spring constant (depends on spring)</li>
+            <li>\(x\) displacement of spring from equilibrium</li>
+            <li>\((5)\) - general form for the law of conservation of energy, taking into account loss of usable energy from heat.
+                <ul>
+                    <li>\(OE\) is any other form of energy.</li>
+                    <li>\(W_{nc}\) is work done by nonconservative forces.</li>
+                </ul>
+            </li>
+        </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>Efficiency & power</td>
+    <td>
+        $$\begin{aligned}
+        Eff &= \frac{W_{out}}{E_{in}} &&& (6) \\
+        P &= \frac{W}{\Delta t}
+        \end{aligned}$$
+    </td>
+    <td>
+        <ul>
+            <li>
+                \((6)\) - efficiency of work. \(W_{out}\) is useful energy produced; \(E_{in}\) is total energy input.
+            </li>
         </ul>
     </td>
   </tr>
