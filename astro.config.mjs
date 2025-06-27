@@ -11,6 +11,12 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
+  markdown: {
+      syntaxHighlight: 'shiki', // or 'prism'
+      shikiConfig: {
+        theme: 'github-light', // or 'github-dark', 'nord', etc.
+      },
+    },
   site: 'https://aadishv.github.io',
   base: ''
 });

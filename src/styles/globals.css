@@ -99,6 +99,9 @@
   h6 {
     @apply font-serif mt-2;
   }
+  hr {
+      @apply my-2
+  }
   pre {
     @apply mt-3 p-3 border-gray-200 border rounded;
   }
