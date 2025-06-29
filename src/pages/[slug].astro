@@ -30,7 +30,11 @@ type PostGetStaticPathsResult = Array<{ params: PostParams; props: PostProps }>;
 
 export async function getStaticPaths({}: GetStaticPathsOptions): Promise<PostGetStaticPathsResult> {
   // allContent is an array of MarkdownPost instances
-  const allContent: MarkdownPost[] = await Astro.glob("@/content/posts/*.md");
+  let allContent: MarkdownPost[] = await Astro.glob("@/content/posts/*.md");
+  if (import.meta.env.DEV) {
+    const personal: MarkdownPost[] = await Astro.glob("@/content/personal/*.md");
+    allContent = allContent.concat(personal);
+  }
 
   const paths: PostGetStaticPathsResult = allContent.map((post) => {
     // post.file is guaranteed to be a string by Astro.glob
