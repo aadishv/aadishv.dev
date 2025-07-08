@@ -11,31 +11,31 @@ interface ReferenceModalProps {
 const tabData = [
   {
     name: "Aufbau Principle",
-    imageSrc: "/chemutils/aufbau.jpg",
+    imageSrc: "/tools/chemutils/aufbau.jpg",
     alt: "Aufbau Principle",
     value: "aufbau",
   },
   {
     name: "Bonding",
-    imageSrc: "/chemutils/bonding.avif",
+    imageSrc: "/tools/chemutils/bonding.avif",
     alt: "Chemical Bonding",
     value: "bonding",
   },
   {
     name: "Solubility",
-    imageSrc: "/chemutils/solubility.webp",
+    imageSrc: "/tools/chemutils/solubility.webp",
     alt: "Solubility Rules",
     value: "solubility",
   },
   {
     name: "Transition metal charges",
-    imageSrc: "/chemutils/transition_charges.avif",
+    imageSrc: "/tools/chemutils/transition_charges.avif",
     alt: "Common transition metal charges",
     value: "transition",
   },
   {
     name: "Metal activity series",
-    imageSrc: "/chemutils/activity_series.avif",
+    imageSrc: "/tools/chemutils/activity_series.avif",
     alt: "Willingness of metals to ionize",
     value: "activity",
   },
