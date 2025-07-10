@@ -78,7 +78,7 @@ The most important changes are:
 * Match structure: Teams compete 1v1. Elimination rounds do not use alliances and rank teams individually.
 * Robot count: Each team uses two robots per match, one fitting within a 15” cube and the other within a 24” cube.
 * Timing: Matches consist of a 30-second autonomous period and a 90-second driver Control Period.
-* Custom shtuff: A wide range of commercial hardware, sensors, springs, electronics, pneumatics, and coprocessors are permitted. You can also fabricate or 3D-print your own parts(!!!). (For reference, V5RC only allows you a narrow selection from V5 hardware and sensors.)
+* Custom shtuff (mispelling intentional): A wide range of commercial hardware, sensors, springs, electronics, pneumatics, and coprocessors are permitted. You can also fabricate or 3D-print your own parts(!!!). (For reference, V5RC only allows you a narrow selection from V5 hardware and sensors.)
 * Motors: The number of V5 Smart Motors is unlimited (you are restricted to 88W of motors in V5RC; motors come in 11W and 5.5W variants).
 
 Check out my previous two ([1](/robotics-1) [2](/robotics-2))  posts for a more in-detail explanation of how V5RC handles these things.
@@ -109,8 +109,7 @@ Like V5RC, there is a wide range of possible solutions to the fundamental premis
 
 Different types of teams have very different ways to address this. I’ll try to give a rough explanation of different approaches:
 
-* The static teams. These teams are often high-performing V5RC teams that decided to go into AI for ~~content~~ ~~bragging rights~~ fun. They already have very good/consistent autonomous routines and just extend those to work in the 30-second isolation period (in addition to building a second robot). They don’t do anything in interaction other than maybe finishing their static routines. Unfortunately, the
-* of VEX games means that these teams can often win.
+* The static teams. These teams are often high-performing V5RC teams that decided to go into AI for ~~content~~ ~~bragging rights~~ fun. They already have very good/consistent autonomous routines and just extend those to work in the 30-second isolation period (in addition to building a second robot). They don’t do anything in interaction other than maybe finishing their static routines. Unfortunately, the nature of VEX games means that these teams can often win.
 * The high school teams. These teams may train their own AI but that is often exceedingly expensive (in terms of both money and time). Most teams use the prebuilt VEX AI system, which has a few interlocking parts.
   * Sensors: Intel Realsense D435. This has three cameras (as well as an infrared camera, which we don’t use): two stereoscopic cameras and a color camera. The stereoscopic cameras are fused by the Realsense firmware to get a depth map.
   * Compute hardware: NVIDIA Jetson Nano. This is a purpose-built device from NVIDIA designed for embedded AI systems, featuring a ✨GPU ✨.
