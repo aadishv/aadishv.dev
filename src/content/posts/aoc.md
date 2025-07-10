@@ -1,7 +1,7 @@
 ---
 date: "2025-02-22"
 title: "Takeaways from Advent of Code 2024"
-categories: ["blog"]
+categories: ["blog", "project"]
 description: ""
 ---
 

@@ -3,7 +3,7 @@ date: "2025-03-15"
 title: "Periodic Table"
 link: "/tools/periodic"
 image: "/projects/periodic/thumbnail.png"
-categories: ["project"]
+categories: ["project", "webdev"]
 ---
 
 ## Demo

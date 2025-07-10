@@ -1,7 +1,7 @@
 ---
 date: "2025-05-16"
 title: "Privacy Policy for OHS AC Utilities"
-categories: []
+categories: ["project"]
 description: ""
 ---
 

@@ -1,7 +1,7 @@
 ---
 date: "2025-03-23"
 title: "Robotics 2: 315P (High Stakes)"
-categories: ["blog"]
+categories: ["blog", "robotics"]
 description: ""
 ---
 

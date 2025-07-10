@@ -137,6 +137,8 @@ To go any further right now would explain a lot of technical stuff so I’ll sto
 * Robotics 5: 3151A — tech & worlds
   * A lot of random technical stuff about our tech stack we ran at the world championships.
   * Also a bit of actual interesting discussion of what transpired at worlds
+
+
 Note that both of those posts will be quite technical.
 
 Thanks for reading!

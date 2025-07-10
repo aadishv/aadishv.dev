@@ -1,7 +1,7 @@
 ---
 date: "2024-09-08"
 title: "Robotics 1: 315P (Over Under)"
-categories: ["blog"]
+categories: ["blog", "robotics"]
 description: ""
 ---
 

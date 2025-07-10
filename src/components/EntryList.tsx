@@ -162,7 +162,7 @@ export function EntryList({ entries }: EntryListProps) {
                     </Badge>
                   ))}
                 </a>
-                <div className="">{entry.date == "<top>" ? "the future :D" : formatDate(entry.date)}</div>
+                <div className="">{entry.date == "<top>" ? "from the future :D" : formatDate(entry.date)}</div>
                 {entry.description && (
                   <p className="text-sm text-muted-foreground line-clamp-3">
                     {entry.description}
