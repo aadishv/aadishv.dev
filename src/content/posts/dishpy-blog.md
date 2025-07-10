@@ -1,13 +1,13 @@
 ---
 date: "2025-06-24"
 title: "DishPy: better Python development for VEX V5"
-categories: ["blog"]
+categories: ["blog", "robotics", "project"]
 description: ""
 ---
 
 ## Prelude
 
-As you [probably](/robotics-1) [know](/robotics-3), I am quite involved with the VEX robotics community. In fact, I have 4-5 more upcoming blog posts queued up just about robotics (not even including this one)!
+As you [probably](/robotics-1) [know](/robotics-2), I am quite involved with the VEX robotics community. In fact, I have 4-5 more upcoming blog posts queued up just about robotics (not even including this one)!
 
 After the VEX AI World Championships in early of this June (blog post coming soon!), I sat down and wrote a small Python CLI I call **DishPy** to make Python development on the VEX V5 more bearable (I'll explain why I made it below). Following is a post I planned to publish to the VEX Forums about DishPy. It was unfortunately unlisted by a VEX employee, likely because of its use of an internal binary (known as `vexcom`) that VEX uses to handle serial communication with the V5 brain. (I do not mention `vexcom` in the announcement, nor do I violate its license by distributing it.)
 

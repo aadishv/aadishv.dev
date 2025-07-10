@@ -69,8 +69,15 @@ export function EntryList({ entries }: EntryListProps) {
       }
     });
 
+    // Place entries with date '<top>' at the top
+    const topEntries = filteredEntries.filter((e) => e.date === "<top>");
+    const restEntries = filteredEntries.filter((e) => e.date !== "<top>");
+
+    let finalEntries: Entry[];
+
     if (queryWithoutIs === "") {
-      setFiltered(filteredEntries);
+      finalEntries = [...topEntries, ...restEntries];
+      setFiltered(finalEntries);
     } else {
       // Use Fuse on filtered subset
       const fuseSubset = new Fuse(filteredEntries, {
@@ -80,41 +87,48 @@ export function EntryList({ entries }: EntryListProps) {
         ignoreLocation: true,
       });
       const results = fuseSubset.search(queryWithoutIs);
-      setFiltered(results.map((r) => r.item));
+      // Place <top> entries at the top of search results as well
+      const searchTop = results.map((r) => r.item).filter((e) => e.date === "<top>");
+      const searchRest = results.map((r) => r.item).filter((e) => e.date !== "<top>");
+      finalEntries = [...searchTop, ...searchRest];
+      setFiltered(finalEntries);
     }
   }, [search, entries]);
+
+  // Get unique categories (case-insensitive, but display original)
+  const uniqueCategories = Array.from(
+    entries
+      .reduce((acc, entry) => {
+        entry.categories.forEach((cat) => acc.set(cat.toLowerCase(), cat));
+        return acc;
+      }, new Map<string, string>())
+      .values()
+  );
 
   return (
     <div>
       <div className="flex space-x-2 mb-4">
-        <Button
-          id="filter-blog-btn"
-          variant="outline"
-          className={search.trim().startsWith("is:blog") ? "bg-accent" : ""}
-          onClick={() => {
-            if (search.trim().startsWith("is:blog")) {
-              setSearch("");
-            } else {
-              setSearch("is:blog");
-            }
-          }}
-        >
-          Blog
-        </Button>
-        <Button
-          id="filter-project-btn"
-          variant="outline"
-          className={search.trim().startsWith("is:project") ? "bg-accent" : ""}
-          onClick={() => {
-            if (search.trim().startsWith("is:project")) {
-              setSearch("");
-            } else {
-              setSearch("is:project");
-            }
-          }}
-        >
-          Projects
-        </Button>
+        {uniqueCategories.map((cat) => {
+          const filterValue = `is:${cat.toLowerCase()}`;
+          const isActive = search.trim().startsWith(filterValue);
+          return (
+            <Button
+              key={cat}
+              id={`filter-${cat.toLowerCase()}-btn`}
+              variant="outline"
+              className={isActive ? "bg-accent" : ""}
+              onClick={() => {
+                if (isActive) {
+                  setSearch("");
+                } else {
+                  setSearch(filterValue);
+                }
+              }}
+            >
+              {cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </Button>
+          );
+        })}
       </div>
       <Input
         type="text"
@@ -148,7 +162,7 @@ export function EntryList({ entries }: EntryListProps) {
                     </Badge>
                   ))}
                 </a>
-                <div className="">{formatDate(entry.date)}</div>
+                <div className="">{entry.date == "<top>" ? "the future :D" : formatDate(entry.date)}</div>
                 {entry.description && (
                   <p className="text-sm text-muted-foreground line-clamp-3">
                     {entry.description}

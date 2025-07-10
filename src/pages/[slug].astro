@@ -72,7 +72,7 @@ const headings = post.getHeadings();
 // Blog post header functionality
 // post.frontmatter.date is typed as string by PostFrontmatter
 const date: Date = parseISO(post.frontmatter.date); // parseISO returns Date
-const formatted: string = format(date, "LLLL d, yyyy"); // format returns string
+const formatted: string = post.frontmatter.date == "<top>" ? "" : format(date, "LLLL d, yyyy"); // format returns string
 
 const isProject =
   post.frontmatter.categories &&
