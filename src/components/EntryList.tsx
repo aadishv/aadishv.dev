@@ -33,7 +33,11 @@ function formatDate(dateString: string) {
 
 export function EntryList({ entries }: EntryListProps) {
   const [search, setSearch] = useState("");
-  const [filtered, setFiltered] = useState<Entry[]>(entries);
+  // Sort entries by date descending (newest first)
+  const sortedEntries = [...entries].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  const [filtered, setFiltered] = useState<Entry[]>(sortedEntries);
 
   useEffect(() => {
     // Parse is: filters from the search query
@@ -51,7 +55,7 @@ export function EntryList({ entries }: EntryListProps) {
     queryWithoutIs = query.replace(/\bis:[a-zA-Z0-9_-]+\b/g, "").trim();
 
     // Apply filters
-    let filteredEntries = entries;
+    let filteredEntries = sortedEntries;
     filters.forEach((filter) => {
       if (filter === "blog") {
         filteredEntries = filteredEntries.filter(
@@ -69,15 +73,8 @@ export function EntryList({ entries }: EntryListProps) {
       }
     });
 
-    // Place entries with date '<top>' at the top
-    const topEntries = filteredEntries.filter((e) => e.date === "<top>");
-    const restEntries = filteredEntries.filter((e) => e.date !== "<top>");
-
-    let finalEntries: Entry[];
-
     if (queryWithoutIs === "") {
-      finalEntries = [...topEntries, ...restEntries];
-      setFiltered(finalEntries);
+      setFiltered(filteredEntries);
     } else {
       // Use Fuse on filtered subset
       const fuseSubset = new Fuse(filteredEntries, {
@@ -87,48 +84,41 @@ export function EntryList({ entries }: EntryListProps) {
         ignoreLocation: true,
       });
       const results = fuseSubset.search(queryWithoutIs);
-      // Place <top> entries at the top of search results as well
-      const searchTop = results.map((r) => r.item).filter((e) => e.date === "<top>");
-      const searchRest = results.map((r) => r.item).filter((e) => e.date !== "<top>");
-      finalEntries = [...searchTop, ...searchRest];
-      setFiltered(finalEntries);
+      setFiltered(results.map((r) => r.item));
     }
   }, [search, entries]);
-
-  // Get unique categories (case-insensitive, but display original)
-  const uniqueCategories = Array.from(
-    entries
-      .reduce((acc, entry) => {
-        entry.categories.forEach((cat) => acc.set(cat.toLowerCase(), cat));
-        return acc;
-      }, new Map<string, string>())
-      .values()
-  );
 
   return (
     <div>
       <div className="flex space-x-2 mb-4">
-        {uniqueCategories.map((cat) => {
-          const filterValue = `is:${cat.toLowerCase()}`;
-          const isActive = search.trim().startsWith(filterValue);
-          return (
-            <Button
-              key={cat}
-              id={`filter-${cat.toLowerCase()}-btn`}
-              variant="outline"
-              className={isActive ? "bg-accent" : ""}
-              onClick={() => {
-                if (isActive) {
-                  setSearch("");
-                } else {
-                  setSearch(filterValue);
-                }
-              }}
-            >
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </Button>
-          );
-        })}
+        <Button
+          id="filter-blog-btn"
+          variant="outline"
+          className={search.trim().startsWith("is:blog") ? "bg-accent" : ""}
+          onClick={() => {
+            if (search.trim().startsWith("is:blog")) {
+              setSearch("");
+            } else {
+              setSearch("is:blog");
+            }
+          }}
+        >
+          Blog
+        </Button>
+        <Button
+          id="filter-project-btn"
+          variant="outline"
+          className={search.trim().startsWith("is:project") ? "bg-accent" : ""}
+          onClick={() => {
+            if (search.trim().startsWith("is:project")) {
+              setSearch("");
+            } else {
+              setSearch("is:project");
+            }
+          }}
+        >
+          Projects
+        </Button>
       </div>
       <Input
         type="text"
@@ -162,7 +152,7 @@ export function EntryList({ entries }: EntryListProps) {
                     </Badge>
                   ))}
                 </a>
-                <div className="">{entry.date == "<top>" ? "from the future :D" : formatDate(entry.date)}</div>
+                <div className="">{formatDate(entry.date)}</div>
                 {entry.description && (
                   <p className="text-sm text-muted-foreground line-clamp-3">
                     {entry.description}

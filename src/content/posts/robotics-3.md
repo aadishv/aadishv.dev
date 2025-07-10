@@ -37,23 +37,23 @@ All of the above is pretty generic and true of every V5RC game.
 #### High Stakes
 Specifically, for the High Stakes game, there are a few ways to score points:
 There are *rings* in High Stakes, of each alliance color:
-![](assets/robotics-3/image.png)<!-- {"width":227} -->![](assets/robotics-3/image%202.png)<!-- {"width":227} -->
+![](assets/robotics-3/1.png)<!-- {"width":227} -->![](assets/robotics-3/2.png)<!-- {"width":227} -->
 You can score rings on *stakes*, which are basically sticks with a rubber thing on top. The easiest stake to score on (and the one that is generally most focused on) are *mobile goals* (often referred to as “mogos”):
-![](assets/robotics-3/image%203.png)<!-- {"width":297} -->
+![](assets/robotics-3/3.png)<!-- {"width":297} -->
 Here’s what a mogo looks like with some rings scored on it:
-![](assets/robotics-3/image%204.png)<!-- {"width":444} -->
+![](assets/robotics-3/4.png)<!-- {"width":444} -->
 You can also score rings on *neutral wall stakes*:
-![](assets/robotics-3/image%205.png)<!-- {"width":368} -->
+![](assets/robotics-3/5.png)<!-- {"width":368} -->
 And on *alliance wall stakes*:
-![](assets/robotics-3/image%206.png)
+![](assets/robotics-3/6.png)
 As the name suggests, only one alliance can score on their alliance wall stake, and they can only score their color rings. (There is one alliance wall stake for each alliance, of course).
 Every ring scored on a stake counts for points, and the top ring scored on a stake has a point bonus.
 You can also hang your robot off of the *ladder*:
-![](assets/robotics-3/image%207.png)
+![](assets/robotics-3/7.png)
 Basically, the higher you hang, the more points you get.
 There is also the concept of *corners*. If you put a mobile goal inside a *negative corner*, its rings’ values are essentially negated, subtracting points from their alliance’s other rings. (And no, a negative score is not possible!)
-![](assets/robotics-3/image%208.png)<!-- {"width":568} -->
-If you put a mobile goal inside a *positive* corner, its rings’ values are doubled.![](assets/robotics-3/image%209.png)<!-- {"width":480} -->
+![](assets/robotics-3/8.png)<!-- {"width":568} -->
+If you put a mobile goal inside a *positive* corner, its rings’ values are doubled.![](assets/robotics-3/9.png)<!-- {"width":480} -->
 There are two positive corners and two negative corners.
 As noted above, you can complete a certain set of tasks to get an Autonomous Win Point, but that’s not super important. To level the playing field, corner modifiers and hangs are not counted for the autonomous bonus (at least in V5RC — more on that later).
 In the last 30 seconds, positive corners are protected — that is, robots can’t interact with goals in those corners. This is to encourage hanging.
@@ -122,7 +122,7 @@ Different types of teams have very different ways to address this. I’ll try to
   * Writing 100k LOC?! From Maxx (GHOST / UT Austin):
     > If we didn't precompile certain dependencies, our VexU repo used to be probably 100k+ LoC? That's not an amazing metric, just a gauge on magnitude
   * Whatever amalgamation of Jetsons and PCBs this is. (Credit: QUEEN / Queen’s.) (For reference, the Jetson pictured here is a Jetson Orin Nano, not the Jetson Nanos that the VEX platform uses.)
-  ![](assets/robotics-3/image%2010.png)
+  ![](assets/robotics-3/10.png)
 
 For 3151A, we unfortunately were not computer science college students, so we could not do VEX U-level things. Purely static routines were also kinda unappealing since, well, what’s the point of AI then? So we decided to go the good ol’ “high school team” path.
 

@@ -1,5 +1,6 @@
 ---
-date: "<top>"
+date: "2025-07-22"
+hidden: true
 title: "Aadish Verma — programming background"
 categories: ["note"]
 description: ""
