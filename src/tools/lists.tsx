@@ -102,6 +102,16 @@ function useMultiList() {
     }
   };
 
+  // Reorder lists
+  const handleReorderLists = (fromIdx: number, toIdx: number) => {
+    setLists(prev => {
+      const arr = [...prev];
+      const [removed] = arr.splice(fromIdx, 1);
+      arr.splice(toIdx, 0, removed);
+      return arr;
+    });
+  };
+
   return {
     lists,
     setLists,
@@ -115,6 +125,7 @@ function useMultiList() {
     handleListNameChange,
     handleCreateList,
     handleDeleteList,
+    handleReorderLists,
   };
 }
 
@@ -128,13 +139,18 @@ function TopSection(props: {
   handleListNameChange: (v: string) => void;
   handleCreateList: () => void;
   handleDeleteList: () => void;
+  handleReorderLists: (fromIdx: number, toIdx: number) => void;
 }) {
   const {
     lists, selectedListId, setSelectedListId,
     listName, setListName, handleListNameChange,
-    handleCreateList, handleDeleteList
+    handleCreateList, handleDeleteList, handleReorderLists
   } = props;
   const [dropdownHovered, setDropdownHovered] = useState(false);
+
+  // Drag state
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
 
   return (
     <div
@@ -165,13 +181,45 @@ function TopSection(props: {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {lists.map(list => (
+          {lists.map((list, idx) => (
             <DropdownMenuItem
               key={list.id}
               onClick={() => setSelectedListId(list.id)}
-              className={selectedListId === list.id ? 'font-bold' : ''}
+              className={
+                (selectedListId === list.id ? 'font-bold ' : '') +
+                (dragOverIdx === idx && draggedIdx !== null && draggedIdx !== idx
+                  ? ' bg-accent'
+                  : '')
+              }
+              draggable
+              onDragStart={e => {
+                setDraggedIdx(idx);
+                e.dataTransfer.effectAllowed = 'move';
+              }}
+              onDragOver={e => {
+                e.preventDefault();
+                setDragOverIdx(idx);
+              }}
+              onDrop={e => {
+                e.preventDefault();
+                if (draggedIdx !== null && draggedIdx !== idx) {
+                  handleReorderLists(draggedIdx, idx);
+                }
+                setDraggedIdx(null);
+                setDragOverIdx(null);
+              }}
+              onDragEnd={() => {
+                setDraggedIdx(null);
+                setDragOverIdx(null);
+              }}
+              style={{
+                cursor: 'grab',
+                opacity: draggedIdx === idx ? 0.5 : 1,
+                userSelect: 'none',
+              }}
             >
               {list.name || <span className="italic text-muted-foreground">Untitled</span>}
+              <span style={{marginLeft: "auto", opacity: 0.3, fontSize: 12, cursor: 'grab'}}>⠿</span>
             </DropdownMenuItem>
           ))}
           <DropdownMenuItem onClick={handleCreateList}>
@@ -278,7 +326,7 @@ function BottomSection(props: {
   const sortedNodes = [...nodes].sort((a, b) => getOrder(a.state) - getOrder(b.state));
 
   return (
-    <motion.ul layout className="space-y-2">
+    <motion.ul layout className="">
       <AnimatePresence>
         {sortedNodes.map((node, sortedIdx) => {
           const index = nodes.findIndex((n) => n === node);
@@ -290,7 +338,7 @@ function BottomSection(props: {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className="flex items-center"
+              className="flex items-center dark:hover:border-gray-800 hover:border-gray-200 border-2 rounded-full border-transparent transition-all p-1.5 -m-1"
             >
               <button
                 type="button"
@@ -400,7 +448,7 @@ function BottomSection(props: {
                   <button
                     type="button"
                     aria-label="Delete"
-                    className="ml-auto text-red-500 text-lg font-mono cursor-pointer"
+                    className="ml-auto text-red-500 mr-3 text-lg font-mono cursor-pointer"
                     tabIndex={-1}
                     onClick={() => setNodes(prev => prev.filter((_, i) => i !== index))}
                   >
@@ -421,7 +469,8 @@ export default function App() {
   const {
     lists, setLists, selectedList, selectedListId, setSelectedListId,
     nodes, setNodes, listName, setListName,
-    handleListNameChange, handleCreateList, handleDeleteList
+    handleListNameChange, handleCreateList, handleDeleteList,
+    handleReorderLists
   } = useMultiList();
 
   return (
@@ -435,6 +484,7 @@ export default function App() {
         handleListNameChange={handleListNameChange}
         handleCreateList={handleCreateList}
         handleDeleteList={handleDeleteList}
+        handleReorderLists={handleReorderLists}
       />
       <MiddleSection nodes={nodes} />
       <BottomSection nodes={nodes} setNodes={setNodes} />
