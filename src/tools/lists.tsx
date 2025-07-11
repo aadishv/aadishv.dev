@@ -338,15 +338,14 @@ function BottomSection(props: {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className="flex items-center dark:hover:border-gray-800 hover:border-gray-200 border-2 rounded-full border-transparent transition-all p-1.5 -m-1"
+              className="flex p-0.5 border-6 border-blue-500"
             >
               <button
                 type="button"
                 aria-label="Change state"
-                className={`mr-3 rounded-full w-2 h-2 my-auto flex-shrink-0 transition-all duration-300 hover:blur-[2px]
+                className={`rounded-full !min-h-full min-w-[28px] duration-300 hover:blur-[2px] transition-all
                   ${node.state === 'red' ? 'bg-red-500' : node.state === 'yellow' ? 'bg-yellow-300' : 'bg-green-400'}
                 `}
-                style={{ fontSize: 28, minWidth: 28, minHeight: 28 }}
                 onClick={() => {
                   setNodes(prev => {
                     const updated: Node[] = prev.map((n, i) =>
@@ -366,96 +365,91 @@ function BottomSection(props: {
                   });
                 }}
               />
-              <div
-                className="flex items-center w-full group"
+              <Textarea
+                id={`item-${index}`}
+                value={node.text}
+                onChange={e => {
+                  const newNodes = [...nodes];
+                  newNodes[index] = { ...newNodes[index], text: e.target.value };
+                  setNodes(newNodes);
+                }}
+                className="focus:outline-none w-full focus:ring-none mt-0.75 mb-0.5"
+                rows={1}
+                style={{ resize: 'none', overflowY: 'hidden' }}
+                ref={el => (textareaRefs.current[index] = el)}
+                onInput={e => {
+                  const textarea = e.currentTarget;
+                  textarea.style.height = 'auto';
+                  textarea.style.height = `${textarea.scrollHeight}px`;
+                }}
                 onMouseEnter={() => setHoveredIdx(index)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                style={{ width: '100%' }}
-              >
-                <Textarea
-                  id={`item-${index}`}
-                  value={node.text}
-                  onChange={e => {
+                onFocus={() => setFocusedIdx(index)}
+                onBlur={e => {
+                  setFocusedIdx(null);
+                  const trimmed = e.currentTarget.value.trim();
+                  if (trimmed === "") {
+                    setNodes(prev => prev.filter((_, i) => i !== index));
+                  } else if (trimmed !== nodes[index].text) {
                     const newNodes = [...nodes];
-                    newNodes[index] = { ...newNodes[index], text: e.target.value };
+                    newNodes[index] = { ...newNodes[index], text: trimmed };
                     setNodes(newNodes);
-                  }}
-                  className="focus:outline-none focus:ring-none"
-                  rows={1}
-                  style={{ resize: 'none', overflowY: 'hidden' }}
-                  ref={el => (textareaRefs.current[index] = el)}
-                  onInput={e => {
-                    const textarea = e.currentTarget;
-                    textarea.style.height = 'auto';
-                    textarea.style.height = `${textarea.scrollHeight}px`;
-                  }}
-                  onFocus={() => setFocusedIdx(index)}
-                  onBlur={e => {
-                    setFocusedIdx(null);
-                    const trimmed = e.currentTarget.value.trim();
-                    if (trimmed === "") {
-                      setNodes(prev => prev.filter((_, i) => i !== index));
-                    } else if (trimmed !== nodes[index].text) {
-                      const newNodes = [...nodes];
-                      newNodes[index] = { ...newNodes[index], text: trimmed };
-                      setNodes(newNodes);
-                    }
-                  }}
-                  onKeyDown={e => {
-                    const textarea = e.currentTarget;
-                    if (
-                      e.key === 'Backspace' &&
-                      textarea.value === ''
-                    ) {
-                      e.preventDefault();
-                      setNodes(prev => prev.filter((_, i) => i !== index));
-                      setTimeout(() => {
-                        if (index > 0) {
-                          textareaRefs.current[index - 1]?.focus();
-                        } else if (nodes.length > 1) {
-                          textareaRefs.current[1]?.focus();
-                        }
-                      }, 0);
-                      return;
-                    }
-                    if (
-                      e.key === 'ArrowUp' &&
-                      textarea.selectionStart === 0 &&
-                      textarea.selectionEnd === 0 &&
-                      index > 0
-                    ) {
-                      e.preventDefault();
-                      textareaRefs.current[index - 1]?.focus();
-                    }
-                    if (
-                      e.key === 'ArrowDown' &&
-                      textarea.selectionStart === textarea.value.length &&
-                      textarea.selectionEnd === textarea.value.length &&
-                      index < nodes.length - 1
-                    ) {
-                      const value = textarea.value;
-                      const beforeCaret = value.slice(0, textarea.selectionStart);
-                      if (
-                        beforeCaret.split('\n').length === value.split('\n').length
-                      ) {
-                        e.preventDefault();
-                        textareaRefs.current[index + 1]?.focus();
+                  }
+                }}
+                onKeyDown={e => {
+                  const textarea = e.currentTarget;
+                  if (
+                    e.key === 'Backspace' &&
+                    textarea.value === ''
+                  ) {
+                    e.preventDefault();
+                    setNodes(prev => prev.filter((_, i) => i !== index));
+                    setTimeout(() => {
+                      if (index > 0) {
+                        textareaRefs.current[index - 1]?.focus();
+                      } else if (nodes.length > 1) {
+                        textareaRefs.current[1]?.focus();
                       }
+                    }, 0);
+                    return;
+                  }
+                  if (
+                    e.key === 'ArrowUp' &&
+                    textarea.selectionStart === 0 &&
+                    textarea.selectionEnd === 0 &&
+                    index > 0
+                  ) {
+                    e.preventDefault();
+                    textareaRefs.current[index - 1]?.focus();
+                  }
+                  if (
+                    e.key === 'ArrowDown' &&
+                    textarea.selectionStart === textarea.value.length &&
+                    textarea.selectionEnd === textarea.value.length &&
+                    index < nodes.length - 1
+                  ) {
+                    const value = textarea.value;
+                    const beforeCaret = value.slice(0, textarea.selectionStart);
+                    if (
+                      beforeCaret.split('\n').length === value.split('\n').length
+                    ) {
+                      e.preventDefault();
+                      textareaRefs.current[index + 1]?.focus();
                     }
-                  }}
-                />
-                {((focusedIdx === null && hoveredIdx === index) || focusedIdx === index) && (
-                  <button
-                    type="button"
-                    aria-label="Delete"
-                    className="ml-auto text-red-500 mr-3 text-lg font-mono cursor-pointer"
-                    tabIndex={-1}
-                    onClick={() => setNodes(prev => prev.filter((_, i) => i !== index))}
-                  >
-                    X
-                  </button>
-                )}
-              </div>
+                  }
+                }}
+              />
+              {((focusedIdx === null && hoveredIdx === index) || focusedIdx === index) && (
+                <button
+                  type="button"
+                  aria-label="Delete"
+                  className="ml-auto text-red-500 mr-3 text-lg font-mono cursor-pointer"
+                  tabIndex={-1}
+                  onClick={() => setNodes(prev => prev.filter((_, i) => i !== index))}
+                >
+                  X
+                </button>
+              )}
             </motion.li>
           );
         })}
