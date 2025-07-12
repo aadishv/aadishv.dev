@@ -102,6 +102,9 @@
   hr {
       @apply my-2
   }
+  img {
+      @apply w-[30rem] mx-auto;
+  }
   pre {
     @apply mt-3 p-3 border-gray-200 border rounded;
   }
