@@ -311,4 +311,5 @@ some more possible optimizations:
 * caching sine and cosine
 * using prefix sums for cumulative weight sum in SUR
 * use an iterator instead of going through full array for each offset in SUR
+* use the [circular mean](https://en.wikipedia.org/wiki/Circular_mean) to calculate the average theta of particles. this produces better results for widely spaced theta values.
 * the list goes on...
