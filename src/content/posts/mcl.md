@@ -121,6 +121,12 @@ this code is a minimal modification from the code I link at the top of this arti
 
 all distances are in inches, and angles are in radians. we use standard position for angles (the positive x-axis is 0 rad).
 
+in general, if you see a variable with type
+```python
+tuple[float, float, float]
+```
+it is a pose -- that type is for a tuple of three decimal values (x, y, and theta).
+
 ### math imports
 
 if you don't know what these functions do, either 1) read the docs or 2) make sure you understand trigonometry.
