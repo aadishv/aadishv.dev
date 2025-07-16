@@ -1,4 +1,5 @@
 ---
+import { SimpleAnalytics } from 'astro-simpleanalytics-plugin';
 import "@/styles/globals.css";
 import ThemeToggleIsland from "@/components/ThemeToggleIsland.tsx";
 const { title, tool } = Astro.props;
@@ -23,6 +24,7 @@ const { title, tool } = Astro.props;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js"></script>
+
   </head>
   <body>
     <div
@@ -60,5 +62,8 @@ const { title, tool } = Astro.props;
           );
     });
         </script>
+        <!-- 100% privacy-first analytics -->
+        <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+
   </body>
 </html>
