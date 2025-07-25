@@ -1,0 +1,8 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import App from "@/tools/katex-playground/App.tsx";
+---
+
+<Layout title="KaTeX Playground">
+  <App client:only="react" />
+</Layout>

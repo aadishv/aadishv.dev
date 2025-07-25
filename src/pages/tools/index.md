@@ -48,6 +48,10 @@ A simple flashcard app for studying for my precalculus (OM013) finals. It shuffl
 
 A minimal tool to convert LaTeX equations into images (SVG, PNG, or GIF) using the [CodeCogs API](https://latex.codecogs.com/). Features live preview (with KaTeX), copyable image URLs, Markdown snippets, and even clipboard image copying (with html2canvas). Built because I was tired of bloated LaTeX renderers and wanted something fast for blog posts and docs.
 
+### [KaTeX Playground](/tools/katex-playground)
+
+A live KaTeX playground for experimenting with math typesetting and Markdown-style math in real time. Type any text or math (using `$...$`, `$$...$$`, `\(...\)`, or `\[...\]` delimiters) and see instant KaTeX-rendered output, with error messages for invalid LaTeX. Input is cached locally, and the UI uses shadcn/ui components for a clean, modern look. Great for learning KaTeX, prototyping math snippets, or debugging equations.
+
 ### [diff tool](/tools/diff)
 
 A live diff tool for comparing two versions of text. Click "Freeze Text" to snapshot your current text, then edit away and see the differences highlighted (additions in green, deletions in red). Supports both character-level and line-level diffs, and is intentionally as simple as possible—no bloat, no ads, just diff.
