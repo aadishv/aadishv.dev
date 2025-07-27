@@ -27,7 +27,7 @@ I have been programming for about 5 years and have participated in a variety of 
     href="https://github.com/aadishv/highstakes">public mirror</a
     > of my High Stakes code available.
     <p>
-    Lead AI programmer for VEX AI Robotics Competition team 3151A for the High Stakes and Push Back seasons (up until the present). Led work on system design, involving a raining & running a custom computer vision model. In total, designed and wrote over 8,000 lines of C++, Python, TypeScript, and shell.
+    Lead AI programmer for VEX AI Robotics Competition team 3151A for the High Stakes and Push Back seasons (up until the present). Led work on system design, involving training & running a custom computer vision model. In total, designed and wrote over 8,000 lines of C++, Python, TypeScript, and shell.
     </p>
     <p>
     Today, I am exploring future-learning work for the team and pushing the state of the art in VEX, including
