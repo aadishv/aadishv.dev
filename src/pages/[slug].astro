@@ -94,23 +94,14 @@ const isProject =
     }
     <main>
       <div class="text-xl">
-        {
-          post.frontmatter.link ? (
             <a
-              href={post.frontmatter.link}
+              href={post.frontmatter.link ?? `/${getSlugFromPath(post.file)}`}
               target="_blank"
               rel="noopener noreferrer"
+              class="!no-underline"
             >
               <h1>{post.frontmatter.title}</h1>
             </a>
-          ) : (
-            <a href={`/${getSlugFromPath(post.file)}`}>
-              {" "}
-              {/* Point to the page itself if no external link */}
-              <h1>{post.frontmatter.title}</h1>
-            </a>
-          )
-        }
         <h4>
           <time datetime={date.toString()}>{formatted}</time>
         </h4>

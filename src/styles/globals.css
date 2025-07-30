@@ -130,6 +130,6 @@
       border: 1px solid gray;
       border-radius: 6px;
       max-width: 20vw;
-      @apply p-4;
+      @apply p-4 m-1;
   }
 }
