@@ -55,3 +55,15 @@ A live KaTeX playground for experimenting with math typesetting and Markdown-sty
 ### [diff tool](/tools/diff)
 
 A live diff tool for comparing two versions of text. Click "Freeze Text" to snapshot your current text, then edit away and see the differences highlighted (additions in green, deletions in red). Supports both character-level and line-level diffs, and is intentionally as simple as possible—no bloat, no ads, just diff.
+
+### [Slide Puzzle](/tools/slide)
+
+A classic 4x4 slide puzzle game where you can use a default image or upload your own. It tracks moves and time, and saves your custom image in your browser for next time. A fun, simple game built with React.
+
+### [Fantasy AI Rankings](/tools/fantasy-ai)
+
+A drag-and-drop ranking tool for fantasy AI teams. You can reorder a predefined list of teams, name your list, and then generate a shareable URL that saves your custom ranking. The interface uses smooth animations for a polished user experience.
+
+### [Isometric Grid Paper](/tools/isometric)
+
+An interactive digital canvas for creating isometric art. Pick a color and fill in triangles on the grid to build 2.5D shapes and scenes. You can save multiple designs to your browser's local storage and use the color picker to easily reuse colors from your drawing.
