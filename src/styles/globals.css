@@ -124,11 +124,9 @@
     @apply border-l-4 pl-4 italic border-gray-400;
   }
   aside {
-      /* width: 25%; */
       float: right;
-      border-left: 6px solid var(--secondary) !important;
       border-radius: 6px;
       max-width: 20vw;
-      @apply p-4 m-1;
+      @apply p-4 m-1 !bg-gray-500;
   }
 }
