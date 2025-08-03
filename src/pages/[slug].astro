@@ -104,6 +104,8 @@ const isProject =
             </a>
         <h4>
           <time datetime={date.toString()}>{formatted}</time>
+          ・
+          <em>{`${post.rawContent.toString().split(" ").length} words`}</em>
         </h4>
       </div>
 
