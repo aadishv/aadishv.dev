@@ -295,7 +295,7 @@ export function App({ initialProps }: AppProps) {
           return (
             <div
               key={team.Team}
-              ref={(el) => (cardRefs.current[team.Team] = el)}
+              // ref={(el) => (cardRefs.current[team.Team] = el)}
             >
               <Card
                 className={`

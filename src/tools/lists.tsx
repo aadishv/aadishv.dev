@@ -376,7 +376,9 @@ function BottomSection(props: {
                 className="focus:outline-none w-full focus:ring-none mt-0.75 mb-0.5"
                 rows={1}
                 style={{ resize: 'none', overflowY: 'hidden' }}
-                ref={el => (textareaRefs.current[index] = el)}
+                ref={el => {
+                  textareaRefs.current[index] = el;
+                }}
                 onInput={e => {
                   const textarea = e.currentTarget;
                   textarea.style.height = 'auto';

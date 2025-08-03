@@ -11,8 +11,8 @@ import { samplePoints } from "./utils";
 import { runICPAlgorithm } from "./icpAlgorithm"; // Import the ICP algorithm
 
 export function ICPVisualization() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const canvasContainerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null!);
+  const canvasContainerRef = useRef<HTMLDivElement>(null!);
   const [curves, setCurves] = useState<Curve[]>([
     { points: [], color: "#3b82f6" }, // Source curve (blue)
     { points: [], color: "#ef4444" }, // Target curve (red)
