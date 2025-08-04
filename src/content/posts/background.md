@@ -110,7 +110,7 @@ I have been programming for about 5 years and have participated in a variety of 
     >
     that allows OHS students to easily download Adobe Connect recordings. I am
     also currently working on adding AI summaries and chat features to improve
-    students' experience when viewing class recordings. [<a
+    students' experience when viewing class recordings. It has 85 users and counting; impressive since my target audience is only ~700 people at OHS, many of which don't even need the tool! [<a
       href="https://github.com/aadishv/ohs-ac-utils/"
       >code</a
     >]
