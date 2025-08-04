@@ -4,7 +4,6 @@ title: "Robotics 4: 3151A (the first competition)"
 categories: ["blog", "robotics"]
 description: ""
 ---
-# Robotics 4: 3151A (the first competition)
 
 This is the fourth part of what will eventually be a five-part series. This focuses on my work on 3151A’s tech stack for the period of the season leading up to our first competition. Just one more post about VAIRC after this(!!)
 

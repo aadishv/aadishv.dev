@@ -64,11 +64,28 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
   }
-  th, td {
-      @apply border p-2;
+
+  :root {
+      font-size: 30px;
+  }
+  * {
+      word-wrap: break-word !important;
+  }
+  @media (min-width: 1024px) {
+    :root {
+        font-size: 16px;
+    }
+    aside {
+        float: right;
+        max-width: 20vw;
+    }
+  }
+  th,
+  td {
+    @apply border p-2;
   }
   table {
-      @apply my-2;
+    @apply my-2;
   }
   * {
     @apply border-border;
@@ -100,10 +117,10 @@
     @apply font-serif mt-2;
   }
   hr {
-      @apply my-2
+    @apply my-2;
   }
   img {
-      @apply w-[30rem] mx-auto;
+    @apply w-[30rem] mx-auto;
   }
   pre {
     @apply mt-3 p-3 border-gray-200 border rounded;
@@ -124,9 +141,7 @@
     @apply border-l-4 pl-4 italic border-gray-400;
   }
   aside {
-      float: right;
-      border-radius: 6px;
-      max-width: 20vw;
-      @apply p-4 m-1 !bg-gray-500;
+    border-radius: 6px;
+    @apply p-4 m-1 !bg-gray-500;
   }
 }
