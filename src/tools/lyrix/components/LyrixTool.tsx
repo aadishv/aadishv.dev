@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { searchSongs } from "../api";
 import type { Song } from "../api";
-import { Filter } from "lucide-react";
 
 function getSongParam(): string {
   const params = new URLSearchParams(window.location.search);

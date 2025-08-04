@@ -1,8 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Textarea } from "../../components/ui/textarea";
-import { Card } from "../../components/ui/card";
-import { Label } from "../../components/ui/label";
-import { cn } from "../../lib/utils";
 
 // KaTeX and auto-render are loaded via CDN in index.html or can be loaded dynamically if needed
 // For this tool, we assume KaTeX and renderMathInElement are available globally
@@ -33,13 +29,10 @@ function modifyMessage(msg: string, e: any) {
   return `${msg} + ${e}`;
 }
 
-import { Alert } from "../../components/ui/alert";
-
 export function App() {
   const [input, setInput] = useState<string>("");
   const [errors, setErrors] = useState<KatexError[]>([]);
   const outputRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
 
   // Load from cache on mount
   useEffect(() => {
@@ -87,7 +80,7 @@ export function App() {
   const dragging = useRef(false);
 
   // Drag handlers
-  function onMouseDown(e: React.MouseEvent) {
+  function onMouseDown(_: React.MouseEvent) {
     dragging.current = true;
     document.body.style.cursor = "col-resize";
   }

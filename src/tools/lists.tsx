@@ -146,7 +146,6 @@ function TopSection(props: {
     listName, setListName, handleListNameChange,
     handleCreateList, handleDeleteList, handleReorderLists
   } = props;
-  const [dropdownHovered, setDropdownHovered] = useState(false);
 
   // Drag state
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
@@ -155,8 +154,6 @@ function TopSection(props: {
   return (
     <div
       className="relative flex items-center mb-4 group"
-      onMouseEnter={() => setDropdownHovered(true)}
-      onMouseLeave={() => setDropdownHovered(false)}
     >
       <Input
         id="list-name-input"
@@ -328,7 +325,7 @@ function BottomSection(props: {
   return (
     <motion.ul layout className="">
       <AnimatePresence>
-        {sortedNodes.map((node, sortedIdx) => {
+        {sortedNodes.map(node => {
           const index = nodes.findIndex((n) => n === node);
           return (
             <motion.li
@@ -463,7 +460,7 @@ function BottomSection(props: {
 // Main App
 export default function App() {
   const {
-    lists, setLists, selectedList, selectedListId, setSelectedListId,
+    lists, selectedListId, setSelectedListId,
     nodes, setNodes, listName, setListName,
     handleListNameChange, handleCreateList, handleDeleteList,
     handleReorderLists

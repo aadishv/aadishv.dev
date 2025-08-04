@@ -12,7 +12,7 @@ const maxY = Math.max(...elements.map((el: ElementType) => el.ypos));
 const SQUARE_SIZE = 56; // px, adjust as needed
 
 type TableProps = {
-  elementRefs: React.MutableRefObject<{ [key: number]: HTMLDivElement | null }>;
+  elementRefs: React.RefObject<{ [key: number]: HTMLDivElement | null }>;
   textColors: Record<ElementTypeString, string>;
   bgColors: Record<ElementTypeString, string>;
 };

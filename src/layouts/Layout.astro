@@ -1,5 +1,4 @@
 ---
-import { SimpleAnalytics } from 'astro-simpleanalytics-plugin';
 import "@/styles/globals.css";
 import ThemeToggleIsland from "@/components/ThemeToggleIsland.tsx";
 const { title, tool } = Astro.props;
@@ -66,9 +65,9 @@ const { title, tool } = Astro.props;
         </script>
         <!-- 100% privacy-first analytics -->
         <!-- 100% privacy-first analytics -->
-        <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+        <script is:inline data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
         <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif?collect-dnt=true" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7591068367414166"
+        <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7591068367414166"
              crossorigin="anonymous"></script>
   </body>
 </html>
