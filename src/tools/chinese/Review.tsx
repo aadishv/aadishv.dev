@@ -3,7 +3,7 @@ import HanziWriter from "hanzi-writer";
 import { useSelector, useStore } from "@xstate/store/react";
 import { store, type AppMode } from "./Store";
 import { CharState } from "./Data";
-
+import { toast } from "sonner";
 const CHARACTER_SIZE_STYLE = "h-28 w-28";
 
 function convertNumberTonesToMarks(pinyin: string): string {
@@ -242,10 +242,10 @@ export function Review({
       character,
       {
         padding: 5,
-        strokeColor: mode == "character" ? "#0851D0" : "#000000",
-        drawingColor: mode == "character" ? "#0851D0" : "#000000",
+        strokeColor: "#000000",
+        drawingColor: "#000000",
         outlineColor:
-          mode === "pinyin" ? "#000000" : "rgba(130, 169, 229, 0.5)",
+          mode === "pinyin" ? "#000000" : "rgba(0, 0, 0, 0.5)",
         acceptBackwardsStrokes: true,
         showHintAfterMisses: false,
         showOutline: mode === "pinyin",
@@ -274,7 +274,6 @@ export function Review({
   }, []);
   // PINYIN STUFF
   const [input, setInput] = useState(mode == "character" ? pinyin : "");
-  const [isErrorAnimating, setIsErrorAnimating] = useState(false);
   const submitted = () => {
     if (!input.trim()) return;
 
@@ -284,8 +283,7 @@ export function Review({
       local_store.trigger.solved();
     } else {
       local_store.trigger.mistake();
-      setIsErrorAnimating(true);
-      setTimeout(() => setIsErrorAnimating(false), 400);
+      toast.error("wrong pinyin");
     }
   };
   if (mode === "pinyin") {
@@ -309,7 +307,7 @@ export function Review({
       {/* HEADER */}
       <div className="w-full">
         <button
-          className={`font-lora text-base underline decoration-header2 hover:decoration-header ${mode === "pinyin" && isCompleted ? "text-gray-500" : ""}`}
+          className={`text-black/50 lowercase text-base ${mode === "pinyin" && isCompleted ? "opacity-0" : ""}`}
           onClick={() => {
             if (isCompleted) {
               writer!.animateCharacter();
@@ -335,9 +333,9 @@ export function Review({
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className={`w-full bg-transparent py-1 text-center font-lora ${mode === "pinyin" ? "text-header underline" : ""} outline-none ${isErrorAnimating ? "opacity-50 transition-all duration-300" : "transition-all duration-300"} ${isErrorAnimating ? "decoration-red-500" : "decoration-header2"}`}
+            className={`w-full bg-transparent py-1 text-center font-lora ${mode === "pinyin" ? "text-header underline" : ""} outline-none`}
             disabled={isCompleted || mode !== "pinyin"}
-            placeholder="Pinyin"
+            placeholder="pinyin"
             onKeyDown={(e) => {
               if (e.key !== "Enter") return;
               submitted();

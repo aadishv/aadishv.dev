@@ -6,6 +6,7 @@ import MyModal from "./components/MyModal";
 import SettingsModal from "./components/SettingsModal";
 import { SentenceReview, Footer } from "./components/SentenceReviewAndFooter";
 import { SentenceDetails } from "./components/DetailsAndButton";
+import { Toaster } from "sonner";
 
 export default function App() {
   const [historyModalIsOpen, setHistoryModalIsOpen] = useState(false);
@@ -51,20 +52,22 @@ export default function App() {
   );
 
   return (
-    <div className="flex h-screen w-full flex-col items-center text-2xl">
+    <div className="flex flex-col items-center text-2xl mt-[4rem] mx-auto w-[50rem]">
       {/* Fixed header area */}
-      <div className="w-full flex-shrink-0 px-20 pt-20">
-        <div className="flex justify-center">
-          <SentenceDetails />
+        <div className="flex justify-center flex-row w-full">
+          <div className="flex flex-col w-full">
+            <Footer
+              showModal={showHistoryModal}
+              showSettingsModal={showSettingsModal}
+              progressSentence={() => store.trigger.progressSentence()}
+            />
+            <SentenceDetails />
+          </div>
         </div>
-      </div>
 
       {/* Scrollable middle content area */}
-      <div className="w-full flex-grow overflow-y-auto px-20">
-        {/* Container that constrains character component width */}
-        <div className="mx-auto w-[50rem] py-4">
+      <div className="w-full flex-grow overflow-y-auto my-4">
           <SentenceReview key={currentId} mode={mode} />
-        </div>
       </div>
 
       <MyModal
@@ -80,15 +83,7 @@ export default function App() {
         currentMode={mode}
         setMode={setMode}
       />
-
-      {/* Fixed footer area */}
-      <div className="w-full flex-shrink-0 p-5 px-20">
-        <Footer
-          showModal={showHistoryModal}
-          showSettingsModal={showSettingsModal}
-          progressSentence={() => store.trigger.progressSentence()}
-        />
-      </div>
+      <Toaster />
     </div>
   );
 }

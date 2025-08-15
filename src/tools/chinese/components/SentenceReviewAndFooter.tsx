@@ -65,21 +65,21 @@ export function Footer({
     <div className="flex w-full">
       <div className="mb-0 mr-auto flex flex-row gap-5">
         <button
-          className="m-0 h-8 justify-center truncate p-0 font-lora underline transition-all duration-300 ease-in-out hover:decoration-header decoration-header2"
+          className="text-xl text-black/70"
           onClick={() => {
-            window.location.href = "/blog/using-chinese";
+            window.location.href = "/using-chinese";
           }}
         >
           help
         </button>
         <button
-          className="m-0 h-8 justify-center truncate p-0 font-lora underline transition-all duration-300 ease-in-out hover:decoration-header decoration-header2"
+          className="text-xl text-black/70"
           onClick={showModal}
         >
           history
         </button>
         <button
-          className="m-0 h-8 justify-center truncate p-0 font-lora underline transition-all duration-300 ease-in-out hover:decoration-header decoration-header2"
+          className="text-xl text-black/70"
           onClick={showSettingsModal}
         >
           settings
@@ -87,7 +87,7 @@ export function Footer({
       </div>
       <div className="mb-0 ml-auto flex flex-row gap-5">
         <button
-          className="m-0 h-8 justify-center truncate p-0 font-lora underline transition-all duration-300 ease-in-out hover:decoration-header decoration-header2"
+          className="text-xl text-black/70"
           onClick={progressSentence}
         >
           continue
