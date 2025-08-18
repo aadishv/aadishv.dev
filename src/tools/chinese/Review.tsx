@@ -6,56 +6,103 @@ import { CharState } from "./Data";
 import { toast } from "sonner";
 const CHARACTER_SIZE_STYLE = "h-28 w-28";
 
-function convertNumberTonesToMarks(pinyin: string): string {
-  const pinyinLower = pinyin.toLowerCase();
+function parsePinyinToNumbered(raw: string): { p: string; t: number } {
+  // Normalize input
+  const input = raw.toLowerCase().trim();
 
-  // Map of vowels and their tone variants
-  const toneMap: Record<string, string[]> = {
-    a: ["ā", "á", "ǎ", "à"],
-    e: ["ē", "é", "ě", "è"],
-    i: ["ī", "í", "ǐ", "ì"],
-    o: ["ō", "ó", "ǒ", "ò"],
-    u: ["ū", "ú", "ǔ", "ù"],
-    ü: ["ǖ", "ǘ", "ǚ", "ǜ"],
-    v: ["ǖ", "ǘ", "ǚ", "ǜ"], // v is often used as a substitute for ü
-  };
+  if (!input) return { p: "", t: 0 };
 
-  // No tone number found, return as is
-  if (!/[1-4]$/.test(pinyinLower)) {
-    return pinyinLower;
+  // If it ends with a tone digit (1-5), use that
+  const toneDigitMatch = input.match(/^(.*?)([1-5])$/);
+  if (toneDigitMatch) {
+    const base = toneDigitMatch[1].replace(/ü/g, "v");
+    const tone = parseInt(toneDigitMatch[2], 10);
+    return { p: base, t: tone };
   }
 
-  // Extract tone number and remove it from the string
-  const toneNumber = parseInt(pinyinLower.slice(-1)) - 1;
-  const pinyinWithoutTone = pinyinLower.slice(0, -1);
+  // Map precomposed vowel characters with tone marks to base + tone
+  const diacriticMap: Record<string, { base: string; tone: number }> = {
+    // a
+    "ā": { base: "a", tone: 1 },
+    "á": { base: "a", tone: 2 },
+    "ǎ": { base: "a", tone: 3 },
+    "à": { base: "a", tone: 4 },
+    // e
+    "ē": { base: "e", tone: 1 },
+    "é": { base: "e", tone: 2 },
+    "ě": { base: "e", tone: 3 },
+    "è": { base: "e", tone: 4 },
+    // i
+    "ī": { base: "i", tone: 1 },
+    "í": { base: "i", tone: 2 },
+    "ǐ": { base: "i", tone: 3 },
+    "ì": { base: "i", tone: 4 },
+    // o
+    "ō": { base: "o", tone: 1 },
+    "ó": { base: "o", tone: 2 },
+    "ǒ": { base: "o", tone: 3 },
+    "ò": { base: "o", tone: 4 },
+    // u
+    "ū": { base: "u", tone: 1 },
+    "ú": { base: "u", tone: 2 },
+    "ǔ": { base: "u", tone: 3 },
+    "ù": { base: "u", tone: 4 },
+    // ü (v) variants
+    "ǖ": { base: "ü", tone: 1 },
+    "ǘ": { base: "ü", tone: 2 },
+    "ǚ": { base: "ü", tone: 3 },
+    "ǜ": { base: "ü", tone: 4 },
+    // Capital variants (just in case)
+    "Ā": { base: "a", tone: 1 },
+    "Á": { base: "a", tone: 2 },
+    "Ǎ": { base: "a", tone: 3 },
+    "À": { base: "a", tone: 4 },
+    "Ē": { base: "e", tone: 1 },
+    "É": { base: "e", tone: 2 },
+    "Ě": { base: "e", tone: 3 },
+    "È": { base: "e", tone: 4 },
+    "Ī": { base: "i", tone: 1 },
+    "Í": { base: "i", tone: 2 },
+    "Ǐ": { base: "i", tone: 3 },
+    "Ì": { base: "i", tone: 4 },
+    "Ō": { base: "o", tone: 1 },
+    "Ó": { base: "o", tone: 2 },
+    "Ǒ": { base: "o", tone: 3 },
+    "Ò": { base: "o", tone: 4 },
+    "Ū": { base: "u", tone: 1 },
+    "Ú": { base: "u", tone: 2 },
+    "Ǔ": { base: "u", tone: 3 },
+    "Ù": { base: "u", tone: 4 },
+    "Ǖ": { base: "ü", tone: 1 },
+    "Ǘ": { base: "ü", tone: 2 },
+    "Ǚ": { base: "ü", tone: 3 },
+    "Ǜ": { base: "ü", tone: 4 },
+  };
 
-  // Replace 'v' with 'ü' first
-  const normalizedPinyin = pinyinWithoutTone.replace(/v/g, "ü");
-
-  // Priority order for tone marks
-  const vowelPriority = ["a", "e", "o", "i", "u", "ü"];
-
-  // Find the vowel to modify based on priority
-  for (const vowel of vowelPriority) {
-    if (normalizedPinyin.includes(vowel)) {
-      // Replace the first occurrence of this vowel with its toned version
-      return normalizedPinyin.replace(vowel, toneMap[vowel][toneNumber]);
+  // Find any accented vowel to determine tone
+  for (let i = 0; i < input.length; i++) {
+    const ch = input[i];
+    if (diacriticMap[ch]) {
+      // Replace that character with its base and remove other diacritics
+      const tone = diacriticMap[ch].tone;
+      // Replace all accented characters with their base equivalent
+      let replaced = input.split("").map((c) => {
+        if (diacriticMap[c]) return diacriticMap[c].base;
+        return c;
+      }).join("");
+      // Normalize combining marks if any (NFD), then remove combining diacritics
+      replaced = replaced.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      // Convert ü to v for consistent comparison
+      replaced = replaced.replace(/ü/g, "v");
+      // Also convert any remaining literal 'v' stays as 'v'
+      return { p: replaced, t: tone };
     }
   }
 
-  // No vowel found to modify, return as is
-  return normalizedPinyin;
-}
-function normalizePinyin(input: string): string {
-  // Remove spaces and make lowercase
-  const trimmed = input.toLowerCase().trim();
-
-  // Check if this is likely a number-tone pinyin
-  if (/[a-z]+[1-4]$/.test(trimmed)) {
-    return convertNumberTonesToMarks(trimmed);
-  }
-
-  return trimmed;
+  // No explicit tone info (neither digit nor diacritic)
+  // Return base with t = 0 to indicate unspecified/neutral
+  const baseNoDiacritics = input.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  return { p: baseNoDiacritics.replace(/ü/g, "v"), t: 0 };
 }
 
 export function TrafficLights({
@@ -234,7 +281,8 @@ export function Review({
       : "Show solution";
   });
   // CHARACTER STUFF
-  const writerRef = useRef<HTMLDivElement>(null);
+  const writerRef =
+ useRef<HTMLDivElement>(null);
   const [writer, setWriter] = useState<HanziWriter | null>(null);
   useEffect(() => {
     const localWriter = HanziWriter.create(
@@ -277,9 +325,10 @@ export function Review({
   const submitted = () => {
     if (!input.trim()) return;
 
-    const normalizedInput = normalizePinyin(input);
-    const normalizedPinyin = normalizePinyin(pinyin);
-    if (normalizedInput === normalizedPinyin) {
+    const userObj = parsePinyinToNumbered(input);
+    const correctObj = parsePinyinToNumbered(pinyin);
+    // Compare both base pinyin and tone number
+    if (userObj.p === correctObj.p && userObj.t === correctObj.t) {
       local_store.trigger.solved();
     } else {
       local_store.trigger.mistake();
@@ -289,11 +338,13 @@ export function Review({
   if (mode === "pinyin") {
     useEffect(() => {
       const subscription = local_store.on("showSolution", ({}) => {
+        // Show the full pinyin as provided (could be with marks or numbers)
         setInput(pinyin);
       });
       const subscription2 = local_store.on("showPartialSolution", ({}) => {
-        const noTones = pinyin.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        setInput(noTones);
+        // Show pinyin without tone marks/digits (base only)
+        const parsed = parsePinyinToNumbered(pinyin);
+        setInput(parsed.p);
       });
       return () => {
         subscription.unsubscribe();

@@ -124,7 +124,6 @@ export const store = createStore({
         sentences.length > 0 &&
         !enabledLessons.includes(sentences[0].lesson)
       ) {
-        console.log(sentences.length);
         sentences = sentences.slice(1);
         if (sentences.length === 0) {
           sentences = [...getSentences()].sort(() => Math.random() - 0.5);
