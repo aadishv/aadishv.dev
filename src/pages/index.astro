@@ -13,7 +13,7 @@ const getSlugFromPath = (path: string): string => {
   return filename.replace(".md", "");
 };
 
-let allEntries = await Astro.glob("../content/posts/*.md"); // Default: just posts
+let allEntries = await Astro.glob("../content/posts/*.*");
 if (import.meta.env.DEV) {
   const personal = await Astro.glob("../content/personal/*.md");
   allEntries = allEntries.concat(personal); // Concatenate, do not deduplicate
@@ -26,14 +26,13 @@ const sortedEntries = allEntries
       new Date(a.frontmatter.date).valueOf(),
   )
   .filter((p) => p.frontmatter.hidden !== true);
-
 const clientEntries = sortedEntries.map((entry) => ({
   slug: getSlugFromPath(entry.file), // Ensure getSlugFromPath is correctly defined and scoped
   title: entry.frontmatter.title,
   date: entry.frontmatter.date,
   description: entry.frontmatter.description || "",
   categories: entry.frontmatter.categories || [],
-  rawContent: entry.rawContent(), // This is a function call
+  rawContent: entry.rawContent ? entry.rawContent() : ""
 }));
 ---
 

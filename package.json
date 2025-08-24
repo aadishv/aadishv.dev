@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@astrojs/check": "0.9.4",
+    "@astrojs/mdx": "^4.3.4",
     "@astrojs/react": "4.3.0",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/starlight": "^0.34.4",
@@ -53,5 +54,8 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "3.4.3",
     "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "prettier-plugin-astro": "^0.14.1"
   }
 }

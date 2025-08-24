@@ -1,0 +1,46 @@
+---
+date: "2025-08-23"
+title: "MCL 2: Resampling"
+categories: ["blog", "robotics"]
+description: ""
+---
+import {ParticlesVertical, ParticlesPercent, ParticlesLines, ParticlesLines2, ParticlesLines3, StepThrough} from "@/tools/mcl2.tsx";
+
+In [my last post on Monte Carlo Localization](/mcl), I tried my best to explain how the Stochastic Universal Resampling works, but after having to explain to 3 different people how it worked, I realized its not super easy to understand from a beginner's perspective. Let's fix it with the solution to many problems in life: rainbows.
+
+Let's say I have 7 MCL particles, one for each color in ROY G BIV. (This is purely illustrative. Unfortunately, in your implementation, particles will not have colors, but the fundamental idea remains.) Each particle has some kind of weight. Let's say it looks like this:
+<br />
+<ParticlesVertical />
+<br />
+We can divide each weight by the sum of weights, which in this case is `28`, so that they all sum to 1 (we can represent them as percent). These are the "normalized weights".
+<br />
+<ParticlesPercent />
+<br />
+Great, so we can think of each of the particles as "slices". Now, let's introduce lines. There are 7 of these lines (same as the # of particles) and they are equally spaced. They're portrayed as arrows below.
+<br />
+<ParticlesLines />
+<br />
+Note that, even though the lines are spaced by one seventh, there is still not one at the end. This is a classic example of the [fence post problem, or an off-by-one error](https://en.wikipedia.org/wiki/Off-by-one_error).
+Each of these lines will become a new particle; for each line, we'll copy the particle that it is above and add it to our new particles list. However, we want this to emulate a weighted choice as close as possible, and it might be repetitive with this current setup (especially if the order of particles don't change much between iterations). To solve this, we add a random offset to particles:
+<br />
+<ParticlesLines2 />
+<br />
+We can replace the lines with colored circles based on their corresponding particle:
+<br />
+<ParticlesLines3 />
+<br />
+Each of these circles will become a new particle. We see that there will be 2 copies of the red particle, no copies of the purple particle, and 1 copy for all the rest. This makes sense; we want to duplicate the particles with higher weight and remove the particles with lower weight so that the particles overall are more accurate to the robot's actual position.
+
+But how do we efficiently determine which particle corresponds to each line (a.k.a. new particle)? We can use the following algorithm:
+
+0. Set up the particles and lines.
+1. Initialize sum to 0. This will never exceed 1. Think of the sum as representing how far to the right we've gone. We'll compare this to the line values.
+2. Keep track of a current line, starting at the first line.
+2. For each particle (or until we run out of lines):
+  a. Add that particle's normalized weight to the sum.
+  b. Until the current line's value exceeds the sum, copy the particle to the new particles list and move to the next line.
+
+Let's see how this works in practice.
+<br />
+<StepThrough client:load />
+<br />
