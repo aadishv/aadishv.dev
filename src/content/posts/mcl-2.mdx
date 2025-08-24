@@ -21,7 +21,7 @@ Great, so we can think of each of the particles as "slices". Now, let's introduc
 <ParticlesLines />
 <br />
 Note that, even though the lines are spaced by one seventh, there is still not one at the end. This is a classic example of the [fence post problem, or an off-by-one error](https://en.wikipedia.org/wiki/Off-by-one_error).
-Each of these lines will become a new particle; for each line, we'll copy the particle that it is above and add it to our new particles list. However, we want this to emulate a weighted choice as close as possible, and it might be repetitive with this current setup (especially if the order of particles don't change much between iterations). To solve this, we add a random offset to particles:
+Each of these lines will become a new particle; for each line, we'll copy the particle that it is above and add it to our new particles list. However, we want this to be random (although still weighted), so we add a random offset to particles:
 <br />
 <ParticlesLines2 />
 <br />

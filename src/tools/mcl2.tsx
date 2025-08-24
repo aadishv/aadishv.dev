@@ -226,9 +226,6 @@ const steps = [
     particle: 2,
     message: "Update our running sum for the third particle."
   },
-
-
-
   {
     sum: sumFor(3),
     line: 3,
@@ -250,7 +247,6 @@ const steps = [
     particle: 3,
     message: "Update our running sum for the fourth particle."
   },
-
   {
     sum: sumFor(4),
     line: 4,
@@ -272,7 +268,6 @@ const steps = [
     particle: 4,
     message: "Update our running sum for the fifth particle."
   },
-
   {
     sum: sumFor(5),
     line: 5,
