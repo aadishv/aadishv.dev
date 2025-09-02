@@ -3,7 +3,6 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Input } from "./ui/input";
 
-// @ts-ignore
 import Fuse from "fuse.js";
 
 type Entry = {
@@ -33,28 +32,23 @@ function formatDate(dateString: string) {
 
 export function EntryList({ entries }: EntryListProps) {
   const [search, setSearch] = useState("");
-  // Sort entries by date descending (newest first)
   const sortedEntries = [...entries].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
   const [filtered, setFiltered] = useState<Entry[]>(sortedEntries);
 
   useEffect(() => {
-    // Parse is: filters from the search query
     let query = search.trim();
     const isRegex = /\bis:([a-zA-Z0-9_-]+)\b/g;
     let match;
     const filters: string[] = [];
     let queryWithoutIs = query;
 
-    // Extract all is: filters
     while ((match = isRegex.exec(query)) !== null) {
       filters.push(match[1].toLowerCase());
     }
-    // Remove all is:... tokens from the query string
     queryWithoutIs = query.replace(/\bis:[a-zA-Z0-9_-]+\b/g, "").trim();
 
-    // Apply filters
     let filteredEntries = sortedEntries;
     filters.forEach((filter) => {
       if (filter === "blog") {
@@ -66,7 +60,6 @@ export function EntryList({ entries }: EntryListProps) {
           e.categories.includes("project"),
         );
       } else {
-        // Generic is:category filter
         filteredEntries = filteredEntries.filter((e) =>
           e.categories.map((c) => c.toLowerCase()).includes(filter),
         );
@@ -76,7 +69,6 @@ export function EntryList({ entries }: EntryListProps) {
     if (queryWithoutIs === "") {
       setFiltered(filteredEntries);
     } else {
-      // Use Fuse on filtered subset
       const fuseSubset = new Fuse(filteredEntries, {
         keys: ["title", "description", "rawContent", "categories"],
         includeScore: true,

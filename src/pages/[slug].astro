@@ -4,46 +4,18 @@ import Layout from "@/layouts/Layout.astro";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { parseISO, format } from "date-fns";
+import { getCollection } from "astro:content";
+import { render } from "astro:content";
 
-// Define the expected shape of the frontmatter
-interface PostFrontmatter {
-  title: string;
-  date: string; // Assuming date is a string compatible with parseISO
-  hidden?: boolean;
-  image?: string; // Optional image field for project posts
-  description?: string; // Optional description field for project posts
-  link?: string; // Optional link field for project posts
-  categories?: string[]; // Added categories for type safety
-}
-
-// Type for a markdown post instance from Astro.glob
-type MarkdownPost = MarkdownInstance<PostFrontmatter>;
-
-// Type for the parameters object returned by getStaticPaths
-type PostParams = { slug: string };
-
-// Type for the props object returned by getStaticPaths
-type PostProps = { post: MarkdownPost };
-
-// Type for the return value of getStaticPaths for this specific case
-type PostGetStaticPathsResult = Array<{ params: PostParams; props: PostProps }>;
-
-export async function getStaticPaths({}: GetStaticPathsOptions): Promise<PostGetStaticPathsResult> {
-  // allContent is an array of MarkdownPost instances
-  let allContent: MarkdownPost[] = await Astro.glob("@/content/posts/*.*");
-  if (import.meta.env.DEV) {
-    const personal: MarkdownPost[] = await Astro.glob("@/content/personal/*.md");
-    allContent = allContent.concat(personal);
-  }
-
-  const paths: PostGetStaticPathsResult = allContent.map((post) => {
-    // post.file is guaranteed to be a string by Astro.glob
-    const slug = getSlugFromPath(post.file);
+export async function getStaticPaths({}: GetStaticPathsOptions) {
+  const allContent = await getCollection("posts");
+  const paths = allContent.map((post) => {
+    const slug = getSlugFromPath(post.filePath ?? '');
     return {
       params: {
-        slug: slug, // slug is string
+        slug: slug,
       },
-      props: { post }, // post is MarkdownPost
+      props: { post },
     };
   });
 
@@ -51,42 +23,29 @@ export async function getStaticPaths({}: GetStaticPathsOptions): Promise<PostGet
 }
 
 export const getSlugFromPath = (path: string): string => {
-  // path.split("/").at(-1) returns string | undefined.
-  // For valid file paths from Astro.glob, at(-1) will be a string.
-  // Use non-null assertion (!) based on the expected input from glob.
-  // A more robust solution would be error handling or fallback like `.at(-1) ?? 'default-slug'`.
-  // Using ! satisfies the type system assuming valid paths.
   return path.split("/").at(-1)!.replace(".md", "");
 };
 
-// Define the type for the component's props expected from getStaticPaths
-interface Props {
-  post: MarkdownPost;
-}
+const { post } = Astro.props;
 
-// Cast Astro.props to the defined Props interface for type safety
-const { post } = Astro.props as Props;
+const { headings, Content } = await render(post);
 
-const headings = post.getHeadings();
-
-// Blog post header functionality
-// post.frontmatter.date is typed as string by PostFrontmatter
-const date: Date = parseISO(post.frontmatter.date); // parseISO returns Date
-const formatted: string = post.frontmatter.date == "<top>" ? "" : format(date, "LLLL d, yyyy"); // format returns string
+const date: Date = parseISO(post.data.date);
+const formatted: string = post.data.date == "<top>" ? "" : format(date, "LLLL d, yyyy");
 
 const isProject =
-  post.frontmatter.categories &&
-  post.frontmatter.categories.includes("project");
+  post.data.categories &&
+  post.data.categories.includes("project");
 ---
 
-<Layout title={post.frontmatter.title}>
+<Layout title={post.data.title}>
   <article class="container mx-auto py-10 lg:px-52">
     {
-      post.frontmatter.image && (
+      post.data.image && (
         <div>
           <img
-            src={post.frontmatter.image}
-            alt={post.frontmatter.title}
+            src={post.data.image}
+            alt={post.data.title}
             class="w-full h-auto max-h-[400px] object-contain mx-auto"
           />
         </div>
@@ -95,25 +54,25 @@ const isProject =
     <main>
       <div class="text-xl">
             <a
-              href={post.frontmatter.link ?? `/${getSlugFromPath(post.file)}`}
+              href={post.data.link ?? `/${getSlugFromPath(post.filePath ?? '')}`}
               target="_blank"
               rel="noopener noreferrer"
               class="!no-underline"
             >
-              <h1>{post.frontmatter.title}</h1>
+              <h1>{post.data.title}</h1>
             </a>
         <h4>
           <time datetime={date.toString()}>{formatted}</time>
 
-          {post.rawContent && <span>・<em>{`${post.rawContent().split(" ").length} words`}</em></span>}
+          {post.body && <span>・<em>{`${post.body.split(" ").length} words`}</em></span>}
         </h4>
       </div>
 
       {
-        isProject && post.frontmatter.link && (
+        isProject && post.data.link && (
           <div class="my-4">
             <a
-              href={post.frontmatter.link}
+              href={post.data.link}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -146,7 +105,7 @@ const isProject =
         )
       }
 
-      <post.Content />
+      <Content />
     </main>
   </article>
 </Layout>
