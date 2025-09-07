@@ -8,12 +8,17 @@ const { title, tool } = Astro.props;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <meta name="description" content={"A 9th grader and avid coder."} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" type="application/rss+xml" title="Aadish Verma RSS Feed" href="/rss.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Aadish Verma RSS Feed"
+      href="/rss.xml"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,52 +27,62 @@ const { title, tool } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js"></script>
-
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js"
+    ></script>
   </head>
   <body>
-    <div
-      class={`sticky pt-4 -mb-10 mx-4 z-[1000] flex top-bar`}
-    >
+    <div class={`sticky pt-4 -mb-10 mx-4 z-[1000] flex top-bar`}>
       {
         !tool && (
-          <a href="/" class="text-lg mr-auto" style={{ fontFamily: "Lora" }}>
-            Aadish Verma
-          </a>
-      <div class="mx-auto">{""}</div>
-          <div class="ml-auto">
-            <ThemeToggleIsland client:load />
-          </div>
+          <>
+            <a href="/" class="text-lg mr-auto" style={{ fontFamily: "Lora" }}>
+              Aadish Verma
+            </a>
+            <div class="mx-auto">{""}</div>
+            <div class="ml-auto">
+              <ThemeToggleIsland client:load />
+            </div>
+          </>
         )
       }
     </div>
     {
-    <div class={tool ? "" : "pt-8"}>
-      <slot  />
-    </div>
+      (
+        <div class={tool ? "" : "pt-8"}>
+          <slot />
+        </div>
+      )
     }
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-          renderMathInElement(
-              document.body,
-              {
-                  delimiters: [
-                      {left: "$$", right: "$$", display: true},
-                      {left: "\\[", right: "\\]", display: true},
-                      {left: "$", right: "$", display: false},
-                      {left: "\\(", right: "\\)", display: false}
-                  ]
-              }
-          );
-    });
-        </script>
-        <!-- 100% privacy-first analytics -->
-        <!-- 100% privacy-first analytics -->
-        <script is:inline data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-        <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif?collect-dnt=true" alt="" referrerpolicy="no-referrer-when-downgrade"/></noscript>
-        <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7591068367414166"
-             crossorigin="anonymous"></script>
+      document.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false },
+          ],
+        });
+      });
+    </script>
+    <!-- 100% privacy-first analytics -->
+    <!-- sorry for the DNT folks :( guess now I'm big tech :sob: -->
+    <script
+      is:inline
+      data-collect-dnt="true"
+      async
+      src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript
+      ><img
+        src="https://queue.simpleanalyticscdn.com/noscript.gif?collect-dnt=true"
+        alt=""
+        referrerpolicy="no-referrer-when-downgrade"
+      /></noscript
+    >
   </body>
 </html>
