@@ -1,149 +1,41 @@
 ---
 date: "2025-07-22"
 hidden: true
-title: "Aadish Verma — programming background"
+title: "My background"
 categories: ["note"]
 description: ""
 ---
 
-I have been programming for about 5 years and have participated in a variety of projects.
+[Github profile](https://github.com/aadishv/)
 
-<p><b>Competitions</b></p>
-<ul>
-  <li>
-    <em>Hackathons.</em>
-    Led programming for the winning team of the Stanford OHS 2024 Labor Day
-    Hackathon. Planning to write a blog post about it later :) [<a
-      href="https://github.com/aadishv/doleofdoves"
-      >code</a
-    >]
-  </li>
-  <li>
-    <em>Competitive programming.</em>
-    <a href="https://adventofcode.com/2024">Advent of Code</a> 2024 participant.
-    [<a href="https://github.com/aadishv/aoc">code</a>]
-    <a href="https://usaco.org">USACO</a> Silver competitor. [<a
-      href="https://github.com/aadishv/usaco"
-      >code</a
-    >]
-  </li>
-</ul>
-<p><b>Robotics</b></p>
-<ul>
-  <li>
-    <em
-      >Lead coder for VEX V5 Robotics Competition team
-      <a href="https://www.robotevents.com/teams/V5RC/315P">315P</a></em
-    >
-    for Over Under and part of the High Stakes seasons. I have made a
-    <a href="https://github.com/aadishv/highstakes">public mirror</a> of my High
-    Stakes code available.
-  </li>
-  <li>
-    <em>Lead AI programmer for VEX AI Robotics Competition team 3151A</em> for
-    the High Stakes and Push Back seasons (up until the present). Led work on
-    system design, involving training & running a custom computer vision model.
-    In total, designed and wrote over 8,000 lines of C++, Python, TypeScript,
-    and shell.
-    <br />
-    Today, I am exploring future-learning work for the team and pushing the
-    state of the art in VEX, including
-    <ul class="pb-1 -mt-2">
-      <li style="line-height: 0.8rem">
-        GPU-accelerated Monte Carlo localization with a LiDAR,
-      </li>
-      <li style="line-height: 0.8rem">
-        clustering and object persistence using Kalman filters,
-      </li>
-      <li style="line-height: 0.8rem">and much more.</li>
-    </ul>
-    Unfortunately, our code is our secret sauce, so I can't share it :)
-  </li>
-  <li>
-    <em>Open source.</em>
-    In conjunction with my work in the VEX community, I've also worked on
-    several open-source projects used by hundreds of robotics teams (VEX and
-    professional):
-    <ul>
-      <li>
-        A
-        <a href="https://github.com/LemLib/LemLib/pull/274"
-          >bugfix PR to LemLib,</a
-        >
-        the most popular motion control and utilities library in the VEX V5
-        Robotics Competition. This PR is currently in review and fixes a
-        critical bug in the library that would cause it to block indefinitely if
-        motions were called under certain competition conditions.
-      </li>
-      <li>
-        A
-        <a href="https://github.com/Slamtec/rplidar_sdk/pull/141"
-          >bugfix PR to the RPLiDAR C++ SDK.</a
-        >
-        RPLiDAR is a very commonly used LiDAR series made by the Slamtec
-        manufacturer, used in R&D, production cases, and also by the most
-        technologically advanced VEX Robotics teams. This PR fixes a critical
-        segfault in the SDK occuring due to a loop not checking for when a queue
-        was empty.
-      </li>
-      <li>
-        I am the creator and maintainer of
-        <a href="https://github.com/aadishv/dishpy">DishPy</a>, a Python
-        development tool for the VEX V5 supporting multiple files, any editor, a
-        CLI, and libraries. This offers a massive advantage over the vanilla
-        Micropython environment provided by VEX and is in use for competition by
-        many teams. [<a href="/dishpy">docs</a>
-        <a href="/dishpy-blog">blog post</a>]
-      </li>
-    </ul>
-  </li>
-</ul>
-<p><b>Frontend development</b></p>
-<ul>
-  <li>
-    <em
-      >Built
-      <a
-        href="https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne"
-        >a Chrome extension</a
-      ></em
-    >
-    that allows OHS students to easily download Adobe Connect recordings. I am
-    also currently working on adding AI summaries and chat features to improve
-    students' experience when viewing class recordings. It has 85 users and counting; impressive since my target audience is only ~700 people at OHS, many of which don't even need the tool! [<a
-      href="https://github.com/aadishv/ohs-ac-utils/"
-      >code</a
-    >]
-  </li>
-  <li>
-    <em>I've built <a href="/tools">several tools</a> and games</em> as part of
-    my <a href="https://aadishv.github.io/">website</a>. In total, my website
-    has over 10,000 lines of TypeScript code. [<a
-        href="https://github.com/aadishv/aadishv.github.io">Github</a>]
-  </li>
-  <li>
-    <em>I cofounded and help lead development for Dotlist</em>, an open-source
-    productivity manager. I architectured the entire frontend and backend and
-    continue to help the team make informed decisions with regards to our mobile
-    app and hosting infrastructure. I continue to regularly do code review and
-    contribute to the codebase. I also lead development on an affiliated app,
-    Dotlist Lite, which has less features but more polish. [<a
-      href="https://github.com/edwrdq/dotlib"
-      >Dotlist github</a
-    > ・
-    <a href="https://dotlist.edwrdq.xyz/">Dotlist website</a> ・
-    <a href="https://github.com/aadishv/dotlist-lite">Dotlist Lite github</a> ・
-    <a href="https://dotlist-lite.vercel.app/">Dotlist Lite website</a>]
-  </li>
-  <li>
-    <em>I designed and wrote a website</em> for the Venice project, which is an
-    independent and open-source port of a Micropython runtime to the VEX V5.
-    [<a href="https://github.com/venice-v5/venice-v5.github.io">github</a> <a
-        href="https://venice.fibn.cc/">website</a>]
-  </li>
-  <li>
-    <em>I've built <a href="/tools">several tools</a> and games</em> as part of
-    my <a href="https://aadishv.github.io/">website</a>. In total, my website
-    has over 10,000 lines of TypeScript code.
-  </li>
-</ul>
+**Helping students at Stanford OHS**
+
+- Led winning teams for the OHS Labor Day Hackathon in 2024 and 2025. Worked on student-focused projects; [a tech issue diagnosis software with integrated AI](https://github.com/aadishv/doleofdoves) [[demo](https://drive.google.com/file/d/1tY9xYQxgWX8BaUuugb8C5ZvrLzII6VSt/view?usp=sharing)] and [AI-powered fact checker to verify social media posts](https://github.com/aadishv/fluorine/) [[demo](https://drive.google.com/file/d/1g-JFRpFuEvoKB7rdCtDtvEMDrhfKEs8_/view?usp=sharing)]. 1st place both years.
+- Developed and maintain [OHS AC Utilities](https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne) [[code](https://github.com/aadishv/ohs-ac-utils)] (100+ users). Offers useful download utility and AI assistant for OHS students accessing class recordings via Adobe Connect.
+- As part of my volunteer role in the OHS Board of Communications, wrote a program to automatically generate eKudos emails for the board chair. [blog post](https://aadishv.github.io/ekudos/)
+- [Built](https://aadishv.github.io/tools/chinese/) [several](https://aadishv.github.io/tools/periodic/) [tools](https://aadishv.github.io/tools/om013/) to help students in a variety of classes understand course content.
+
+**VEX Robotics**
+
+- Led programming for VEX Robotics Competition team [315P](https://www.robotevents.com/teams/V5RC/315P) (5+ awards including 3x tournament finalist, 1x tournament champion, 1x excellence award world division quarterfinalists). [code](https://github.com/aadishv/highstakes) [blog post 1](https://aadishv.github.io/robotics-1/) [blog post 2](https://aadishv.github.io/robotics-2/)
+- Lead AI programming for VEX AI Robotics Competition team 3151A, including work on system design, training & running custom CV pipeline, and handling serial communications between VEX and NVIDIA hardware. Designed and wrote >8,000 lines of C++, Python, TypeScript, and shell.
+
+  Currently exploring future-learning work and pushing the state of the art in VEX, including
+  - GPU-accelerated Monte Carlo localization with a LiDAR,
+  - clustering and object persistence using Kalman filters,
+  - and more.
+
+  Code is unfortunately private. [blog post 1](https://aadishv.github.io/robotics-3/) [blog post 2](https://aadishv.github.io/robotics-4/)
+
+**Open source**
+
+- Contributed critical bugfixes [to LemLib](https://github.com/LemLib/LemLib/pull/274) (most popular VEX motion control lib, used by hundreds of teams), and [to the RPLiDAR C++ SDK](https://github.com/Slamtec/rplidar_sdk/pull/141) (very commonly used LiDAR SDK made by Slamtec, likely used by thousands if not tens of thousands of projects).
+- Created and maintain [DishPy](https://github.com/aadishv/dishpy) (Python development tool for VEX offering a significant advantage over the VEX Micropython runtime, in competitive use by many teams). [[docs](/dishpy) [blog post](/dishpy-blog)]
+- Designed, wrote, and maintain [website](https://venice.fibn.cc/) for the [Venice open source Micropython runtime for VEX V5](https://github.com/venice-v5/). Active contributor to [Venice CLI](https://github.com/venice-v5/venice-cli), involving low-level serial code.
+- Wrote [several](https://aadishv.github.io/mcl/) [blog posts](https://aadishv.github.io/mcl-2x/) helping dozens of fellow competitors across the US, Canada, and even Hong Kong and Romania with advanced topics in VEX.
+
+**Miscellaneous**
+
+- [Advent of Code](https://adventofcode.com/2024) 2024 participant [[code](https://github.com/aadishv/aoc)]
+- [USACO](https://usaco.org) Silver competitor. [[code](https://github.com/aadishv/usaco)]
+- Cofounded, maintain, and lead architectural decisions and code review for [Dotlist](https://github.com/dotlists/dotlib) and [Dotlist Lite](https://github.com/dotlists/dotlite), a family of open-source productivity managers.

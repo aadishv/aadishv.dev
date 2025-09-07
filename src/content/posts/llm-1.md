@@ -1,6 +1,6 @@
 ---
 date: "2025-07-29"
-title: "Lessons from vibe coding a major project [thoughts on LLMs #1]"
+title: "AI 1: Lessons from vibe coding a major project"
 categories: ["blog", "ai"]
 description: ""
 ---
