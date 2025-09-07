@@ -84,5 +84,17 @@ const { title, tool } = Astro.props;
         referrerpolicy="no-referrer-when-downgrade"
       /></noscript
     >
+    <script>
+    function getSubpath() {
+      // location.pathname already excludes query/hash
+      const raw = window.location.pathname || '/';
+      // remove all leading/trailing slashes
+      const trimmed = raw.replace(/^\/+|\/+$/g, '');
+      // optionally remove a trailing index file like "index.html" or "index.php"
+      const withoutIndex = trimmed.replace(/(?:^|\/)index\.(?:html?|php)$/i, '').replace(/^\/+|\/+$/g, '');
+      return withoutIndex;
+    }
+    console.log(await fetch(`https://heartbeat-pearl.vercel.app/ping/${getSubpath()}`).then(r => r.text()), "analytics sent!")
+    </script>
   </body>
 </html>
