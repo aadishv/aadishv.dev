@@ -1,7 +1,7 @@
 ---
 date: "2025-08-09"
 title: "Using AI to help automate moving my music library"
-categories: ["blog", "ai"]
+categories: ["blog", "ai", "TIL"]
 description: ""
 ---
 
