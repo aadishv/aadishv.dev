@@ -8,6 +8,10 @@ const { title, tool } = Astro.props;
 <!doctype html>
 <html lang="en">
   <head>
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={"A 9th grader and avid coder."} />
+    <meta property="og:image" content="/og.png" />
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
