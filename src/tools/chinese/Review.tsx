@@ -196,13 +196,13 @@ export function Review({
     },
     on: {
       solved: (context, _: {}, enqueue) => {
-        setTimeout(() => enqueue.emit.showSolution(), 400);
         store.trigger.updateCharacter({
           character: context.parentData.char,
           newState: context.state,
           id: context.parentData.id,
           mode: context.parentData.mode,
         });
+        enqueue.emit.showSolution();
         return { ...context, isCompleted: true };
       },
       mistake: (context) => {
