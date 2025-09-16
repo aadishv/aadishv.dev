@@ -145,3 +145,19 @@ Here's another cool example of using AI extensions:
 ![Using Google Calendar + Exa Search for complex queries](assets/raycast-copilot.md/9.png)
 
 Overall, I'm happy I managed to get this to work -- not the most elegant solution, but its nice for when I need it.
+
+## Update 9/15/25: It works with Codex!
+
+By setting it up as a custom provider, I can use my choice of models from Copilot in OpenAI's Codex CLI as well, without having to spend a penny on OpenAI credits. This can be achieved simply by putting the following in `~/.codex/config.toml`:
+```toml
+model = "gpt-5-mini"
+model_provider = "copilot"
+
+[model_providers.copilot]
+name = "Copilot"
+base_url = "http://localhost:4141"
+```
+
+![Copilot + Codex CLI](assets/raycast-copilot.md/10.png)
+
+I don't know if I'll be using this much -- it's great at hallucinating APIs because it doesn't have any easy url context/fetch tool -- but its cool for smaller changes/prototyping.
