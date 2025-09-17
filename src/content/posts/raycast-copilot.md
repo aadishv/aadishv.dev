@@ -37,7 +37,7 @@ Raycast's Custom Providers implementation doesn't natively support automatically
 ![Using Gemini for the JSON -> YAML conversion](assets/raycast-copilot.md/2.png)
 
 It did get a few things wrong -- the provider prefixes (`openai/`, `anthropic/`, etc.) aren't supposed to be in the model IDs which stumped me for a bit, but after removing them it worked well. I gutted most of the models to just ones that I might find useful, ending up with the following config:
-```YAML
+```yaml
 providers:
   - id: copilot
     name: Copilot
