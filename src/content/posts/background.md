@@ -18,14 +18,7 @@ description: ""
 **VEX Robotics**
 
 - Led programming for VEX Robotics Competition team [315P](https://www.robotevents.com/teams/V5RC/315P) (5+ awards including 3x tournament finalist, 1x tournament champion, 1x excellence award world division quarterfinalists). [code](https://github.com/aadishv/highstakes) [blog post 1](https://aadishv.github.io/robotics-1/) [blog post 2](https://aadishv.github.io/robotics-2/)
-- Lead AI programming for VEX AI Robotics Competition team 3151A, including work on system design, training & running custom CV pipeline, and handling serial communications between VEX and NVIDIA hardware. Designed and wrote >8,000 lines of C++, Python, TypeScript, and shell.
-
-  Currently exploring future-learning work and pushing the state of the art in VEX, including
-  - GPU-accelerated Monte Carlo localization with a LiDAR,
-  - clustering and object persistence using Kalman filters,
-  - and more.
-
-  Code is unfortunately private. [blog post 1](https://aadishv.github.io/robotics-3/) [blog post 2](https://aadishv.github.io/robotics-4/)
+- Led AI programming for VEX AI Robotics Competition team 3151A, including work on system design, training & running custom CV pipeline, and handling serial communications between VEX and NVIDIA hardware. Designed and wrote >9,000 lines of C++, Python, TypeScript, Rust, and shell. Also explored future-leaning work for the team that pushed the state of the art in VEX Robotics, such as GPU-accelerated Monte Carlo localization via a LiDAR. [blog post 1](https://aadishv.github.io/robotics-3/) [blog post 2](https://aadishv.github.io/robotics-4/) [code (24-25)](https://github.com/aadishv/AIWorlds) [code (25-26)](https://github.com/aadishv/3151a-zenoh)
 
 **Open source**
 
@@ -39,3 +32,9 @@ description: ""
 - [Advent of Code](https://adventofcode.com/2024) 2024 participant [[code](https://github.com/aadishv/aoc)]
 - [USACO](https://usaco.org) Silver competitor. [[code](https://github.com/aadishv/usaco)]
 - Cofounded, maintain, and lead architectural decisions and code review for [Dotlist](https://github.com/dotlists/dotlib) and [Dotlist Lite](https://github.com/dotlists/dotlite), a family of open-source productivity managers.
+
+**Non-programming related**
+
+- Volunteer at several robotics competitions throughout the year; mentor new teams at an annual Girl Powered robotics workshop.
+- Elected teaching assistant and peer tutor for math courses at OHS.
+- Volunteer in the OHS student government's Board of Communications; wrote code to massively speed up the operations of the board.
