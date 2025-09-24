@@ -1,4 +1,3 @@
-// aadishv.github.io/src/components/vairc/components/InfoPanels.tsx
 import React from "react";
 import type { DetectionPayload } from "../Layout";
 import {

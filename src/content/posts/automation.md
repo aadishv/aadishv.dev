@@ -37,7 +37,7 @@ Notes:
 yt-dlp -f "ba/b" -x --audio-format mp3 --audio-quality 0 --no-embed-thumbnail -o "Blurryface/%(title)s.%(ext)s" "https://music.youtube.com/playlist?list=OLAK5uy_nBZwH-qHNY6l8n4EHnjkhYO8p3lcukTYI" && say done
 ```
 This way, I could just drag the folders into Apple Music and use the "Get Album Artwork" feature to automatically find and update the album art of each album.
-![](assets/automation.png)
+![](assets/automation/1.png)
 The first major issue that arose was that songs weren't ordered properly -- they were arranged alphabetically! With this setup, the Clancy tracklist would be:
 1. At the Risk of Feeling Dumb
 2. Backslide
@@ -58,7 +58,9 @@ The first major issue that arose was that songs weren't ordered properly -- they
 2. Clicking on the tab for track number
 3. Figuring out the number of the track in the ordered album
 4. Inputting that number
+
 ​	That much brainpower is absolutely impossible at 11pm! So instead, I fired up a Gemini CLI instance.
+
 > Why did I use Gemini CLI here?
 >
 > TL;DR I don't really know. It might just be because I was already in Ghostty so using a CLI was the fastest option. I chose not to use gpt-5 since, while it is really smart, I don't want to wait that long for an operation that isn't that hard!
@@ -288,3 +290,106 @@ exit "$EXIT_CODE"
 And no, I have no clue what the code actually does. For all I know, it leaks my personal data to attackers. But I trust GPT-5 to exactly follow my instructions (sometimes to a fault! it will do something stupid without question because I told it to).
 
 After a bit more cleanup, I finally could drag my folders into Apple Music and live happily ever after.
+
+## Update 9/23/25: Adding lyrics
+
+I wanted to be able to view the lyrics inside Apple Music instead of having to look them up every time, so I wrote a short script which used the [LRCLIB API](https://lrclib.net/docs) to fetch the lyrics and update song metadata. I used the following TypeScript script (notably, not vibe coded!):
+
+```tsx
+import { globSync } from "fs";
+import NodeID3 from "node-id3";
+import { err, ok, okAsync } from "neverthrow";
+
+for (const file of globSync("../Media.localized/Music/**/*.mp3")) {
+  const result = await okAsync(NodeID3.read(file))
+    .map((data) => {
+      if (data.album && data.artist) {
+        let title = file.split("/").pop();
+        if (title?.startsWith("0") || title?.startsWith("1")) {
+          title = title.slice(3);
+        }
+        return ok({
+          album: data.album,
+          artist: data.artist,
+          title: title ? title.slice(0, title.length - 4) : "N/A",
+        });
+      } else return err("Missing album, artist, or title");
+    })
+    .andThen((v) => v)
+    .map(async ({ album, artist, title }) => {
+      const params = {
+        artist_name: artist,
+        track_name: title,
+        // "Other" is just a playlist basically
+        ...(album === "Other" ? {} : { album_name: album }),
+      };
+      const query = new URLSearchParams(params);
+      const lyricPromise = fetch(
+        `https://lrclib.net/api/search?${query.toString()}`,
+      )
+        .then(
+          (res) =>
+            res.json() as Promise<
+              ({ plainLyrics?: string } | { message: string })[]
+            >,
+        )
+        .then((data) => {
+          if (data[0]) {
+            return data[0];
+          } else {
+            throw new Error(`No lyrics found for song ${title}`);
+          }
+        })
+        .then((data) =>
+          "plainLyrics" in data && data.plainLyrics
+            ? ok(data.plainLyrics)
+            : err(`No lyrics found for song ${title}`),
+        )
+        .catch((e) => err(e.message));
+      return await lyricPromise;
+    })
+    .andThen((v) => v)
+    .map(
+      (lyrics) =>
+        NodeID3.update(
+          {
+            unsynchronisedLyrics: {
+              language: "eng",
+              text: lyrics,
+            },
+          },
+          file,
+        ) && lyrics,
+    );
+  if (result.isErr()) {
+    console.error(result.error);
+  } else if (result.isOk()) {
+    console.log(
+      "Lyrics updated successfully for ",
+      file,
+      ":",
+      result.value.slice(0, 20),
+    );
+  }
+}
+```
+I additionally got GPT-5 to write me a simple script for downloading a song. (The previous method of copying and pasting commands was unusable, especially as I would add one song every other day during the Breach release!)
+```sh
+# download.sh
+#!/bin/bash
+
+# Script to download a single YouTube/YT Music video as MP3 audio
+# Usage: ./download_audio.sh "<video_url>"
+
+if [ $# -eq 0 ]; then
+    echo "Error: No URL provided. Usage: $0 \"<video_url>\""
+    exit 1
+fi
+
+URL="$1"
+
+yt-dlp -f "ba/b" -x --audio-format mp3 --audio-quality 0 --no-embed-thumbnail -o "%(title)s.%(ext)s" "$URL"
+```
+This ended up working great, and it's still what I use for the majority of my music listening! I've even started adding some songs from other artists.
+
+Yes, I'm frugalmaxxing, but I love it :P

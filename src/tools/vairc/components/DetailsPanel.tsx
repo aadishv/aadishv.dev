@@ -1,4 +1,3 @@
-// aadishv.github.io/src/components/vairc/components/DetailsPanel.tsx
 import React from "react";
 
 // Minimal DetailsPanel placeholder

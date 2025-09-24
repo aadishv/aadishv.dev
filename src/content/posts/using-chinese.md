@@ -164,4 +164,4 @@ If you wish to reset your progress:
 
 For additional assistance or to report issues, please contact me (Aadish) at [aadish@ohs.stanford.edu](mailto:aadish@ohs.stanford.edu)
 
-All code is open-source. Find the most stable release [here](https://github.com/aadishv/aadishv.github.io/tree/main/src/components/chinese).
+All code is open-source. Find the most stable release [here](https://github.com/aadishv/aadishv.dev/tree/main/src/components/chinese).

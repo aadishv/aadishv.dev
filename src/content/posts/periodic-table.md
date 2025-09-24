@@ -37,7 +37,7 @@ This started off as a simple project to try out web technologies, Tailwind CSS, 
 - My website stack (coming soon!)
 - Data collected using a custom scraper script combining data from the Google periodic table, a GitHub repository, and the Pearson periodic table
 
-## [Code!](https://github.com/aadishv/aadishv.github.io/blob/main/src/tools/periodic)
+## [Code!](https://github.com/aadishv/aadishv.dev/blob/main/src/tools/periodic)
 
 This went through around four major iterations:
 

@@ -1,4 +1,3 @@
-// aadishv.github.io/src/components/vairc/components/FieldView.tsx
 import { useEffect, useRef, useState } from "react";
 import type { DetectionPayload, Pose } from "../Layout";
 import { safeGetStuff, isValidDetectionPayload } from "../utils/validation";

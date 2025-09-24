@@ -1,4 +1,3 @@
-// aadishv.github.io/src/components/vairc/components/DetectionCanvas.tsx
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   DEFAULT_SERVER,

@@ -1,4 +1,3 @@
-// aadishv.github.io/src/components/vairc/context/DetectionContext.tsx
 import { createContext, useState, useContext } from "react";
 import type { Detection } from "../Layout";
 

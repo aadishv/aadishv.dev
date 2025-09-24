@@ -1,4 +1,3 @@
-// aadishv.github.io/src/components/vairc/utils/colors.ts
 // Utility function to get color for detection classes
 export const getDetectionColor = (className: string): string => {
   switch (className?.toLowerCase()) {

@@ -1,4 +1,3 @@
-// aadishv.github.io/src/components/vairc/App.tsx
 import { Layout } from "./Layout";
 import { Feed } from "./components/Feeds";
 import { JsonRenderer } from "./components/InfoPanels";

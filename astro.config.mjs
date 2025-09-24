@@ -15,6 +15,6 @@ export default defineConfig({
       theme: "github-light", // or 'github-dark', 'nord', etc.
     },
   },
-  site: "https://aadishv.github.io",
+  site: "https://aadish.dev",
   base: "",
 });

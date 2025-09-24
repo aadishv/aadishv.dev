@@ -1,4 +1,3 @@
-// aadishv.github.io/src/components/vairc/utils/validation.ts
 import type { DetectionPayload, Detection } from "../Layout";
 
 /**

@@ -1,4 +1,3 @@
-// aadishv.github.io/src/components/vairc/components/Feeds.tsx
 import React from "react";
 import DetectionCanvas from "./DetectionCanvas";
 import { type DetectionPayload } from "../Layout";
