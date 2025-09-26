@@ -41,6 +41,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "desmos": "^1.5.4",
+    "desmos-react": "^1.2.0",
     "fast-myers-diff": "^3.2.0",
     "fuse.js": "^7.1.0",
     "hanzi-writer": "^3.7.2",

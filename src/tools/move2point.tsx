@@ -1,5 +1,6 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { RotateCw } from "lucide-react";
+import Desmos from "desmos";
 
 interface Point {
   x: number;
@@ -298,4 +299,115 @@ export function CosineViz() {
       </svg>
     </div>
   );
+}
+
+const calcState = {
+  "version": 11,
+  "randomSeed": "920ef7bdec58cc407472d29d5ed1d1db",
+  "graph": {
+    "viewport": {
+      "xmin": -9.725400457665888,
+      "ymin": -48.55331807780324,
+      "xmax": 10.274599542334112,
+      "ymax": 50.24668192219677
+    },
+    "__v12ViewportLatexStash": {
+      "xmin": "-9.725400457665888",
+      "xmax": "10.274599542334112",
+      "ymin": "-48.55331807780324",
+      "ymax": "50.24668192219677"
+    }
+  },
+  "expressions": {
+    "list": [
+      {
+        "type": "text",
+        "id": "9",
+        "text": "(pose.y - target.y) * -sin(initialAngle) <=\n                              (pose.x - target.x) * cos(initialAngle) + params.earlyExitRange"
+      },
+      {
+        "type": "expression",
+        "id": "1",
+        "color": "#c74440",
+        "latex": "p=\\left(0,0\\right)",
+        "showLabel": true,
+        "label": "Robot",
+        "dragMode": "NONE"
+      },
+      {
+        "type": "expression",
+        "id": "2",
+        "color": "#2d70b3",
+        "latex": "t=\\left(-1.6,4.28\\right)",
+        "showLabel": true,
+        "label": "Target point"
+      },
+      {
+        "type": "expression",
+        "id": "4",
+        "color": "#6042a6",
+        "latex": "a_{1}=\\operatorname{mod}\\left(\\arctan\\left(\\frac{t.y-p.y}{t.x-p.x}\\right)+\\pi,\\pi\\right)"
+      },
+      {
+        "type": "expression",
+        "id": "6",
+        "color": "#c74440",
+        "latex": "a=a_{1}\\cdot\\left\\{t.y<p.y:-1,1\\right\\}"
+      },
+      {
+        "type": "expression",
+        "id": "3",
+        "color": "#388c46",
+        "latex": "r=\\left\\{0<\\theta<a\\right\\}",
+        "polarDomain": {
+          "min": "",
+          "max": "\\left\\{a\\le0:0,a\\right\\}"
+        }
+      },
+      {
+        "type": "expression",
+        "id": "7",
+        "color": "#388c46",
+        "latex": "r=1\\left\\{a<0\\right\\}",
+        "polarDomain": {
+          "min": "-\\pi-a",
+          "max": "0"
+        }
+      },
+      {
+        "type": "expression",
+        "id": "8",
+        "color": "#2d70b3",
+        "latex": "y=\\tan\\left(a_{1}\\right)x\\left\\{y>\\left\\{t.y<p.y:-\\infty,0\\right\\}\\right\\}\\left\\{y<\\left\\{t.y<p.y:0,\\infty\\right\\}\\right\\}",
+        "lineStyle": "DASHED"
+      },
+      {
+        "type": "expression",
+        "id": "10",
+        "color": "#6042a6",
+        "latex": "\\left\\{t.y<p.y:1,-1\\right\\}\\left(y-t.y\\right)\\sin\\left(a_{1}\\right)\\le\\left\\{t.y<p.y:-1,1\\right\\}\\left(x-t.x\\right)\\cos\\left(a_{1}\\right)+1"
+      }
+    ]
+  },
+  "includeFunctionParametersInRandomSeed": true,
+  "doNotMigrateMovablePointStyle": true
+};
+
+export function Demo() {
+  if (!window) {
+    return null;
+  }
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      const calculator = Desmos.GraphingCalculator(ref.current, {
+        expressions: false,
+        lockViewport: true,
+      });
+      calculator.setState(calcState);
+    }
+  }, []);
+
+  return <div ref={ref} style={{ width: "600px", height: "400px" }} />;
 }
