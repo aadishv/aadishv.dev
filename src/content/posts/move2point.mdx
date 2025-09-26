@@ -37,11 +37,11 @@ chassis.moveToPoint(
     false); // intermediate point
 ```
 
-Hundreds if not thousands of VEX teams utilize LemLib to handle their motion controls for them. Unfortunately, a significant number of them likely don't understand the algorithms they are using. Further unfortunately, even I didn't understand how many of LemLib's motion control algorithms worked when I used them.
+Hundreds if not thousands of VEX teams use libraries similar to Lemlib to handle motion controls for them. Unfortunately, many competitors, including myself, don't understand the algorithms behind motion control.
 
 > Disclaimer: I'm no expert in control theory! The closest I've gotten to LemLib is [a single open PR](https://github.com/LemLib/LemLib/pull/274), so take my words with a grain of salt.
 
-Unfortunately, a [V5RC Q&A (asked _and_ answered by the Game Design Comittee :P)](https://qnapl.us/#/2812) recently clarified that (emphasis mine):
+Unfortunately, a rare Q&A asked *and* answered by the VEX Game Design Committee recently stated that:
 
 > It is the responsibility of each Team to be able **to explain and defend** the design, construction, and **programming** of their Robot if questioned by referees, inspectors, Event Partners, or judges. Teams should be prepared to describe their design process, justify design decisions, and demonstrate a full understanding of how their Robot functions.
 
@@ -65,7 +65,7 @@ Before we continue, a necessary prerequisite is understanding PID control. You c
 
 PID stands for "Proportion / Integral / Derivative" control, and its goal is to, given an error, return an "output" force which can be applied to reduce the error. They can basically be thought of as a function:
 
-![LaTeX image](https://latex.codecogs.com/svg.image?%5Ctext%7BPID%7D(%5Ctext%7Berror%7D)%20%3D%20K_p%20%5Ccdot%20%5Ctext%7Berror%7D%20%5Ccdot%20K_i%20%5Ccdot%20%5Ctext%7Btotal%20error%7D%20%2B%20K_p%20%5Ccdot%20%5Ctext%7Bchange%20in%20error%7D)
+![LaTeX image](https://latex.codecogs.com/svg.image?%5Ctext%7BPID%7D(%5Ctext%7Berror%7D)%20%3D%20K_p%20%5Ccdot%20%5Ctext%7Berror%7D%20%5Ccdot%20K_i%20%5Ccdot%20%5Ctext%7Btotal%20error%7D%20%2B%20K_d%20%5Ccdot%20%5Ctext%7Bchange%20in%20error%7D)
 
 TL;DR:
 
