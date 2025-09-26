@@ -115,7 +115,7 @@ export function ParticlesLines2() {
     </div>
   );
 }
-const colorFor = (l) => {
+const colorFor = (l: any) => {
   let s = 0;
   for (const d of data) {
     s += d.value / 28;

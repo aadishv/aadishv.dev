@@ -1,6 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { RotateCw } from "lucide-react";
-import Desmos from "desmos";
 
 interface Point {
   x: number;
@@ -394,19 +393,25 @@ const calcState = {
 };
 
 export function Demo() {
-  if (!window) {
+  if (typeof window === "undefined") {
     return null;
   }
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (ref.current) {
-      const calculator = Desmos.GraphingCalculator(ref.current, {
-        expressions: false,
-        lockViewport: true,
-      });
-      calculator.setState(calcState);
-    }
+    if (!ref.current) return;
+     let calculator: any;
+     (async () => {
+       // @ts-ignore - @types/desmos declares globals instead of a module; silence module-type error and treat import as any
+       const DesmosModule: any = await import("desmos");
+       calculator = DesmosModule.default
+         ? DesmosModule.default.GraphingCalculator(ref.current, { expressions: false, lockViewport: true })
+         : DesmosModule.GraphingCalculator(ref.current, { expressions: false, lockViewport: true });
+       calculator.setState(calcState);
+     })();
+     return () => {
+       if (calculator && calculator.destroy) calculator.destroy();
+     };
   }, []);
 
   return <div ref={ref} style={{ width: "600px", height: "400px" }} />;
