@@ -1,0 +1,148 @@
+---
+date: "2025-09-25"
+title: "Understanding how LemLib's motions work"
+categories: ["blog", "robotics"]
+description: ""
+hidden: true
+---
+import {CosineViz} from "@/tools/move2point.tsx";
+
+
+*I'm currently wrapping up a lot of projects, preparing to start a new chapter of my programming journey next week. ~~Barring procrastination~~ expect an influx of blog posts!*
+
+## Why you need this blog post
+
+On my time for the VEX AI Robotics team 3151A, I used the [LemLib](https://github.com/LemLib/LemLib) library for the PROS kernel for my motions and localization. LemLib and similar solutions are often referred to in the VEX community as "templates;" they abstract away significant amounts of functionality (namely, LemLib handles the implementations of motion control and odometry) in exchange for a drastically simpler API.
+
+![LemLib banner/logo](assets/move2point.md/1.png)
+
+LemLib code is easy to read, like this excerpt from our real codebase:
+
+```cpp
+while (chassis.getPose().x > -26) {
+    pros::delay(10);
+} // wait until robot is far enough away from center goal
+pros::delay(200);        // wait for doinker to go down
+chassis.turnToHeading(330, 500,
+    {
+        .direction = lemlib::AngularDirection::AUTO,
+        .minSpeed = 5,
+        .earlyExitRange = 2},
+    false); // turn to face corner goal
+chassis.turnToPoint(
+    -24, 12, 500, {.forwards = false, .minSpeed = 10, .earlyExitRange = 2},
+    false); // turn to intermediate point
+chassis.moveToPoint(
+    -24, 12, 1000, {.forwards = false, .minSpeed = 10, .earlyExitRange = 2},
+    false); // intermediate point
+```
+
+Hundreds if not thousands of VEX teams utilize LemLib to handle their motion controls for them. Unfortunately, a significant number of them likely don't understand the algorithms they are using. Further unfortunately, even I didn't understand how many of LemLib's motion control algorithms worked when I used them.
+
+> Disclaimer: I'm no expert in control theory! The closest I've gotten to LemLib is [a single open PR](https://github.com/LemLib/LemLib/pull/274), so take my words with a grain of salt.
+
+Unfortunately, a [V5RC Q&A (asked _and_ answered by the Game Design Comittee :P)](https://qnapl.us/#/2812) recently clarified that (emphasis mine):
+
+> It is the responsibility of each Team to be able **to explain and defend** the design, construction, and **programming** of their Robot if questioned by referees, inspectors, Event Partners, or judges. Teams should be prepared to describe their design process, justify design decisions, and demonstrate a full understanding of how their Robot functions.
+
+In other words, V5RC teams need to be able to explain the programming of their robots.
+
+This can be taken to the extreme, as the rule (and the corresponding [RECF Code of Conduct](https://v5rc-kb.recf.org/hc/en-us/articles/9653987780375-Code-of-Conduct)) are quite ambiguous.
+
+![](assets/move2point.md/2.png)
+***Exhibit A.** Background: [vexide](https://vexide.dev/) relies on a [VEX SDK jumptable](https://github.com/vexide/vex-sdk/tree/main/packages/vex-sdk-jumptable) to do basically anything with the brain.*
+
+[![](assets/move2point.md/3.png)](https://github.com/Gavin-Niederman/student-centered-arcade-drive/)
+***Exhibit B.** Background: created by a vexide maintainer. You can only explain all your code if you wrote the bootloader!*
+
+---
+
+Anyways, assuming we have to adhere to rule \<G3> (Use Common Sense), this means that all teams using LemLib need to be able to explain what each of their calls to LemLib does. Like I previously said, however, many teams aren't able to do so! In this blog post, I'll try to explain how most of the LemLib motions work.
+
+## Prelude: a brief overview of PID
+
+Before we continue, a necessary prerequisite is understanding PID control. You can get much better overviews elsewhere but I'll recap here for reference.
+
+PID stands for "Proportion / Integral / Derivative" control, and its goal is to, given an error, return an "output" force which can be applied to reduce the error. They can basically be thought of as a function:
+
+![LaTeX image](https://latex.codecogs.com/svg.image?%5Ctext%7BPID%7D(%5Ctext%7Berror%7D)%20%3D%20K_p%20%5Ccdot%20%5Ctext%7Berror%7D%20%5Ccdot%20K_i%20%5Ccdot%20%5Ctext%7Btotal%20error%7D%20%2B%20K_p%20%5Ccdot%20%5Ctext%7Bchange%20in%20error%7D)
+
+TL;DR:
+
+- Track your previous error and the sum (integral) of all past errors.
+- PID contains three components:
+  - a component proportional to the error. if there's more error, increase the force.
+  - a component proportional to the derivative (basically the change in error). if the error is increasing quickly, move quicker; if its decreasing rapidly, slow down a bit (to avoid overshooting).
+  - a component proportional to the sum. if it's been constant error for a long time (i.e., the error is stuck), integral increases and we slowly build up force.
+
+PIDs are designed to be used in a wide range of systems, so there needs to be some way to tune them for different cases, leading to the constants $K_p$, $K_i$, and $K_p$. There are easily available guides online to find how to tune them to optimize the speed and accuracy of your PID, but those are beyond the scope of this part.
+
+[LemLib's implementation of PID is actually quite simple to understand](https://github.com/LemLib/LemLib/blob/e6318a9d7180e2e743bb0298860a7a943edd159a/src/lemlib/PID.cpp#L22C1-L43C2) (only 20 lines!); I highly suggest taking a look to better understand how PID is actually implemented.
+
+### PID is everywhere!
+
+PID underlies _all_ of LemLib's motion algorithms. All angular motions (`turnToHeading`, `turnToPoint`, and their `swingToHeading`/`swingToPoint` counterparts) rely almost entirely on a PID. They compare the robot's current heading to the target angle to get an error which is fed into the controller. For `turnToPoint` and `swingToPoint`, the target angle is calculated from the target point using ✨math✨.
+
+LemLib's `moveToPoint` implementation is more complex, however. It still uses PID, but with a few other components to have a fast, arc-like curve. I'll explore a bit more about how it is implemented in this next section.
+
+## How `moveToPoint` works
+
+The LemLib code is pretty verbose and uses a lot of LemLib-specific utils, so I'll add pseudocode as needed.
+
+> Note: all code was accessed from LemLib's `master` branch on Sep 25, 2025. Most teams will use a LemLib binary compiled from the `stable` branch, but implementations likely do not differ significantly. [Permalink](https://github.com/LemLib/LemLib/blob/e6318a9d7180e2e743bb0298860a7a943edd159a/src/lemlib/motions/moveToPoint.cpp)
+
+### How does it work?
+
+Let's try to rederive this ourselves.
+
+#### Solution 1: Turn, then drive
+
+This seems pretty simple! Turn to the desired point, then drive until you reach it, using PIDs for each. Simple to code, but there end up being two major issues with it:
+
+1. Speed. Turning and driving have to be separate motions with this solution (at least, they can't fully overlap), so there is a full stop or similar.
+2. Accuracy. If the robot hits an obstacle while driving to the point, it doesn't have any way to turn to correct itself.
+   So what if we did the turn and the drive at the same time?!
+
+#### Solution 2: Turn and drive simultaneously
+
+The vast majority of `moveToPoint` implementations rely on a combined _angular PID_ and _lateral PID_ controller; LemLib's is no exception. The key idea is that
+
+- an angular error is determined based on how far the robot needs to turn to be facing the target point. Similarly,
+- the lateral (straight) error is determined based on how far the robot needs to travel in a straight line to reach the target point. (Pythagorean theorem and arctangent, my beloved.)
+- They are both then plugged into PIDs (with their own constants), and the outputs get added together like so (for a tank drive):
+
+```python
+leftSideVoltage = lateralOutput - angularOutput
+rightSideVoltage = lateralOutput + angularOutput
+```
+
+This is much faster since we can turn and drive simultaneously, enabling for a smoother curve-like motion. A big issue, however, is that sometimes having both PIDs at full power is not ideal, particularly, when the robot needs to significantly turn to get to its destination, like this:
+![diagram of robot that needs to turn a lot to reach its destination](assets/move2point.md/4.png)
+If we directly added lateral and angular output, the robot would drive in the wrong direction! Even though the distance from the robot to the target warrants fast driving, the robot isn't currently facing in the right direction. This means we'd spend a lot of time looping around before we could actually make it to the target.
+![diagram of robot that needs to turn a lot to reach its destination](assets/move2point.md/5.png)
+This feels like a regression from Solution 1: at least Solution 1 could turn fully before starting to drive, preventing this farcical path!
+
+We thus need a hybrid solution.
+
+#### Solution 3: Cosine scaling
+
+We want to decrease our lateral PID output when we're not fully facing towards the
+
+The idea here is to stick with the same general idea as Solution 2, but with a minor (yet very important) modification. Instead of using the raw distance to the target as the lateral error, we multiply the raw distance **by the cosine of the angular error.** This may sound arbitrary, but it makes sense when you consider the behavior of the cosine function: when the input (a.k.a. angular error) is near 0, cosine is near 1, so when the robot doesn't need to turn much, it can start driving forward faster. If the input is closer to 90º, cosine is near 0, so the robot will slow down if its turning.
+
+Feel free to play around with the below widget to get a feel for how the cosine function works:
+
+<CosineViz client:load />
+
+An issue with this you might notice is that, if the angle between the robot and the point is greater than 90º (obtuse), the cosine is negative and, thus, the robot would start driving backwards. `moveToPoint`, however, guarantees that the robot always moves forward, so we clamp the lateral error to always be positive (so that the lateral PID is also only positive).
+
+## Code walkthrough
+
+todo!
+
+## Sources
+
+1. [5. Angular Motion | LemLib docs](https://lemlib.readthedocs.io/en/stable/tutorials/5_angular_motion.html)
+2. [6. Lateral Motion | LemLib docs](https://lemlib.readthedocs.io/en/stable/tutorials/6_lateral_motion.html)
+3. [LemLib/src/lemlib/PID.cpp](https://github.com/LemLib/LemLib/blob/master/src/lemlib/PID.cpp)
+4. [LemLib/src/lemlib/motions/moveToPoint.cpp](https://github.com/LemLib/LemLib/blob/master/src/lemlib/motions/moveToPoint.cpp)

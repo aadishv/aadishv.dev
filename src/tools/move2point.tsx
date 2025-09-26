@@ -1,0 +1,252 @@
+import { useState, useRef, useCallback } from "react";
+import { RotateCw } from "lucide-react";
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+export function CosineViz() {
+  const [boxPosition, setBoxPosition] = useState<Point>({ x: 300, y: 400 });
+  const [boxRotation, setBoxRotation] = useState(0); // in degrees
+  const [otherPoint, setOtherPoint] = useState<Point>({ x: 300, y: 200 });
+  const [isDraggingBox, setIsDraggingBox] = useState(false);
+  const [isDraggingPoint, setIsDraggingPoint] = useState(false);
+  const [isRotating, setIsRotating] = useState(false);
+  const [dragOffset, setDragOffset] = useState<Point>({ x: 0, y: 0 });
+
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // Calculate angle between box heading and direction to other point
+  const calculateAngle = useCallback(() => {
+    const dx = otherPoint.x - boxPosition.x;
+    const dy = otherPoint.y - boxPosition.y;
+    const angleToPoint = (Math.atan2(dy, dx) * 180) / Math.PI;
+
+    // Normalize angles to 0-360 range
+    const normalizeAngle = (angle: number) => {
+      while (angle < 0) angle += 360;
+      while (angle >= 360) angle -= 360;
+      return angle;
+    };
+
+    const normalizedBoxRotation = normalizeAngle(boxRotation);
+    const normalizedAngleToPoint = normalizeAngle(angleToPoint);
+
+    let angleDifference = normalizedAngleToPoint - normalizedBoxRotation;
+    if (angleDifference < 0) angleDifference += 360;
+    if (angleDifference > 180) angleDifference = 360 - angleDifference;
+
+    return Math.round(angleDifference * 10) / 10; // Round to 1 decimal place
+  }, [boxPosition, otherPoint, boxRotation]);
+
+  const getMousePosition = (e: React.MouseEvent) => {
+    if (!svgRef.current) return { x: 0, y: 0 };
+    const rect = svgRef.current.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    };
+  };
+
+  const handleBoxMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const mousePos = getMousePosition(e);
+    setDragOffset({
+      x: mousePos.x - boxPosition.x,
+      y: mousePos.y - boxPosition.y,
+    });
+    setIsDraggingBox(true);
+  };
+
+  const handlePointMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const mousePos = getMousePosition(e);
+    setDragOffset({
+      x: mousePos.x - otherPoint.x,
+      y: mousePos.y - otherPoint.y,
+    });
+    setIsDraggingPoint(true);
+  };
+
+  const handleRotateMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsRotating(true);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const mousePos = getMousePosition(e);
+
+    if (isDraggingBox) {
+      setBoxPosition({
+        x: mousePos.x - dragOffset.x,
+        y: mousePos.y - dragOffset.y,
+      });
+    } else if (isDraggingPoint) {
+      setOtherPoint({
+        x: mousePos.x - dragOffset.x,
+        y: mousePos.y - dragOffset.y,
+      });
+    } else if (isRotating) {
+      const dx = mousePos.x - boxPosition.x;
+      const dy = mousePos.y - boxPosition.y;
+      const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+      setBoxRotation(angle);
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDraggingBox(false);
+    setIsDraggingPoint(false);
+    setIsRotating(false);
+  };
+
+  // Calculate line endpoints for visualization
+  const lineLength = 2 * 10 * 1000;
+  const boxHeadingEndX =
+    boxPosition.x + Math.cos((boxRotation * Math.PI) / 180) * lineLength;
+  const boxHeadingEndY =
+    boxPosition.y + Math.sin((boxRotation * Math.PI) / 180) * lineLength;
+
+  const distanceToPoint = Math.sqrt(
+    Math.pow(otherPoint.x - boxPosition.x, 2) +
+      Math.pow(otherPoint.y - boxPosition.y, 2),
+  );
+  const pointLineLength = Math.min(lineLength, distanceToPoint);
+  const pointLineEndX =
+    boxPosition.x +
+    (otherPoint.x - boxPosition.x) * (pointLineLength / distanceToPoint);
+  const pointLineEndY =
+    boxPosition.y +
+    (otherPoint.y - boxPosition.y) * (pointLineLength / distanceToPoint);
+
+  // Calculate arc for angle visualization
+  const arcRadius = 140;
+  const startAngle = (boxRotation * Math.PI) / 180;
+  const endAngle = Math.atan2(
+    otherPoint.y - boxPosition.y,
+    otherPoint.x - boxPosition.x,
+  );
+
+  const arcStartX = boxPosition.x + Math.cos(startAngle) * arcRadius;
+  const arcStartY = boxPosition.y + Math.sin(startAngle) * arcRadius;
+  const arcEndX = boxPosition.x + Math.cos(endAngle) * arcRadius;
+  const arcEndY = boxPosition.y + Math.sin(endAngle) * arcRadius;
+
+  let angleDiff = endAngle - startAngle;
+  if (angleDiff < 0) angleDiff += 2 * Math.PI;
+
+  const arcPath =
+    angleDiff > Math.PI
+      ? `M ${arcEndX} ${arcEndY} A ${arcRadius} ${arcRadius} 0 ${0} 1 ${arcStartX} ${arcStartY}`
+      : `M ${arcStartX} ${arcStartY} A ${arcRadius} ${arcRadius} 0 ${0} 1 ${arcEndX} ${arcEndY}`;
+
+  if (angleDiff > Math.PI) angleDiff = 2 * Math.PI - angleDiff;
+
+  return (
+    <div className="w-[800px] mx-auto">
+      {/* Angle display */}
+      <pre className="border-1 border-black rounded-none h-[18rem] flex flex-col">
+        <div className="my-auto">
+        <p className="font-mono text-wrap text-2xl">
+          angle error: <b className="text-blue-600">{calculateAngle()}°</b>
+        </p>
+        <p className="font-mono text-wrap text-2xl">
+          <em>cosine of</em> angle error (lateral error multiplier): <b className="text-blue-600">{(Math.cos(angleDiff) * 100).toFixed(0)}%</b>
+        </p>
+        <ul className="text-sm text-muted-foreground mx-auto">
+          <li>
+            Drag the (green) robot to translate it, or drag its handle to rotate
+            it
+          </li>
+          <li>Drag the target (red) point</li>
+          <li>Watch as the angle and its cosine change in real time</li>
+        </ul>
+        </div>
+      </pre>
+
+      {/* SVG Canvas */}
+        <svg
+          ref={svgRef}
+          width="800"
+          height="600"
+          className="cursor-crosshair border-black border mx-auto my-auto"
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {/* Dashed lines */}
+          <line
+            x1={boxPosition.x}
+            y1={boxPosition.y}
+            x2={boxHeadingEndX}
+            y2={boxHeadingEndY}
+            stroke="#d1d5db"
+            strokeWidth="4"
+            strokeDasharray="10,10"
+          />
+          <line
+            x1={boxPosition.x}
+            y1={boxPosition.y}
+            x2={pointLineEndX}
+            y2={pointLineEndY}
+            stroke="#d1d5db"
+            strokeWidth="4"
+            strokeDasharray="10,10"
+          />
+
+          {/* Angle arc */}
+          <path d={arcPath} fill="none" stroke="#3b82f6" strokeWidth="6" />
+
+          {/* Box */}
+          <g
+            transform={`translate(${boxPosition.x}, ${boxPosition.y}) rotate(${boxRotation})`}
+            onMouseDown={handleBoxMouseDown}
+            className="cursor-move"
+          >
+            {/* Light green square */}
+            <rect
+              x="-40"
+              y="-40"
+              width="80"
+              height="80"
+              fill="#86efac"
+              stroke="#22c55e"
+              strokeWidth="4"
+              rx="8"
+            />
+
+            {/* Dark green arrow */}
+            <polygon points="40,0 70,0 60,-10 80,0 60,10 70,0" fill="#16a34a" />
+          </g>
+
+          {/* Rotation handle */}
+          <g
+            transform={`translate(${boxPosition.x + Math.cos((boxRotation * Math.PI) / 180) * 104}, ${boxPosition.y + Math.sin((boxRotation * Math.PI) / 180) * 104})`}
+            onMouseDown={handleRotateMouseDown}
+            className="cursor-grab active:cursor-grabbing"
+          >
+            <RotateCw
+              size={32}
+              x="-16"
+              y="-16"
+              className="text-blue-500 fill-white"
+            />
+          </g>
+
+          {/* Other point */}
+          <circle
+            cx={otherPoint.x}
+            cy={otherPoint.y}
+            r="16"
+            fill="#ef4444"
+            stroke="#dc2626"
+            strokeWidth="4"
+            className="cursor-move"
+            onMouseDown={handlePointMouseDown}
+          />
+        </svg>
+    </div>
+  );
+}
