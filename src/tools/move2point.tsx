@@ -9,7 +9,7 @@ interface Point {
 export function CosineViz() {
   const [boxPosition, setBoxPosition] = useState<Point>({ x: 300, y: 400 });
   const [boxRotation, setBoxRotation] = useState(0); // in degrees
-  const [otherPoint, setOtherPoint] = useState<Point>({ x: 300, y: 200 });
+  const [otherPoint, setOtherPoint] = useState<Point>({ x: 500, y: 200 });
   const [isDraggingBox, setIsDraggingBox] = useState(false);
   const [isDraggingPoint, setIsDraggingPoint] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
@@ -108,18 +108,21 @@ export function CosineViz() {
     boxPosition.x + Math.cos((boxRotation * Math.PI) / 180) * lineLength;
   const boxHeadingEndY =
     boxPosition.y + Math.sin((boxRotation * Math.PI) / 180) * lineLength;
+  const boxHeadingStartX =
+    boxPosition.x - Math.cos((boxRotation * Math.PI) / 180) * lineLength;
+  const boxHeadingStartY =
+    boxPosition.y - Math.sin((boxRotation * Math.PI) / 180) * lineLength;
 
   const distanceToPoint = Math.sqrt(
     Math.pow(otherPoint.x - boxPosition.x, 2) +
       Math.pow(otherPoint.y - boxPosition.y, 2),
   );
-  const pointLineLength = Math.min(lineLength, distanceToPoint);
-  const pointLineEndX =
-    boxPosition.x +
-    (otherPoint.x - boxPosition.x) * (pointLineLength / distanceToPoint);
-  const pointLineEndY =
-    boxPosition.y +
-    (otherPoint.y - boxPosition.y) * (pointLineLength / distanceToPoint);
+  const pointDirX = (otherPoint.x - boxPosition.x) / distanceToPoint;
+  const pointDirY = (otherPoint.y - boxPosition.y) / distanceToPoint;
+  const pointLineEndX = boxPosition.x + pointDirX * lineLength;
+  const pointLineEndY = boxPosition.y + pointDirY * lineLength;
+  const pointLineStartX = boxPosition.x - pointDirX * lineLength;
+  const pointLineStartY = boxPosition.y - pointDirY * lineLength;
 
   // Calculate arc for angle visualization
   const arcRadius = 140;
@@ -144,109 +147,155 @@ export function CosineViz() {
 
   if (angleDiff > Math.PI) angleDiff = 2 * Math.PI - angleDiff;
 
+  // Calculate right triangle points
+  const angleDeg = calculateAngle();
+  const distance = distanceToPoint;
+  const projectionLength = distance * Math.cos((angleDeg * Math.PI) / 180);
+  const headingX = Math.cos((boxRotation * Math.PI) / 180);
+  const headingY = Math.sin((boxRotation * Math.PI) / 180);
+  const projectionPoint = {
+    x: boxPosition.x + projectionLength * headingX,
+    y: boxPosition.y + projectionLength * headingY,
+  };
+
   return (
     <div className="w-[800px] mx-auto">
       {/* Angle display */}
       <pre className="border-1 border-black rounded-none h-[18rem] flex flex-col">
         <div className="my-auto">
-        <p className="font-mono text-wrap text-2xl">
-          angle error: <b className="text-blue-600">{calculateAngle()}°</b>
-        </p>
-        <p className="font-mono text-wrap text-2xl">
-          <em>cosine of</em> angle error (lateral error multiplier): <b className="text-blue-600">{(Math.cos(angleDiff) * 100).toFixed(0)}%</b>
-        </p>
-        <ul className="text-sm text-muted-foreground mx-auto">
-          <li>
-            Drag the (green) robot to translate it, or drag its handle to rotate
-            it
-          </li>
-          <li>Drag the target (red) point</li>
-          <li>Watch as the angle and its cosine change in real time</li>
-        </ul>
+          <p className="font-mono text-wrap text-2xl">
+            angle error: <b className="text-blue-600">{calculateAngle()}°</b>
+          </p>
+          <p className="font-mono text-wrap text-2xl">
+            <em>cosine of</em> angle error (lateral error multiplier):{" "}
+            <b className="text-blue-600">
+              {(Math.cos(angleDiff) * 100).toFixed(0)}%
+            </b>
+          </p>
+          <ul className="text-sm text-muted-foreground mx-auto">
+            <li>
+              Drag the (green) robot to translate it, or drag its handle to
+              rotate it
+            </li>
+            <li>Drag the target (red) point</li>
+            <li>Watch as the angle and its cosine change in real time</li>
+          </ul>
         </div>
       </pre>
 
       {/* SVG Canvas */}
-        <svg
-          ref={svgRef}
-          width="800"
-          height="600"
-          className="cursor-crosshair border-black border mx-auto my-auto"
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
+      <svg
+        ref={svgRef}
+        width="800"
+        height="600"
+        className="cursor-crosshair border-black border mx-auto my-auto"
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
+        {/* Dashed lines */}
+        <line
+          x1={boxHeadingStartX}
+          y1={boxHeadingStartY}
+          x2={boxHeadingEndX}
+          y2={boxHeadingEndY}
+          stroke="#d1d5db"
+          strokeWidth="4"
+          strokeDasharray="10,10"
+        />
+        <line
+          x1={boxPosition.x}
+          y1={boxPosition.y}
+          x2={projectionPoint.x}
+          y2={projectionPoint.y}
+          stroke="#1e40af"
+          strokeWidth="4"
+        />
+        <line
+          x1={projectionPoint.x}
+          y1={projectionPoint.y}
+          x2={otherPoint.x}
+          y2={otherPoint.y}
+          stroke="#3b82f6"
+          strokeWidth="2"
+        />
+        <line
+          x1={boxPosition.x}
+          y1={boxPosition.y}
+          x2={otherPoint.x}
+          y2={otherPoint.y}
+          stroke="#3b82f6"
+          strokeWidth="2"
+        />
+        <line
+          x1={pointLineStartX}
+          y1={pointLineStartY}
+          x2={pointLineEndX}
+          y2={pointLineEndY}
+          stroke="#d1d5db"
+          strokeWidth="4"
+          strokeDasharray="10,10"
+        />
+        {/* Angle arc */}{" "}
+        <path d={arcPath} fill="none" stroke="#3b82f6" strokeWidth="6" />
+        {/* Right triangle */}
+        <polygon
+          points={`${boxPosition.x},${boxPosition.y} ${projectionPoint.x},${projectionPoint.y} ${otherPoint.x},${otherPoint.y}`}
+          fill="transparent"
+          stroke="#5591f2"
+          strokeWidth="3"
+        />
+        <line
+          x1={boxPosition.x}
+          y1={boxPosition.y}
+          x2={projectionPoint.x}
+          y2={projectionPoint.y}
+          stroke="#1e40af"
+          strokeWidth="5"
+        />
+        {/* Box */}
+        <g
+          transform={`translate(${boxPosition.x}, ${boxPosition.y}) rotate(${boxRotation})`}
+          onMouseDown={handleBoxMouseDown}
+          className="cursor-move"
         >
-          {/* Dashed lines */}
-          <line
-            x1={boxPosition.x}
-            y1={boxPosition.y}
-            x2={boxHeadingEndX}
-            y2={boxHeadingEndY}
-            stroke="#d1d5db"
+          {/* Light green square */}
+          <rect
+            x="-40"
+            y="-40"
+            width="80"
+            height="80"
+            fill="#86efac"
+            stroke="#22c55e"
             strokeWidth="4"
-            strokeDasharray="10,10"
+            rx="8"
           />
-          <line
-            x1={boxPosition.x}
-            y1={boxPosition.y}
-            x2={pointLineEndX}
-            y2={pointLineEndY}
-            stroke="#d1d5db"
-            strokeWidth="4"
-            strokeDasharray="10,10"
+        </g>
+        {/* Rotation handle */}
+        <g
+          transform={`translate(${boxPosition.x + Math.cos((boxRotation * Math.PI) / 180) * 40}, ${boxPosition.y + Math.sin((boxRotation * Math.PI) / 180) * 40})`}
+          onMouseDown={handleRotateMouseDown}
+          className="cursor-grab active:cursor-grabbing"
+        >
+          <RotateCw
+            size={32}
+            x="-16"
+            y="-16"
+            className="text-blue-500 fill-white"
           />
-
-          {/* Angle arc */}
-          <path d={arcPath} fill="none" stroke="#3b82f6" strokeWidth="6" />
-
-          {/* Box */}
-          <g
-            transform={`translate(${boxPosition.x}, ${boxPosition.y}) rotate(${boxRotation})`}
-            onMouseDown={handleBoxMouseDown}
-            className="cursor-move"
-          >
-            {/* Light green square */}
-            <rect
-              x="-40"
-              y="-40"
-              width="80"
-              height="80"
-              fill="#86efac"
-              stroke="#22c55e"
-              strokeWidth="4"
-              rx="8"
-            />
-
-            {/* Dark green arrow */}
-            <polygon points="40,0 70,0 60,-10 80,0 60,10 70,0" fill="#16a34a" />
-          </g>
-
-          {/* Rotation handle */}
-          <g
-            transform={`translate(${boxPosition.x + Math.cos((boxRotation * Math.PI) / 180) * 104}, ${boxPosition.y + Math.sin((boxRotation * Math.PI) / 180) * 104})`}
-            onMouseDown={handleRotateMouseDown}
-            className="cursor-grab active:cursor-grabbing"
-          >
-            <RotateCw
-              size={32}
-              x="-16"
-              y="-16"
-              className="text-blue-500 fill-white"
-            />
-          </g>
-
-          {/* Other point */}
-          <circle
-            cx={otherPoint.x}
-            cy={otherPoint.y}
-            r="16"
-            fill="#ef4444"
-            stroke="#dc2626"
-            strokeWidth="4"
-            className="cursor-move"
-            onMouseDown={handlePointMouseDown}
-          />
-        </svg>
+        </g>
+        {/* Other point */}
+        <circle
+          cx={otherPoint.x}
+          cy={otherPoint.y}
+          r="16"
+          fill="#ef4444"
+          stroke="#dc2626"
+          strokeWidth="4"
+          className="cursor-move"
+          onMouseDown={handlePointMouseDown}
+        />
+      </svg>
     </div>
   );
 }

@@ -177,9 +177,9 @@ Suppose we have a robot that's facing about 90 degrees away from the target poin
 
 **Level 4.** Ideally, we'd decrease the lateral PID output if the robot is facing too far away from the target point. To do this, we can make a minor yet very helpful modification to our code for Level 3. Instead of using the raw distance to the target as the lateral error, we multiply the raw distance *by the cosine of the angular error.*
 
-This may sound arbitrary, but it makes sense when you consider the behavior of the cosine function: when the input (a.k.a. angular error) is near 0, cosine is near 1, so when the robot is pointing pretty close to the target, the lateral error is higher and it can start driving forward faster. If the input is closer to 90º, cosine is near 0, so the robot will slow down if it needs to turn. This can be intuitively thought of using the right triangle definition of cosine.
+This may sound arbitrary, but it makes sense when you consider the behavior of the cosine function: when the input (a.k.a. angular error) is near 0, cosine is near 1, so when the robot is pointing pretty close to the target, the lateral error is higher and it can start driving forward faster. If the input is closer to 90º, cosine is near 0, so the robot will slow down if it needs to turn.
 
-Feel free to play around with the below widget to get a feel for how the cosine function works:
+Feel free to play around with the below widget to get a feel for how the cosine function works. It shows the relevant right triangle; the highlighted dark blue leg represents the magnitude of the cosine value.
 
 <CosineViz client:load />
 
