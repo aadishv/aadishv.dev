@@ -210,7 +210,7 @@ This is great! We now have super smooth, curving arc motions that go straight to
 **Level 5.** Let's look back at our `arcade` function:
 
 There is a subtle bug here, known as oversaturation. If both `straight` and `turn` are very high (close to the maximum motor power), the input to `moveRightSide` (or `moveLeftSide`, if `turn` is very large) will be greater than the maximum motor power. This won't break the motors (luckily), but it will cause the powers to get clamped to the maximum. This leads to the turn amount being less than expected. To avoid this, we can scale down (*`desaturate`*) both side's power if either is too large. This way, even if the robot moves a bit slower, the turning radius will be more accurate. Here's a helpful diagram from a [LemLib issue](https://github.com/LemLib/LemLib/issues/66):
-![diagram of over/desaturation](https://private-user-images.githubusercontent.com/42101043/269435342-fa6b56a5-7853-451c-802a-69361e21d9ba.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTg4NzAxMjIsIm5iZiI6MTc1ODg2OTgyMiwicGF0aCI6Ii80MjEwMTA0My8yNjk0MzUzNDItZmE2YjU2YTUtNzg1My00NTFjLTgwMmEtNjkzNjFlMjFkOWJhLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA5MjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwOTI2VDA2NTcwMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI5MzU3MTJlOTZhZTFkODRlYWM1NWQzYTBlNGUzNjkxMTE2NjRjZWY2NTY1NzA2MTliMzkxZTY2OWZmZmU1NzQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.lPtVkxh05Sz18RO_R0cEGXGSdXwjuRCLIAgKILdy5S8)
+![diagram of over/desaturation](assets/move2point.md/8.png)
 
 The change looks like this:
 ```rust
