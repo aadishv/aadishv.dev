@@ -44,8 +44,17 @@ const { title, tool } = Astro.props;
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js"
     ></script>
+    <style is:inline>
+    /* for rehype */
+    .anchor-link {
+        color: gray !important;
+        float: right;
+        @apply no-underline hover:underline;
+    }
+    </style>
   </head>
   <body>
+
     <div class={`sticky pt-4 -mb-10 mx-4 z-[1000] flex top-bar`}>
       {
         !tool && (
