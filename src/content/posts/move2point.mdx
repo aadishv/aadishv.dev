@@ -3,7 +3,6 @@ date: "2025-09-25"
 title: "Understanding how LemLib's motions work"
 categories: ["robotics"]
 description: ""
-hidden: true
 ---
 import {CosineViz, DesmosSide} from "@/tools/move2point.tsx";
 
@@ -347,7 +346,7 @@ These variables keep track of various things throughout the loop's iterations:
 * the `timer` is a LemLib utility that's used to break the loop when the motion is cancelled or the timer is done.
 * `close` is a variable which is set to true once we are within a certain threshold distance (in this case, `7.5 inches`) of the target. This is analogous to the check we do in Level 6, and is later used to disable turning when the robot is close.
 * `distTraveled` is a global variable in LemLib used to keep track of the progress of motions. Here, we reset it in preparation for beginning the new motion.
-* `prevLateralOut` and `prevAngularOut` simple store the previous lateral and angular PID outputs. `lastPose` similarly stores the last pose the robot was at.
+* `prevLateralOut` and `prevAngularOut` simply store the previous lateral and angular PID outputs. `lastPose` similarly stores the last pose the robot was at.
 * `prevSide` is an `optional<bool>`, which means it has three states: `nullopt`, `true`, and `false`. We basically use the boolean options as a way to show which "side" of the target point we are on, and the null state is just a placeholder for until we run an iteration. I'll explain more in the relevant part of the loop.
 * Don't worry about `compState`, it's not used anywhere else.
 
