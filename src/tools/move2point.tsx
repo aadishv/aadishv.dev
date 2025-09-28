@@ -163,10 +163,10 @@ export function CosineViz() {
       {/* Angle display */}
       <pre className="border-1 border-black rounded-none h-[18rem] flex flex-col">
         <div className="my-auto">
-          <p className="font-mono text-wrap text-2xl">
+          <p className="font-mono text-wrap text-[1.5rem]">
             angle error: <b className="text-blue-600">{calculateAngle()}°</b>
           </p>
-          <p className="font-mono text-wrap text-2xl">
+          <p className="font-mono text-wrap text-[1.5rem]">
             <em>cosine of</em> angle error (lateral error multiplier):{" "}
             <b className="text-blue-600">
               {(Math.cos(angleDiff) * 100).toFixed(0)}%
@@ -392,7 +392,7 @@ const calcState = {
   "doNotMigrateMovablePointStyle": true
 };
 
-export function Demo() {
+export function DesmosSide() {
   if (typeof window === "undefined") {
     return null;
   }
@@ -414,5 +414,5 @@ export function Demo() {
      };
   }, []);
 
-  return <div ref={ref} style={{ width: "600px", height: "400px" }} />;
+  return <div ref={ref} style={{ width: "600px", height: "400px", marginLeft: "auto", marginRight: "auto" }} />;
 }

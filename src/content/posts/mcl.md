@@ -1,7 +1,7 @@
 ---
 date: "2025-07-12"
 title: "Monte Carlo Localization for VEX teams"
-categories: ["blog", "robotics"]
+categories: ["robotics"]
 description: ""
 ---
 <br>

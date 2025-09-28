@@ -1,7 +1,7 @@
 ---
 date: "2025-08-03"
 title: "Robotics 4: 3151A (the first competition)"
-categories: ["blog", "robotics"]
+categories: ["robotics"]
 description: ""
 ---
 

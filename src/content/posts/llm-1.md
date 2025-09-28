@@ -1,7 +1,7 @@
 ---
 date: "2025-07-29"
 title: "AI 1: Lessons from vibe coding a major project"
-categories: ["blog", "ai"]
+categories: ["ai"]
 description: ""
 ---
 

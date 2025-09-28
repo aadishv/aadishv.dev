@@ -2,7 +2,7 @@
 date: "2025-09-14"
 hidden: true
 title: "tøp theories"
-categories: ["blog"]
+categories: ["notes"]
 description: ""
 ---
 

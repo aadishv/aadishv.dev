@@ -1,7 +1,7 @@
 ---
 date: "2025-03-24"
 title: "Using code to simplify a repetitive task"
-categories: ["blog"]
+categories: ["TIL"]
 description: ""
 ---
 
