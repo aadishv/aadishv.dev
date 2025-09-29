@@ -10,7 +10,7 @@ import { render } from "astro:content";
 export async function getStaticPaths({}: GetStaticPathsOptions) {
   const allContent = await getCollection("posts");
   const paths = allContent.map((post) => {
-    const slug = getSlugFromPath(post.filePath ?? '');
+    const slug = getSlugFromPath(post.filePath ?? "");
     return {
       params: {
         slug: slug,
@@ -31,11 +31,11 @@ const { post } = Astro.props;
 const { headings, Content } = await render(post);
 
 const date: Date = parseISO(post.data.date);
-const formatted: string = post.data.date == "<top>" ? "" : format(date, "LLLL d, yyyy");
+const formatted: string =
+  post.data.date == "<top>" ? "" : format(date, "LLLL d, yyyy");
 
 const isProject =
-  post.data.categories &&
-  post.data.categories.includes("project");
+  post.data.categories && post.data.categories.includes("project");
 ---
 
 <Layout title={post.data.title}>
@@ -53,29 +53,31 @@ const isProject =
     }
     <main>
       <div class="text-xl">
-            <a
-              href={post.data.link ?? `/${getSlugFromPath(post.filePath ?? '')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="!no-underline"
-            >
-              <h1>{post.data.title}</h1>
-            </a>
+        <a
+          href={post.data.link ?? `/${getSlugFromPath(post.filePath ?? "")}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="!no-underline"
+        >
+          <h1>{post.data.title}</h1>
+        </a>
         <h4>
           <time datetime={date.toString()}>{formatted}</time>
 
-          {post.body && <span>・<em>{`${post.body.split(" ").length} words`}</em></span>}
+          {
+            post.body && (
+              <span>
+                ・<em>{`${post.body.split(" ").length} words`}</em>
+              </span>
+            )
+          }
         </h4>
       </div>
 
       {
         isProject && post.data.link && (
           <div class="my-4">
-            <a
-              href={post.data.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={post.data.link} target="_blank" rel="noopener noreferrer">
               <Button variant="outline">View Live Project / Tool</Button>
             </a>
           </div>
@@ -104,8 +106,8 @@ const isProject =
           </div>
         )
       }
-      <div class="[&_a]:text-[#1d4ed8]">
-      <Content />
+      <div class="[&_a]:text-[#1d4ed8] dark:[&_a]:text-[#5075de]">
+        <Content />
       </div>
     </main>
   </article>
