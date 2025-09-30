@@ -1,46 +1,57 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useSelector } from "@xstate/store/react";
 import { Review } from "../Review";
 import { store, type AppMode } from "../Store";
+import ListenReview from "./ListenReview";
 
 /**
- * Component that renders a full sentence review interface with multiple characters
+ * Component that renders a full sentence review interface for the current question
  */
 export function SentenceReview({ mode }: { mode: AppMode | null }) {
+  const enabledModes = useSelector(store, (s) => s.context.enabledModes);
   const id = useRef({
     id: Math.random().toString(36).substring(2, 10) + Date.now().toString(36),
-    m: mode ?? ((Math.random() < 0.5 ? "character" : "pinyin") as AppMode),
+    m: null as AppMode | null,
   }).current;
 
-  // Move session update to useEffect
+  const chosenMode = useMemo<AppMode>(() => {
+    if (mode) return mode;
+    const modes = enabledModes && enabledModes.length ? enabledModes : (["character", "pinyin", "listen"] as AppMode[]);
+    return modes[Math.floor(Math.random() * modes.length)];
+  }, [mode, enabledModes]);
+
+  // Track session and expose current question mode
   useEffect(() => {
+    id.m = chosenMode;
     store.trigger.updateSession({ key: id.id, date: new Date() });
-  }, []);
+    store.trigger.setCurrentQuestionMode({ mode: chosenMode });
+    return () => {
+      store.trigger.setCurrentQuestionMode({ mode: null });
+    };
+  }, [chosenMode]);
 
   const sentences = useSelector(store, (state) => state.context.sentences);
+
+  if (chosenMode === "listen") {
+    return <ListenReview persistentId={id.id} />;
+  }
 
   return (
     <div className="flex w-full flex-wrap justify-center gap-4 overflow-visible">
       {sentences[0].words.map(
         (word: { character: string; pinyin: string }, index: number) => {
-          // Special handling for punctuation - display inline with previous character
           const isPunctuation = word.pinyin === "";
-          // Create a non-breaking span for punctuation to keep it with preceding characters
           return (
             <div
               key={index}
-              className={
-                isPunctuation
-                  ? "-ml-2 inline-block whitespace-nowrap"
-                  : undefined
-              }
+              className={isPunctuation ? "-ml-2 inline-block whitespace-nowrap" : undefined}
               style={isPunctuation ? { position: "relative" } : undefined}
             >
               <Review
                 character={word.character}
                 pinyin={word.pinyin}
                 persistentId={id.id}
-                mode={id.m}
+                mode={(chosenMode as "character" | "pinyin")}
               />
             </div>
           );

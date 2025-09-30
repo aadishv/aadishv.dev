@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "@xstate/store/react";
 import { store, type AppMode, getAllLessons } from "../Store";
 import Modal from "react-modal";
+import { toast } from "sonner";
 
 // Re-export Button for use in this file
 import { Button } from "./DetailsAndButton";
@@ -16,13 +17,25 @@ interface SettingsModalProps {
 const SettingsModal: React.FC<SettingsModalProps> = ({
   modalIsOpen,
   closeModal,
-  currentMode,
-  setMode,
 }) => {
-  // Update settings immediately when changed
-  const updateMode = (newMode: AppMode | null) => {
-    setMode(newMode);
+  // Practice modes multiselect
+  const enabledModes = useSelector(store, (s) => s.context.enabledModes);
+  const [selectedModes, setSelectedModes] = useState<AppMode[]>(enabledModes);
+
+  const toggleMode = (m: AppMode) => {
+    setSelectedModes((prev) => {
+      const next = prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m];
+      if (next.length === 0) {
+        toast.error("At least one mode must remain enabled");
+        return prev;
+      }
+      return next;
+    });
   };
+
+  useEffect(() => {
+    store.trigger.updateEnabledModes({ modes: selectedModes });
+  }, [selectedModes]);
 
   // State for lesson selection
   const allLessons = useMemo(() => getAllLessons(), []);
@@ -74,37 +87,34 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
         <h2 className="mb-4 text-xl font-bold">Settings</h2>
 
         <div className="mb-6">
-          <h3 className="mb-2 font-medium">Practice Mode</h3>
+          <h3 className="mb-2 font-medium">Practice Modes</h3>
           <div className="flex flex-col gap-2">
             <label className="flex items-center">
               <input
-                type="radio"
-                name="mode"
-                checked={currentMode === null}
-                onChange={() => updateMode(null)}
+                type="checkbox"
+                checked={selectedModes.includes("character")}
+                onChange={() => toggleMode("character")}
                 className="mr-2"
               />
-              I'm feeling lucky (random)
+              Character
             </label>
             <label className="flex items-center">
               <input
-                type="radio"
-                name="mode"
-                checked={currentMode === "character"}
-                onChange={() => updateMode("character")}
+                type="checkbox"
+                checked={selectedModes.includes("pinyin")}
+                onChange={() => toggleMode("pinyin")}
                 className="mr-2"
               />
-              Character mode
+              Pinyin
             </label>
             <label className="flex items-center">
               <input
-                type="radio"
-                name="mode"
-                checked={currentMode === "pinyin"}
-                onChange={() => updateMode("pinyin")}
+                type="checkbox"
+                checked={selectedModes.includes("listen")}
+                onChange={() => toggleMode("listen")}
                 className="mr-2"
               />
-              Pinyin mode
+              Listen -&gt; English
             </label>
           </div>
         </div>

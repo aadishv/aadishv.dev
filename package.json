@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev --host",
+    "dev:backend": "convex dev --local",
     "start": "astro dev",
     "build": "astro build",
     "check": "astro check",
@@ -40,6 +41,7 @@
     "bun": "^1.2.19",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "convex": "^1.27.3",
     "date-fns": "^4.1.0",
     "desmos": "^1.5.4",
     "desmos-react": "^1.2.0",

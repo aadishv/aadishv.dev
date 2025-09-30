@@ -31,20 +31,26 @@ export function SentenceDetails() {
     store,
     (state) => state.context.sentences[0],
   );
+  const currentMode = useSelector(store, (s) => s.context.currentQuestionMode);
   useEffect(() => {
     setRevealMeaning(false);
-  }, [sentence])
-  return (<div className="text-xl flex flex-col">
-    <span className="text-black/50">{sentence.lesson}</span>
-        {revealMeaning ? (
-            sentence.def
-        ) : (
-          <button
-            className="text-black/70 mr-auto"
-            onClick={() => setRevealMeaning(true)}
-          >
-            click to reveal english definition
-          </button>
-        )}
-  </div>);
+  }, [sentence]);
+  const listening = currentMode === "listen";
+  return (
+    <div className="text-xl flex flex-col">
+      <span className="text-black/50">{sentence.lesson}</span>
+      {listening ? (
+        <span className="text-black/40 select-none">[nice try]</span>
+      ) : revealMeaning ? (
+        sentence.def
+      ) : (
+        <button
+          className="text-black/70 mr-auto"
+          onClick={() => setRevealMeaning(true)}
+        >
+          click to reveal english definition
+        </button>
+      )}
+    </div>
+  );
 }

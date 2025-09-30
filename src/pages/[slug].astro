@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { parseISO, format } from "date-fns";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
-
+import ConvexComments from "@/components/ConvexProvider";
 export async function getStaticPaths({}: GetStaticPathsOptions) {
   const allContent = await getCollection("posts");
   const paths = allContent.map((post) => {
@@ -15,7 +15,7 @@ export async function getStaticPaths({}: GetStaticPathsOptions) {
       params: {
         slug: slug,
       },
-      props: { post },
+      props: { post, slug },
     };
   });
 
@@ -26,7 +26,7 @@ export const getSlugFromPath = (path: string): string => {
   return path.split("/").at(-1)!.replace(".md", "");
 };
 
-const { post } = Astro.props;
+const { post, slug } = Astro.props;
 
 const { headings, Content } = await render(post);
 
@@ -109,6 +109,7 @@ const isProject =
       <div class="[&_a]:text-[#1d4ed8] dark:[&_a]:text-[#5075de]">
         <Content />
       </div>
+      <ConvexComments slug={slug} client:only="react" />
     </main>
   </article>
 </Layout>

@@ -27,12 +27,15 @@ export const saveToStorage = (data: any) => {
     console.error("Failed to save data to localStorage:", error);
   }
 };
-export type AppMode = "pinyin" | "character";
+export type AppMode = "pinyin" | "character" | "listen";
+ 
+ type HistoryType = {
+   character: Record<string, [CharState, string]>;
+   pinyin: Record<string, [CharState, string]>;
+   listen: Record<string, [CharState, string]>;
+ };
 
-type HistoryType = {
-  character: Record<string, [CharState, string]>;
-  pinyin: Record<string, [CharState, string]>;
-};
+const defaultHistory: HistoryType = { character: {}, pinyin: {}, listen: {} };
 
 // Get all available lesson names
 export const getAllLessons = (): string[] => {
@@ -52,20 +55,22 @@ const storedData = loadFromStorage() as {
   sentences?: Sentence[];
   sessions?: Record<string, string>;
   enabledLessons?: string[];
+  enabledModes?: AppMode[];
+  sentenceIndex?: Record<string, string>;
 } | null;
 const allLessons = getAllLessons();
 
 const initialContext = {
-  history: (storedData?.history ?? {
-    character: {},
-    pinyin: {},
-  }) as HistoryType,
+  history: ({ ...defaultHistory, ...(storedData?.history || {}) } as HistoryType),
   sentences:
     storedData?.sentences ??
     ([...getSentences()].sort(() => 0.5 - Math.random()) as Sentence[]),
   sessions: (storedData?.sessions ?? {}) as Record<string, string>,
   completedCount: 0, // Always starts at 0 and is not persisted
   enabledLessons: storedData?.enabledLessons ?? allLessons, // Default to all lessons enabled
+  enabledModes: (storedData?.enabledModes ?? ["character", "pinyin", "listen"]) as AppMode[],
+  currentQuestionMode: null as AppMode | null,
+  sentenceIndex: (storedData?.sentenceIndex ?? {}) as Record<string, string>,
 };
 
 export const store = createStore({
@@ -95,6 +100,27 @@ export const store = createStore({
                 [event.character]: [event.newState, event.id],
               },
             } as HistoryType),
+      };
+    },
+    setCurrentQuestionMode: (context, event: { mode: AppMode | null }) => {
+      return {
+        ...context,
+        currentQuestionMode: event.mode,
+      };
+    },
+    updateEnabledModes: (context, event: { modes: AppMode[] }) => {
+      return {
+        ...context,
+        enabledModes: event.modes,
+      };
+    },
+    indexSentence: (context, event: { id: string; label: string }) => {
+      return {
+        ...context,
+        sentenceIndex: {
+          ...context.sentenceIndex,
+          [event.id]: event.label,
+        },
       };
     },
     resetCompletedCount: (context, _) => {

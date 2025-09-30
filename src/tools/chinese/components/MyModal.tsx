@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSelector } from "@xstate/store/react";
 import Modal from "react-modal";
 import { TrafficLights } from "../Review";
@@ -10,10 +10,12 @@ type MyModalProps = {
   relativeTimes: {
     character: Record<string, string>;
     pinyin: Record<string, string>;
+    listen: Record<string, string>;
   };
   history: {
     character: Record<string, [number, string]>;
     pinyin: Record<string, [number, string]>;
+    listen: Record<string, [number, string]>;
   };
 };
 
@@ -44,14 +46,23 @@ const MyModal: React.FC<MyModalProps> = ({
   relativeTimes,
   history,
 }) => {
-  const [activeTab, setActiveTab] = useState<"character" | "pinyin">(
+  const [activeTab, setActiveTab] = useState<"character" | "pinyin" | "listen">(
     "character",
   );
   const numSentences = useSelector(
     store,
     (state) => state.context.sentences.length,
   );
-  // Determine which data to use based on active tab
+  const sentenceIndex = useSelector(store, (s) => s.context.sentenceIndex);
+
+  const labeledEntries = useMemo(() => {
+    if (activeTab !== "listen") return null;
+    return Object.entries(history.listen).map(([id, value]) => {
+      const label = sentenceIndex[id] || id;
+      return { id, label, value } as { id: string; label: string; value: [number, string] };
+    });
+  }, [history.listen, sentenceIndex, activeTab]);
+
   const currentHistory = history[activeTab] || {};
 
   return (
@@ -66,7 +77,6 @@ const MyModal: React.FC<MyModalProps> = ({
       <div className="bg-stripes-header2 h-full w-full p-6">
         <h2 className="mb-4 text-xl font-bold">Learning history</h2>
         <p className="">You have {numSentences} sentences left this cycle.</p>
-        {/* Tabs for switching between character and pinyin history */}
         <div className="mb-4 flex border-b border-header">
           <button
             className={`mr-4 px-2 py-1 font-medium ${
@@ -88,6 +98,16 @@ const MyModal: React.FC<MyModalProps> = ({
           >
             Pinyin
           </button>
+          <button
+            className={`ml-4 px-2 py-1 font-medium ${
+              activeTab === "listen"
+                ? "border-b-2 border-header text-header"
+                : "text-gray-500"
+            }`}
+            onClick={() => setActiveTab("listen")}
+          >
+            Listening
+          </button>
         </div>
 
         <div className="mb-4">
@@ -96,6 +116,22 @@ const MyModal: React.FC<MyModalProps> = ({
               Your {activeTab} learning history will appear here. It is
               currently empty.
             </p>
+          ) : activeTab === "listen" && labeledEntries ? (
+            <div className="list-disc">
+              {labeledEntries.map(({ id, label, value }) => (
+                <div key={id} className="flex">
+                  <span className="min-w-40 font-lora text-xl font-bold truncate">
+                    {label}
+                  </span>
+                  <span className="my-auto px-4">
+                    <TrafficLights state={value[0]} checkMark={false} />
+                  </span>
+                  <span className="my-auto px-4 font-mono text-gray-500">
+                    {relativeTimes.listen[id]}
+                  </span>
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="list-disc">
               {Object.entries(currentHistory).map(([key, value]) => (
@@ -125,13 +161,10 @@ const MyModal: React.FC<MyModalProps> = ({
                     "Are you sure you want to delete all data from past practice sessions?",
                   )
                 ) {
-                  // Get existing data
                   const storedData = JSON.parse(
                     localStorage.getItem("chinese_app_data") || "{}",
                   );
-                  // Clear only current mode data
                   if (storedData) {
-                    // storedData[CURRENT_MODE] = {};
                     localStorage.setItem(
                       "chinese_app_data",
                       JSON.stringify(storedData),

@@ -29,18 +29,25 @@ export default function App() {
     let times = {
       character: {} as Record<string, string>,
       pinyin: {} as Record<string, string>,
+      listen: {} as Record<string, string>,
     };
 
-    Object.entries(history.character).forEach(([char, [_, sessionId]]) => {
+    Object.entries(history.character || {}).forEach(([char, [_, sessionId]]) => {
       if (state.context.sessions[sessionId]) {
         const time = new Date(state.context.sessions[sessionId]);
         times.character[char] = rtf.from(time);
       }
     });
-    Object.entries(history.pinyin).forEach(([char, [_, sessionId]]) => {
+    Object.entries(history.pinyin || {}).forEach(([char, [_, sessionId]]) => {
       if (state.context.sessions[sessionId]) {
         const time = new Date(state.context.sessions[sessionId]);
         times.pinyin[char] = rtf.from(time);
+      }
+    });
+    Object.entries(history.listen || {}).forEach(([key, [_, sessionId]]) => {
+      if (state.context.sessions[sessionId]) {
+        const time = new Date(state.context.sessions[sessionId]);
+        times.listen[key] = rtf.from(time);
       }
     });
     return times;
