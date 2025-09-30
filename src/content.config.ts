@@ -9,6 +9,6 @@ const posts = defineCollection({
     categories: z.array(z.string()),
     description: z.string().optional(),
     hidden: z.boolean().optional(),
-    image: z.string().optional()
-  })
+    image: z.string().optional(),
+  }),
 });

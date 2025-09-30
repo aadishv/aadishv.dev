@@ -16,7 +16,10 @@ export function SentenceReview({ mode }: { mode: AppMode | null }) {
 
   const chosenMode = useMemo<AppMode>(() => {
     if (mode) return mode;
-    const modes = enabledModes && enabledModes.length ? enabledModes : (["character", "pinyin", "listen"] as AppMode[]);
+    const modes =
+      enabledModes && enabledModes.length
+        ? enabledModes
+        : (["character", "pinyin", "listen"] as AppMode[]);
     return modes[Math.floor(Math.random() * modes.length)];
   }, [mode, enabledModes]);
 
@@ -44,14 +47,18 @@ export function SentenceReview({ mode }: { mode: AppMode | null }) {
           return (
             <div
               key={index}
-              className={isPunctuation ? "-ml-2 inline-block whitespace-nowrap" : undefined}
+              className={
+                isPunctuation
+                  ? "-ml-2 inline-block whitespace-nowrap"
+                  : undefined
+              }
               style={isPunctuation ? { position: "relative" } : undefined}
             >
               <Review
                 character={word.character}
                 pinyin={word.pinyin}
                 persistentId={id.id}
-                mode={(chosenMode as "character" | "pinyin")}
+                mode={chosenMode as "character" | "pinyin"}
               />
             </div>
           );
@@ -83,24 +90,15 @@ export function Footer({
         >
           help
         </button>
-        <button
-          className="text-xl text-black/70"
-          onClick={showModal}
-        >
+        <button className="text-xl text-black/70" onClick={showModal}>
           history
         </button>
-        <button
-          className="text-xl text-black/70"
-          onClick={showSettingsModal}
-        >
+        <button className="text-xl text-black/70" onClick={showSettingsModal}>
           settings
         </button>
       </div>
       <div className="mb-0 ml-auto flex flex-row gap-5">
-        <button
-          className="text-xl text-black/70"
-          onClick={progressSentence}
-        >
+        <button className="text-xl text-black/70" onClick={progressSentence}>
           continue
         </button>
       </div>

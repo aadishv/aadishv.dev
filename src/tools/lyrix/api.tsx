@@ -13,10 +13,10 @@ export type Song = {
 };
 
 export const searchSongs = async (query: {
-  q?: string,
-  track_name?: string,
-  artist_name?: string,
-  album_name?: string,
+  q?: string;
+  track_name?: string;
+  artist_name?: string;
+  album_name?: string;
 }): Promise<Song[]> => {
   const response = await ky.get("https://lrclib.net/api/search", {
     searchParams: {

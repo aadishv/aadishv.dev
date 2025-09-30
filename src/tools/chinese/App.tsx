@@ -32,12 +32,14 @@ export default function App() {
       listen: {} as Record<string, string>,
     };
 
-    Object.entries(history.character || {}).forEach(([char, [_, sessionId]]) => {
-      if (state.context.sessions[sessionId]) {
-        const time = new Date(state.context.sessions[sessionId]);
-        times.character[char] = rtf.from(time);
-      }
-    });
+    Object.entries(history.character || {}).forEach(
+      ([char, [_, sessionId]]) => {
+        if (state.context.sessions[sessionId]) {
+          const time = new Date(state.context.sessions[sessionId]);
+          times.character[char] = rtf.from(time);
+        }
+      },
+    );
     Object.entries(history.pinyin || {}).forEach(([char, [_, sessionId]]) => {
       if (state.context.sessions[sessionId]) {
         const time = new Date(state.context.sessions[sessionId]);
@@ -61,20 +63,20 @@ export default function App() {
   return (
     <div className="flex flex-col items-center text-2xl mt-[4rem] mx-auto w-[50rem]">
       {/* Fixed header area */}
-        <div className="flex justify-center flex-row w-full">
-          <div className="flex flex-col w-full">
-            <Footer
-              showModal={showHistoryModal}
-              showSettingsModal={showSettingsModal}
-              progressSentence={() => store.trigger.progressSentence()}
-            />
-            <SentenceDetails />
-          </div>
+      <div className="flex justify-center flex-row w-full">
+        <div className="flex flex-col w-full">
+          <Footer
+            showModal={showHistoryModal}
+            showSettingsModal={showSettingsModal}
+            progressSentence={() => store.trigger.progressSentence()}
+          />
+          <SentenceDetails />
         </div>
+      </div>
 
       {/* Scrollable middle content area */}
       <div className="w-full flex-grow overflow-y-auto my-4">
-          <SentenceReview key={currentId} mode={mode} />
+        <SentenceReview key={currentId} mode={mode} />
       </div>
 
       <MyModal

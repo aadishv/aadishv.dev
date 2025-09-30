@@ -11,8 +11,8 @@ const { title, tool } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={"A 9th grader and avid coder."} />
     <meta property="og:image" content="https://aadishv.dev/og.png" />
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:image" content="https://aadishv.dev/og.png">
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:image" content="https://aadishv.dev/og.png" />
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -47,16 +47,14 @@ const { title, tool } = Astro.props;
       src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js"
     ></script>
     <style is:inline>
-    /* for rehype */
-    .anchor-link {
+      /* for rehype */
+      .anchor-link {
         color: gray !important;
         float: right;
-        font-size: 2rem;
-    }
+      }
     </style>
   </head>
   <body>
-
     <div class={`sticky pt-4 -mb-10 mx-4 z-[1000] flex top-bar`}>
       {
         !tool && (
@@ -75,7 +73,7 @@ const { title, tool } = Astro.props;
     {
       (
         <div class={tool ? "" : "pt-8"}>
-            <slot />
+          <slot />
         </div>
       )
     }
@@ -91,9 +89,15 @@ const { title, tool } = Astro.props;
         });
       });
     </script>
-    {import.meta.env.PROD ? <Analytics /> : (() => {
-    console.log("dev deployment; not using analytics.")
-    return false;
-    })()}
+    {
+      import.meta.env.PROD ? (
+        <Analytics />
+      ) : (
+        (() => {
+          console.log("dev deployment; not using analytics.");
+          return false;
+        })()
+      )
+    }
   </body>
 </html>

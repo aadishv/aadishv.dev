@@ -121,7 +121,7 @@ export function App() {
               })),
               {
                 type: "text" as const,
-                text
+                text,
               },
             ],
           },
@@ -134,7 +134,8 @@ export function App() {
           setStreamingResult(partial as SentenceOutput);
         }
       }
-    } catch { } finally {
+    } catch {
+    } finally {
       setIsStreaming(false);
     }
   }
@@ -225,9 +226,14 @@ export function App() {
               </div>
               <ul className="space-y-2">
                 {files.map((f, i) => (
-                  <li key={i} className="flex items-center gap-3 border rounded p-2 bg-muted">
+                  <li
+                    key={i}
+                    className="flex items-center gap-3 border rounded p-2 bg-muted"
+                  >
                     <span className="text-xs font-mono">{f.name}</span>
-                    <span className="text-xs text-muted-foreground">{f.type}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {f.type}
+                    </span>
                     {f.type.startsWith("image/") ? (
                       <img
                         src={f.contents}
@@ -281,57 +287,68 @@ export function App() {
               <thead>
                 <tr>
                   <th className="border-b p-2 text-left">Definition</th>
-                  <th className="border-b p-2 text-left">Words (Character / Pinyin)</th>
+                  <th className="border-b p-2 text-left">
+                    Words (Character / Pinyin)
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {streamingResult
-                  ? streamingResult.sentences.map((sentence, i) => (
-                      <tr key={i}>
-                        <td className="border-b p-2 align-top w-1/2">{sentence.def}</td>
-                        <td className="border-b p-2 align-top">
-                          <div className="flex flex-wrap gap-2">
-                            {sentence.words.map((word, j) => (
-                              <span
-                                key={j}
-                                className="inline-block px-2 py-1 rounded bg-muted"
-                                title={word.pinyin}
-                              >
-                                <span className="font-bold">{word.character}</span>
-                                {word.pinyin && (
-                                  <span className="ml-1 text-xs text-muted-foreground">({word.pinyin})</span>
-                                )}
+                {streamingResult ? (
+                  streamingResult.sentences.map((sentence, i) => (
+                    <tr key={i}>
+                      <td className="border-b p-2 align-top w-1/2">
+                        {sentence.def}
+                      </td>
+                      <td className="border-b p-2 align-top">
+                        <div className="flex flex-wrap gap-2">
+                          {sentence.words.map((word, j) => (
+                            <span
+                              key={j}
+                              className="inline-block px-2 py-1 rounded bg-muted"
+                              title={word.pinyin}
+                            >
+                              <span className="font-bold">
+                                {word.character}
                               </span>
-                            ))}
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  : isStreaming
-                  ? Array.from({ length: 3 }).map((_, i) => (
-                      <tr key={i}>
-                        <td className="border-b p-2">
-                          <div className="h-4 w-3/4 bg-gray-200 animate-pulse rounded" />
-                        </td>
-                        <td className="border-b p-2">
-                          <div className="flex gap-2">
-                            {Array.from({ length: 5 }).map((_, j) => (
-                              <div
-                                key={j}
-                                className="h-4 w-8 bg-gray-200 animate-pulse rounded"
-                              />
-                            ))}
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  : (
-                    <tr>
-                      <td colSpan={2} className="text-muted-foreground text-center p-4">
-                        No result yet.
+                              {word.pinyin && (
+                                <span className="ml-1 text-xs text-muted-foreground">
+                                  ({word.pinyin})
+                                </span>
+                              )}
+                            </span>
+                          ))}
+                        </div>
                       </td>
                     </tr>
-                  )}
+                  ))
+                ) : isStreaming ? (
+                  Array.from({ length: 3 }).map((_, i) => (
+                    <tr key={i}>
+                      <td className="border-b p-2">
+                        <div className="h-4 w-3/4 bg-gray-200 animate-pulse rounded" />
+                      </td>
+                      <td className="border-b p-2">
+                        <div className="flex gap-2">
+                          {Array.from({ length: 5 }).map((_, j) => (
+                            <div
+                              key={j}
+                              className="h-4 w-8 bg-gray-200 animate-pulse rounded"
+                            />
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={2}
+                      className="text-muted-foreground text-center p-4"
+                    >
+                      No result yet.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

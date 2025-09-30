@@ -65,8 +65,8 @@ function LyrixTool() {
     setError(null);
     import("../api").then(({ getSong }) => {
       getSong(Number(songId))
-        .then(song => setFullscreenSong(song))
-        .catch(err => setError(err.message || "Failed to load song"))
+        .then((song) => setFullscreenSong(song))
+        .catch((err) => setError(err.message || "Failed to load song"))
         .finally(() => setLoading(false));
     });
   }, [songId]);
@@ -92,12 +92,8 @@ function LyrixTool() {
       {/* Results */}
       {!songId && (
         <div className="flex-1 p-8">
-          {loading && (
-            <div>Loading...</div>
-          )}
-          {error && (
-            <div style={{ color: "red" }}>{error}</div>
-          )}
+          {loading && <div>Loading...</div>}
+          {error && <div style={{ color: "red" }}>{error}</div>}
           {!loading && !error && (
             <table className="w-full border border-gray-300 bg-white">
               <thead>
@@ -114,7 +110,10 @@ function LyrixTool() {
                   return (
                     <tr key={song.id}>
                       <td className="border px-2 py-1">
-                        <a href={"?" + params.toString()} style={{ textDecoration: "underline", color: "blue" }}>
+                        <a
+                          href={"?" + params.toString()}
+                          style={{ textDecoration: "underline", color: "blue" }}
+                        >
                           {song.trackName}
                         </a>
                       </td>
@@ -134,9 +133,15 @@ function LyrixTool() {
         <div className="flex flex-col min-h-screen bg-background">
           <div className="flex justify-between items-center px-8 pt-8 pb-4 w-full">
             <div>
-              <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{fullscreenSong.trackName}</div>
-              <div style={{ fontSize: "1.2rem", color: "#555" }}>{fullscreenSong.artistName}</div>
-              <div style={{ fontSize: "1rem", color: "#888" }}>{fullscreenSong.albumName}</div>
+              <div style={{ fontWeight: "bold", fontSize: "2rem" }}>
+                {fullscreenSong.trackName}
+              </div>
+              <div style={{ fontSize: "1.2rem", color: "#555" }}>
+                {fullscreenSong.artistName}
+              </div>
+              <div style={{ fontSize: "1rem", color: "#888" }}>
+                {fullscreenSong.albumName}
+              </div>
             </div>
             <a href="?" style={{ textDecoration: "none" }}>
               <Button variant="secondary">Back</Button>
@@ -156,7 +161,7 @@ function LyrixTool() {
                 width: "100%",
                 minHeight: "60vh",
                 boxSizing: "border-box",
-                overflowX: "auto"
+                overflowX: "auto",
               }}
             >
               {fullscreenSong.plainLyrics || "No lyrics found."}

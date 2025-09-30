@@ -11,13 +11,12 @@ declare global {
       opts?: {
         delimiters?: { left: string; right: string; display: boolean }[];
         errorCallback?: (msg: string, err: any) => void;
-      }
+      },
     ) => void;
   }
 }
 
 const CACHE_KEY = "KaTeXInput";
-
 
 type KatexError = {
   msg: string;
@@ -70,8 +69,6 @@ export function App() {
     setErrors(parseErrors);
   }, [input]);
 
-
-
   // Draggable split state (left pane width in px)
   const DEFAULT_LEFT = 400;
   const MIN_LEFT = 120;
@@ -119,7 +116,7 @@ export function App() {
         <textarea
           id="katex-input"
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value)}
           autoFocus
           spellCheck={false}
           placeholder="Type text with $LaTeX$ math here..."
@@ -135,9 +132,11 @@ export function App() {
         className="w-1 cursor-col-resize bg-muted transition-colors"
         style={{ zIndex: 10 }}
         onMouseDown={onMouseDown}
-        onKeyDown={e => {
-          if (e.key === "ArrowLeft") setLeftPx(w => Math.max(MIN_LEFT, w - 16));
-          if (e.key === "ArrowRight") setLeftPx(w => Math.min(MAX_LEFT, w + 16));
+        onKeyDown={(e) => {
+          if (e.key === "ArrowLeft")
+            setLeftPx((w) => Math.max(MIN_LEFT, w - 16));
+          if (e.key === "ArrowRight")
+            setLeftPx((w) => Math.min(MAX_LEFT, w + 16));
         }}
         aria-label="Resize input/output panels"
       />
@@ -151,14 +150,23 @@ export function App() {
           className="w-full h-full text-base p-4"
           tabIndex={0}
           aria-label="KaTeX output"
-          style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", minHeight: 0, height: "100%" }}
+          style={{
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+            minHeight: 0,
+            height: "100%",
+          }}
         />
         {errors.length > 0 && (
           <div className="space-y-2 mt-2" aria-live="polite">
             {errors.map((err, i) => (
-              <div key={i} className="font-mono text-destructive bg-transparent text-sm">
+              <div
+                key={i}
+                className="font-mono text-destructive bg-transparent text-sm"
+              >
                 <span>
-                  <strong>KaTeX parse error:</strong> {modifyMessage(err.msg, err.err)}
+                  <strong>KaTeX parse error:</strong>{" "}
+                  {modifyMessage(err.msg, err.err)}
                 </span>
               </div>
             ))}

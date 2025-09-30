@@ -4,10 +4,10 @@ title: "Understanding how LemLib's motions work"
 categories: ["robotics"]
 description: ""
 ---
-import {CosineViz, DesmosSide} from "@/tools/move2point.tsx";
 
+import { CosineViz, DesmosSide } from "@/tools/move2point.tsx";
 
-*I'm currently wrapping up a lot of projects, preparing to start a new chapter of my programming journey next week. ~~Barring procrastination~~ expect an influx of blog posts!*
+_I'm currently wrapping up a lot of projects, preparing to start a new chapter of my programming journey next week. ~~Barring procrastination~~ expect an influx of blog posts!_
 
 ## Why you need this blog post
 
@@ -19,7 +19,7 @@ Hundreds if not thousands of VEX teams use libraries similar to Lemlib to handle
 
 > Disclaimer: I'm no expert in control theory! The closest I've gotten to LemLib is [a single open PR](https://github.com/LemLib/LemLib/pull/274), so take my words with a grain of salt.
 
-Unfortunately, a rare Q&A asked *and* answered by the VEX Game Design Committee recently stated that:
+Unfortunately, a rare Q&A asked _and_ answered by the VEX Game Design Committee recently stated that:
 
 > It is the responsibility of each Team to be able **to explain and defend** the design, construction, and **programming** of their Robot if questioned by referees, inspectors, Event Partners, or judges. Teams should be prepared to describe their design process, justify design decisions, and demonstrate a full understanding of how their Robot functions.
 
@@ -28,10 +28,10 @@ In other words, V5RC teams need to be able to explain the programming of their r
 This can be taken to the extreme, as the rule (and the corresponding [RECF Code of Conduct](https://v5rc-kb.recf.org/hc/en-us/articles/9653987780375-Code-of-Conduct)) are quite ambiguous.
 
 ![](assets/move2point.md/2.png)
-***Exhibit A.** Background: [vexide](https://vexide.dev/) relies on a [VEX SDK jumptable](https://github.com/vexide/vex-sdk/tree/main/packages/vex-sdk-jumptable) to do basically anything with the brain.*
+**\*Exhibit A.** Background: [vexide](https://vexide.dev/) relies on a [VEX SDK jumptable](https://github.com/vexide/vex-sdk/tree/main/packages/vex-sdk-jumptable) to do basically anything with the brain.\*
 
 [![](assets/move2point.md/3.png)](https://github.com/Gavin-Niederman/student-centered-arcade-drive/)
-***Exhibit B.** Background: created by a vexide maintainer. You can only explain all your code if you wrote the bootloader!*
+**\*Exhibit B.** Background: created by a vexide maintainer. You can only explain all your code if you wrote the bootloader!\*
 
 ---
 
@@ -43,7 +43,7 @@ Before we continue, a necessary prerequisite is understanding PID control. You c
 
 PID stands for "Proportion / Integral / Derivative" control, and its goal is to, given an error, return an "output" force which can be applied to reduce the error. They can basically be thought of as a function:
 
-![LaTeX image](https://latex.codecogs.com/svg.image?%5Ctext%7BPID%7D(%5Ctext%7Berror%7D)%20%3D%20K_p%20%5Ccdot%20%5Ctext%7Berror%7D%20%5Ccdot%20K_i%20%5Ccdot%20%5Ctext%7Btotal%20error%7D%20%2B%20K_d%20%5Ccdot%20%5Ctext%7Bchange%20in%20error%7D)
+![LaTeX image](<https://latex.codecogs.com/svg.image?%5Ctext%7BPID%7D(%5Ctext%7Berror%7D)%20%3D%20K_p%20%5Ccdot%20%5Ctext%7Berror%7D%20%5Ccdot%20K_i%20%5Ccdot%20%5Ctext%7Btotal%20error%7D%20%2B%20K_d%20%5Ccdot%20%5Ctext%7Bchange%20in%20error%7D>)
 
 TL;DR:
 
@@ -116,7 +116,7 @@ fn moveToPoint(targetPoint) {
 }
 ```
 
-This is already a massive improvement, since we'll probably get *somewhere* close to the target (hopefully!). However, if there is an obstacle on the route, or if we aren't pointing *exactly* at the target, or if the drivetrain has drift/is overheating, etc., we might end up skewing sideways! Here's an example of such a "near miss:"
+This is already a massive improvement, since we'll probably get _somewhere_ close to the target (hopefully!). However, if there is an obstacle on the route, or if we aren't pointing _exactly_ at the target, or if the drivetrain has drift/is overheating, etc., we might end up skewing sideways! Here's an example of such a "near miss:"
 
 ![robot near miss example](assets/move2point.md/6.png)
 
@@ -148,13 +148,16 @@ fn moveToPoint(targetPoint) {
 That's annoying to tune, and also not fast; turning, driving, stopping, turning again, etc. is very slow due to the repeated full stops. Time to do some speeding up...
 
 **Level 3.** What if, instead of doing turns and forward motion in entirely seperate stages, we do them simulatenously?! This sounds weird, but it makes sense if you've used arcade drive before. Arcade controllers basically allow us to simulatenously execute turning and straight motion on a tank drivetrain, using the following:
+
 ```rust
 fn driveArcade(straight, turn) {
     moveLeftSide(straight - turn);
     moveRightSide(straight + turn);
 }
 ```
+
 This has an issue which we'll discuss later, but it makes combining the two motions trivially; we can
+
 1. calculate angular and lateral error
 2. plug them in to our respective PIDs to get angular and lateral velocity commands
 3. plug those into our arcade function to get left and right motor commands and move the drivetrain.
@@ -170,15 +173,16 @@ fn moveToPoint(targetPoint) {
     }
 }
 ```
+
 This looks great! Now, we can start moving forward even while we are still turning towards the target point. This produces the expected smooth curving motion. Also, since we're always running the angular PID, the above issue is addressed; angular error at any point in the motion is immediately resolved.
 
 Is this the holy grail of move to point algorithms? No...
 
-Suppose we have a robot that's facing about 90 degrees away from the target point. Initially, going forward at all would be a *bad* idea since it actually brings the robot farther away from the targt. Unfortunately, our `moveToPoint` function doesn't know that, so it starts driving forward. It thus takes a lot longer for the turn to execute and redirect the robot all the way back. An example of the resulting elongated arc motion is below, with the ideal curve in light blue.
+Suppose we have a robot that's facing about 90 degrees away from the target point. Initially, going forward at all would be a _bad_ idea since it actually brings the robot farther away from the targt. Unfortunately, our `moveToPoint` function doesn't know that, so it starts driving forward. It thus takes a lot longer for the turn to execute and redirect the robot all the way back. An example of the resulting elongated arc motion is below, with the ideal curve in light blue.
 
 ![Elongated Arc Motion](assets/move2point.md/7.png)
 
-**Level 4.** Ideally, we'd decrease the lateral PID output if the robot is facing too far away from the target point. To do this, we can make a minor yet very helpful modification to our code for Level 3. Instead of using the raw distance to the target as the lateral error, we multiply the raw distance *by the cosine of the angular error.*
+**Level 4.** Ideally, we'd decrease the lateral PID output if the robot is facing too far away from the target point. To do this, we can make a minor yet very helpful modification to our code for Level 3. Instead of using the raw distance to the target as the lateral error, we multiply the raw distance _by the cosine of the angular error._
 
 This may sound arbitrary, but it makes sense when you consider the behavior of the cosine function: when the input (a.k.a. angular error) is near 0, cosine is near 1, so when the robot is pointing pretty close to the target, the lateral error is higher and it can start driving forward faster. If the input is closer to 90º, cosine is near 0, so the robot will slow down if it needs to turn.
 
@@ -204,16 +208,18 @@ fn moveToPoint(targetPoint) {
     }
 }
 ```
+
 This is commonly known as cosine scaling.
 
 This is great! We now have super smooth, curving arc motions that go straight to our target point. Alas, there are still myriad edge cases that we need to consider.
 
 **Level 5.** Let's look back at our `arcade` function:
 
-There is a subtle bug here, known as oversaturation. If both `straight` and `turn` are very high (close to the maximum motor power), the input to `moveRightSide` (or `moveLeftSide`, if `turn` is very large) will be greater than the maximum motor power. This won't break the motors (luckily), but it will cause the powers to get clamped to the maximum. This leads to the turn amount being less than expected. To avoid this, we can scale down (*`desaturate`*) both side's power if either is too large. This way, even if the robot moves a bit slower, the turning radius will be more accurate. Here's a helpful diagram from a [LemLib issue](https://github.com/LemLib/LemLib/issues/66):
+There is a subtle bug here, known as oversaturation. If both `straight` and `turn` are very high (close to the maximum motor power), the input to `moveRightSide` (or `moveLeftSide`, if `turn` is very large) will be greater than the maximum motor power. This won't break the motors (luckily), but it will cause the powers to get clamped to the maximum. This leads to the turn amount being less than expected. To avoid this, we can scale down (_`desaturate`_) both side's power if either is too large. This way, even if the robot moves a bit slower, the turning radius will be more accurate. Here's a helpful diagram from a [LemLib issue](https://github.com/LemLib/LemLib/issues/66):
 ![diagram of over/desaturation](assets/move2point.md/8.png)
 
 The change looks like this:
+
 ```rust
 fn driveArcade(straight, turn) {
     let left = straight - turn;
@@ -227,6 +233,7 @@ fn driveArcade(straight, turn) {
     moveRightSide(right);
 }
 ```
+
 (No changes to `moveToPoint` are required.)
 
 LemLib has an equivalent [`desaturate`](https://github.com/LemLib/LemLib/blob/e6318a9d7180e2e743bb0298860a7a943edd159a/src/lemlib/util.cpp#L42C1-L48C2) function used in their move to point implementation.
@@ -236,6 +243,7 @@ One bug squashed... just one more to go.
 **Level 6.** If you played around enough with the above cosine scaling widget, you might have noticed something peculiar: if the robot is very close to the target point, any slight movement can result in drastic changes to the angular error. The closer the robot gets, the more unreliable turning is. By the time we get to the target point, the robot is basically turning unpredictably. This is obviously not good.
 
 There are a bunch of interesting ways to address this, but the simplest is to disable turning when the robot is within a certain threshold distance of the target point. The implementation is relatively simple. We set `angularError` to zero instead of `angularOutput` so that the cosine scaling doesn't get messed up either:
+
 ```rust
 // constants:
 // stopTurningError: the distance at which to effectively disable turning. in LemLib, this is set to 7.5in.
@@ -259,6 +267,7 @@ fn moveToPoint(targetPoint) {
 ```
 
 These together form the key components of LemLib's move to point implementation. To summarize, the final implementation involves:
+
 1. Combined lateral and angular PIDs,
 2. with lateral output scaled by the cosine of angular error,
 3. with angular output disabled when lateral error is below a threshold,
@@ -273,17 +282,19 @@ The LemLib code is pretty verbose and uses a lot of LemLib-specific utils. If yo
 ### LemLib is weird
 
 This code might not look like any C++ code you've seen or written before. There are a few important things to understand before looking at it:
-* LemLib has its own ecosystem of internal tooling (loggers, utility classes, etc.) that are used everywhere. I'll skip over most of these since they aren't helpful and just focus on the math/logic.
-* LemLib is infinitely configurable, so it supports a large number of customizable parameters for the move to point implementation:
-  * `params.forwards` -- false if the robot is only allowed to go backwards. If false, modifications are made to the math so that it works for going in reverse.
-  * `lateralSmallExit` and `lateralLargeExit` are instances of a LemLib `ExitCondition` class, which basically say wait until the error is below a certain threshold for a certain amount of time:
-    * `lateralSmallExit` waits until the lateral error is below a small threshold for a short amount of time.
-    * `lateralLargeExit` waits until the lateral error is below a large threshold for a large amount of time.
-  Why are two exit conditions needed? No one really knows.
-  ![text message exchange](assets/move2point.md/10.png)
-  *Background: [andrew](https://github.com/meisZWFLZ/) is a LemLib maintainer. The diagram he sent in this screenshot is pretty helpful for understanding exit conditions, I recommend taking a look!*
-  * `params.earlyExitRange`: this basically says "stop once I'm `earlyExitRange` away from the target." This is commonly used in motion chaining, where multiple motions are executed consecutively with smooth transitions (no stops) between them. For regular motions, it is set by default to 0 inches ("only stop if I am exactly at the target, or have overshot it").
-* All speed values are from -127 \<-> 127, since that is what PROS motors natively take as input voltage.
+
+- LemLib has its own ecosystem of internal tooling (loggers, utility classes, etc.) that are used everywhere. I'll skip over most of these since they aren't helpful and just focus on the math/logic.
+- LemLib is infinitely configurable, so it supports a large number of customizable parameters for the move to point implementation:
+  - `params.forwards` -- false if the robot is only allowed to go backwards. If false, modifications are made to the math so that it works for going in reverse.
+  - `lateralSmallExit` and `lateralLargeExit` are instances of a LemLib `ExitCondition` class, which basically say wait until the error is below a certain threshold for a certain amount of time:
+    - `lateralSmallExit` waits until the lateral error is below a small threshold for a short amount of time.
+    - `lateralLargeExit` waits until the lateral error is below a large threshold for a large amount of time.
+      Why are two exit conditions needed? No one really knows.
+      ![text message exchange](assets/move2point.md/10.png)
+      _Background: [andrew](https://github.com/meisZWFLZ/) is a LemLib maintainer. The diagram he sent in this screenshot is pretty helpful for understanding exit conditions, I recommend taking a look!_
+  - `params.earlyExitRange`: this basically says "stop once I'm `earlyExitRange` away from the target." This is commonly used in motion chaining, where multiple motions are executed consecutively with smooth transitions (no stops) between them. For regular motions, it is set by default to 0 inches ("only stop if I am exactly at the target, or have overshot it").
+- All speed values are from -127 \<-> 127, since that is what PROS motors natively take as input voltage.
+
 ### Setup
 
 This is boilerplate, don't worry too much about. The rest of our code will occur inside the `moveToPoint` function.
@@ -331,6 +342,7 @@ void lemlib::Chassis::moveToPoint(float x, float y, int timeout, MoveToPointPara
 Pretty simple; we add imports, declare the function, and brake at the end. There's a lot of boilerplate to handle LemLib's way of managing motions and handle an edge case, but don't worry too much about it. Let's look at the rest:
 
 ### Boilerplate (persistent variables & main loop)
+
 ```cpp
 // initialize vars used between iterations
 Pose lastPose = getPose();
@@ -342,15 +354,18 @@ float prevAngularOut = 0; // previous angular power
 const int compState = pros::competition::get_status();
 std::optional<bool> prevSide = std::nullopt;
 ```
+
 These variables keep track of various things throughout the loop's iterations:
-* the `timer` is a LemLib utility that's used to break the loop when the motion is cancelled or the timer is done.
-* `close` is a variable which is set to true once we are within a certain threshold distance (in this case, `7.5 inches`) of the target. This is analogous to the check we do in Level 6, and is later used to disable turning when the robot is close.
-* `distTraveled` is a global variable in LemLib used to keep track of the progress of motions. Here, we reset it in preparation for beginning the new motion.
-* `prevLateralOut` and `prevAngularOut` simply store the previous lateral and angular PID outputs. `lastPose` similarly stores the last pose the robot was at.
-* `prevSide` is an `optional<bool>`, which means it has three states: `nullopt`, `true`, and `false`. We basically use the boolean options as a way to show which "side" of the target point we are on, and the null state is just a placeholder for until we run an iteration. I'll explain more in the relevant part of the loop.
-* Don't worry about `compState`, it's not used anywhere else.
+
+- the `timer` is a LemLib utility that's used to break the loop when the motion is cancelled or the timer is done.
+- `close` is a variable which is set to true once we are within a certain threshold distance (in this case, `7.5 inches`) of the target. This is analogous to the check we do in Level 6, and is later used to disable turning when the robot is close.
+- `distTraveled` is a global variable in LemLib used to keep track of the progress of motions. Here, we reset it in preparation for beginning the new motion.
+- `prevLateralOut` and `prevAngularOut` simply store the previous lateral and angular PID outputs. `lastPose` similarly stores the last pose the robot was at.
+- `prevSide` is an `optional<bool>`, which means it has three states: `nullopt`, `true`, and `false`. We basically use the boolean options as a way to show which "side" of the target point we are on, and the null state is just a placeholder for until we run an iteration. I'll explain more in the relevant part of the loop.
+- Don't worry about `compState`, it's not used anywhere else.
 
 The rest of our code occurs inside the loop body:
+
 ```cpp
 while (!timer.isDone() && ((!lateralSmallExit.getExit() && !lateralLargeExit.getExit()) || !close) &&
        this->motionRunning) {
@@ -359,9 +374,10 @@ while (!timer.isDone() && ((!lateralSmallExit.getExit() && !lateralLargeExit.get
 ```
 
 Basically, we loop while all of these conditions are true:
-  * we haven't run out of time
-  * our motion is still running
-  * we haven't gotten close to the target OR neither exit condition has triggered
+
+- we haven't run out of time
+- our motion is still running
+- we haven't gotten close to the target OR neither exit condition has triggered
 
 Let's see what happens inside the loop.
 
@@ -384,10 +400,12 @@ if (distTarget < 7.5 && close == false) {
     params.maxSpeed = fmax(fabs(prevLateralOut), 60);
 }
 ```
+
 There's some more boilerplate:
-* getting the pose of the robot,
-* getting the distance of its pose to the current pose,
-* and updating the global vars `distTraveled` and `lastPose`.
+
+- getting the pose of the robot,
+- getting the distance of its pose to the current pose,
+- and updating the global vars `distTraveled` and `lastPose`.
 
 The `if` statement, however, is quite interesting. This isn't to disable turning like we discussed in Level 6, but rather just something to avoid the robot speeding up too much in the final leg (like if it overshoots). It limits lateral and angular motion to either `60/127 ≈ 47%` power, or the previous lateral output, whichever is larger. We incorporate the previous lateral output to avoid sudden deceleration -- if the previous lateral output was 100% (127) then capping it to 60 would be like slamming on the brakes. As noted in the comment, this helps the robot "settle" into the target position. The `close` variable represents whether the robot is settling or now. Note that `params.maxSpeed` affects both the angular and linear outputs.
 
@@ -411,7 +429,9 @@ That `prevSide` variable we previously discussed comes into play here. The equat
 The rest of the code is relatively simple logic: if we've switched sides (i.e., crossed the line), that's an indicator it's time to stop, so we break out of the loop. This makes sense intuitively; if we've crossed the line, that means we're `params.earlyExit` inches or closer to the target point, so it's a good time to stop. (It might also be that we've overshot the target point, in which case it is also a good time to stop.)
 
 ### Calculating error and controller outputs
+
 This is quite a big chunk of code, but each part on its own is quite simple!
+
 ```cpp
 // calculate error
 const float adjustedRobotTheta = params.forwards ? pose.theta : pose.theta + M_PI;
@@ -453,21 +473,21 @@ prevLateralOut = lateralOut;
 infoSink()->debug("Angular Out: {}, Lateral Out: {}", angularOut, lateralOut);
 ```
 
-* `adjustedRobotTheta`: we just add π = 180 degrees to the robot's angle if it is driving in reverse, which makes sense as its front is flipped.
-* `angularError` & `lateralError`: the same calculations we did in our pseudocode. You can even see the cosine scaling in action!
-* We update our exit conditions so they can decide whether it's time to exit yet.
-* As expected, we update our PIDs (with a bit of angle conversions).
-* This `if` check:
+- `adjustedRobotTheta`: we just add π = 180 degrees to the robot's angle if it is driving in reverse, which makes sense as its front is flipped.
+- `angularError` & `lateralError`: the same calculations we did in our pseudocode. You can even see the cosine scaling in action!
+- We update our exit conditions so they can decide whether it's time to exit yet.
+- As expected, we update our PIDs (with a bit of angle conversions).
+- This `if` check:
   ```cpp
   if (close) angularOut = 0;
   ```
   implements the turn disabling we derived in Level 6.
-* We clamp both outputs to the range of `-maxSpeed` \<-> `maxSpeed`. Recall that we also implement settling behavior by setting `maxSpeed`.
-* We apply the `slew` function. Its exact purpose and implementation aren't relevant, but it basically prevents sudden acceleration/deceleration. It's disabled for the lateral output when settling (since we already have special behavior, discussed above, for settling).
-* There are a few more modifications to the lateral output:
-  * We apply clamping to ensure we're going in the right direction. This is somewhat accomplished in our pseudocode by clamping the lateral error, but that assumes the lateral PID function always returns positive outputs for positive inputs; LemLib's solution is more robust.
-  * We apply `params.minSpeed` according using some logic that seems complicated but is actually quite simple. We obviously don't apply `minSpeed` to the angular output (since having a "minimum turning speed" is not a good idea!).
-* Finally, we update `prevAngularOut` and `prevLateralOut`, and debug the outputs.
+- We clamp both outputs to the range of `-maxSpeed` \<-> `maxSpeed`. Recall that we also implement settling behavior by setting `maxSpeed`.
+- We apply the `slew` function. Its exact purpose and implementation aren't relevant, but it basically prevents sudden acceleration/deceleration. It's disabled for the lateral output when settling (since we already have special behavior, discussed above, for settling).
+- There are a few more modifications to the lateral output:
+  - We apply clamping to ensure we're going in the right direction. This is somewhat accomplished in our pseudocode by clamping the lateral error, but that assumes the lateral PID function always returns positive outputs for positive inputs; LemLib's solution is more robust.
+  - We apply `params.minSpeed` according using some logic that seems complicated but is actually quite simple. We obviously don't apply `minSpeed` to the angular output (since having a "minimum turning speed" is not a good idea!).
+- Finally, we update `prevAngularOut` and `prevLateralOut`, and debug the outputs.
 
 TL;DR: we calculate PID errors, then normalize and slew the PID outputs.
 
@@ -490,6 +510,7 @@ drivetrain.rightMotors->move(rightPower);
 // delay to save resources
 pros::delay(10);
 ```
+
 This part is relatively simple.
 
 The "ratio the speeds" section is analagous to the desaturation we did in Level 5, but uses `params.maxSpeed` instead of a constant upper limit.

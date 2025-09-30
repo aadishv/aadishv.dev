@@ -11,7 +11,7 @@ I'm a student. In other words, I don't have the money to pay for yet another AI 
 
 Just one small problem -- you have to pay a subscription for it...
 
-Interestingly, Raycast recently introduced [Bring Your Own Key](https://www.raycast.com/changelog/1-100-0) which looks pretty cool, but it only supports a few select providers. I tried Gemini for a bit and quickly hit rate limits on the free tier  of the API; I tried [gpt-oss-20b (free)](https://openrouter.ai/openai/gpt-oss-20b:free) from OpenRouter and somehow obtained a negative balance. Not the best luck.
+Interestingly, Raycast recently introduced [Bring Your Own Key](https://www.raycast.com/changelog/1-100-0) which looks pretty cool, but it only supports a few select providers. I tried Gemini for a bit and quickly hit rate limits on the free tier of the API; I tried [gpt-oss-20b (free)](https://openrouter.ai/openai/gpt-oss-20b:free) from OpenRouter and somehow obtained a negative balance. Not the best luck.
 
 ## Getting Copilot working
 
@@ -26,9 +26,11 @@ Luckily, hacking together a few other things happens to work super well!
 The first thing to note is that Raycast [very recently added support for Bring Your Own Models](https://www.raycast.com/changelog/1-102-0), released under the name of "Custom Providers." It basically lets you hook up a custom OpenAI API-compatible endpoint base and handles the rest for you. There are a few caveats that I'll get into later but it suffices.
 
 To get an OpenAI API-compatible endpoint I used the fabulous [ericc-ch/copilot-api](https://github.com/ericc-ch/copilot-api) ([blog post](https://dev.to/ericc/i-turned-github-copilot-into-openai-api-compatible-provider-1fb8) on how it was made). Extremely simple to set up, since it has clear instructions after running:
+
 ```sh
 bunx --bun copilot-api start
 ```
+
 (Yes, the `--bun` is necessary, I'm not sure why.)
 It then exposes an OpenAI-compatible endpoint at `http://localhost:4141/`. Unfortunately, that's not the end of our troubles.
 
@@ -37,6 +39,7 @@ Raycast's Custom Providers implementation doesn't natively support automatically
 ![Using Gemini for the JSON -> YAML conversion](assets/raycast-copilot.md/2.png)
 
 It did get a few things wrong -- the provider prefixes (`openai/`, `anthropic/`, etc.) aren't supposed to be in the model IDs which stumped me for a bit, but after removing them it worked well. I gutted most of the models to just ones that I might find useful, ending up with the following config:
+
 ```yaml
 providers:
   - id: copilot
@@ -104,6 +107,7 @@ providers:
           tools:
             supported: true
 ```
+
 Note my choice of models -- predominantly OpenAI models! I see increasingly less reasons to use Claude given how good (and cheaper) GPT-5 mini is for the same tasks, and I haven't used Grok Code Fast 1 enough to form a good opinion on it. GPT-4.1 is still a workhorse for tasks that require quick responses and/or tool calling. This will be the focus of one of my upcoming posts on AI.
 
 To use this config, open Raycast settings, go to the AI tab, scroll to the bottom "Experiments" section, and enable Custom Providers.
@@ -137,8 +141,9 @@ No API key required either, which makes it simple to set up.
 ## Why would I use this?
 
 Good question -- Google AI Mode is faster and looks at dozens of websites; the Copilot website itself provides a chat experience; where does Raycast AI fit in? I find two main uses of it:
-* **AI extensions**: Raycast extensions that also expose themselves as tools to the model. Exa Search is an AI extension, but there are many more useful ones.
-* **Fast chats**: I often don't have a browser open for whatever reason, or want to just chat with GPT-5 about something without needing to go to the Copilot website. Having the fast native Raycast experience is great in those cases.
+
+- **AI extensions**: Raycast extensions that also expose themselves as tools to the model. Exa Search is an AI extension, but there are many more useful ones.
+- **Fast chats**: I often don't have a browser open for whatever reason, or want to just chat with GPT-5 about something without needing to go to the Copilot website. Having the fast native Raycast experience is great in those cases.
 
 Here's another cool example of using AI extensions:
 
@@ -149,6 +154,7 @@ Overall, I'm happy I managed to get this to work -- not the most elegant solutio
 ## Update 9/15/25: It works with Codex!
 
 By setting it up as a custom provider, I can use my choice of models from Copilot in OpenAI's Codex CLI as well, without having to spend a penny on OpenAI credits. This can be achieved simply by putting the following in `~/.codex/config.toml`:
+
 ```toml
 model = "gpt-5-mini"
 model_provider = "copilot"

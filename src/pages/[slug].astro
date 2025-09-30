@@ -96,7 +96,7 @@ const isProject =
                   {headings.map((heading) => (
                     <div style={`margin-left: ${2 * heading.depth - 1}rem`}>
                       <a href={`#${heading.slug}`} class="text-sm">
-                        {heading.text}
+                        {heading.text.slice(0, -1)}
                       </a>
                     </div>
                   ))}

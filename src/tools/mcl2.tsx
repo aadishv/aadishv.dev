@@ -153,7 +153,8 @@ export function ParticlesLines3() {
     </div>
   );
 }
-const sumFor = (n: number) => data.slice(0, n).reduce((acc, d) => acc + (d.value / sum) * 100, 0);
+const sumFor = (n: number) =>
+  data.slice(0, n).reduce((acc, d) => acc + (d.value / sum) * 100, 0);
 const steps = [
   {
     sum: 0,
@@ -182,126 +183,139 @@ const steps = [
     line: 0,
     lineForList: 1,
     particle: 0,
-    message: "Since the current line's value is less than the running sum, we copy the current particle to our new list and move to the next line.",
+    message:
+      "Since the current line's value is less than the running sum, we copy the current particle to our new list and move to the next line.",
   },
   {
     sum: sumFor(1),
     line: 1,
     lineForList: 2,
     particle: 0,
-    message: "The second line's value is still less than the running sum, so we repeat."
+    message:
+      "The second line's value is still less than the running sum, so we repeat.",
   },
   {
     sum: sumFor(1),
     line: 2,
     lineForList: 2,
     particle: 0,
-    message: "The third line's value is more than the running sum, so we move on to the next particle."
+    message:
+      "The third line's value is more than the running sum, so we move on to the next particle.",
   },
   {
     sum: sumFor(2),
     line: 2,
     lineForList: 2,
     particle: 1,
-    message: "Update our running sum for the second particle."
+    message: "Update our running sum for the second particle.",
   },
   {
     sum: sumFor(2),
     line: 2,
     lineForList: 3,
     particle: 1,
-    message: "Now the third line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line."
+    message:
+      "Now the third line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
   },
   {
     sum: sumFor(2),
     line: 3,
     lineForList: 3,
     particle: 1,
-    message: "The fourth line's value is more than the running sum, so we move on to the next particle."
+    message:
+      "The fourth line's value is more than the running sum, so we move on to the next particle.",
   },
   {
     sum: sumFor(3),
     line: 3,
     lineForList: 3,
     particle: 2,
-    message: "Update our running sum for the third particle."
+    message: "Update our running sum for the third particle.",
   },
   {
     sum: sumFor(3),
     line: 3,
     lineForList: 4,
     particle: 2,
-    message: "Now the fourth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line."
+    message:
+      "Now the fourth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
   },
   {
     sum: sumFor(3),
     line: 4,
     lineForList: 4,
     particle: 2,
-    message: "The fifth line's value is more than the running sum, so we move on to the next particle."
+    message:
+      "The fifth line's value is more than the running sum, so we move on to the next particle.",
   },
   {
     sum: sumFor(3),
     line: 4,
     lineForList: 4,
     particle: 3,
-    message: "Update our running sum for the fourth particle."
+    message: "Update our running sum for the fourth particle.",
   },
   {
     sum: sumFor(4),
     line: 4,
     lineForList: 5,
     particle: 3,
-    message: "Now the fifth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line."
+    message:
+      "Now the fifth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
   },
   {
     sum: sumFor(4),
     line: 5,
     lineForList: 5,
     particle: 3,
-    message: "The sixth line's value is more than the running sum, so we move on to the next particle."
+    message:
+      "The sixth line's value is more than the running sum, so we move on to the next particle.",
   },
   {
     sum: sumFor(4),
     line: 5,
     lineForList: 5,
     particle: 4,
-    message: "Update our running sum for the fifth particle."
+    message: "Update our running sum for the fifth particle.",
   },
   {
     sum: sumFor(5),
     line: 5,
     lineForList: 6,
     particle: 4,
-    message: "Now the sixth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line."
+    message:
+      "Now the sixth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
   },
   {
     sum: sumFor(5),
     line: 6,
     lineForList: 6,
     particle: 4,
-    message: "The seventh line's value is more than the running sum, so we move on to the next particle."
+    message:
+      "The seventh line's value is more than the running sum, so we move on to the next particle.",
   },
   {
     sum: sumFor(6),
     line: 6,
     lineForList: 6,
     particle: 5,
-    message: "Update our running sum for the sixth particle."
+    message: "Update our running sum for the sixth particle.",
   },
   {
     sum: sumFor(6),
     line: 6,
     lineForList: 7,
     particle: 5,
-    message: "Now the seventh line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line."
+    message:
+      "Now the seventh line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
   },
   {
     sum: sumFor(7),
     line: null,
     lineForList: 7,
     particle: null,
-    message: "But wait, there is no next line! Voila - we've now successfully associated each line to its respective particle, and thus determined our list of new particles."
+    message:
+      "But wait, there is no next line! Voila - we've now successfully associated each line to its respective particle, and thus determined our list of new particles.",
   },
 ];
 export function StepThrough() {
@@ -354,7 +368,9 @@ export function StepThrough() {
         >
           <ArrowLeft />
         </Button>
-        <span className="my-auto mx-auto font-bold text-center">{state.message}</span>
+        <span className="my-auto mx-auto font-bold text-center">
+          {state.message}
+        </span>
         <Button
           variant="outline"
           disabled={step == steps.length - 1}

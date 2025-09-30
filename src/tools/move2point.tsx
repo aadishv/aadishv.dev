@@ -301,95 +301,98 @@ export function CosineViz() {
 }
 
 const calcState = {
-  "version": 11,
-  "randomSeed": "920ef7bdec58cc407472d29d5ed1d1db",
-  "graph": {
-    "viewport": {
-      "xmin": -9.725400457665888,
-      "ymin": -48.55331807780324,
-      "xmax": 10.274599542334112,
-      "ymax": 50.24668192219677
+  version: 11,
+  randomSeed: "920ef7bdec58cc407472d29d5ed1d1db",
+  graph: {
+    viewport: {
+      xmin: -9.725400457665888,
+      ymin: -48.55331807780324,
+      xmax: 10.274599542334112,
+      ymax: 50.24668192219677,
     },
-    "__v12ViewportLatexStash": {
-      "xmin": "-9.725400457665888",
-      "xmax": "10.274599542334112",
-      "ymin": "-48.55331807780324",
-      "ymax": "50.24668192219677"
-    }
+    __v12ViewportLatexStash: {
+      xmin: "-9.725400457665888",
+      xmax: "10.274599542334112",
+      ymin: "-48.55331807780324",
+      ymax: "50.24668192219677",
+    },
   },
-  "expressions": {
-    "list": [
+  expressions: {
+    list: [
       {
-        "type": "text",
-        "id": "9",
-        "text": "(pose.y - target.y) * -sin(initialAngle) <=\n                              (pose.x - target.x) * cos(initialAngle) + params.earlyExitRange"
+        type: "text",
+        id: "9",
+        text: "(pose.y - target.y) * -sin(initialAngle) <=\n                              (pose.x - target.x) * cos(initialAngle) + params.earlyExitRange",
       },
       {
-        "type": "expression",
-        "id": "1",
-        "color": "#c74440",
-        "latex": "p=\\left(0,0\\right)",
-        "showLabel": true,
-        "label": "Robot",
-        "dragMode": "NONE"
+        type: "expression",
+        id: "1",
+        color: "#c74440",
+        latex: "p=\\left(0,0\\right)",
+        showLabel: true,
+        label: "Robot",
+        dragMode: "NONE",
       },
       {
-        "type": "expression",
-        "id": "2",
-        "color": "#2d70b3",
-        "latex": "t=\\left(-1.6,4.28\\right)",
-        "showLabel": true,
-        "label": "Target point"
+        type: "expression",
+        id: "2",
+        color: "#2d70b3",
+        latex: "t=\\left(-1.6,4.28\\right)",
+        showLabel: true,
+        label: "Target point",
       },
       {
-        "type": "expression",
-        "id": "4",
-        "color": "#6042a6",
-        "latex": "a_{1}=\\operatorname{mod}\\left(\\arctan\\left(\\frac{t.y-p.y}{t.x-p.x}\\right)+\\pi,\\pi\\right)"
+        type: "expression",
+        id: "4",
+        color: "#6042a6",
+        latex:
+          "a_{1}=\\operatorname{mod}\\left(\\arctan\\left(\\frac{t.y-p.y}{t.x-p.x}\\right)+\\pi,\\pi\\right)",
       },
       {
-        "type": "expression",
-        "id": "6",
-        "color": "#c74440",
-        "latex": "a=a_{1}\\cdot\\left\\{t.y<p.y:-1,1\\right\\}"
+        type: "expression",
+        id: "6",
+        color: "#c74440",
+        latex: "a=a_{1}\\cdot\\left\\{t.y<p.y:-1,1\\right\\}",
       },
       {
-        "type": "expression",
-        "id": "3",
-        "color": "#388c46",
-        "latex": "r=\\left\\{0<\\theta<a\\right\\}",
-        "polarDomain": {
-          "min": "",
-          "max": "\\left\\{a\\le0:0,a\\right\\}"
-        }
+        type: "expression",
+        id: "3",
+        color: "#388c46",
+        latex: "r=\\left\\{0<\\theta<a\\right\\}",
+        polarDomain: {
+          min: "",
+          max: "\\left\\{a\\le0:0,a\\right\\}",
+        },
       },
       {
-        "type": "expression",
-        "id": "7",
-        "color": "#388c46",
-        "latex": "r=1\\left\\{a<0\\right\\}",
-        "polarDomain": {
-          "min": "-\\pi-a",
-          "max": "0"
-        }
+        type: "expression",
+        id: "7",
+        color: "#388c46",
+        latex: "r=1\\left\\{a<0\\right\\}",
+        polarDomain: {
+          min: "-\\pi-a",
+          max: "0",
+        },
       },
       {
-        "type": "expression",
-        "id": "8",
-        "color": "#2d70b3",
-        "latex": "y=\\tan\\left(a_{1}\\right)x\\left\\{y>\\left\\{t.y<p.y:-\\infty,0\\right\\}\\right\\}\\left\\{y<\\left\\{t.y<p.y:0,\\infty\\right\\}\\right\\}",
-        "lineStyle": "DASHED"
+        type: "expression",
+        id: "8",
+        color: "#2d70b3",
+        latex:
+          "y=\\tan\\left(a_{1}\\right)x\\left\\{y>\\left\\{t.y<p.y:-\\infty,0\\right\\}\\right\\}\\left\\{y<\\left\\{t.y<p.y:0,\\infty\\right\\}\\right\\}",
+        lineStyle: "DASHED",
       },
       {
-        "type": "expression",
-        "id": "10",
-        "color": "#6042a6",
-        "latex": "\\left\\{t.y<p.y:1,-1\\right\\}\\left(y-t.y\\right)\\sin\\left(a_{1}\\right)\\le\\left\\{t.y<p.y:-1,1\\right\\}\\left(x-t.x\\right)\\cos\\left(a_{1}\\right)+1"
-      }
-    ]
+        type: "expression",
+        id: "10",
+        color: "#6042a6",
+        latex:
+          "\\left\\{t.y<p.y:1,-1\\right\\}\\left(y-t.y\\right)\\sin\\left(a_{1}\\right)\\le\\left\\{t.y<p.y:-1,1\\right\\}\\left(x-t.x\\right)\\cos\\left(a_{1}\\right)+1",
+      },
+    ],
   },
-  "includeFunctionParametersInRandomSeed": true,
-  "doNotMigrateMovablePointStyle": true
+  includeFunctionParametersInRandomSeed: true,
+  doNotMigrateMovablePointStyle: true,
 };
 
 export function DesmosSide() {
@@ -400,19 +403,35 @@ export function DesmosSide() {
 
   useEffect(() => {
     if (!ref.current) return;
-     let calculator: any;
-     (async () => {
-       // @ts-ignore - @types/desmos declares globals instead of a module; silence module-type error and treat import as any
-       const DesmosModule: any = await import("desmos");
-       calculator = DesmosModule.default
-         ? DesmosModule.default.GraphingCalculator(ref.current, { expressions: false, lockViewport: true })
-         : DesmosModule.GraphingCalculator(ref.current, { expressions: false, lockViewport: true });
-       calculator.setState(calcState);
-     })();
-     return () => {
-       if (calculator && calculator.destroy) calculator.destroy();
-     };
+    let calculator: any;
+    (async () => {
+      // @ts-ignore - @types/desmos declares globals instead of a module; silence module-type error and treat import as any
+      const DesmosModule: any = await import("desmos");
+      calculator = DesmosModule.default
+        ? DesmosModule.default.GraphingCalculator(ref.current, {
+            expressions: false,
+            lockViewport: true,
+          })
+        : DesmosModule.GraphingCalculator(ref.current, {
+            expressions: false,
+            lockViewport: true,
+          });
+      calculator.setState(calcState);
+    })();
+    return () => {
+      if (calculator && calculator.destroy) calculator.destroy();
+    };
   }, []);
 
-  return <div ref={ref} style={{ width: "600px", height: "400px", marginLeft: "auto", marginRight: "auto" }} />;
+  return (
+    <div
+      ref={ref}
+      style={{
+        width: "600px",
+        height: "400px",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
+    />
+  );
 }

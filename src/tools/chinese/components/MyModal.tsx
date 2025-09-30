@@ -59,7 +59,11 @@ const MyModal: React.FC<MyModalProps> = ({
     if (activeTab !== "listen") return null;
     return Object.entries(history.listen).map(([id, value]) => {
       const label = sentenceIndex[id] || id;
-      return { id, label, value } as { id: string; label: string; value: [number, string] };
+      return { id, label, value } as {
+        id: string;
+        label: string;
+        value: [number, string];
+      };
     });
   }, [history.listen, sentenceIndex, activeTab]);
 

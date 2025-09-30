@@ -26,29 +26,27 @@ export default function Comments({ slug }: CommentsProps) {
   return (
     <>
       <hr />
-        <h3>Comments</h3>
-        <div className="flex flex-col gap-4">
-          {comments?.map((comment) => (
-            <div key={comment._id}>
-              <p>{comment.body}</p>
-              <small className="text-muted-foreground">
-                {new Date(comment._creationTime).toLocaleString()}
-              </small>
-              <hr className="mx-20" />
-            </div>
-          ))}
-          <form onSubmit={handleSubmit} className="flex gap-2">
-            <Input
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              placeholder="Add a comment..."
-              className="mb-2"
-            />
-            <Button type="submit" disabled={!body.trim()} className="min-h-full">
-              Submit
-            </Button>
-          </form>
-        </div>
+      <h3>Comments</h3>
+      <div className="flex flex-col gap-4">
+        {comments?.map((comment) => (
+          <div key={comment._id}>
+            <p>{comment.body}</p>
+            <small className="text-muted-foreground">
+              {new Date(comment._creationTime).toLocaleString()}
+            </small>
+          </div>
+        ))}
+        <form onSubmit={handleSubmit} className="flex gap-2 mt-4">
+          <Input
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            placeholder="write a comment!"
+          />
+          <Button type="submit" disabled={!body.trim()} className="min-h-full">
+            Submit
+          </Button>
+        </form>
+      </div>
     </>
   );
 }

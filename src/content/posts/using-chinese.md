@@ -48,7 +48,6 @@ Each character's status is represented by a colored indicator:
 Your traffic light status changes based on two factors:
 
 1. **Number of mistakes made**:
-
    - **Green to Yellow**: After approximately 5 mistakes in character writing mode or 2 mistakes in pinyin mode
    - **Yellow to Red**: After approximately 7 additional mistakes in character writing mode or 2 additional mistakes in pinyin mode
 

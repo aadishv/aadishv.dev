@@ -32,20 +32,20 @@ Despite this, using Python in V5RC is generally not considered a great idea. The
 
 I decided to fix all three of these in one fell swoop with a new project I have been working on for a few weeks, **DishPy.** (Yes, it is a pun on my name!)
 
-* DishPy adds multi-file support by ~~using dark magic~~ messing around with the AST of your code to combine everything into one file.
-* It has a simple package model inspired by PROS, with decentralized packages maintaining metadata and DishPy users having a local registry of packages on their computers.
-* DishPy also has a simple CLI (also written in Python!) that allows you to build and upload DishPy projects from any editor (or, if you are a vim lover, from the terminal).
-* The best part is that DishPy **just works.** Create a new DishPy project and paste in your current Python code — you can immediately start building and uploading it! Unlike PROS or vexide, which implement their own kernel, DishPy binds to the same Micropython VM as VEXcode Python does, so you can continue using the same APIs as you are used to.  We also auto-generate [docs](https://aadishv.github.io/dishpy/VEX%20SDK/) for the API for easy reference.
-* It is all OSS and on my GitHub.
+- DishPy adds multi-file support by ~~using dark magic~~ messing around with the AST of your code to combine everything into one file.
+- It has a simple package model inspired by PROS, with decentralized packages maintaining metadata and DishPy users having a local registry of packages on their computers.
+- DishPy also has a simple CLI (also written in Python!) that allows you to build and upload DishPy projects from any editor (or, if you are a vim lover, from the terminal).
+- The best part is that DishPy **just works.** Create a new DishPy project and paste in your current Python code — you can immediately start building and uploading it! Unlike PROS or vexide, which implement their own kernel, DishPy binds to the same Micropython VM as VEXcode Python does, so you can continue using the same APIs as you are used to. We also auto-generate [docs](https://aadishv.github.io/dishpy/VEX%20SDK/) for the API for easy reference.
+- It is all OSS and on my GitHub.
 
 I hope you’ll try out DishPy and maybe even open an issue if you find one (or ping me on VTOW)!
 
 **Quick links**
 
-* Install from PyPI — https://pypi.org/project/dishpy/
-* Github repo — https://github.com/aadishv/dishpy
-* Docs — https://aadishv.github.io/dishpy/
-  * Tutorial for beginners — https://aadishv.github.io/dishpy/Tutorial/1_installation/
+- Install from PyPI — https://pypi.org/project/dishpy/
+- Github repo — https://github.com/aadishv/dishpy
+- Docs — https://aadishv.github.io/dishpy/
+  - Tutorial for beginners — https://aadishv.github.io/dishpy/Tutorial/1_installation/
 
 Thanks,
 Aadish (315P V5RC; 3151A VAIRC)

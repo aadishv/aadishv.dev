@@ -26,13 +26,13 @@ description: ""
 - Created and maintain [DishPy](https://github.com/aadishv/dishpy) (Python development tool for VEX offering a significant advantage over the VEX Micropython runtime, in competitive use by many teams). [[docs](https://aadishv.github.io/dishpy) [blog post](/dishpy-blog)]
 - Designed, wrote, and maintain [website](https://venice.fibn.cc/) for the [Venice open source Micropython runtime for VEX V5](https://github.com/venice-v5/). Active contributor to [Venice CLI](https://github.com/venice-v5/venice-cli), involving low-level serial code.
 - Wrote [several](/mcl/) [blog posts](/mcl-2x/) helping dozens of fellow competitors across the
-  * US,
-  * Canada,
-  * Hong Kong,
-  * Thailand,
-  * Romania,
-  * the Czech Republic,
-  * and more
+  - US,
+  - Canada,
+  - Hong Kong,
+  - Thailand,
+  - Romania,
+  - the Czech Republic,
+  - and more
 
   with advanced topics in VEX.
 

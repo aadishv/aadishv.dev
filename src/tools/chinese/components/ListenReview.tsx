@@ -7,10 +7,19 @@ import { toast } from "sonner";
 
 function isChineseVoice(v: SpeechSynthesisVoice) {
   const l = (v.lang || "").toLowerCase();
-  return l.startsWith("zh") || l.includes("zh-cn") || l.includes("zh-hk") || l.includes("zh-tw");
+  return (
+    l.startsWith("zh") ||
+    l.includes("zh-cn") ||
+    l.includes("zh-hk") ||
+    l.includes("zh-tw")
+  );
 }
 
-export default function ListenReview({ persistentId }: { persistentId: string }) {
+export default function ListenReview({
+  persistentId,
+}: {
+  persistentId: string;
+}) {
   const sentences = useSelector(store, (s) => s.context.sentences);
   const enabledLessons = useSelector(store, (s) => s.context.enabledLessons);
   const current = sentences[0];
@@ -41,7 +50,9 @@ export default function ListenReview({ persistentId }: { persistentId: string })
 
   const speak = () => {
     if (!voice) return;
-    const u = new SpeechSynthesisUtterance(current.words.map((w) => w.character).join(""));
+    const u = new SpeechSynthesisUtterance(
+      current.words.map((w) => w.character).join(""),
+    );
     u.voice = voice;
     u.rate = rate;
     window.speechSynthesis.cancel();
@@ -53,11 +64,7 @@ export default function ListenReview({ persistentId }: { persistentId: string })
   const pool = useMemo(() => {
     const eligible = allData.filter((s) => enabledLessons.includes(s.lesson));
     const defs = Array.from(
-      new Set(
-        eligible
-          .map((s) => s.def)
-          .filter((d) => d !== current.def),
-      ),
+      new Set(eligible.map((s) => s.def).filter((d) => d !== current.def)),
     );
     const shuffled = [...defs].sort(() => Math.random() - 0.5).slice(0, 3);
     const opts = [...shuffled, current.def].sort(() => Math.random() - 0.5);
@@ -75,7 +82,12 @@ export default function ListenReview({ persistentId }: { persistentId: string })
     const correct = selected === current.def;
     if (attempts === 0) {
       if (correct) {
-        store.trigger.updateCharacter({ character: current.id, newState: CharState.green, id: persistentId, mode: "listen" as any });
+        store.trigger.updateCharacter({
+          character: current.id,
+          newState: CharState.green,
+          id: persistentId,
+          mode: "listen" as any,
+        });
         setCompleted(true);
       } else {
         toast.error("wrong choice");
@@ -84,11 +96,21 @@ export default function ListenReview({ persistentId }: { persistentId: string })
       }
     } else {
       if (correct) {
-        store.trigger.updateCharacter({ character: current.id, newState: CharState.yellow, id: persistentId, mode: "listen" as any });
+        store.trigger.updateCharacter({
+          character: current.id,
+          newState: CharState.yellow,
+          id: persistentId,
+          mode: "listen" as any,
+        });
       } else {
         toast.error("wrong choice");
         setState(CharState.red);
-        store.trigger.updateCharacter({ character: current.id, newState: CharState.red, id: persistentId, mode: "listen" as any });
+        store.trigger.updateCharacter({
+          character: current.id,
+          newState: CharState.red,
+          id: persistentId,
+          mode: "listen" as any,
+        });
       }
       setCompleted(true);
     }
@@ -97,16 +119,33 @@ export default function ListenReview({ persistentId }: { persistentId: string })
   return (
     <div className="w-full flex flex-col items-center gap-4">
       <div className="flex items-center gap-4">
-        <button className="text-black/50 lowercase text-base" onClick={speak}>play</button>
+        <button className="text-black/50 lowercase text-base" onClick={speak}>
+          play
+        </button>
         <div className="flex items-center gap-2 text-base text-black/60">
           <span>speed</span>
-          <input type="range" min={0.6} max={1.4} step={0.1} value={rate} onChange={(e) => setRate(parseFloat(e.target.value))} />
+          <input
+            type="range"
+            min={0.6}
+            max={1.4}
+            step={0.1}
+            value={rate}
+            onChange={(e) => setRate(parseFloat(e.target.value))}
+          />
         </div>
         <div className="flex items-center gap-2 text-base text-black/60">
           <span>voice</span>
-          <select className="bg-transparent underline" value={voice?.name || ""} onChange={(e) => setVoice(voices.find(v => v.name === e.target.value) || null)}>
+          <select
+            className="bg-transparent underline"
+            value={voice?.name || ""}
+            onChange={(e) =>
+              setVoice(voices.find((v) => v.name === e.target.value) || null)
+            }
+          >
             {voices.map((v) => (
-              <option key={v.name} value={v.name}>{v.name}</option>
+              <option key={v.name} value={v.name}>
+                {v.name}
+              </option>
             ))}
           </select>
         </div>
@@ -134,7 +173,12 @@ export default function ListenReview({ persistentId }: { persistentId: string })
               className={cls}
               onClick={() => !completed && setSelected(opt)}
             >
-              <input type="radio" className="mr-2" checked={selected === opt} readOnly />
+              <input
+                type="radio"
+                className="mr-2"
+                checked={selected === opt}
+                readOnly
+              />
               <span className="text-lg text-black/80">{opt}</span>
             </div>
           );

@@ -25,9 +25,8 @@ basically my theory is that the other personality is Blurryface
 > The Outside: why he is the only bandito/person who is able to possess the bishops
 > Polarize: idk maybe opposite sides are him/nico?
 > The Contract: seems to alternate between the two:
->   clancy: "I chеck the doors, check the windows, and pull the blinds / ... / I have a feeling that necromancer's outside"
->   nico: "I check the clock, wondering what he'll pull this time / And I'm just tryna stay quiet"
-
+> clancy: "I chеck the doors, check the windows, and pull the blinds / ... / I have a feeling that necromancer's outside"
+> nico: "I check the clock, wondering what he'll pull this time / And I'm just tryna stay quiet"
 
 > another interesting thing about the dual personality theory, a LOT of lore-y songs have two lines/scenes:
 > paladin strait: actual battle vs. the sitting on a cliff
@@ -52,26 +51,20 @@ Well, it happened.
 I now use [Lyrix](https://github.com/aadishv/lyrix/), which is a simple tool I made for commenting on song lyrics. Below are my comments: [full share link](https://lyrix-eight.vercel.app/song?id=24004028&shared=21bc22). And yes, the mobile experience is terrible.
 
 Songs that I have connected so far:
-* overcompensate
-* holding on to you
-* truce
-* migraine
-* heavydirtysoul
-* morph
-* neon gravestones?
-* goner
-* not today
-* the contract
+
+- overcompensate
+- holding on to you
+- truce
+- migraine
+- heavydirtysoul
+- morph
+- neon gravestones?
+- goner
+- not today
+- the contract
 
 <iframe src="https://lyrix-eight.vercel.app/song?id=24004028&shared=21bc22" className="w-full h-[50rem] m-5 border-0"></iframe>
 
 My "Blurryface is an alter ego" theory is at least partially confirmed -- not in a way that I would have liked, but in a way that provides a fitting ending to this decade-old story. I talk in my comments about how Not Today, The Contract, Goner, etc. can be thought of as dually narrated by Clancy & Nico.
-
-
-
-
-
-
-
 
 |-/

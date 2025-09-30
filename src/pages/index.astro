@@ -32,18 +32,25 @@ const entries = allEntries
     <span>
       <b>Aadish Verma</b>
       <p>
-          I’m Aadish, a freshman at Stanford Online High School who builds connected hardware-software systems: VEX robots, AI tools, and developer tooling that make practical problems easier to solve.
+        I’m Aadish, a freshman at Stanford Online High School who builds
+        connected hardware-software systems: VEX robots, AI tools, and developer
+        tooling that make practical problems easier to solve.
       </p>
       <p>
-          Lately I’ve been focused on robotics and applied ML: custom CV and localization work, GPU-accelerated pipelines, and integrating AI into student-facing tools. I also ship small utilities and extensions (one has 100+ users), lead winning hackathon teams, and contribute fixes and tools to open-source projects used by other competitors and developers.
+        Lately I’ve been focused on robotics and applied ML: custom CV and
+        localization work, GPU-accelerated pipelines, and integrating AI into
+        student-facing tools. I also ship small utilities and extensions (one
+        has 100+ users), lead winning hackathon teams, and contribute fixes and
+        tools to open-source projects used by other competitors and developers.
       </p>
       <p>
-          I care about performance, reliability, and clear interfaces that make complex systems feel simple. If you want the longer story, my projects and write-ups are available, or just reach out!
+        I care about performance, reliability, and clear interfaces that make
+        complex systems feel simple. If you want the longer story, my projects
+        and write-ups are available, or just reach out!
       </p>
       <p>
-          Check out my <a href="/background"
-          >programming background</a
-        > for a few notable things I've done.
+        Check out my <a href="/background">programming background</a> for a few notable
+        things I've done.
       </p>
 
       <p>
@@ -80,7 +87,9 @@ const entries = allEntries
                 </Badge>
               ))}
             </a>
-            <time class="block" datetime={entry.data.date}>{formatDate(entry.data.date)}</time>
+            <time class="block" datetime={entry.data.date}>
+              {formatDate(entry.data.date)}
+            </time>
             {entry.data.description && (
               <p class="text-sm text-muted-foreground line-clamp-3">
                 {entry.data.description}

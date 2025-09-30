@@ -28,12 +28,12 @@ export const saveToStorage = (data: any) => {
   }
 };
 export type AppMode = "pinyin" | "character" | "listen";
- 
- type HistoryType = {
-   character: Record<string, [CharState, string]>;
-   pinyin: Record<string, [CharState, string]>;
-   listen: Record<string, [CharState, string]>;
- };
+
+type HistoryType = {
+  character: Record<string, [CharState, string]>;
+  pinyin: Record<string, [CharState, string]>;
+  listen: Record<string, [CharState, string]>;
+};
 
 const defaultHistory: HistoryType = { character: {}, pinyin: {}, listen: {} };
 
@@ -61,14 +61,18 @@ const storedData = loadFromStorage() as {
 const allLessons = getAllLessons();
 
 const initialContext = {
-  history: ({ ...defaultHistory, ...(storedData?.history || {}) } as HistoryType),
+  history: { ...defaultHistory, ...(storedData?.history || {}) } as HistoryType,
   sentences:
     storedData?.sentences ??
     ([...getSentences()].sort(() => 0.5 - Math.random()) as Sentence[]),
   sessions: (storedData?.sessions ?? {}) as Record<string, string>,
   completedCount: 0, // Always starts at 0 and is not persisted
   enabledLessons: storedData?.enabledLessons ?? allLessons, // Default to all lessons enabled
-  enabledModes: (storedData?.enabledModes ?? ["character", "pinyin", "listen"]) as AppMode[],
+  enabledModes: (storedData?.enabledModes ?? [
+    "character",
+    "pinyin",
+    "listen",
+  ]) as AppMode[],
   currentQuestionMode: null as AppMode | null,
   sentenceIndex: (storedData?.sentenceIndex ?? {}) as Record<string, string>,
 };

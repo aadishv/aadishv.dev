@@ -5,16 +5,20 @@ categories: ["ai", "TIL"]
 description: ""
 ---
 
-​	Recently (today), I decided to switch from YouTube Music to Apple Music. However, being a broke student, I don't obviously want to pay for it. My family also has YT Music Premium, which furthers the case.
+​ Recently (today), I decided to switch from YouTube Music to Apple Music. However, being a broke student, I don't obviously want to pay for it. My family also has YT Music Premium, which furthers the case.
 
-​	I thus brainstormed a (purportedly "brilliant") plan to get my songs onto Apple Music. The key note is that basically all of my listens nowadays are for Twenty One Pilots songs (don't ask), so I could just use one of the many YouTube video downloaders out there to download their five major albums (after getting signed).
+​ I thus brainstormed a (purportedly "brilliant") plan to get my songs onto Apple Music. The key note is that basically all of my listens nowadays are for Twenty One Pilots songs (don't ask), so I could just use one of the many YouTube video downloaders out there to download their five major albums (after getting signed).
 
-​	I ended up using a *lot* of AI help along the way!
+​ I ended up using a _lot_ of AI help along the way!
+
 ## Downloading the videos
-​	After doing a bit more research, I found [yt-dlp](https://github.com/yt-dlp/yt-dlp) to be a good option as a terminal downloader CLI. This was 11pm, so I was not willing to dig through docs. So instead, I just opened the Zed assistant and set it to use GPT-5 via Copilot. I then pasted in the whole README of yt-dlp and prompted:
+
+​ After doing a bit more research, I found [yt-dlp](https://github.com/yt-dlp/yt-dlp) to be a good option as a terminal downloader CLI. This was 11pm, so I was not willing to dig through docs. So instead, I just opened the Zed assistant and set it to use GPT-5 via Copilot. I then pasted in the whole README of yt-dlp and prompted:
+
 > Write a command to, given a YouTube/YT Music playlist link, download all of its videos in audio format. Maybe also strip the thumbnail if possible
 
 And it worked perfectly!
+
 ```markdown
 Use one of these, replacing <playlist_url> with your YouTube or YouTube Music playlist link.
 
@@ -28,17 +32,22 @@ Optional: also strip all embedded metadata (including any cover art) from the ou
 ... --ppa "ExtractAudio+ffmpeg:-map_metadata -1"
 
 Notes:
+
 - -f "ba/b" prefers audio-only formats (faster, smaller); falls back to best if needed.
 - --no-embed-thumbnail is the default; included here for clarity.
 - Output path includes a playlist folder and a zero-padded index. Adjust as you like.
 ```
-​	I then proceeded to boot up 5 Ghostty terminals to run the commands in parallel, since my assumption was that most of the time used by the CLI would just be fetching the videos, with less time actually decoding and extracting them. For this, I copied-and-pasted the YouTube Music URLs by hand since it was fast enough. Each command looked something like this:
+
+​ I then proceeded to boot up 5 Ghostty terminals to run the commands in parallel, since my assumption was that most of the time used by the CLI would just be fetching the videos, with less time actually decoding and extracting them. For this, I copied-and-pasted the YouTube Music URLs by hand since it was fast enough. Each command looked something like this:
+
 ```zsh
 yt-dlp -f "ba/b" -x --audio-format mp3 --audio-quality 0 --no-embed-thumbnail -o "Blurryface/%(title)s.%(ext)s" "https://music.youtube.com/playlist?list=OLAK5uy_nBZwH-qHNY6l8n4EHnjkhYO8p3lcukTYI" && say done
 ```
+
 This way, I could just drag the folders into Apple Music and use the "Get Album Artwork" feature to automatically find and update the album art of each album.
 ![](assets/automation/1.png)
 The first major issue that arose was that songs weren't ordered properly -- they were arranged alphabetically! With this setup, the Clancy tracklist would be:
+
 1. At the Risk of Feeling Dumb
 2. Backslide
 3. Lavish
@@ -52,37 +61,46 @@ The first major issue that arose was that songs weren't ordered properly -- they
 11. Snap Back
 12. The Craving (Jenna's Version)
 13. Vignette
+
 ## Ordering the tracklists
-​	One way to correctly order the albums, would be, for each song:
+
+​ One way to correctly order the albums, would be, for each song:
+
 1. Right click on the song and select "Get info"
 2. Clicking on the tab for track number
 3. Figuring out the number of the track in the ordered album
 4. Inputting that number
 
-​	That much brainpower is absolutely impossible at 11pm! So instead, I fired up a Gemini CLI instance.
+​ That much brainpower is absolutely impossible at 11pm! So instead, I fired up a Gemini CLI instance.
 
 > Why did I use Gemini CLI here?
 >
 > TL;DR I don't really know. It might just be because I was already in Ghostty so using a CLI was the fastest option. I chose not to use gpt-5 since, while it is really smart, I don't want to wait that long for an operation that isn't that hard!
 
 My initial prompt was:
+
 > Can you figure out how to edit the metadata of the song files here to set their track numbers in the right order? thanks!
 
 Gemini promptly discovered that I have ffmpeg installed and proceed to use that to spawn multiple concurrent terminal requests to edit the metadata. Worked well! I changed the prompt a bit to add some clarifications and ensure that it would continue to use that method:
+
 > Can you figure out how to edit the metadata of the song files here to set their track numbers in the right order? thanks! Use ffmpeg. Set the album and artist name as well -- artist should be "twenty one pilots" with no caps. They should be in the right order for the album​
 
 and promptly proceeded to spawn 4 more Gemini CLI agents to run. I slightly underestimated the performance hit of running 4 heavy Node processes and 50 instances of ffmpeg on my aging laptop (it was literally unusable while the commands were executing) but it ended up working.
 
 Just one more big bug.
+
 ## Updating song durations
-​	One more issue: all of the song durations didn't match their actual audio data! For example, Mulberry Street was over 8 minutes, which is obviously outrageous.
 
-​	After playing some of the songs I found that Apple Music correctly jumps to the next song right after the exact audio ended, so it was purely an issue in the metadata. Nothing that a little gpt-5 can't handle!
+​ One more issue: all of the song durations didn't match their actual audio data! For example, Mulberry Street was over 8 minutes, which is obviously outrageous.
 
-​	I hopped back to my Zed instance, fired up GPT-5 in the assistant and prompted:
+​ After playing some of the songs I found that Apple Music correctly jumps to the next song right after the exact audio ended, so it was purely an issue in the metadata. Nothing that a little gpt-5 can't handle!
+
+​ I hopped back to my Zed instance, fired up GPT-5 in the assistant and prompted:
+
 > There are a lot of mp3 files in this directory whose metadata's length doesn't match the actual audio length. Can you write a Python or Bash script to fix their metadata and run it?
 
 It wrote and ran the following script -- once again, worked flawlessly.
+
 ```bash
 #!/usr/bin/env bash
 # fix_mp3_duration.sh
@@ -287,6 +305,7 @@ done < <(gather_files "$@")
 
 exit "$EXIT_CODE"
 ```
+
 And no, I have no clue what the code actually does. For all I know, it leaks my personal data to attackers. But I trust GPT-5 to exactly follow my instructions (sometimes to a fault! it will do something stupid without question because I told it to).
 
 After a bit more cleanup, I finally could drag my folders into Apple Music and live happily ever after.
@@ -373,7 +392,9 @@ for (const file of globSync("../Media.localized/Music/**/*.mp3")) {
   }
 }
 ```
+
 I additionally got GPT-5 to write me a simple script for downloading a song. (The previous method of copying and pasting commands was unusable, especially as I would add one song every other day during the Breach release!)
+
 ```sh
 # download.sh
 #!/bin/bash
@@ -390,6 +411,7 @@ URL="$1"
 
 yt-dlp -f "ba/b" -x --audio-format mp3 --audio-quality 0 --no-embed-thumbnail -o "%(title)s.%(ext)s" "$URL"
 ```
+
 This ended up working great, and it's still what I use for the majority of my music listening! I've even started adding some songs from other artists.
 
 Yes, I'm frugalmaxxing, but I love it :P

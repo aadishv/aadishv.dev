@@ -24,7 +24,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
   const toggleMode = (m: AppMode) => {
     setSelectedModes((prev) => {
-      const next = prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m];
+      const next = prev.includes(m)
+        ? prev.filter((x) => x !== m)
+        : [...prev, m];
       if (next.length === 0) {
         toast.error("At least one mode must remain enabled");
         return prev;

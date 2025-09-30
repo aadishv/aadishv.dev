@@ -24,7 +24,7 @@ export default defineConfig({
       [
         rehypeAutolinkHeadings,
         {
-          behavior: "before",
+          behavior: "append",
           content: {
             type: "text",
             value: `#`,
