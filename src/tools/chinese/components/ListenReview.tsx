@@ -185,7 +185,11 @@ export default function ListenReview({
         })}
       </div>
 
-      <div>
+      <div
+        className={`transition-opacity duration-500 ${
+          completed ? "opacity-0" : "opacity-100"
+        }`}
+      >
         <button className="text-black/70" onClick={onSubmit}>
           {completed ? "done" : attempts === 0 ? "submit" : "try again"}
         </button>

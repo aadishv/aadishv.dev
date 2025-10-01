@@ -39,9 +39,7 @@ export function SentenceDetails() {
   return (
     <div className="text-xl flex flex-col">
       <span className="text-black/50">{sentence.lesson}</span>
-      {listening ? (
-        <span className="text-black/40 select-none">[nice try]</span>
-      ) : revealMeaning ? (
+      {!listening && (revealMeaning ? (
         sentence.def
       ) : (
         <button
@@ -50,7 +48,7 @@ export function SentenceDetails() {
         >
           click to reveal english definition
         </button>
-      )}
+      ))}
     </div>
   );
 }
