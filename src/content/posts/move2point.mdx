@@ -286,20 +286,18 @@ This code might not look like any C++ code you've seen or written before. There 
 - LemLib has its own ecosystem of internal tooling (loggers, utility classes, etc.) that are used everywhere. I'll skip over most of these since they aren't helpful and just focus on the math/logic.
 - LemLib is infinitely configurable, so it supports a large number of customizable parameters for the move to point implementation:
   - `params.forwards` -- false if the robot is only allowed to go backwards. If false, modifications are made to the math so that it works for going in reverse.
-  - `lateralSmallExit` and `lateralLargeExit` are instances of a LemLib `ExitCondition` class, which basically say wait until the error is below a certain threshold for a certain amount of time:
+  - `lateralSmallExit` and `lateralLargeExit` are instances of a LemLib `ExitCondition` class, which basically say wait until the error is below a certain threshold for a certain amount of time. Furthermore, there is also a `timeout` param. Why do we need three different ways of figuring out when to exit?!
     - `lateralSmallExit` waits until the lateral error is below a small threshold for a short amount of time.
-    - `lateralLargeExit` waits until the lateral error is below a large threshold for a large amount of time.
-      Why are two exit conditions needed? No one really knows.
-      ![text message exchange](assets/move2point.md/10.png)
-      _Background: [andrew](https://github.com/meisZWFLZ/) is a LemLib maintainer. The diagram he sent in this screenshot is pretty helpful for understanding exit conditions, I recommend taking a look!_
-  - `params.earlyExitRange`: this basically says "stop once I'm `earlyExitRange` away from the target." This is commonly used in motion chaining, where multiple motions are executed consecutively with smooth transitions (no stops) between them. For regular motions, it is set by default to 0 inches ("only stop if I am exactly at the target, or have overshot it").
+    - `lateralLargeExit` waits until the lateral error is below a large threshold for a large amount of time. This is basically in case, for some reason, the robot get stucks at a particular error; e.g., maybe there is an obstacle preventing it from getting close enough to trigger the `lateralSmallExit`.
+    - Finally, `timeout` is a last resort; it's a (generally much larger) time after which, no matter what the error is, the motion exits. This is a safety measure in case something goes terribly wrong during the execution of the motion.
+  - `params.earlyExitRange`: this basically says "stop once I'm `earlyExitRange` away from the target." This is commonly used in motion chaining, where multiple motions are executed consecutively with smooth transitions (no stops) between them ([learn more on the LemLib docs](https://lemlib.readthedocs.io/en/stable/tutorials/8_motion_chaining.html)). For regular motions, it is set by default to 0 inches ("only stop if I am exactly at the target, or have overshot it").
 - All speed values are from -127 \<-> 127, since that is what PROS motors natively take as input voltage.
 
 ### Setup
 
 This is boilerplate, don't worry too much about. The rest of our code will occur inside the `moveToPoint` function.
 
-[Permalink to the code I dicuss](https://github.com/LemLib/LemLib/blob/708e246f5b85e8b646f3cac0fcdd892bd74fa703/src/lemlib/chassis/motions/moveToPoint.cpp)
+[Permalink to the code I discuss](https://github.com/LemLib/LemLib/blob/708e246f5b85e8b646f3cac0fcdd892bd74fa703/src/lemlib/chassis/motions/moveToPoint.cpp)
 
 ```cpp
 #include <cmath>
