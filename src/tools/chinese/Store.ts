@@ -57,6 +57,7 @@ const storedData = loadFromStorage() as {
   enabledLessons?: string[];
   enabledModes?: AppMode[];
   sentenceIndex?: Record<string, string>;
+  listenPreferences?: { voiceName: string | null, rate: number };
 } | null;
 const allLessons = getAllLessons();
 
@@ -75,6 +76,7 @@ const initialContext = {
   ]) as AppMode[],
   currentQuestionMode: null as AppMode | null,
   sentenceIndex: (storedData?.sentenceIndex ?? {}) as Record<string, string>,
+  listenPreferences: (storedData?.listenPreferences ?? { voiceName: null, rate: 1 }) as { voiceName: string | null, rate: number },
 };
 
 export const store = createStore({
@@ -175,6 +177,12 @@ export const store = createStore({
       return {
         ...context,
         completedCount: context.completedCount + 1,
+      };
+    },
+    updateListenPreferences: (context, event: { voiceName: string | null, rate: number }) => {
+      return {
+        ...context,
+        listenPreferences: event,
       };
     },
   },

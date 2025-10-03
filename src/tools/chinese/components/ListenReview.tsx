@@ -22,25 +22,32 @@ export default function ListenReview({
 }) {
   const sentences = useSelector(store, (s) => s.context.sentences);
   const enabledLessons = useSelector(store, (s) => s.context.enabledLessons);
+  const listenPreferences = useSelector(store, (s) => s.context.listenPreferences);
   const current = sentences[0];
 
   // Voices
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [voice, setVoice] = useState<SpeechSynthesisVoice | null>(null);
-  const [rate, setRate] = useState<number>(1);
+  const [rate, setRate] = useState<number>(listenPreferences.rate);
 
   useEffect(() => {
     const update = () => {
       const vs = window.speechSynthesis.getVoices().filter(isChineseVoice);
       setVoices(vs);
       let def = vs.find((v) => v.name.toLowerCase().includes("tingting"));
+      if (listenPreferences.voiceName) {
+        const storedVoice = vs.find((v) => v.name === listenPreferences.voiceName);
+        if (storedVoice) {
+          def = storedVoice;
+        }
+      }
       setVoice(def || vs[0] || null);
     };
     update();
     if (typeof window !== "undefined") {
       window.speechSynthesis.onvoiceschanged = update;
     }
-  }, []);
+  }, [listenPreferences.voiceName]);
 
   // Index current sentence label for friendly history display
   useEffect(() => {
@@ -57,6 +64,22 @@ export default function ListenReview({
     u.rate = rate;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(u);
+  };
+
+  const handleVoiceChange = (newVoice: SpeechSynthesisVoice | null) => {
+    setVoice(newVoice);
+    store.trigger.updateListenPreferences({
+      voiceName: newVoice?.name || null,
+      rate: rate,
+    });
+  };
+
+  const handleRateChange = (newRate: number) => {
+    setRate(newRate);
+    store.trigger.updateListenPreferences({
+      voiceName: voice?.name || null,
+      rate: newRate,
+    });
   };
 
   // MCQ options from full dataset respecting enabled lessons
@@ -130,7 +153,7 @@ export default function ListenReview({
             max={1.4}
             step={0.1}
             value={rate}
-            onChange={(e) => setRate(parseFloat(e.target.value))}
+            onChange={(e) => handleRateChange(parseFloat(e.target.value))}
           />
         </div>
         <div className="flex items-center gap-2 text-base text-black/60">
@@ -139,7 +162,7 @@ export default function ListenReview({
             className="bg-transparent underline"
             value={voice?.name || ""}
             onChange={(e) =>
-              setVoice(voices.find((v) => v.name === e.target.value) || null)
+              handleVoiceChange(voices.find((v) => v.name === e.target.value) || null)
             }
           >
             {voices.map((v) => (
