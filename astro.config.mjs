@@ -18,8 +18,11 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: "shiki", // or 'prism'
     shikiConfig: {
-      theme: "github-light", // or 'github-dark', 'nord', etc.
-    },
+            themes: {
+              light: "github-light",
+              dark: "github-dark",
+            },
+          },
     rehypePlugins: [
       rehypeSlug,
       [
