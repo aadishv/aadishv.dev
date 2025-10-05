@@ -19,14 +19,5 @@ export default function useTheme() {
     return () => observer.disconnect();
   }, []);
 
-  const toggleTheme = () => {
-    if (document.documentElement.classList.contains("dark")) {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-    }
-    setIsDark(!isDark);
-  };
-
-  return { isDark, toggleTheme };
+  return { isDark };
 }

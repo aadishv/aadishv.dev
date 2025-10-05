@@ -68,7 +68,7 @@ const { title, tool } = Astro.props;
             </a>
             <div class="mx-auto">{""}</div>
             <div class="ml-auto">
-                <ThemeToggle client:idle />
+                <ThemeToggle client:only="react" />
             </div>
           </>
         )
