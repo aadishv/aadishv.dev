@@ -1,6 +1,6 @@
 ---
 import "@/styles/globals.css";
-import ThemeToggleIsland from "@/components/ThemeToggleIsland.tsx";
+import ThemeToggle from "@/components/theme/ThemeToggle.tsx";
 import Analytics from "./Analytics.astro";
 const { title, tool } = Astro.props;
 ---
@@ -29,7 +29,10 @@ const { title, tool } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <meta name="google-site-verification" content="-e3sQUiyjUpdegTe0TMDBOnz5Z34OHkikLI87igRFro" />
+    <meta
+      name="google-site-verification"
+      content="-e3sQUiyjUpdegTe0TMDBOnz5Z34OHkikLI87igRFro"
+    />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
@@ -65,40 +68,40 @@ const { title, tool } = Astro.props;
             </a>
             <div class="mx-auto">{""}</div>
             <div class="ml-auto">
-              <ThemeToggleIsland client:load />
+              <ThemeToggle client:idle></ThemeToggle>
             </div>
           </>
         )
       }
-    </div>
-    {
-      (
-        <div class={tool ? "" : "pt-8"}>
-          <slot />
-        </div>
-      )
-    }
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.body, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "\\[", right: "\\]", display: true },
-            { left: "$", right: "$", display: false },
-            { left: "\\(", right: "\\)", display: false },
-          ],
+      {
+        (
+          <div class={tool ? "" : "pt-8"}>
+            <slot />
+          </div>
+        )
+      }
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          renderMathInElement(document.body, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "\\[", right: "\\]", display: true },
+              { left: "$", right: "$", display: false },
+              { left: "\\(", right: "\\)", display: false },
+            ],
+          });
         });
-      });
-    </script>
-    {
-      import.meta.env.PROD ? (
-        <Analytics />
-      ) : (
-        (() => {
-          console.log("dev deployment; not using analytics.");
-          return false;
-        })()
-      )
-    }
+      </script>
+      {
+        import.meta.env.PROD ? (
+          <Analytics />
+        ) : (
+          (() => {
+            console.log("dev deployment; not using analytics.");
+            return false;
+          })()
+        )
+      }
+    </div>
   </body>
 </html>

@@ -352,7 +352,8 @@ function Joystick({
 
     const update = () => {
       const keys = pressedKeys.current;
-      let dx = 0, dy = 0;
+      let dx = 0,
+        dy = 0;
       // Use full extent for the target; we'll clamp diagonals to the circular maxDistance
       const axisAmount = maxDistance; // full extent for a pressed key
 
@@ -383,7 +384,9 @@ function Joystick({
         const ny = curr.y + (target.y - curr.y) * alpha;
         setPosition({ x: nx, y: ny });
         // If we're very close to the exact target, snap to it to avoid tiny asymptotic differences
-        const remain = Math.sqrt((target.x - nx) * (target.x - nx) + (target.y - ny) * (target.y - ny));
+        const remain = Math.sqrt(
+          (target.x - nx) * (target.x - nx) + (target.y - ny) * (target.y - ny),
+        );
         if (remain < 0.6) {
           setPosition(target);
         }
@@ -522,7 +525,7 @@ const useTankDriveSim = (power: { l: number; r: number }) => {
   useInterval(() => {
     const { l, r } = power;
     const theta = -(Math.PI * (r - l)) / (LIMIT * TIME_CONSTANT) + state.theta;
-    const linear = 40 * (l + r) / (LIMIT * TIME_CONSTANT);
+    const linear = (40 * (l + r)) / (LIMIT * TIME_CONSTANT);
     const x = Math.max(-70, Math.min(70, linear * Math.cos(theta) + state.x));
     const y = Math.max(-70, Math.min(70, linear * Math.sin(theta) + state.y));
     setState({ theta, x, y });

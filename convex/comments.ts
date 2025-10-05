@@ -1,5 +1,14 @@
 import { v } from "convex/values";
-import { query, mutation } from "./_generated/server";
+import { query, mutation, action, internalMutation } from "./_generated/server";
+import { internal } from "./_generated/api";
+import { RateLimiter, MINUTE } from "@convex-dev/rate-limiter";
+import { components } from "./_generated/api";
+
+export const rateLimiter = new RateLimiter(components.rateLimiter, {
+  addComment: { kind: "fixed window", rate: 1, period: MINUTE },
+});
+
+const secret = process.env.HCAPTCHA_SECRET;
 
 export const getComments = query({
   args: { slug: v.string() },
@@ -10,16 +19,47 @@ export const getComments = query({
       .collect();
   },
 });
-
-export const addComment = mutation({
+export const addCommentInternal = internalMutation({
   args: { slug: v.string(), body: v.string() },
-  handler: async (ctx, args) => {
-    if (args.body.trim() === "") {
-      throw new Error("Comment body cannot be empty");
-    }
+  handler: async (ctx, { slug, body }) => {
     await ctx.db.insert("comments", {
-      slug: args.slug,
-      body: args.body.trim(),
+      slug,
+      body: body.trim(),
+    });
+  },
+});
+export const addComment = action({
+  args: { slug: v.string(), body: v.string(), token: v.string() },
+  handler: async (ctx, { body, token, slug }) => {
+    if (body.trim() === "") {
+      throw new Error("Haha nice try smh");
+    }
+    if (body.trim().length > 200) {
+      throw new Error("Bro are you writing an essay?");
+    }
+    const { ok } = await rateLimiter.limit(ctx, "addComment");
+    if (!ok) {
+      throw new Error("Bruh are you botting, slow down bro");
+    }
+    const payload = {
+      secret,
+      response: token,
+    };
+    const response = await fetch("https://hcaptcha.com/siteverify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(payload as any),
+    });
+
+    const responseData = (await response.json()) as { success: boolean };
+    if (!responseData.success) {
+      throw new Error("You're giving robot ngl");
+    }
+    await ctx.runMutation(internal.comments.addCommentInternal, {
+      slug,
+      body: body.trim(),
     });
   },
 });

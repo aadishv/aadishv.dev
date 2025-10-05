@@ -22,7 +22,10 @@ export default function ListenReview({
 }) {
   const sentences = useSelector(store, (s) => s.context.sentences);
   const enabledLessons = useSelector(store, (s) => s.context.enabledLessons);
-  const listenPreferences = useSelector(store, (s) => s.context.listenPreferences);
+  const listenPreferences = useSelector(
+    store,
+    (s) => s.context.listenPreferences,
+  );
   const current = sentences[0];
 
   // Voices
@@ -36,7 +39,9 @@ export default function ListenReview({
       setVoices(vs);
       let def = vs.find((v) => v.name.toLowerCase().includes("tingting"));
       if (listenPreferences.voiceName) {
-        const storedVoice = vs.find((v) => v.name === listenPreferences.voiceName);
+        const storedVoice = vs.find(
+          (v) => v.name === listenPreferences.voiceName,
+        );
         if (storedVoice) {
           def = storedVoice;
         }
@@ -162,7 +167,9 @@ export default function ListenReview({
             className="bg-transparent underline"
             value={voice?.name || ""}
             onChange={(e) =>
-              handleVoiceChange(voices.find((v) => v.name === e.target.value) || null)
+              handleVoiceChange(
+                voices.find((v) => v.name === e.target.value) || null,
+              )
             }
           >
             {voices.map((v) => (

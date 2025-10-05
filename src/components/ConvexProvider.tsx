@@ -1,7 +1,6 @@
 import { ConvexReactClient, ConvexProvider } from "convex/react";
 import type { JSX, FunctionComponent } from "react";
 import Comments from "./Comments";
-console.log(import.meta.env.PUBLIC_CONVEX_URL as string);
 
 const client = new ConvexReactClient(
   import.meta.env.PUBLIC_CONVEX_URL as string,

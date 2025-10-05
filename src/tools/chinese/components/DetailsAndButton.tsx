@@ -39,16 +39,17 @@ export function SentenceDetails() {
   return (
     <div className="text-xl flex flex-col">
       <span className="text-black/50">{sentence.lesson}</span>
-      {!listening && (revealMeaning ? (
-        sentence.def
-      ) : (
-        <button
-          className="text-black/70 mr-auto"
-          onClick={() => setRevealMeaning(true)}
-        >
-          click to reveal english definition
-        </button>
-      ))}
+      {!listening &&
+        (revealMeaning ? (
+          sentence.def
+        ) : (
+          <button
+            className="text-black/70 mr-auto"
+            onClick={() => setRevealMeaning(true)}
+          >
+            click to reveal english definition
+          </button>
+        ))}
     </div>
   );
 }
