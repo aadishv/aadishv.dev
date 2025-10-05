@@ -26,12 +26,11 @@ export default function Comments({ slug }: CommentsProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (body.trim() && token) {
-      try {
-        await addComment({ slug, body, token });
-        setBody("");
-      } catch (error) {
-        toast.error(`${error as string}`);
+      const error = await addComment({ slug, body, token });
+      if (error) {
+        toast.error(error.error);
       }
+      setBody("");
     }
   };
 

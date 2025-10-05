@@ -32,14 +32,14 @@ export const addComment = action({
   args: { slug: v.string(), body: v.string(), token: v.string() },
   handler: async (ctx, { body, token, slug }) => {
     if (body.trim() === "") {
-      throw new Error("Haha nice try smh");
+      return { error: "Haha nice try smh" as const };
     }
     if (body.trim().length > 200) {
-      throw new Error("Bro are you writing an essay?");
+      return { error: "Bro are you writing an essay?" as const };
     }
     const { ok } = await rateLimiter.limit(ctx, "addComment");
     if (!ok) {
-      throw new Error("Bruh are you botting, slow down bro");
+      return { error: "Bruh are you botting, slow down bro" as const };
     }
     const payload = {
       secret,
@@ -55,11 +55,12 @@ export const addComment = action({
 
     const responseData = (await response.json()) as { success: boolean };
     if (!responseData.success) {
-      throw new Error("You're giving robot ngl");
+      return { error: "You're giving robot ngl" as const };
     }
     await ctx.runMutation(internal.comments.addCommentInternal, {
       slug,
       body: body.trim(),
     });
+    return null;
   },
 });
