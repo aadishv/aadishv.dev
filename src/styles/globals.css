@@ -163,6 +163,6 @@
   }
   aside {
     border-radius: 6px;
-    @apply p-4 m-1 !bg-gray-500;
+    @apply p-4 m-1 dark:bg-white/20 bg-black/20;
   }
 }

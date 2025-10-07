@@ -28,18 +28,18 @@ Any and all code I write for the robot runs on the VEX V5 brain:
 This runs VEXos, which is not a full-fledged operating system, per se, but enables the execution of custom binaries which can interface with I/O. I/O on the V5 brain includes quite a few things, most of which come from either the screen, the smart ports (pictured above on either vertical side of the screen), or the three-wire ports (not shown above).
 
 - Inputs
-  - Touch events on the brain screen
-  - Sensing inputs from any smart ports (including motor readings)
-  - Sensing inputs from any three-wire ports
-  - Battery levels
-  - Reading files from the SD slot
-  - Serial over the USB port
+- Touch events on the brain screen
+- Sensing inputs from any smart ports (including motor readings)
+- Sensing inputs from any three-wire ports
+- Battery levels
+- Reading files from the SD slot
+- Serial over the USB port
 - Outputs
-  - Displaying things on the brain screen
-  - Actuators (mostly motors)
-  - Pneumatics over three-wire ports
-  - Writing files onto the SD slot
-  - Serial over the USB port
+- Displaying things on the brain screen
+- Actuators (mostly motors)
+- Pneumatics over three-wire ports
+- Writing files onto the SD slot
+- Serial over the USB port
 
 Typically, these binaries are built and uploaded through VEX’s proprietary IDE, [VEXcode](https://www.vexrobotics.com/vexcode), or its corresponding VScode extension. However, there is also a division of VRC called VEXU, which is a collegiate-level version of the competition with more coding, two robots per team, and a few other different things. It turns out that Purdue University has a VEXU team, BLRS the Purdue ACM SIGBots (one of my all-time favorite teams :D), and _clearly_ college students have too much time because they wrote their own operating system for the V5…
 
@@ -57,7 +57,15 @@ Typically, these binaries are built and uploaded through VEX’s proprietary IDE
 - Documentation. PROS has actually well-documented APIs compared to the mess of VEX APIs. For example, VEX only somewhat [documented their APIs a few months ago](https://api.vex.com/) — even though they’ve existed for years!
 - External libraries. VEXcode’s tough integration with other tools makes it hard to have a proper package management system. In contrast, PROS has a robust library ecosystem with hundreds if not more packages ready to install via their CLI (another thing that VEXcode doesn’t have).
 - IDE integration. While PROS has a recommended VSCode plugin, its extensible CLI means you can code in it from everywhere (including [Zed](https://zed.dev), my favorite code editor). VEXcode can only be used from their proprietary app or VSCode extension. Also, VEXcode has _very_ weird code structure, while PROS’ is just regular C++ with cpp and header files.
+
+<aside>
+    Update 10/7/25: this is a bit inaccurate. C++ does support async, but PROS doesn't use it; all of its operations are synchronous, and threads are preemptive. `vexide` uses Rust's cooperative scheduling to have first-class async operations.
+</aside>
+
 - PROS is open-source! All of VEXCode’s APIs and protocols are closed-source (although the SIGbots team got access to it under a NDA to develop PROS) while every single bit of PROS is open-source and on [Github](https://github.com/purduesigbots/pros). This has enabled the community to do a bunch of cool things. The coolest of these, in my opinion, is [vexide](https://vexide.dev/), which is a runtime like PROS for the V5, with two major differences. 1) It supports async. But wait, C++ doesn’t have async. And then we have 2) _It’s written in Rust!_
+
+
+
 
 This is hopefully enough to convice anyone to switch to PROS! Time to go one abstraction level higher.
 
@@ -91,53 +99,53 @@ VOSS provides an excellent API surface to build off of, but at the time of writi
 // [a number of internal functions]
 
 namespace robot {
-    void rumble(const char* sequence);
-    void log(std::string message, std::string end = "\n");
-    void log_pose(std::string end = "\n");
-    enum class Direction;
-    extern pros::Controller controller;
+  void rumble(const char* sequence);
+  void log(std::string message, std::string end = "\n");
+  void log_pose(std::string end = "\n");
+  enum class Direction;
+  extern pros::Controller controller;
 }
 
 namespace robot::selector {
-    void init(std::map<std::string, void(*)()> game_autons, VoidFn skills_auton, int default_auton, bool show_graphics = true);
-    void run_auton();
+  void init(std::map<std::string, void(*)()> game_autons, VoidFn skills_auton, int default_auton, bool show_graphics = true);
+  void run_auton();
 }
 
 namespace robot::auton {
-    void start(voss::Pose starting_pose);
-    void checkpoint(std::optional<std::string> point = std::nullopt);
-    void end();
+  void start(voss::Pose starting_pose);
+  void checkpoint(std::optional<std::string> point = std::nullopt);
+  void end();
 }
 
 namespace robot::drive {
-    extern bool mirrored; // false = red
-    void init();
-    void face(double angle, double speed = 100);
-    void go(double distance, float speed = 100);
-    void swing(double angle, bool reversed = false);
-    void set_mirroring(bool state);
-    void set_position(voss::Pose position);
+  extern bool mirrored; // false = red
+  void init();
+  void face(double angle, double speed = 100);
+  void go(double distance, float speed = 100);
+  void swing(double angle, bool reversed = false);
+  void set_mirroring(bool state);
+  void set_position(voss::Pose position);
 }
 
 namespace robot::subsys {
-    void init();
-    extern Direction intake_state;
-    void intake(Direction direction, float speed = 1);
-    void wsm(Direction direction, float speed = 1);
+  void init();
+  extern Direction intake_state;
+  void intake(Direction direction, float speed = 1);
+  void wsm(Direction direction, float speed = 1);
 }
 ```
 
 This is quite the shortening from the ~100 public functions that could be called from VOSS. If I wanted to execute a particularly customized motion in a routine, however, I would directly call a VOSS function. A briefly explanation of what each namespace contains:
 
 - `robot` — the root namespace
-  - A number of logging functions (including `rumble`, which vibrates the controller according to a specific pattern)
-  - `selector` — the autonomous selector
-    - Initialize the selector with a `map` matching various routine names to their corresponding functions
-    - `run_auton` which ran the selected routine
-  - `drive` — the chassis code
-    - `set_mirroring` — sets the mirroring of the drivetrain, this will be explained more later
-    - The others are fairly self-explanatory, just a collection of simple functions to move the robot around
-  - `subsys` — code for controlling other systems on the robot \* Functions for changing the state of other subsystems
+- A number of logging functions (including `rumble`, which vibrates the controller according to a specific pattern)
+- `selector` — the autonomous selector
+  - Initialize the selector with a `map` matching various routine names to their corresponding functions
+  - `run_auton` which ran the selected routine
+- `drive` — the chassis code
+  - `set_mirroring` — sets the mirroring of the drivetrain, this will be explained more later
+  - The others are fairly self-explanatory, just a collection of simple functions to move the robot around
+- `subsys` — code for controlling other systems on the robot \* Functions for changing the state of other subsystems
 
 Now that this is all out of the way, let’s explain a bit more about the autonomous selector.
 
@@ -162,67 +170,67 @@ using namespace robot::subsys;
 using namespace voss;
 // ...
 namespace autons::shared {
-    /**
-     * @brief An auton whose only goal is to gain the Autonomous Win Point (AWP).
-     *
-     * @note This auton was designed with intake raise and odom.
-     *
-     * @details
-     * Starting position: NR starting position
-     * 1. Aligns with alliance wall stake & scores preload
-     * 2. Gets mogo
-     * 3. Get NR square rings
-     * 4. Touch ladder
-    //  */
-    void awp() {
-        auton::start({0,0,180}); // UTB mirrored ? 0 : 180 ; please test auto mirroring
-        /**
-         * Align with alliance wall stake & score preload
-         */
-        go(-16);
-        face(90);
-        go(-9);
-        go(-2);
-        go(1.75);
-        intake(Direction::FORWARD);
-        pros::delay(550);
-        /**
-         * Get mogo
-         */
-        go(10);
-        face(-49);
-        mogo.extend();
-        go(-27);
-        intake(Direction::STOP);
-        go(-10, 30);
-        mogo.retract();
-        pros::delay(800);
+  /**
+    * @brief An auton whose only goal is to gain the Autonomous Win Point (AWP).
+    *
+    * @note This auton was designed with intake raise and odom.
+    *
+    * @details
+    * Starting position: NR starting position
+    * 1. Aligns with alliance wall stake & scores preload
+    * 2. Gets mogo
+    * 3. Get NR square rings
+    * 4. Touch ladder
+  //  */
+  void awp() {
+      auton::start({0,0,180}); // UTB mirrored ? 0 : 180 ; please test auto mirroring
+      /**
+        * Align with alliance wall stake & score preload
+        */
+      go(-16);
+      face(90);
+      go(-9);
+      go(-2);
+      go(1.75);
+      intake(Direction::FORWARD);
+      pros::delay(550);
+      /**
+        * Get mogo
+        */
+      go(10);
+      face(-49);
+      mogo.extend();
+      go(-27);
+      intake(Direction::STOP);
+      go(-10, 30);
+      mogo.retract();
+      pros::delay(800);
 
-        auton::checkpoint("Got mogo");
-        /**
-         * Get NR square ring
-         */
-        face(139);
-        intake(Direction::FORWARD);
-        go(17.5);
-        pros::delay(400);
-        /**
-         * Get ring from stack next to square
-         */
-        swing(-32, true);
-        go(20);
-        pros::delay(400);
+      auton::checkpoint("Got mogo");
+      /**
+        * Get NR square ring
+        */
+      face(139);
+      intake(Direction::FORWARD);
+      go(17.5);
+      pros::delay(400);
+      /**
+        * Get ring from stack next to square
+        */
+      swing(-32, true);
+      go(20);
+      pros::delay(400);
 
-        auton::checkpoint("Got da goods");
-        /**
-         * Touch ladder
-         */
-        go(-25);
-        go(-5, 60);
+      auton::checkpoint("Got da goods");
+      /**
+        * Touch ladder
+        */
+      go(-25);
+      go(-5, 60);
 
-        auton::checkpoint("Touched ladder");
-        auton::end();
-    }}
+      auton::checkpoint("Touched ladder");
+      auton::end();
+  }}
 // ...
 ```
 
