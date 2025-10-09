@@ -23,7 +23,7 @@ description: ""
 **Open source**
 
 - Contributed critical bugfixes [to LemLib](https://github.com/LemLib/LemLib/pull/274) (most popular VEX motion control lib, used by hundreds of teams), and [to the RPLiDAR C++ SDK](https://github.com/Slamtec/rplidar_sdk/pull/141) (very commonly used LiDAR SDK made by Slamtec, likely used by thousands if not tens of thousands of projects).
-- Created and maintain [DishPy](https://github.com/aadishv/dishpy) (Python development tool for VEX offering a significant advantage over the VEX Micropython runtime, in competitive use by many teams). [[docs](https://aadishv.github.io/dishpy) [blog post](/dishpy-blog)]
+- Created and maintain [DishPy](https://github.com/aadishv/dishpy) (Python development tool for VEX offering a significant advantage over the VEX Micropython runtime, in competitive use by many teams). [[docs](https://aadishv.github.io/dishpy) [blog post](/dis py-blog)]
 - Designed, wrote, and maintain [website](https://venice.fibn.cc/) for the [Venice open source Micropython runtime for VEX V5](https://github.com/venice-v5/). Active contributor to [Venice CLI](https://github.com/venice-v5/venice-cli), involving low-level serial code.
 - Wrote [several](/mcl/) [blog posts](/mcl-2x/) helping dozens of fellow competitors across the
   - US,
@@ -46,4 +46,4 @@ description: ""
 
 - Volunteer at several robotics competitions throughout the year; mentor new teams at an annual Girl Powered robotics workshop.
 - Elected teaching assistant and peer tutor for math courses at OHS.
-- Volunteer in the OHS student government's Board of Communications; [wrote code to massively speed up the operations of the board](/ekudos).
+- Volunteer in the OHS student government's Board of Communications; [wrote code to massively speed up the operations of the board](/ekudos). Also reverse-engineered and reimplemented in Typescript the API of a chat app we use, leveraging AI to build a "Bulletin Bard" which summarizes school events for the upcoming month [[code](https://github.com/aadishv/pronto-stugov)].
