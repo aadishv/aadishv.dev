@@ -215,15 +215,22 @@ export default function ListenReview({
         })}
       </div>
 
-      <div
-        className={`transition-opacity duration-500 ${
-          completed ? "opacity-0" : "opacity-100"
-        }`}
-      >
-        <button className="text-black/70" onClick={onSubmit}>
-          {completed ? "done" : attempts === 0 ? "submit" : "try again"}
-        </button>
-      </div>
+      {completed ? (
+        <div className="flex flex-col items-center ">
+          <p>{current.words.map((w) => w.character).join("")}</p>
+          <p>{current.words.map((w) => w.pinyin === "" ? w.character : w.pinyin).join(" ")}</p>
+        </div>
+      ) : (
+        <div
+          className={`transition-opacity duration-500 ${
+            completed ? "opacity-0" : "opacity-100"
+          }`}
+        >
+          <button className="text-black/70" onClick={onSubmit}>
+            {attempts === 0 ? "submit" : "try again"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
