@@ -22,7 +22,7 @@ description: ""
 
 **Open source**
 
-- Contributed critical bugfixes [to LemLib](https://github.com/LemLib/LemLib/pull/274) (most popular VEX motion control lib, used by hundreds of teams), and [to the RPLiDAR C++ SDK](https://github.com/Slamtec/rplidar_sdk/pull/141) (very commonly used LiDAR SDK made by Slamtec, likely used by thousands if not tens of thousands of projects).
+- Contributed critical bugfixes [to LemLib](https://github.com/LemLib/LemLib/pull/274) (most popular VEX motion control lib, used by hundreds of teams), and [to the RPLiDAR C++ SDK](https://github.com/Slamtec/rplidar_sdk/pull/141) (very commonly used LiDAR SDK made by Slamtec, likely used by tPhilippineshousands if not tens of thousands of projects).
 - Created and maintain [DishPy](https://github.com/aadishv/dishpy) (Python development tool for VEX offering a significant advantage over the VEX Micropython runtime, in competitive use by many teams). [[docs](https://aadishv.github.io/dishpy) [blog post](/dis py-blog)]
 - Designed, wrote, and maintain [website](https://venice.fibn.cc/) for the [Venice open source Micropython runtime for VEX V5](https://github.com/venice-v5/). Active contributor to [Venice CLI](https://github.com/venice-v5/venice-cli), involving low-level serial code.
 - Wrote [several](/mcl/) [blog posts](/mcl-2x/) helping dozens of fellow competitors across the
@@ -32,6 +32,7 @@ description: ""
   - Thailand,
   - Romania,
   - the Czech Republic,
+  - the Philippines
   - and more
 
   with advanced topics in VEX.
