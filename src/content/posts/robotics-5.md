@@ -2,7 +2,6 @@
 date: "2025-10-18"
 title: "Robotics 5: 3151A (the world championships)"
 categories: ["project", "robotics"]
-hidden: true
 ---
 This is the fifth and final post on my experience in VEX Robotics. In this post, I'll focus on how I designed the full AI tech stack that we ran on one of our robots for the VEX AI World Championship.
 
