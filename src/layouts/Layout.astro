@@ -1,5 +1,6 @@
 ---
 import "@/styles/globals.css";
+import { ClientRouter } from "astro:transitions";
 import ThemeToggle from "@/components/theme/ThemeToggle.tsx";
 import Analytics from "./Analytics.astro";
 const { title, tool } = Astro.props;
@@ -8,6 +9,7 @@ const { title, tool } = Astro.props;
 <!doctype html>
 <html lang="en">
   <head>
+    <ClientRouter />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={"A 9th grader and avid coder."} />
     <meta property="og:image" content="https://aadishv.dev/og.png" />
@@ -68,40 +70,40 @@ const { title, tool } = Astro.props;
             </a>
             <div class="mx-auto">{""}</div>
             <div class="ml-auto">
-                <ThemeToggle client:only="react" />
+              <ThemeToggle client:only="react" />
             </div>
           </>
         )
       }
     </div>
-      {
-        (
-          <div class={tool ? "" : "pt-8"}>
-            <slot />
-          </div>
-        )
-      }
-      <script>
-        document.addEventListener("DOMContentLoaded", () => {
-          renderMathInElement(document.body, {
-            delimiters: [
-              { left: "$$", right: "$$", display: true },
-              { left: "\\[", right: "\\]", display: true },
-              { left: "$", right: "$", display: false },
-              { left: "\\(", right: "\\)", display: false },
-            ],
-          });
+    {
+      (
+        <div class={tool ? "" : "pt-8"}>
+          <slot />
+        </div>
+      )
+    }
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false },
+          ],
         });
-      </script>
-      {
-        import.meta.env.PROD ? (
-          <Analytics />
-        ) : (
-          (() => {
-            console.log("dev deployment; not using analytics.");
-            return false;
-          })()
-        )
-      }
+      });
+    </script>
+    {
+      import.meta.env.PROD ? (
+        <Analytics />
+      ) : (
+        (() => {
+          console.log("dev deployment; not using analytics.");
+          return false;
+        })()
+      )
+    }
   </body>
 </html>

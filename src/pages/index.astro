@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import { getCollection } from "astro:content";
 import { Badge } from "@/components/ui/badge";
+import { parseISO, format } from "date-fns";
 const getSlugFromPath = (path: string): string => {
   const parts = path.split("/");
   const filename = parts.pop() || "";
@@ -78,7 +79,10 @@ const entries = allEntries
               href={"/" + getSlugFromPath(entry.filePath ?? "")}
               class="text-xl decoration-none aadish-none"
             >
-              <span class="underline hover:decoration-none">
+              <span
+                class="underline hover:decoration-none"
+                transition:name={entry.id}
+              >
                 {entry.data.title}
               </span>
               {entry.data.categories.map((c: string) => (
@@ -87,8 +91,8 @@ const entries = allEntries
                 </Badge>
               ))}
             </a>
-            <time class="block" datetime={entry.data.date}>
-              {formatDate(entry.data.date)}
+            <time class="block" datetime={parseISO(entry.data.date).toString()}>
+                {format(parseISO(entry.data.date), "LLLL d, yyyy")}
             </time>
             {entry.data.description && (
               <p class="text-sm text-muted-foreground line-clamp-3">

@@ -58,11 +58,12 @@ const isProject =
           target="_blank"
           rel="noopener noreferrer"
           class="!no-underline"
+          transition:name={post.id}
         >
           <h1>{post.data.title}</h1>
         </a>
         <h4>
-          <time datetime={date.toString()}>{formatted}</time>
+            <time datetime={date.toString()}>{formatted}</time>
 
           {
             post.body && (
