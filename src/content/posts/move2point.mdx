@@ -78,7 +78,7 @@ We want to drive straight forward until we reach the target point -- in other wo
 // constants:
 // maxError: the maximum error you allow for the distance
 fn moveToPoint(targetPoint) {
-    while error < maxError {
+    while error > maxError {
         let error = distance(robot, targetPoint);
         let output = computePID(error);
         driveForward(output);
@@ -104,13 +104,13 @@ Here's a diagram, with the angular error annotated:
 // maxLateralError: the maximum error you allow for the distance
 // maxAngularError: the maximum error you allow for the angle before we start driving to the target
 fn moveToPoint(targetPoint) {
-    while abs(angularError) < maxAngularError {
+    while abs(angularError) > maxAngularError {
         // assume angularError is from -180º - 180º
         let angularError = angleFrom(robot, targetPoint);
         let output = computeAngularPID(angularError);
         driveTurn(output);
     }
-    while error < maxLateralError {
+    while error > maxLateralError {
         let error = distance(robot, targetPoint);
         let output = computeLateralPID(error);
         driveForward(output);
@@ -130,7 +130,7 @@ But how would we determine if we've from the path? Doing so is actually a nontri
 // constants:
 // acceptableAngularError: the angular error which is okay from deviations from the path
 fn moveToPoint(targetPoint) {
-    while lateralError < maxLateralError {
+    while lateralError > maxLateralError {
         let deviatedFromPath = angleFrom(robot, targetPoint) > acceptableAngularError;
         if deviatedFromPath {
             while abs(angularError) < maxAngularError {
@@ -166,7 +166,7 @@ This has an issue which we'll discuss later, but it makes combining the two moti
 
 ```rust
 fn moveToPoint(targetPoint) {
-    while lateralError < maxLateralError {
+    while lateralError > maxLateralError {
         let lateralError = distance(robot, targetPoint);
         let lateralOutput = computeLateralPID(lateralError);
         let angularError = angleFrom(robot, targetPoint);
@@ -196,7 +196,7 @@ And our updated code:
 
 ```rust
 fn moveToPoint(targetPoint) {
-    while lateralError < maxLateralError {
+    while lateralError > maxLateralError {
         let angularError = angleFrom(robot, targetPoint);
         let angularOutput = computeAngularPID(angularError);
 
@@ -250,7 +250,7 @@ There are a bunch of interesting ways to address this, but the simplest is to di
 // constants:
 // stopTurningError: the distance at which to effectively disable turning. in LemLib, this is set to 7.5in.
 fn moveToPoint(targetPoint) {
-    while lateralError < maxLateralError {
+    while lateralError > maxLateralError {
         let angularError = angleFrom(robot, targetPoint);
         if distance(robot, targetPoint) < stopTurningError {
             angularError = 0;
