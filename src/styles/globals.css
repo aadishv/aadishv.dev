@@ -13,7 +13,6 @@
     opacity: 1;
   }
 }
-
 @layer base {
   *,
   ::before,
@@ -53,7 +52,7 @@
   }
 
   .dark {
-    --background: 222.2 0% 0%;
+    --background: 0 0% 0%;
     --foreground: 210 40% 98%;
 
     --card: 222.2 84% 4.9%;
@@ -136,7 +135,7 @@
   hr {
     @apply my-2;
   }
-  img {
+  img:not(.aadish-none) {
     @apply w-[30rem] mx-auto;
   }
   pre {
