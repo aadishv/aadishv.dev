@@ -1,7 +1,6 @@
 ---
 import "@/styles/globals.css";
 import { ClientRouter } from "astro:transitions";
-import ThemeToggle from "@/components/theme/ThemeToggle.tsx";
 import Analytics from "./Analytics.astro";
 const { title, tool } = Astro.props;
 ---
@@ -70,12 +69,77 @@ const { title, tool } = Astro.props;
             </a>
             <div class="mx-auto">{""}</div>
             <div class="ml-auto">
-              <ThemeToggle client:only="react" />
+                <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" aria-label="Toggle theme" id="theme-button">Loading...</button>
             </div>
           </>
         )
       }
     </div>
+    <script lang="ts">
+      function run() {
+        // t: light | dark
+        const setHtmlTheme = (t) => {
+          if (t == "light") {
+            if (document.documentElement.classList.contains("dark")) {
+              document.documentElement.classList.remove("dark");
+            }
+          } else {
+            if (!document.documentElement.classList.contains("dark")) {
+              document.documentElement.classList.add("dark");
+            }
+          }
+        };
+        let theme = (localStorage.getItem("theme") ?? "system");
+        // theme: light/dark/system
+
+        // setup systemTheme
+        const query = window.matchMedia("(prefers-color-scheme: dark)");
+        let systemTheme = query.matches ? "dark" : "light";
+        query.addEventListener(
+          "change",
+          (event) => {
+            systemTheme = event.matches ? "dark" : "light";
+            if (theme === "system") {
+              setHtmlTheme(systemTheme);
+            }
+          },
+        );
+        // set theme
+        const setTheme = (th) => {
+          if (th === "dark") setHtmlTheme("dark");
+          else if (th === "light") setHtmlTheme("light");
+          else setHtmlTheme(systemTheme);
+          theme = th;
+          localStorage.setItem("theme", th);
+        }
+        setTheme(theme);
+        // update button
+        const button = document.getElementById("theme-button");
+        const updateButton = () => {
+          if (theme == "dark") {
+            button.innerHTML = "🌙 Dark";
+          } else if (theme == "light") {
+            button.innerHTML = "☀️ Light";
+          } else {
+            button.innerHTML = "⚙️ System";
+          }
+        }
+        updateButton();
+        button.addEventListener("click", () => {
+          // system -> light -> dark -> system
+          if (theme === "system") {
+            setTheme("light")
+          } else if (theme === "light") {
+            setTheme("dark");
+          } else if (theme === "dark") {
+            setTheme("system");
+          }
+          updateButton();
+        });
+      }
+      document.addEventListener('astro:page-load', run);
+      run();
+    </script>
     {
       (
         <div class={tool ? "" : "pt-8"}>
