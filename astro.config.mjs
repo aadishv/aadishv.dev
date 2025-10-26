@@ -4,25 +4,32 @@ import tailwind from "@astrojs/tailwind";
 import rehypeSlug from "rehype-slug";
 import mdx from "@astrojs/mdx";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import sitemap from '@astrojs/sitemap';
+import sitemap from "@astrojs/sitemap";
+import solidJs from "@astrojs/solid-js";
 // https://astro.build/config
 export default defineConfig({
   integrations: [
-    react(),
+    solidJs({
+      include: ["src/solid/music-solid/*"],
+    }),
+    react({
+      // include: ["**/*/react/*"],
+      exclude: ["src/solid/music-solid/*"],
+    }),
     tailwind({
       applyBaseStyles: false,
     }),
     mdx(),
-    sitemap()
+    sitemap(),
   ],
   markdown: {
     syntaxHighlight: "shiki", // or 'prism'
     shikiConfig: {
-            themes: {
-              light: "github-light",
-              dark: "github-dark",
-            },
-          },
+      themes: {
+        light: "github-light",
+        dark: "github-dark",
+      },
+    },
     rehypePlugins: [
       rehypeSlug,
       [
