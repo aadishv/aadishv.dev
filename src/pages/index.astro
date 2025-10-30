@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import { getCollection } from "astro:content";
 import { Badge } from "@/components/ui/badge";
 import { parseISO, format } from "date-fns";
-import { FileText, Github, Globe } from "lucide-react";
+import { Chrome, FileText, Github, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 const getSlugFromPath = (path: string): string => {
   const parts = path.split("/");
@@ -100,6 +100,14 @@ const delay = () => {
               <p class="w-full pr-4 my-auto"><b>{"Venice: "}</b>an open source Micropython runtime for the VEX V5 brain</p>
               <a href="https://venice.fibn.cc" class="p-1 border border-border rounded-lg mt-auto"><Globe size={32} /></a>
               <a href="https://github.com/venice-v5" class="p-1 border border-border rounded-lg mt-auto"><Github size={32} /></a>
+          </div>
+
+          <div style={delay()} class="w-full border rounded-xl bg-[#00261a] text-white p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row">
+              <img src="/ohs-ac-intro.md/1.png" class="!size-16 rounded-lg" />
+              <p class="w-full pr-4 my-auto"><b>{"OHS AC Utils: "}</b>Chrome extension for OHS students that adds downloading options & AI features to lecture recordings</p>
+              <a href="/introducing-ohs-ac-utils" class="p-1 border border-border rounded-lg mt-auto"><FileText size={32} /></a>
+              <a href="https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne" class="p-1 border border-border rounded-lg mt-auto"><Chrome size={32} /></a>
+              <a href="https://github.com/aadishv/ohs-ac-utils" class="p-1 border border-border rounded-lg mt-auto"><Github size={32} /></a>
           </div>
           </ul>
           </div>

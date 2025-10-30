@@ -39,6 +39,17 @@ const isProject =
 ---
 
 <Layout title={post.data.title}>
+  <div class="h-2 fixed bottom-0 left-0 transition-all bg-blue-200 dark:bg-blue-800 duration-100" id="progress-bar"></div>
+  <script>
+    const progressBar = document.getElementById("progress-bar")!;
+    const totalHeight = document.body.scrollHeight - window.innerHeight;
+    window.addEventListener("scroll", () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const progress = (scrollTop / totalHeight) * 100;
+      progressBar.style.width = `${progress}dvw`;
+    });
+  </script>
   <article class="container mx-auto py-10">
     {
       post.data.image && (
@@ -63,7 +74,7 @@ const isProject =
           <h1>{post.data.title}</h1>
         </a>
         <h4>
-            <time datetime={date.toString()}>{formatted}</time>
+          <time datetime={date.toString()}>{formatted}</time>
 
           {
             post.body && (
