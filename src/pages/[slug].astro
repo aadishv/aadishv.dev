@@ -39,7 +39,7 @@ const isProject =
 ---
 
 <Layout title={post.data.title}>
-  <article class="container mx-auto py-10 lg:px-52">
+  <article class="container mx-auto py-10">
     {
       post.data.image && (
         <div>
@@ -85,28 +85,6 @@ const isProject =
         )
       }
 
-      {
-        headings.length != 0 && (
-          <div class="mt-3">
-            <Card>
-              <div class="-m-3 flex flex-col">
-                <CardHeader>
-                  <h6 class="-mb-5 -mt-1">Contents</h6>
-                </CardHeader>
-                <CardContent>
-                  {headings.map((heading) => (
-                    <div style={`margin-left: ${2 * heading.depth - 1}rem`}>
-                      <a href={`#${heading.slug}`} class="text-sm">
-                        {heading.text.slice(0, -1)}
-                      </a>
-                    </div>
-                  ))}
-                </CardContent>
-              </div>
-            </Card>
-          </div>
-        )
-      }
       <div class="[&_a]:text-[#1d4ed8] dark:[&_a]:text-[#5075de]">
         <Content />
       </div>

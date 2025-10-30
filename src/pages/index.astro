@@ -4,6 +4,8 @@ import "@/styles/globals.css";
 import { getCollection } from "astro:content";
 import { Badge } from "@/components/ui/badge";
 import { parseISO, format } from "date-fns";
+import { FileText, Github, Globe } from "lucide-react";
+import { Button } from "@/components/ui/button";
 const getSlugFromPath = (path: string): string => {
   const parts = path.split("/");
   const filename = parts.pop() || "";
@@ -29,7 +31,7 @@ const entries = allEntries
 
 let value = 0;
 const delay = () => {
-  value += 30;
+  value += 50;
   return `
   animation-delay: ${value}ms;
   animation-name: appear !important;
@@ -43,106 +45,98 @@ const delay = () => {
 ---
 
 <Layout title="Aadish Verma" hideName={true}>
-  <main class="container mx-auto py-10 lg:px-64">
-    <div
-      style="display: grid;  overflow: hidden; margin-top: -10%;"
-    >
-      <img
-        style={`grid-column: 1; grid-row: 1; width: 100%; aspect-ratio: calc(3632/2734); ${delay()}`}
-        id="image-of-the-pageload"
-      />
-      <script>
-      const checkTheme = () => {
-        const isDark = document.documentElement.classList.contains("dark");
-        const number = Math.random() < 0.5 ? 1 : 2;
-        const filepath = `/thumbnails/${isDark ? "dark" : "light"}-${number}.jpg`;
-        const img = document.getElementById("image-of-the-pageload");
-        img.src = filepath;
-      };
-      checkTheme();
-      const observer = new MutationObserver(checkTheme);
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["class"],
-      })
-      </script>
-      <div
-        style="background: linear-gradient(to bottom, hsl(var(--background)) 0%, hsl(var(--background)) 5%, transparent 40%, transparent 50%, hsl(var(--background)) 90%, hsl(var(--background)) 100%); z-index: 101; grid-column: 1; grid-row: 1;"
-      >
-      </div>
-      <h1 style={`z-index: 102; grid-column: 1; grid-row: 1; margin-bottom: 15px; margin-left: 10px; margin-top: auto; font-size: 3rem; color: hsl(var(--foreground)); line-height: 3.0rem; ${delay()}`}>Aadish Verma</h1>
-    </div>
-    <span>
-      <p style={delay()}>
-        I’m Aadish, a freshman at Stanford Online High School who builds
-        connected hardware-software systems: VEX robots, AI tools, and developer
-        tooling that make practical problems easier to solve.
-      </p>
-      <p style={delay()}>
-        Lately I’ve been focused on robotics and applied ML: custom CV and
-        localization work, GPU-accelerated pipelines, and integrating AI into
-        student-facing tools. I also ship small utilities and extensions (one
-        has 100+ users), lead winning hackathon teams, and contribute fixes and
-        tools to open-source projects used by other competitors and developers.
-      </p>
-      <p style={delay()}>
-        I care about performance, reliability, and clear interfaces that make
-        complex systems feel simple. If you want the longer story, my projects
-        and write-ups are available, or just reach out!
-      </p>
-      <p style={delay()}>
-        Check out my <a href="/background">programming background</a> for a few notable
-        things I've done.
-      </p>
-
-      <p style={delay()}>
-        Contact me!
-        <br /><a href="mailto:aadish@ohs.stanford.edu">email</a>
-        <br /><a href="https://github.com/aadishv" target="_blank">github</a>
-      </p>
-
-      <p style={delay()}>
-        {"If I've built something else, you might find it"}
-        <a href="/tools">here</a>
-        {"or in my blog/projects ↓"}
-      </p>
-    </span>
-
-    <!-- divider -->
-    <hr class="my-4" />
-
-    <!-- <EntryList entries={entries} client:load /> -->
-    <ul id="entries-list" class="space-y-6">
-      {
-        entries.map((entry) => (
-          <div style={delay()}>
-            <a
-              href={"/" + getSlugFromPath(entry.filePath ?? "")}
-              class="text-xl decoration-none aadish-none"
+  <main class="container mx-auto">
+    <h3 style={delay()}>hi, I'm Aadish!</h3>
+    <hr />
+    <div class="flex flex-col lg:flex-row-reverse lg:gap-4">
+      <div class="w-full pt-1 pb-10">
+          <p style={delay()} class="mt-0 pt-0">
+            I’m a freshman at Stanford Online High School and passionate programmer.
+          </p>
+          <p style={delay()}>
+            {
+              "(If you're looking for a list of skills or programming languages, you aren't going to find it. Such a list would grow every day 🙂)"
+            }
+          </p>
+          <p style={delay()}>
+            Check out my <a href="/background">programming background</a> for a few
+            notable things I've done.
+          </p>
+          <p style={delay()}>
+            Contact me!
+            <br /><a href="mailto:aadish@ohs.stanford.edu">email</a>
+            <br /><a href="https://github.com/aadishv" target="_blank">github</a
             >
-              <span
-                class="underline hover:decoration-none"
-                transition:name={entry.id}
-              >
-                {entry.data.title}
-              </span>
-              {entry.data.categories.map((c: string) => (
-                <Badge variant="outline" className="ml-2 font-normal">
-                  {c}
-                </Badge>
-              ))}
-            </a>
-            <time class="block" datetime={parseISO(entry.data.date).toString()}>
-              {format(parseISO(entry.data.date), "LLLL d, yyyy")}
-            </time>
-            {entry.data.description && (
-              <p class="text-sm text-muted-foreground line-clamp-3">
-                {entry.data.description}
-              </p>
-            )}
+            <br /><a href="https://x.com/aadishvdotdev" target="_blank"
+              >twitter (views my own)</a
+            >
+          </p>
+          <div class="flex flex-col-reverse lg:flex-col space-y-3">
+          <p style={delay()}>
+              <span class="lg:inline hidden">←</span>
+            {"check out my blog!"}
+            <span class="lg:hidden inline">↓</span>
+          </p>
+          <ul class="space-y-3">
+          <p style={delay()}>A few cool projects I've worked on (not an exhuastive list!):</p>
+
+          <div style={delay()} class="w-full border rounded-xl p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row">
+              <img src="https://avatars.githubusercontent.com/u/228060980?s=200&v=4" class="!size-16 rounded-lg" />
+              <p class="w-full my-auto pr-4"><b>{"Dotlist: "}</b>a family of open-source productivity managers</p>
+              <a href="/llm-1" class="p-1 border border-border rounded-lg mt-auto"><FileText size={32} /></a>
+              <a href="https://dotlist.edwrdq.xyz/" class="p-1 border border-border rounded-lg mt-auto"><Globe size={32} /></a>
+              <a href="https://github.com/dotlists" class="p-1 border border-border rounded-lg mt-auto"><Github size={32} /></a>
           </div>
-        ))
-      }
-    </ul>
+
+          <div style={delay()} class="w-full border rounded-xl p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row">
+              <img src="/tools/vairc/vairc.png" class="!h-16 !w-[7.3125rem] px-2 rounded-lg" />
+              <p class="w-full my-auto pr-4"><b>{"3151A: "}</b>innovated a tech stack to train, run, and integrate custom AI and logic models from scratch</p>
+              <a href="/robotics-5" class="p-1 border border-border rounded-lg mt-auto"><FileText size={32} /></a>
+              <a href="https://github.com/aadishv/AIWorlds" class="p-1 border border-border rounded-lg mt-auto"><Github size={32} /></a>
+          </div>
+
+          <div style={delay()} class="w-full border rounded-xl bg-[#ff453b] text-white p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row">
+              <img src="https://avatars.githubusercontent.com/u/217141257?s=400" class="!size-16 rounded-lg" />
+              <p class="w-full pr-4 my-auto"><b>{"Venice: "}</b>an open source Micropython runtime for the VEX V5 brain</p>
+              <a href="https://venice.fibn.cc" class="p-1 border border-border rounded-lg mt-auto"><Globe size={32} /></a>
+              <a href="https://github.com/venice-v5" class="p-1 border border-border rounded-lg mt-auto"><Github size={32} /></a>
+          </div>
+          </ul>
+          </div>
+      </div>
+      <ul class="space-y-6 w-full mt-0 pb-10">
+        {
+          entries.map((entry) => (
+            <div style={delay()}>
+              <span class="text-xl">
+                <a
+                  href={"/" + getSlugFromPath(entry.filePath ?? "")}
+                  class="underline hover:decoration-none"
+                  transition:name={entry.id}
+                >
+                  {entry.data.title}
+                </a>
+                {entry.data.categories.map((c: string) => (
+                  <Badge variant="outline" className="ml-2 font-normal">
+                    {c}
+                  </Badge>
+                ))}
+              </span>
+              <time
+                class="block"
+                datetime={parseISO(entry.data.date).toString()}
+              >
+                {format(parseISO(entry.data.date), "LLLL d, yyyy")}
+              </time>
+              {entry.data.description && (
+                <p class="text-sm text-muted-foreground line-clamp-3">
+                  {entry.data.description}
+                </p>
+              )}
+            </div>
+          ))
+        }
+      </ul>
+    </div>
   </main>
 </Layout>
