@@ -91,10 +91,6 @@
     :root {
       font-size: 16px;
     }
-    aside {
-      float: right;
-      max-width: 20vw;
-    }
   }
   th,
   td {
