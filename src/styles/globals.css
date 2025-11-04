@@ -4,8 +4,8 @@
 
 @keyframes appear {
   from {
-      /*// blur a bit*/
-      filter: blur(2px);
+    /*// blur a bit*/
+    filter: blur(2px);
     opacity: 0;
     transform: translateY(10px);
   }
@@ -20,6 +20,8 @@
     border-color: black; /* or a hex like #94a3b8 */
   }
   :root {
+    --aadish: 224 76% 48%;
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -52,6 +54,8 @@
   }
 
   .dark {
+    --aadish: 224 68% 59%;
+
     --background: 0 0% 0%;
     --foreground: 210 40% 98%;
 
@@ -138,7 +142,7 @@
     @apply mt-3 p-3 border-gray-200 border rounded;
   }
   a:not(.aadish-none) {
-    @apply underline hover:no-underline;
+    @apply underline hover:no-underline text-aadish;
   }
   :is(.dark *):is(
     .astro-code,
@@ -171,4 +175,5 @@
   aside {
     @apply border p-3 text-muted-foreground my-3 rounded-lg;
   }
+
 }

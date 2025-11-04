@@ -39,7 +39,7 @@ const isProject =
 ---
 
 <Layout title={post.data.title}>
-  <div class="h-2 fixed bottom-0 left-0 transition-all bg-blue-200 dark:bg-blue-800 duration-100" id="progress-bar"></div>
+  <div class="h-2 fixed bottom-0 left-0 transition-all bg-aadish duration-100" id="progress-bar"></div>
   <script>
     const progressBar = document.getElementById("progress-bar")!;
     const totalHeight = document.body.scrollHeight - window.innerHeight;
@@ -96,7 +96,7 @@ const isProject =
         )
       }
 
-      <div class="[&_a]:text-[#1d4ed8] dark:[&_a]:text-[#5075de]">
+      <div class="">
         <Content />
       </div>
       <ConvexComments slug={slug} client:only="react" />
