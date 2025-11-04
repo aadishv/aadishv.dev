@@ -12,7 +12,7 @@ description: ""
 
 - Led winning teams for the OHS Labor Day Hackathon in 2024 and 2025. Worked on student-focused projects; [a tech issue diagnosis software with integrated AI](https://github.com/aadishv/doleofdoves) [[demo](https://drive.google.com/file/d/1tY9xYQxgWX8BaUuugb8C5ZvrLzII6VSt/view?usp=sharing)] and [AI-powered fact checker to verify social media posts](https://github.com/aadishv/fluorine/) [[demo](https://drive.google.com/file/d/1g-JFRpFuEvoKB7rdCtDtvEMDrhfKEs8_/view?usp=sharing)]. 1st place both years.
 - Developed and maintain [OHS AC Utilities](https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne) [[code](https://github.com/aadishv/ohs-ac-utils)] (100+ users). Offers useful download utility and AI assistant for OHS students accessing class recordings via Adobe Connect.
-- As part of my volunteer role in the OHS Board of Communications, wrote a program to automatically generate eKudos emails for the board chair. [blog post](/ekudos/)
+- Volunteer in the OHS student government's Board of Communications; [wrote code to massively speed up the operations of the board](/ekudos). Also reverse-engineered and reimplemented in TypeScript the API of a chat app we use, leveraging AI to build a "Bulletin Bard" which summarizes school events for the upcoming month [[code](https://github.com/aadishv/pronto-stugov)].
 - [Built](/tools/chinese/) [several](/tools/periodic/) [tools](/tools/om013/) to help students in a variety of classes understand course content.
 
 **VEX Robotics**
@@ -22,8 +22,8 @@ description: ""
 
 **Open source**
 
-- Contributed critical bugfixes [to LemLib](https://github.com/LemLib/LemLib/pull/274) (most popular VEX motion control lib, used by hundreds of teams), and [to the RPLiDAR C++ SDK](https://github.com/Slamtec/rplidar_sdk/pull/141) (very commonly used LiDAR SDK made by Slamtec, likely used by tPhilippineshousands if not tens of thousands of projects).
-- Created and maintain [DishPy](https://github.com/aadishv/dishpy) (Python development tool for VEX offering a significant advantage over the VEX Micropython runtime, in competitive use by many teams). [[docs](https://aadishv.github.io/dishpy) [blog post](/dis py-blog)]
+- Contributed critical bugfixes [to LemLib](https://github.com/LemLib/LemLib/pull/274) (most popular VEX motion control lib, used by hundreds of teams), and [to the RPLiDAR C++ SDK](https://github.com/Slamtec/rplidar_sdk/pull/141) (very commonly used LiDAR SDK made by Slamtec, likely used by thousands if not tens of thousands of projects).
+- Created and maintain [DishPy](https://github.com/aadishv/dishpy) (Python development tool for VEX offering a significant advantage over the VEX Micropython runtime, in competitive use by many teams). [[docs](https://aadishv.github.io/dishpy) [blog post](/dishpy-blog)]
 - Designed, wrote, and maintain [website](https://venice.fibn.cc/) for the [Venice open source Micropython runtime for VEX V5](https://github.com/venice-v5/). Active contributor to [Venice CLI](https://github.com/venice-v5/venice-cli), involving low-level serial code.
 - Wrote [several](/mcl/) [blog posts](/mcl-2x/) helping dozens of fellow competitors across the
   - US,
@@ -47,4 +47,3 @@ description: ""
 
 - Volunteer at several robotics competitions throughout the year; mentor new teams at an annual Girl Powered robotics workshop.
 - Elected teaching assistant and peer tutor for math courses at OHS.
-- Volunteer in the OHS student government's Board of Communications; [wrote code to massively speed up the operations of the board](/ekudos). Also reverse-engineered and reimplemented in Typescript the API of a chat app we use, leveraging AI to build a "Bulletin Bard" which summarizes school events for the upcoming month [[code](https://github.com/aadishv/pronto-stugov)].
