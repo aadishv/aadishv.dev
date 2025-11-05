@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "@/styles/globals.css";
+import NotesIsland from "@/components/NotesIsland.astro";
+
+export const prerender = false;
+---
+
+<Layout title="Notes - Aadish Verma">
+  <main class="container mx-auto py-10">
+    <NotesIsland server:load />
+  </main>
+</Layout>

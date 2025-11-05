@@ -6,4 +6,7 @@ export default defineSchema({
     slug: v.string(),
     body: v.string(),
   }).index("by_slug", ["slug"]),
+  notes: defineTable({
+    content: v.string(),
+  }),
 });
