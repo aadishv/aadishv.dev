@@ -42,75 +42,171 @@ const delay = () => {
   opacity: 0;
 `;
 };
+
+const projects = [
+  {
+    image: "https://avatars.githubusercontent.com/u/228060980?s=200&v=4",
+    name: "Dotlist",
+    desc: "a family of open-source productivity managers",
+    icons: [
+      {
+        icon: FileText,
+        href: "/llm-1",
+      },
+      {
+        icon: Globe,
+        href: "https://dotlist.edwrdq.xyz/",
+      },
+      {
+        icon: Github,
+        href: "https://github.com/dotlists",
+      },
+    ],
+  },
+  {
+    image: "/tools/vairc/vairc.png",
+    width: "7.3125rem",
+    height: "4rem",
+    name: "3151A",
+    desc: "innovated a tech stack to train, run, and integrate custom AI and logic models from scratch",
+    icons: [
+      {
+        icon: FileText,
+        href: "/robotics-5",
+      },
+      {
+        icon: Github,
+        href: "https://github.com/aadishv/AIWorlds",
+      },
+    ],
+  },
+  {
+    background: "#ff453b",
+    text: "white",
+    image: "https://avatars.githubusercontent.com/u/217141257?s=400",
+    name: "Venice",
+    desc: "an open source Micropython runtime for the VEX V5 brain",
+    icons: [
+      {
+        icon: Globe,
+        href: "https://venice.fibn.cc",
+      },
+      {
+        icon: Github,
+        href: "https://github.com/venice-v5",
+      },
+    ],
+  },
+  {
+    background: "#00261a",
+    text: "white",
+    image: "/ohs-ac-intro.md/1.png",
+    name: "OHS AC Utils",
+    desc: "Chrome extension for OHS students that adds downloading options & AI features to lecture recordings",
+    icons: [
+      {
+        icon: FileText,
+        href: "/introducing-ohs-ac-utils",
+      },
+      {
+        icon: Chrome,
+        href: "https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne",
+      },
+      {
+        icon: Github,
+        href: "https://github.com/aadishv/ohs-ac-utils",
+      },
+    ],
+  },
+];
 ---
 
 <Layout title="Aadish Verma" hideName={true}>
   <main class="container mx-auto">
-    <h3 style={delay()}>hi, I'm Aadish!</h3>
+    <h3>hi, I'm Aadish!</h3>
     <hr class="border-aadish/50" />
     <div class="flex flex-col lg:flex-row-reverse lg:gap-4">
       <div class="w-full pt-1 pb-10">
-          <p style={delay()} class="mt-0 pt-0">
-            I’m a freshman at Stanford Online High School and passionate programmer.
-          </p>
-          <p style={delay()}>
-            {
-              "(If you're looking for a list of skills or programming languages, you aren't going to find it. Such a list would grow every day 🙂)"
-            }
-          </p>
-          <p style={delay()}>
-            Check out my <a href="/background">programming background</a> for a few
-            notable things I've done.
-          </p>
-          <p style={delay()}>
-            Contact me!
-            <br /><a href="mailto:aadish@ohs.stanford.edu">email</a>
-            <br /><a href="https://github.com/aadishv" target="_blank">github</a
-            >
-            <br /><a href="https://x.com/aadishvdotdev" target="_blank"
+        <p class="mt-0 pt-0">
+          I’m a freshman at Stanford Online High School and passionate
+          programmer. I'm currently working as a founding engineer at <a
+            href="https://www.jvcopilot.ai/"
+            target="_blank">JV Copilot</a
+          >, as well as pursuing various personal projects and contributing to
+          several open source repos.
+        </p>
+        <p>
+          I'm exploring all kinds of programming, from full stack to embedded.
+          You can find me at your nearest localhost :)
+        </p>
+        <ul class="-space-y-1">
+          <p>Contact me!</p>
+          <li><a href="mailto:aadish@ohs.stanford.edu">email</a></li>
+          <li>
+            <a href="https://github.com/aadishv" target="_blank">github</a>
+          </li>
+          <li>
+            <a href="https://x.com/aadishvdotdev" target="_blank"
               >twitter (views my own)</a
             >
-          </p>
-          <div class="flex flex-col-reverse lg:flex-col space-y-3">
-          <p style={delay()}>
-              <span class="lg:inline hidden">←</span>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/aadishv/" target="_blank"
+              >linkedin</a
+            >
+          </li>
+          <li>discord @blood_bagel</li>
+        </ul>
+        <div class="flex flex-col-reverse lg:flex-col space-y-3">
+          <p>
+            <span class="lg:inline hidden">←</span>
             {"check out my blog!"}
             <span class="lg:hidden inline">↓</span>
           </p>
           <ul class="space-y-3">
-          <p style={delay()}>A few cool projects I've worked on (not an exhuastive list!):</p>
-
-          <div style={delay()} class="w-full border rounded-xl p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row">
-              <img src="https://avatars.githubusercontent.com/u/228060980?s=200&v=4" class="!size-16 rounded-lg" />
-              <p class="w-full my-auto pr-4"><b>{"Dotlist: "}</b>a family of open-source productivity managers</p>
-              <a href="/llm-1" class="p-1 border border-border rounded-lg mt-auto aadish-none"><FileText size={32} /></a>
-              <a href="https://dotlist.edwrdq.xyz/" class="p-1 border border-border rounded-lg mt-auto aadish-none"><Globe size={32} /></a>
-              <a href="https://github.com/dotlists" class="p-1 border border-border rounded-lg mt-auto aadish-none"><Github size={32} /></a>
-          </div>
-
-          <div style={delay()} class="w-full border rounded-xl p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row">
-              <img src="/tools/vairc/vairc.png" class="!h-16 !w-[7.3125rem] px-2 rounded-lg" />
-              <p class="w-full my-auto pr-4"><b>{"3151A: "}</b>innovated a tech stack to train, run, and integrate custom AI and logic models from scratch</p>
-              <a href="/robotics-5" class="p-1 border border-border rounded-lg mt-auto aadish-none"><FileText size={32} /></a>
-              <a href="https://github.com/aadishv/AIWorlds" class="p-1 border border-border rounded-lg mt-auto aadish-none"><Github size={32} /></a>
-          </div>
-
-          <div style={delay()} class="w-full border rounded-xl bg-[#ff453b] text-white p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row">
-              <img src="https://avatars.githubusercontent.com/u/217141257?s=400" class="!size-16 rounded-lg" />
-              <p class="w-full pr-4 my-auto"><b>{"Venice: "}</b>an open source Micropython runtime for the VEX V5 brain</p>
-              <a href="https://venice.fibn.cc" class="p-1 border border-border rounded-lg mt-auto aadish-none"><Globe size={32} /></a>
-              <a href="https://github.com/venice-v5" class="p-1 border border-border rounded-lg mt-auto aadish-none"><Github size={32} /></a>
-          </div>
-
-          <div style={delay()} class="w-full border rounded-xl bg-[#00261a] text-white p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row">
-              <img src="/ohs-ac-intro.md/1.png" class="!size-16 rounded-lg" />
-              <p class="w-full pr-4 my-auto"><b>{"OHS AC Utils: "}</b>Chrome extension for OHS students that adds downloading options & AI features to lecture recordings</p>
-              <a href="/introducing-ohs-ac-utils" class="p-1 border border-border rounded-lg mt-auto aadish-none"><FileText size={32} /></a>
-              <a href="https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne" class="p-1 border border-border rounded-lg mt-auto aadish-none"><Chrome size={32} /></a>
-              <a href="https://github.com/aadishv/ohs-ac-utils" class="p-1 border border-border rounded-lg mt-auto aadish-none"><Github size={32} /></a>
-          </div>
+            <p>
+              A few cool projects I've worked on (<a
+                href="/background"
+                target="_blank">more exhaustive list</a
+              >):
+            </p>
+            {
+              projects.map((project) => (
+                <div
+                  class="w-full border rounded-xl p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row"
+                  style={{
+                    ...(project.text ? { color: project.text } : {}),
+                    ...(project.background
+                      ? { backgroundColor: project.background }
+                      : {}),
+                  }}
+                >
+                  <img
+                    src={project.image}
+                    style={{
+                      height: project.height ?? "4rem",
+                      width: project.width ?? "4rem",
+                    }}
+                    class="my-auto"
+                  />
+                  <p class="w-full my-auto pr-4">
+                    <b>{project.name + ": "}</b>
+                    {project.desc}
+                  </p>
+                  {project.icons.map((icon) => (
+                    <a
+                      href={icon.href}
+                      target="_blank"
+                      class="p-1 border border-border rounded-lg mt-auto aadish-none"
+                    >
+                      <icon.icon size={32} />
+                    </a>
+                  ))}
+                </div>
+              ))
+            }
           </ul>
-          </div>
+        </div>
       </div>
       <ul class="space-y-6 w-full mt-0 pb-10">
         {
