@@ -263,34 +263,3 @@ A [chat with Gemini](https://gemini.google.com/share/3eb691bbdf01) seems to sugg
 A few future directions I could take this are actually learning WGPU (despite its verboseness...) and porting the visualization to run natively, perhaps converting the shaders via wgpu's `naga` utility, or porting it to pure TypeScript through the insanely cool [TypeGPU](https://docs.swmansion.com/TypeGPU/). GPU programming is definitely quite interesting and I think I'll explore it more in the future, perhaps implementing more complex programs such as ray tracing.
 
 As always, thanks for reading!
-
-## All Gemini threads
-
-* [finding the original tweet by Sam](https://gemini.google.com/share/2e0c1b7be439)
-* [initial research into how I could do similar debugging](https://gemini.google.com/share/d1f9007175f5)
-* [trying to use FLEX in a simulator](https://gemini.google.com/share/c75a4691c69a)
-* [more questions about FLEX compatibility](https://gemini.google.com/share/44ea59f9b19d)
-* [installing FLEX tweaks on a simulator](https://gemini.google.com/share/53b14ba7f92d)
-* [identifying how Sam used FLEXList](https://gemini.google.com/share/3290dac202ff)
-* [editing heap objects in LLDB](https://gemini.google.com/share/cee88b64021a)
-* [trying to swizzle the app to make sigma always 0 in MPSGaussianBlur](https://gemini.google.com/share/b88c693a0368)
-* [more fighting LLDB](https://gemini.google.com/share/dc69c37529aa)
-* [learning about Gaussian blurs & their optimizations](https://gemini.google.com/share/a23b2bafb021)
-* [looking into WGPU](https://gemini.google.com/share/f0063ead2f82)
-* [finding tutorials for loading images into WebGL](https://gemini.google.com/share/ca4f9ab96877)
-* [understanding WebGL behavior](https://gemini.google.com/share/d4acb634892e)
-* [figuring out how to implement multi-pass rendering](https://gemini.google.com/share/e96cc5967896)
-* [understanding buffers](https://gemini.google.com/share/d719ac0d77e0)
-* [writing a quick TypeScript function to generate a Gaussian kernel](https://gemini.google.com/share/ebfc4e0d5911)
-* [learning that GLSL ES 1.00 has mid array support](https://gemini.google.com/share/e38ab8ebc491)
-* [learning more about vertex shaders](https://gemini.google.com/share/393c2a3aa544)
-* [understanding the twist effect](https://gemini.google.com/share/5660c3b7993d)
-* [understanding the saturation constants](https://gemini.google.com/share/a2429de30a80)
-* [understanding the saturation shader](https://gemini.google.com/share/5aeaf4ca1e95)
-* [understanding the blur shader](https://gemini.google.com/share/436c36d71d10)
-* [understanding the blur shader (again)](https://gemini.google.com/share/bc7148e9180e)
-* [understanding the transformation shader](https://gemini.google.com/share/38e033dc53b0)
-* [asking about how the blur was implemented](https://gemini.google.com/share/8736f9855c19)
-* [asking about how the `LyricsScene` interface worked](https://gemini.google.com/share/f26489dd8315)
-* [asking about parts of the bundle](https://gemini.google.com/share/c019443e39c0)
-* [help with Solid](https://gemini.google.com/share/08282096a1a9)
