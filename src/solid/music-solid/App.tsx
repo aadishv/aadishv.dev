@@ -11,7 +11,7 @@ export function App() {
     sat: true,
   });
 
-  const canvas = <canvas class="h-screen w-screen" />;
+  const canvas = <canvas class="h-screen w-screen fixed top-0 left-0" />;
   let scene: LyricsScene;
   onMount(() => {
     scene = new LyricsScene(
