@@ -44,6 +44,7 @@
     "@yaireo/relative-time": "^1.1.0",
     "ai": "^5.0.79",
     "astro": "5.9.3",
+    "astro-og-canvas": "^0.7.2",
     "bun": "^1.3.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

@@ -2,7 +2,7 @@
 import "@/styles/globals.css";
 import { ClientRouter } from "astro:transitions";
 import Analytics from "./Analytics.astro";
-const { title, tool, hideName, description } = Astro.props;
+const { title, tool, hideName, description, image } = Astro.props;
 ---
 
 <!doctype html>
@@ -16,9 +16,9 @@ const { title, tool, hideName, description } = Astro.props;
     <meta name="description" content={description} />
     )
     }
-    <meta property="og:image" content="/og/blog.svg" />
+    <meta property="og:image" content={image ?? "https://aadishv.dev/og.png"} />
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:image" content="/og/blog.svg" />
+    <meta property="twitter:image" content={image ?? "https://aadishv.dev/og.png"} />
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

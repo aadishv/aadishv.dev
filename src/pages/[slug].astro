@@ -16,6 +16,7 @@ export async function getStaticPaths({}: GetStaticPathsOptions) {
     return {
       params: {
         slug: slug,
+        id: post.id
       },
       props: { post, slug },
     };
@@ -43,9 +44,14 @@ const dom = new JSDOM(`
     <!doctype html><html><body>${post.rendered?.html}</body></html>
 `);
 const desc = Array.from(dom.window.document.querySelectorAll("p")).map(i => i.textContent).filter(Boolean).join("\n\n");
+
+const baseUrl = import.meta.env.DEV
+  ? "http://localhost:4321"
+  : new URL(Astro.request.url).origin;
+const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 ---
 
-<Layout title={post.data.title} description={desc}>
+<Layout title={post.data.title} description={desc} image={ogImage}>
   <div class="h-2 fixed bottom-0 left-0 transition-all bg-aadish duration-100" id="progress-bar"></div>
   <script>
     const progressBar = document.getElementById("progress-bar")!;
