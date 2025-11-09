@@ -43,7 +43,7 @@ const isProject =
 const dom = new JSDOM(`
     <!doctype html><html><body>${post.rendered?.html}</body></html>
 `);
-const desc = Array.from(dom.window.document.querySelectorAll("p")).map(i => i.textContent).filter(Boolean).join("\n\n");
+const desc = Array.from(dom.window.document.querySelectorAll("p")).map(i => i.textContent).filter(Boolean)[0];
 
 const baseUrl = import.meta.env.DEV
   ? "http://localhost:4321"
