@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { parseISO, format } from "date-fns";
 import { Chrome, FileText, Github, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 const getSlugFromPath = (path: string): string => {
   const parts = path.split("/");
   const filename = parts.pop() || "";
@@ -121,9 +122,31 @@ const projects = [
 ];
 ---
 
-<Layout title="Aadish Verma" hideName={true}>
+<Layout title="Aadish Verma" hideName={true} description="A freshman and avid programmer">
   <main class="container mx-auto">
-    <h3>hi, I'm Aadish!</h3>
+      <style is:inline>
+        @keyframes wiggle {
+            0% {
+                transform: rotate(0deg);
+            }
+            33% {
+                transform: rotate(10deg);
+            }
+            /* SIX SEVE- */
+            67% {
+                transform: rotate(-10deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+        /* wiggle elements with .wiggle on hover */
+        .wiggle:hover {
+            animation: wiggle 0.5s ease-in-out;
+        }
+      </style>
+    <h3><span class="wiggle inline-block">👋</span> hi, I'm Aadish!
+    </h3>
     <hr class="border-aadish/50" />
     <div class="flex flex-col lg:flex-row lg:gap-4">
       <div class="w-full pt-1 pb-10">

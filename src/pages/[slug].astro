@@ -2,11 +2,13 @@
 import type { MarkdownInstance, GetStaticPathsOptions } from "astro";
 import Layout from "@/layouts/Layout.astro";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { JSDOM } from "jsdom";
 import { parseISO, format } from "date-fns";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import ConvexComments from "@/components/ConvexProvider";
+
+
 export async function getStaticPaths({}: GetStaticPathsOptions) {
   const allContent = await getCollection("posts");
   const paths = allContent.map((post) => {
@@ -36,9 +38,14 @@ const formatted: string =
 
 const isProject =
   post.data.categories && post.data.categories.includes("project");
+
+const dom = new JSDOM(`
+    <!doctype html><html><body>${post.rendered?.html}</body></html>
+`);
+const desc = Array.from(dom.window.document.querySelectorAll("p")).map(i => i.textContent).filter(Boolean).join("\n\n");
 ---
 
-<Layout title={post.data.title}>
+<Layout title={post.data.title} description={desc}>
   <div class="h-2 fixed bottom-0 left-0 transition-all bg-aadish duration-100" id="progress-bar"></div>
   <script>
     const progressBar = document.getElementById("progress-bar")!;
