@@ -58,6 +58,7 @@ export default function ListenReview({
   useEffect(() => {
     const label = current.words.map((w) => w.character).join("");
     store.trigger.indexSentence({ id: current.id, label });
+    setRevealed(false);
   }, [current.id]);
 
   const speak = () => {
@@ -103,6 +104,7 @@ export default function ListenReview({
   const [state, setState] = useState<CharState>(CharState.green);
   const [attempts, setAttempts] = useState<number>(0);
   const [completed, setCompleted] = useState<boolean>(false);
+  const [revealed, setRevealed] = useState<boolean>(false);
 
   const onSubmit = () => {
     if (completed) return;
@@ -146,81 +148,88 @@ export default function ListenReview({
 
   return (
     <div className="w-full flex flex-col items-center gap-4">
-      <div className="flex items-center gap-4">
-        <button className="text-black/50 lowercase text-base" onClick={speak}>
-          play
-        </button>
-        <div className="flex items-center gap-2 text-base text-black/60">
-          <span>speed</span>
-          <input
-            type="range"
-            min={0.6}
-            max={1.4}
-            step={0.1}
-            value={rate}
-            onChange={(e) => handleRateChange(parseFloat(e.target.value))}
-          />
+
+        <div className={`flex items-center gap-4 ${!voice && "opacity-0"}`}>
+          <button className="text-black/50 lowercase text-base" onClick={speak}>
+            play
+          </button>
+          <div className="flex items-center gap-2 text-base text-black/60">
+            <span>speed</span>
+            <input
+              type="range"
+              min={0.6}
+              max={1.4}
+              step={0.1}
+              value={rate}
+              onChange={(e) => handleRateChange(parseFloat(e.target.value))}
+            />
+          </div>
+          <div className="flex items-center gap-2 text-base text-black/60">
+            <span>voice</span>
+            <select
+              className="bg-transparent underline"
+              value={voice?.name || ""}
+              onChange={(e) =>
+                handleVoiceChange(
+                  voices.find((v) => v.name === e.target.value) || null,
+                )
+              }
+            >
+              {voices.map((v) => (
+                <option key={v.name} value={v.name}>
+                  {v.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="flex items-center gap-2 text-base text-black/60">
-          <span>voice</span>
-          <select
-            className="bg-transparent underline"
-            value={voice?.name || ""}
-            onChange={(e) =>
-              handleVoiceChange(
-                voices.find((v) => v.name === e.target.value) || null,
-              )
-            }
-          >
-            {voices.map((v) => (
-              <option key={v.name} value={v.name}>
-                {v.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
 
       <TrafficLights state={state} checkMark={completed} />
 
-      <div className="w-full max-w-xl">
-        {pool.map((opt) => {
-          const isCorrect = opt === current.def;
-          let cls = "border bg-white px-3 py-2 my-2 cursor-pointer ";
-          if (completed) {
-            // On completion, fill correct in green and wrong in red
-            cls += isCorrect
-              ? "bg-green-500 border-green-600 text-white "
-              : "bg-red-500 border-red-600 text-white ";
-          } else if (selected === opt) {
-            cls += "bg-gray-50 border-header2 ";
-          } else {
-            cls += "border-header ";
-          }
-          return (
-            <div
-              key={opt}
-              className={cls}
-              onClick={() => !completed && setSelected(opt)}
-            >
-              <input
-                type="radio"
-                className="mr-2"
-                checked={selected === opt}
-                readOnly
-              />
-              <span className="text-lg text-black/80">{opt}</span>
-            </div>
-          );
-        })}
-      </div>
+      {!revealed ? (
+        <button className="text-xl text-black/70" onClick={() => setRevealed(true)}>
+          reveal questions
+        </button>
+      ) : (
+        <div className="w-full max-w-xl">
+          {pool.map((opt) => {
+            const isCorrect = opt === current.def;
+            let cls = "border bg-white px-3 py-2 my-2 cursor-pointer ";
+            if (completed) {
+              // On completion, fill correct in green and wrong in red
+              cls += isCorrect
+                ? "bg-green-500 border-green-600 text-white "
+                : "bg-red-500 border-red-600 text-white ";
+            } else if (selected === opt) {
+              cls += "bg-gray-50 border-header2 ";
+            } else {
+              cls += "border-header ";
+            }
+            return (
+              <div
+                key={opt}
+                className={cls}
+                onClick={() => !completed && setSelected(opt)}
+              >
+                <input
+                  type="radio"
+                  className="mr-2"
+                  checked={selected === opt}
+                  readOnly
+                />
+                <span className="text-lg text-black/80">{opt}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {completed ? (
         <div className="flex flex-col items-center ">
           <p>{current.words.map((w) => w.character).join("")}</p>
           <p>{current.words.map((w) => w.pinyin === "" ? w.character : w.pinyin).join(" ")}</p>
         </div>
-      ) : (
+      ) : revealed ? (
         <div
           className={`transition-opacity duration-500 ${
             completed ? "opacity-0" : "opacity-100"
@@ -230,7 +239,7 @@ export default function ListenReview({
             {attempts === 0 ? "submit" : "try again"}
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

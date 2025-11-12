@@ -26,6 +26,7 @@ import lessonData122 from "./data/12-2.json";
 import lessonData131 from "./data/13-1.json";
 import lessonData131supp from "./data/13-1-supp.json";
 import lessonData131directions from "./data/13-1-directions.json";
+import lessonData132 from "./data/13-2.json";
 export interface Sentence {
   lesson: string;
   def: string;
@@ -107,5 +108,6 @@ export function getSentences(): Sentence[] {
     ...transformLessonData(lessonData131, "ic lesson 13-1"),
     ...transformLessonData(lessonData131supp, "ic lesson 13-1 supplemental"),
     ...transformLessonData(lessonData131directions, "ic lesson 13-1 directions"),
+    ...transformLessonData(lessonData132, "ic lesson 13-2"),
   ];
 }
