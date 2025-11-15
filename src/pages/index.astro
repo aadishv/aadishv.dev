@@ -32,7 +32,7 @@ const entries = allEntries
 
 let value = 0;
 const delay = () => {
-  value += 50;
+  value += 35;
   return `
   animation-delay: ${value}ms;
   animation-name: appear !important;
@@ -125,24 +125,14 @@ const projects = [
 <Layout title="Aadish Verma" hideName={true} description="A freshman and avid programmer">
   <main class="container mx-auto">
       <style is:inline>
-        @keyframes wiggle {
-            0% {
-                transform: rotate(0deg);
-            }
-            33% {
-                transform: rotate(10deg);
-            }
-            /* SIX SEVE- */
-            67% {
-                transform: rotate(-10deg);
-            }
-            100% {
-                transform: rotate(0deg);
-            }
+        .wiggle {
+            transform: rotate(0deg);
+            transition: transform 0.3s ease-in-out;
         }
         /* wiggle elements with .wiggle on hover */
         .wiggle:hover {
-            animation: wiggle 0.5s ease-in-out;
+            transform: rotate(20deg);
+            transition: transform 0.3s ease-in-out;
         }
       </style>
     <h3><span class="wiggle inline-block">👋</span> hi, I'm Aadish!
@@ -150,7 +140,7 @@ const projects = [
     <hr class="border-aadish/50" />
     <div class="flex flex-col lg:flex-row lg:gap-4">
       <div class="w-full pt-1 pb-10">
-        <p class="mt-0 pt-0">
+        <p class="mt-0 pt-0" style={delay()}>
           I’m a freshman at Stanford Online High School and passionate
           programmer, located in the Bay Area. I'm currently working as a founding engineer at <a
             href="https://www.jvcopilot.ai/"
@@ -158,36 +148,36 @@ const projects = [
           >, as well as pursuing various personal projects and contributing to
           several open source repos.
         </p>
-        <p>
+        <p style={delay()}>
           I'm exploring all kinds of programming, from full stack to embedded.
           You can find me at your nearest localhost :)
         </p>
         <ul class="-space-y-1">
-          <p>Contact me!</p>
-          <li><a href="mailto:aadish@ohs.stanford.edu">email</a></li>
-          <li>
+          <p style={delay()}>Contact me!</p>
+          <li style={delay()}><a href="mailto:aadish@ohs.stanford.edu">email</a></li>
+          <li style={delay()}>
             <a href="https://github.com/aadishv" target="_blank">github</a>
           </li>
-          <li>
+          <li style={delay()}>
             <a href="https://x.com/aadishvdotdev" target="_blank"
               >twitter (views my own)</a
             >
           </li>
-          <li>
+          <li style={delay()}>
             <a href="https://www.linkedin.com/in/aadishv/" target="_blank"
               >linkedin</a
             >
           </li>
-          <li>discord @blood_bagel</li>
+          <li style={delay()}>discord @aadishv</li>
         </ul>
         <div class="flex flex-col-reverse lg:flex-col space-y-3">
-          <p>
+          <p style={delay()}>
             {"check out my blog!"}
             <span class="lg:inline hidden">→</span>
             <span class="lg:hidden inline">↓</span>
           </p>
           <ul class="space-y-3">
-            <p>
+            <p style={delay()}>
               A few cool projects I've worked on (<a
                 href="/background"
                 target="_blank">here's a more exhaustive list</a
@@ -196,6 +186,7 @@ const projects = [
             {
               projects.map((project) => (
                 <div
+                    style={delay()}
                   class="w-full border rounded-xl p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row"
                   style={{
                     ...(project.text ? { color: project.text } : {}),
