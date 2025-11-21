@@ -53,48 +53,118 @@
     --radius: 0.5rem;
   }
 
+  :root {
+    --background: 45 29% 97%; /* Warm off-white #FDFBF7 */
+    --foreground: 0 0% 0%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    --primary: 262 83% 58%; /* Purple */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 47 95% 57%; /* Yellow */
+    --secondary-foreground: 0 0% 0%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 199 89% 48%; /* Blue */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 0%;
+    --input: 0 0% 0%;
+    --ring: 0 0% 0%;
+    
+    --radius: 0px;
+  }
+
   .dark {
-    --aadish: 224 68% 59%;
+    /* Neo-brutalism usually stays light, but let's make dark mode high contrast */
+    --background: 260 20% 10%;
+    --foreground: 0 0% 100%;
 
-    --background: 0 0% 0%;
-    --foreground: 210 40% 98%;
+    --card: 260 20% 15%;
+    --card-foreground: 0 0% 100%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --popover: 260 20% 15%;
+    --popover-foreground: 0 0% 100%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --primary: 262 83% 70%;
+    --primary-foreground: 0 0% 0%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 47 95% 57%;
+    --secondary-foreground: 0 0% 0%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --muted: 260 20% 20%;
+    --muted-foreground: 260 10% 70%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 199 89% 60%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --border: 0 0% 100%;
+    --input: 0 0% 100%;
+    --ring: 0 0% 100%;
   }
 
   :root {
-    font-size: 20px;
+    font-size: 16px;
   }
-  * {
-    word-wrap: break-word !important;
+  
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: "Inter", sans-serif;
+    background-image: radial-gradient(hsl(var(--foreground) / 0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
-  @media (min-width: 1024px) {
-    :root {
-      font-size: 16px;
-    }
+
+  .neo-card {
+    border: 2px solid var(--foreground);
+    box-shadow: 5px 5px 0 0 var(--foreground);
+    transition: all 0.1s ease;
+  }
+  
+  .neo-card:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0 0 var(--foreground);
+  }
+
+  .neo-button {
+    border: 2px solid var(--foreground);
+    box-shadow: 3px 3px 0 0 var(--foreground);
+    transition: all 0.1s ease;
+  }
+
+  .neo-button:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 0 var(--foreground);
+  }
+
+  /* Dark mode overrides for specific elements if needed */
+  .dark .neo-card, .dark .neo-button {
+    border-color: white;
+    box-shadow: 5px 5px 0 0 white;
+  }
+  .dark .neo-card:hover, .dark .neo-button:hover {
+    box-shadow: 3px 3px 0 0 white;
+  }
+  .dark .neo-button:active {
+    box-shadow: 0 0 0 0 white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 900;
+    letter-spacing: -0.05em;
   }
   th,
   td {

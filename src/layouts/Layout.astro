@@ -65,25 +65,15 @@ const { title, tool, hideName, description, image } = Astro.props;
     </style>
   </head>
   <body>
-    <div class={`sticky pt-4 -mb-14 mx-4 z-[1000] flex top-bar`}>
-      {
-        !tool && (
-          <>
-              {
-              !hideName && (
-                <a href="/" class="text-lg mr-auto font-serif aadish-none">
-                  Aadish Verma
-                </a>
-              )
-              }
-            <div class="mx-auto">{""}</div>
-            <div class="ml-auto">
-                <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" aria-label="Toggle theme" id="theme-button">Loading...</button>
-            </div>
-          </>
-        )
-      }
-    </div>
+    <nav class="fixed top-0 left-0 w-full border-b-2 border-black bg-white z-50 px-4 py-3 flex justify-between items-center">
+      <a href="/" class="text-xl font-black tracking-tighter hover:bg-yellow-300 px-2 transition-colors border-2 border-transparent hover:border-black">AADISH.DEV</a>
+      <div class="flex gap-4 font-bold text-sm">
+        <a href="/rss.xml" class="hover:underline decoration-2 underline-offset-4">RSS</a>
+        <a href="mailto:aadish@ohs.stanford.edu" class="hover:underline decoration-2 underline-offset-4">CONTACT</a>
+        <button id="theme-button" class="uppercase hover:bg-black hover:text-white px-2 transition-colors">THEME</button>
+      </div>
+    </nav>
+
     <script lang="ts">
       function run() {
         // t: light | dark
@@ -126,11 +116,11 @@ const { title, tool, hideName, description, image } = Astro.props;
         const button = document.getElementById("theme-button");
         const updateButton = () => {
           if (theme == "dark") {
-            button.innerHTML = "🌙 Dark";
+            button.innerHTML = "DARK";
           } else if (theme == "light") {
-            button.innerHTML = "☀️ Light";
+            button.innerHTML = "LIGHT";
           } else {
-            button.innerHTML = "⚙️ System";
+            button.innerHTML = "AUTO";
           }
         }
         updateButton();
@@ -151,7 +141,7 @@ const { title, tool, hideName, description, image } = Astro.props;
     </script>
     {
       (
-        <div class={tool ? "" : "pt-8"}>
+        <div class={tool ? "" : "pt-24 pb-20"}>
           <slot />
         </div>
       )

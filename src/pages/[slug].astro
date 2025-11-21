@@ -52,7 +52,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 ---
 
 <Layout title={post.data.title} description={desc} image={ogImage}>
-  <div class="h-2 fixed bottom-0 left-0 transition-all bg-aadish duration-100" id="progress-bar"></div>
+  <div class="h-2 fixed bottom-0 left-0 transition-all bg-black z-50 duration-100" id="progress-bar"></div>
   <script>
     const progressBar = document.getElementById("progress-bar")!;
     const totalHeight = document.body.scrollHeight - window.innerHeight;
@@ -63,56 +63,67 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
       progressBar.style.width = `${progress}dvw`;
     });
   </script>
-  <article class="mx-auto max-w-[750px] leading-8 py-10">
-    {
-      post.data.image && (
-        <div>
-          <img
-            src={post.data.image}
-            alt={post.data.title}
-            class="w-full h-auto max-h-[400px] object-contain mx-auto"
-          />
-        </div>
-      )
-    }
-    <main>
-      <div class="text-xl">
+  
+  <article class="container mx-auto px-4 max-w-4xl py-8">
+    <div class="bg-white border-4 border-black p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+      {
+        post.data.image && (
+          <div class="mb-8 border-2 border-black p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <img
+              src={post.data.image}
+              alt={post.data.title}
+              class="w-full h-auto max-h-[400px] object-contain mx-auto"
+            />
+          </div>
+        )
+      }
+      
+      <header class="mb-10 border-b-4 border-black pb-6">
         <a
           href={post.data.link ?? `/${getSlugFromPath(post.filePath ?? "")}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="!no-underline"
+          class="!no-underline block group"
           transition:name={post.id}
         >
-          <h1>{post.data.title}</h1>
+          <h1 class="text-4xl md:text-6xl font-black tracking-tighter mb-4 group-hover:text-blue-600 transition-colors">{post.data.title}</h1>
         </a>
-        <h4>
-          <time datetime={date.toString()}>{formatted}</time>
+        
+        <div class="flex flex-wrap gap-4 items-center text-sm font-bold">
+          <span class="bg-yellow-300 px-3 py-1 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            <time datetime={date.toString()}>{formatted}</time>
+          </span>
 
           {
             post.body && (
-              <span>
-                ・<em>{`${post.body.split(" ").length} words`}</em>
+              <span class="bg-purple-300 px-3 py-1 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                {`${post.body.split(" ").length} words`}
               </span>
             )
           }
-        </h4>
-      </div>
+        </div>
+      </header>
 
       {
         isProject && post.data.link && (
-          <div class="my-4">
-            <a href={post.data.link} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline">View Live Project / Tool</Button>
+          <div class="mb-8">
+            <a href={post.data.link} target="_blank" rel="noopener noreferrer" class="inline-block">
+              <button class="bg-white px-6 py-3 font-black border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white transition-all flex items-center gap-2">
+                VIEW LIVE PROJECT <span class="text-xl">→</span>
+              </button>
             </a>
           </div>
         )
       }
 
-      <div class="">
+      <div class="prose prose-lg prose-slate max-w-none prose-headings:font-black prose-headings:border-b-2 prose-headings:border-black prose-headings:pb-2 prose-p:font-medium prose-a:text-blue-600 prose-a:decoration-2 prose-a:decoration-blue-400 hover:prose-a:bg-blue-100 prose-img:border-2 prose-img:border-black prose-img:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
         <Content />
       </div>
-      <ConvexComments slug={slug} client:only="react" />
-    </main>
+      
+      <div class="mt-16 pt-8 border-t-4 border-black">
+        <h3 class="text-2xl font-black mb-6 bg-black text-white inline-block px-2">COMMENTS</h3>
+        <ConvexComments slug={slug} client:only="react" />
+      </div>
+    </div>
   </article>
 </Layout>

@@ -7,7 +7,14 @@ export const prerender = false;
 ---
 
 <Layout title="notes">
-  <main class="container mx-auto py-10">
-    <NotesIsland server:load />
+  <main class="container mx-auto px-4 max-w-4xl py-12">
+    <div class="mb-12">
+      <h1 class="text-5xl font-black tracking-tighter mb-4">NOTES</h1>
+      <div class="h-2 bg-black w-24"></div>
+    </div>
+    
+    <div class="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] prose prose-lg prose-slate max-w-none prose-headings:font-black prose-p:font-medium">
+      <NotesIsland server:load />
+    </div>
   </main>
 </Layout>

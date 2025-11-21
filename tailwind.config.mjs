@@ -13,9 +13,17 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Helvetica Neue", "helvetica", "sans-serif"],
-        serif: ["georgia", "serif"],
+        sans: ["Inter", "sans-serif"],
+        serif: ["Lora", "serif"],
         mono: ["Geist Mono", "monospace"],
+      },
+      boxShadow: {
+        'neo': '5px 5px 0 0 rgba(0,0,0,1)',
+        'neo-sm': '3px 3px 0 0 rgba(0,0,0,1)',
+        'neo-lg': '8px 8px 0 0 rgba(0,0,0,1)',
+      },
+      translate: {
+        'box': '5px',
       },
       keyframes: {
         "accordion-down": {
@@ -26,10 +34,15 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "marquee": {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-100%)" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "marquee": "marquee 20s linear infinite",
       },
       colors: {
         aadish: "hsl(var(--aadish))",
