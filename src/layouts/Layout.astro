@@ -65,20 +65,19 @@ const { title, tool, hideName, description, image } = Astro.props;
     </style>
   </head>
   <body>
-    <div class={`sticky pt-4 -mb-14 mx-4 z-[1000] flex top-bar`}>
+    <div class={`fixed top-0 right-0 p-6 z-[1000] flex justify-end`}>
       {
         !tool && (
           <>
               {
               !hideName && (
-                <a href="/" class="text-lg mr-auto font-serif aadish-none">
+                <a href="/" class="text-lg mr-auto font-serif hover:text-primary transition-colors fixed top-6 left-6">
                   Aadish Verma
                 </a>
               )
               }
-            <div class="mx-auto">{""}</div>
-            <div class="ml-auto">
-                <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" aria-label="Toggle theme" id="theme-button">Loading...</button>
+            <div>
+                <button class="font-mono text-xs uppercase tracking-widest hover:text-primary transition-colors" aria-label="Toggle theme" id="theme-button">THEME</button>
             </div>
           </>
         )
@@ -126,11 +125,11 @@ const { title, tool, hideName, description, image } = Astro.props;
         const button = document.getElementById("theme-button");
         const updateButton = () => {
           if (theme == "dark") {
-            button.innerHTML = "🌙 Dark";
+            button.innerHTML = "[ DARK ]";
           } else if (theme == "light") {
-            button.innerHTML = "☀️ Light";
+            button.innerHTML = "[ LIGHT ]";
           } else {
-            button.innerHTML = "⚙️ System";
+            button.innerHTML = "[ AUTO ]";
           }
         }
         updateButton();
@@ -151,7 +150,7 @@ const { title, tool, hideName, description, image } = Astro.props;
     </script>
     {
       (
-        <div class={tool ? "" : "pt-8"}>
+        <div class={tool ? "" : "pt-20"}>
           <slot />
         </div>
       )
