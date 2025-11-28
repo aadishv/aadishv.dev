@@ -122,27 +122,33 @@ const projects = [
 ];
 ---
 
-<Layout title="Aadish Verma" hideName={true} description="A freshman and avid programmer">
+<Layout
+  title="Aadish Verma"
+  hideName={true}
+  description="A freshman and avid programmer"
+>
   <main class="container mx-auto">
-      <style is:inline>
-        .wiggle {
-            transform: rotate(0deg);
-            transition: transform 0.3s ease-in-out;
-        }
-        /* wiggle elements with .wiggle on hover */
-        .wiggle:hover {
-            transform: rotate(20deg);
-            transition: transform 0.3s ease-in-out;
-        }
-      </style>
-    <h3><span class="wiggle inline-block">👋</span> hi, I'm Aadish!
+    <style is:inline>
+      .wiggle {
+        transform: rotate(0deg);
+        transition: transform 0.3s ease-in-out;
+      }
+      /* wiggle elements with .wiggle on hover */
+      .wiggle:hover {
+        transform: rotate(20deg);
+        transition: transform 0.3s ease-in-out;
+      }
+    </style>
+    <h3>
+      <span class="wiggle inline-block">👋</span> hi, I'm Aadish!
     </h3>
     <hr class="border-aadish/50" />
     <div class="flex flex-col lg:flex-row lg:gap-4">
       <div class="w-full pt-1 pb-10">
         <p class="mt-0 pt-0" style={delay()}>
           I’m a freshman at Stanford Online High School and passionate
-          programmer, located in the Bay Area. I'm currently working as a founding engineer at <a
+          programmer, located in the Bay Area. I'm currently working as a
+          founding engineer at <a
             href="https://www.jvcopilot.ai/"
             target="_blank">JV Copilot</a
           >, as well as pursuing various personal projects and contributing to
@@ -154,7 +160,9 @@ const projects = [
         </p>
         <ul class="-space-y-1">
           <p style={delay()}>Contact me!</p>
-          <li style={delay()}><a href="mailto:aadish@ohs.stanford.edu">email</a></li>
+          <li style={delay()}>
+            <a href="mailto:aadish@ohs.stanford.edu">email</a>
+          </li>
           <li style={delay()}>
             <a href="https://github.com/aadishv" target="_blank">github</a>
           </li>
@@ -186,7 +194,7 @@ const projects = [
             {
               projects.map((project) => (
                 <div
-                    style={delay()}
+                  style={delay()}
                   class="w-full border rounded-xl p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row"
                   style={{
                     ...(project.text ? { color: project.text } : {}),
@@ -201,7 +209,7 @@ const projects = [
                       height: project.height ?? "4rem",
                       width: project.width ?? "4rem",
                     }}
-                    class="my-auto"
+                    class="my-auto rounded-xl"
                   />
                   <p class="w-full my-auto pr-4">
                     <b>{project.name + ": "}</b>
@@ -225,32 +233,20 @@ const projects = [
       <ul class="space-y-6 w-full mt-0 pb-10">
         {
           entries.map((entry) => (
-            <div style={delay()}>
-              <span class="text-xl">
-                <a
-                  href={"/" + getSlugFromPath(entry.filePath ?? "")}
-                  class="underline hover:decoration-none"
-                  transition:name={entry.id}
-                >
-                  {entry.data.title}
-                </a>
-                {entry.data.categories.map((c: string) => (
-                  <Badge variant="outline" className="ml-2 font-normal">
-                    {c}
-                  </Badge>
-                ))}
-              </span>
+            <div style={delay()} class="flex">
+              <a
+                href={"/" + getSlugFromPath(entry.filePath ?? "")}
+                class="underline hover:decoration-none text-xl"
+                transition:name={entry.id}
+              >
+                {entry.data.title}
+              </a>
               <time
-                class="block"
                 datetime={parseISO(entry.data.date).toString()}
+                class="text-sm ml-auto my-auto"
               >
                 {format(parseISO(entry.data.date), "LLLL d, yyyy")}
               </time>
-              {entry.data.description && (
-                <p class="text-sm text-muted-foreground line-clamp-3">
-                  {entry.data.description}
-                </p>
-              )}
             </div>
           ))
         }

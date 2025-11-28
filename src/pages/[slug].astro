@@ -52,17 +52,6 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 ---
 
 <Layout title={post.data.title} description={desc} image={ogImage}>
-  <div class="h-2 fixed bottom-0 left-0 transition-all bg-aadish duration-100" id="progress-bar"></div>
-  <script>
-    const progressBar = document.getElementById("progress-bar")!;
-    const totalHeight = document.body.scrollHeight - window.innerHeight;
-    window.addEventListener("scroll", () => {
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
-      const progress = (scrollTop / totalHeight) * 100;
-      progressBar.style.width = `${progress}dvw`;
-    });
-  </script>
   <article class="mx-auto max-w-[750px] leading-8 py-10">
     {
       post.data.image && (
@@ -81,7 +70,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
           href={post.data.link ?? `/${getSlugFromPath(post.filePath ?? "")}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="!no-underline"
+          class="!no-underline aadish-none"
           transition:name={post.id}
         >
           <h1>{post.data.title}</h1>

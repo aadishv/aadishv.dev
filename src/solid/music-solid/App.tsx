@@ -48,7 +48,7 @@ export function App() {
   return (
     <div>
       {canvas}
-      <div class="fixed bottom-4 p-4 bg-white right-4 flex flex-col">
+      <div class="fixed bottom-4 p-4 bg-background right-4 flex flex-col">
         <b>Controls</b>
         <button onClick={() => {
           const r = !running();

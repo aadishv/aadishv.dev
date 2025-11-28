@@ -13,8 +13,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Helvetica Neue", "helvetica", "sans-serif"],
-        serif: ["georgia", "serif"],
+        sans: ["IBM Plex Sans", "helvetica", "sans-serif"],
+        serif: ["Charter", "serif"],
         mono: ["Geist Mono", "monospace"],
       },
       keyframes: {
