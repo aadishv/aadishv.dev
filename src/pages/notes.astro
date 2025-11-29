@@ -11,3 +11,17 @@ export const prerender = false;
     <NotesIsland server:load />
   </main>
 </Layout>
+
+<script>
+  const checkAndScroll = () => {
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "instant" });
+      } else {
+        requestAnimationFrame(checkAndScroll);
+      }
+    }
+  };
+  checkAndScroll();
+</script>
