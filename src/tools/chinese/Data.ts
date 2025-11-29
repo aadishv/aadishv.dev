@@ -27,6 +27,13 @@ import lessonData131 from "./data/13-1.json";
 import lessonData131supp from "./data/13-1-supp.json";
 import lessonData131directions from "./data/13-1-directions.json";
 import lessonData132 from "./data/13-2.json";
+import lessonData141 from "./data/14-1.json";
+import lessonData141supp from "./data/14-1-supp.json";
+import lessonData142 from "./data/14-2.json";
+import lessonData142supp from "./data/14-2-supp.json";
+import fables1 from "./data/fables-1.json";
+import fables2 from "./data/fables-2.json";
+import fables3 from "./data/fables-3.json";
 export interface Sentence {
   lesson: string;
   def: string;
@@ -109,5 +116,12 @@ export function getSentences(): Sentence[] {
     ...transformLessonData(lessonData131supp, "ic lesson 13-1 supplemental"),
     ...transformLessonData(lessonData131directions, "ic lesson 13-1 directions"),
     ...transformLessonData(lessonData132, "ic lesson 13-2"),
+    ...transformLessonData(lessonData141, "ic lesson 14-1"),
+    ...transformLessonData(lessonData141supp, "ic lesson 14-1 supplemental"),
+    ...transformLessonData(lessonData142, "ic lesson 14-2"),
+    ...transformLessonData(lessonData142supp, "ic lesson 14-2 supplemental"),
+    ...transformLessonData(fables1, "fable 1"),
+    ...transformLessonData(fables2, "fable 2"),
+    ...transformLessonData(fables3, "fable 3"),
   ];
 }
