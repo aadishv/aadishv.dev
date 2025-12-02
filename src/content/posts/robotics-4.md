@@ -46,10 +46,8 @@ When the team just got formed, I had no idea how we would play the game. I thus 
 ![image](assets/robotics4/image.png)
 Note the many fancy terms here. The TL;DR is that I wanted to run as much as possible on a Jetson Orin Nano (not the Jetson Nano that comes with the VEX AI Platform) so we could have powerful hardware (aka GPU) to do cool stuff. What I eventually realized, however, is that getting this to work would require tens of thousands of lines of code. Given that this was 2 weeks before the competition, we decided to scrap this plan.
 
-<aside>VEX teams are required to maintain an <em>engineering notebook</em> to log their development journey, which also helps when getting awards.</aside>
-
 So what did we do instead?
-Here’s an excerpt from our engineering notebook about how we handled this.
+Here’s an excerpt from our engineering notebook[^nb] about how we handled this.
 
 ## The _actual_ plan
 
@@ -138,3 +136,5 @@ We ended up ranked second and made it to the finals, where we (inevitably) lost 
 Overall, it was fun! We also got to ~~steal some tech~~ get inspired by some of the teams that had tried using AI. Big thanks to Chroma for being the reason we won any matches at all.
 
 Just one more blog post left for VAIRC. That one’s gonna be _very_ technical and _very long_…
+
+[^nb]: VEX teams are required to maintain an <em>engineering notebook</em> to log their development journey, which also helps when getting awards.

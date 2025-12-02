@@ -57,12 +57,7 @@ Typically, these binaries are built and uploaded through VEX’s proprietary IDE
 - Documentation. PROS has actually well-documented APIs compared to the mess of VEX APIs. For example, VEX only somewhat [documented their APIs a few months ago](https://api.vex.com/) — even though they’ve existed for years!
 - External libraries. VEXcode’s tough integration with other tools makes it hard to have a proper package management system. In contrast, PROS has a robust library ecosystem with hundreds if not more packages ready to install via their CLI (another thing that VEXcode doesn’t have).
 - IDE integration. While PROS has a recommended VSCode plugin, its extensible CLI means you can code in it from everywhere (including [Zed](https://zed.dev), my favorite code editor). VEXcode can only be used from their proprietary app or VSCode extension. Also, VEXcode has _very_ weird code structure, while PROS’ is just regular C++ with cpp and header files.
-
-<aside>
-    Update 10/7/25: this is a bit inaccurate. C++ does support async, but PROS doesn't use it; all of its operations are synchronous, and threads are preemptive. `vexide` uses Rust's cooperative scheduling to have first-class async operations.
-</aside>
-
-- PROS is open-source! All of VEXCode’s APIs and protocols are closed-source (although the SIGbots team got access to it under a NDA to develop PROS) while every single bit of PROS is open-source and on [Github](https://github.com/purduesigbots/pros). This has enabled the community to do a bunch of cool things. The coolest of these, in my opinion, is [vexide](https://vexide.dev/), which is a runtime like PROS for the V5, with two major differences. 1) It supports async. But wait, C++ doesn’t have async. And then we have 2) _It’s written in Rust!_
+- PROS is open-source! All of VEXCode’s APIs and protocols are closed-source (although the SIGbots team got access to it under a NDA to develop PROS) while every single bit of PROS is open-source and on [Github](https://github.com/purduesigbots/pros). This has enabled the community to do a bunch of cool things. The coolest of these, in my opinion, is [vexide](https://vexide.dev/), which is a runtime like PROS for the V5, with two major differences. 1) It supports async. But wait, C++ doesn’t have async[^misrep]. And then we have 2) _It’s written in Rust!_
 
 
 
@@ -239,3 +234,5 @@ That’s basically all I have to say about the robot’s codebase. Hope some of 
 ## Epilogue<!-- {"fold":true} -->
 
 Due to internal frustrations with how the team was being managed and the lack of focus on coding, I left the team in October 2024. As for the future of the team, they recently qualified to the World Championships by getting a design award at states. Unfortunately, their coding is in limbo at the moment as multiple other coders have left the team or are busy with other extracurriculars. As noted above, to preserve my original code (entirely written by me, with no external authors), I have cloned the repository at the time of my leaving the team in this MIT-licensed [repo](https://github.com/aadishv/HighStakes). Hope this post was helpful/inspiring/something!
+
+[^misrep]: Update 10/7/25: this is a bit inaccurate. C++ does support async, but PROS doesn't use it; all of its operations are synchronous, and threads are preemptive. `vexide` uses Rust's cooperative scheduling to have first-class async operations.

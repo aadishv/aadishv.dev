@@ -52,9 +52,7 @@ A genuine text I sent to the team is:
 
 > I keep on telling you, every time I try to touch the UI I get burnt so hard I want to quit doing frontend altogether
 
-This is the story of a recent project that I contributed to, [Dotlist](https://github.com/edwrdq/dotlib). Dotlist is still undergoing development and I have faith that we'll figure out how to fix these mistakes. This isn't meant to roast or dunk on our choices -- instead, it's a cautionary tale for how to avoid them in the future.
-
-<aside>I now have made and use <a href="https://dotlist-lite.vercel.app/">Dotlist Lite</a> for managing all of my todos and haven't ran into a single issue yet. Features like live sync and the (in my opinion :D) beautiful themes make me truly enjoy the experience, even if it doesn't have some of the sparkly features of the regular Dotlist.</aside>
+This is the story of a recent project that I contributed to, [Dotlist](https://github.com/edwrdq/dotlib)[^loc]. Dotlist is still undergoing development and I have faith that we'll figure out how to fix these mistakes. This isn't meant to roast or dunk on our choices -- instead, it's a cautionary tale for how to avoid them in the future[^dotlite].
 
 Eventually, you have to start fresh with a new codebase. This is what I did with [Dotlist Lite](https://github.com/aadishv/dotlist-lite). It's not meant to compete with Dotlist, and I'll probably only touch it sporadically from now on. I made it because I needed a good todo list app _now_, not when we figured out how to fix the UI of Dotlist. I specifically designed Lite to be much leaner while still supporting all of the important features, as well as much more polished microinteractions/UX. How I got this to happen while still using Claude for the most part is quite interesting:
 
@@ -62,8 +60,11 @@ Eventually, you have to start fresh with a new codebase. This is what I did with
 - I made Claude port my old code to this codebase. I had an old version of Dotlist which I published as a tool on my website; it was a tiny React app which saved to localstorage. For the initial prompt, I just had Claude port the entire app (only ~600 LOC of TypeScript) to our new Convex + Vite foundation. The key idea of this is that I already understood the code, having worked on the old app for a while, so there is a very low chance of having any garbage code show up in the process. This already had the vast majority of features I needed.
 - I tuned microinteractions myself. If I didn't like a font choice or animation speed, I looked at the Tailwind classes and changed them. This is important to build up knowledge of what goes where in the codebase.
 - When I wanted to update a feature, I always asked Claude to do it. I'd review the code and test it out. If a specific part had a problem, I'd ask Claude to "simplify" and remove that part, then rewrite it myself.
-
-<aside>For reference, at the time of writing, Dotlist had 1,000 lines of (purportedly non-vibe coded) backend code and 2,500 lines of vibe coded frontend code.</aside>
+ 
 In conclusion, vibe coding is good. Until it's not. I still think the biggest advantage of vibe coding is to get an idea out super quickly -- PMs can vibe code a prototype of certain functionality instead of trying to describe it to engineers, etc. The issues start emerging when using vibe coding to actually write the majority of a production grade application.
 
 If you're looking for a simple todo app, check out Dotlist! It is still a great choice even if it's vibe coded and the team is working hard to fix our issues with the AI-generated base.
+
+[^dotlite]: I now have made and use <a href="https://dotlist-lite.vercel.app/">Dotlist Lite</a> for managing all of my todos and haven't ran into a single issue yet. Features like live sync and the (in my opinion :D) beautiful themes make me truly enjoy the experience, even if it doesn't have some of the sparkly features of the regular Dotlist.
+
+[^loc]: For reference, at the time of writing, Dotlist had 1,000 lines of (purportedly non-vibe coded) backend code and 2,500 lines of vibe coded frontend code.

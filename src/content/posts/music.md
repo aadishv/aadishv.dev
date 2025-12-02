@@ -13,15 +13,8 @@ Apple Music, in the fullscreen view for playing music, shows an animated, flowin
 
 ![](assets/music.md/1.png)
 
-I spent a lot of time trying to figure out how this could work before giving in and actually doing a bit of research into it. I ended up going down a multilayer rabbit hole (as most of my projects end up in) to reproduce it myself.
+I spent a lot of time trying to figure out how this could work before giving in and actually doing a bit of research into it. I ended up going down a multilayer rabbit hole (as most of my projects end up in) to reproduce it myself[^ai].
 
-<aside>
-    <b>Use of AI:</b> no AI-generated code ended up the final version of this project (although tab complete through Zed's Edit Predictions was used). This task is actually surprisingly difficult for LLMs -- I tried to get OpenCode with gpt-5-mini and grok-code-fast-1 to do similar work to what I describe in the rest of this post, and they both failed. I think a big reason for this is context, which was very pervasive as the files I'm discussing are in the 12k LOC range. Even using tricks like subagents doesn't fully resolve the problem.
-    <br /><br />
-    However, I *did* use AI to help me with my research. All queries were conducted on the Google Gemini app with Gemini 2.5 Pro. I chose to go this route because the actual work with the code is very appealing to me, but doing all of the auxiliary research, not as much. Queries ranged from simple ("how does X API work?") to much more complex "explain how X effect is implemented in Y shader language, taking into account Z's implementation"). I occasionally asked Gemini to generate example code but never just pasted it in. Share links to all of my Gemini conversations will be available at relevant parts of the article.
-    <br /><br />
-    This is how I'm doing much of my coding nowadays, so I hopefully won't have to post another update like this in a while.
-</aside>
 
 This was a relatively short project: I initially started looking into it in the afternoon of October 20...
 
@@ -112,11 +105,7 @@ Gemini threads:
 
 At this point, I concluded that the fastest route to answer my questions would be to write the effect myself and then tune it until it matched the Apple Music one.
 
-I initially decided to try using WGPU and WGSL since my graphics-nerd friends recommended it (and also because Rust = ⚡blazing fast⚡), but quickly burned out after it took about 200 lines of code to draw a triangle, and 350 for a simple image. The concept of textures/fragment shaders/vertex shaders weren't super clear to me at the time, either, which probably added to the confusion.
-
-<aside>
-    For those who are wondering, vertex shaders are called multiple times to return points which form lines/points/triangles/etc. For each shape, the fragment shader is then called at each pixel (in the canvas coordinate space) to choose a certain color. Textures are used to store images and intermediary frames, and are often used paired with framebuffers.
-</aside>
+I initially decided to try using WGPU and WGSL since my graphics-nerd friends recommended it (and also because Rust = ⚡blazing fast⚡), but quickly burned out after it took about 200 lines of code to draw a triangle, and 350 for a simple image. The concept of textures/fragment shaders/vertex shaders weren't super clear to me at the time, either, which probably added to the confusion[^shaders].
 
 I decided to try using WebGL instead on a whim, which led to the fumble of the century:
 
@@ -263,3 +252,9 @@ A [chat with Gemini](https://gemini.google.com/share/3eb691bbdf01) seems to sugg
 A few future directions I could take this are actually learning WGPU (despite its verboseness...) and porting the visualization to run natively, perhaps converting the shaders via wgpu's `naga` utility, or porting it to pure TypeScript through the insanely cool [TypeGPU](https://docs.swmansion.com/TypeGPU/). GPU programming is definitely quite interesting and I think I'll explore it more in the future, perhaps implementing more complex programs such as ray tracing.
 
 As always, thanks for reading!
+
+[^ai]: **Use of AI:** no AI-generated code ended up the final version of this project (although tab complete through Zed's Edit Predictions was used). This task is actually surprisingly difficult for LLMs -- I tried to get OpenCode with gpt-5-mini and grok-code-fast-1 to do similar work to what I describe in the rest of this post, and they both failed. I think a big reason for this is context, which was very pervasive as the files I'm discussing are in the 12k LOC range. Even using tricks like subagents doesn't fully resolve the problem.  
+    However, I *did* use AI to help me with my research. All queries were conducted on the Google Gemini app with Gemini 2.5 Pro. I chose to go this route because the actual work with the code is very appealing to me, but doing all of the auxiliary research, not as much. Queries ranged from simple ("how does X API work?") to much more complex "explain how X effect is implemented in Y shader language, taking into account Z's implementation"). I occasionally asked Gemini to generate example code but never just pasted it in. Share links to all of my Gemini conversations will be available at relevant parts of the article.  
+    This is how I'm doing much of my coding nowadays, so I hopefully won't have to post another update like this in a while.
+
+[^shaders]: For those who are wondering, vertex shaders are called multiple times to return points which form lines/points/triangles/etc. For each shape, the fragment shader is then called at each pixel (in the canvas coordinate space) to choose a certain color. Textures are used to store images and intermediary frames, and are often used paired with framebuffers.

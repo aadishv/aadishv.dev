@@ -175,9 +175,6 @@
   blockquote {
     @apply border-l-4 pl-4 italic border-gray-400;
   }
-  aside {
-    @apply border p-3 text-muted-foreground my-3 rounded-lg;
-  }
   p > code {
       @apply text-aadish;
   }
