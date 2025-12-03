@@ -29,97 +29,6 @@ const entries = allEntries
     (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
   )
   .filter((p) => p.data.hidden !== true);
-
-let value = 0;
-const delay = () => {
-  value += 20;
-  return `
-  animation-delay: ${value}ms;
-  animation-name: appear !important;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 1;
-  animation-duration: 250ms;
-  animation-fill-mode: forwards;
-  opacity: 0;
-`;
-};
-
-const projects = [
-  {
-    image: "https://avatars.githubusercontent.com/u/228060980?s=200&v=4",
-    name: "Dotlist",
-    desc: "a family of open-source productivity managers",
-    icons: [
-      {
-        icon: FileText,
-        href: "/llm-1",
-      },
-      {
-        icon: Globe,
-        href: "https://dotlist.edwrdq.xyz/",
-      },
-      {
-        icon: Github,
-        href: "https://github.com/dotlists",
-      },
-    ],
-  },
-  {
-    image: "/tools/vairc/vairc.png",
-    width: "7.3125rem",
-    height: "4rem",
-    name: "3151A",
-    desc: "innovated a tech stack to train, run, and integrate custom AI and logic models from scratch",
-    icons: [
-      {
-        icon: FileText,
-        href: "/robotics-5",
-      },
-      {
-        icon: Github,
-        href: "https://github.com/aadishv/AIWorlds",
-      },
-    ],
-  },
-  {
-    background: "#ff453b",
-    text: "white",
-    image: "https://avatars.githubusercontent.com/u/217141257?s=400",
-    name: "Venice",
-    desc: "an open source Micropython runtime for the VEX V5 brain",
-    icons: [
-      {
-        icon: Globe,
-        href: "https://venice.fibn.cc",
-      },
-      {
-        icon: Github,
-        href: "https://github.com/venice-v5",
-      },
-    ],
-  },
-  {
-    background: "#00261a",
-    text: "white",
-    image: "/ohs-ac-intro.md/1.png",
-    name: "OHS AC Utils",
-    desc: "Chrome extension for OHS students that adds downloading options & AI features to lecture recordings",
-    icons: [
-      {
-        icon: FileText,
-        href: "/introducing-ohs-ac-utils",
-      },
-      {
-        icon: Chrome,
-        href: "https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne",
-      },
-      {
-        icon: Github,
-        href: "https://github.com/aadishv/ohs-ac-utils",
-      },
-    ],
-  },
-];
 ---
 
 <Layout
@@ -127,129 +36,75 @@ const projects = [
   hideName={true}
   description="A freshman and avid programmer"
 >
-  <main class="container mx-auto">
-    <style is:inline>
-      .wiggle {
-        transform: rotate(0deg);
-        transition: transform 0.3s ease-in-out;
-      }
-      /* wiggle elements with .wiggle on hover */
-      .wiggle:hover {
-        transform: rotate(20deg);
-        transition: transform 0.3s ease-in-out;
-      }
-    </style>
-    <h3>
-      <span class="wiggle inline-block">👋</span> hi, I'm Aadish!
-    </h3>
-    <hr class="border-aadish/50" />
-    <div class="flex flex-col lg:flex-row lg:gap-4">
-      <div class="w-full pt-1 pb-10">
-        <p class="mt-0 pt-0" style={delay()}>
-          I’m a freshman at Stanford Online High School and passionate
-          programmer, located in the Bay Area. I'm currently working as a
-          founding engineer at <a
-            href="https://www.jvcopilot.ai/"
-            target="_blank">JV Copilot</a
-          >, as well as pursuing various personal projects and contributing to
-          several open source repos.
-        </p>
-        <p style={delay()}>
-            Here's my <a href="/resume.pdf">resume</a>, which you probably won't need.
-        </p>
-        <ul class="-space-y-1">
-          <p style={delay()}>Contact me!</p>
-          <li style={delay()}>
-            <a href="mailto:mail@aadishv.dev">email</a>
-          </li>
-          <li style={delay()}>
-            <a href="https://github.com/aadishv" target="_blank">github</a>
-          </li>
-          <li style={delay()}>
-            <a href="https://x.com/aadishvdotdev" target="_blank"
-              >twitter (views my own)</a
-            >
-          </li>
-          <li style={delay()}>
-            <a href="https://www.linkedin.com/in/aadishv/" target="_blank"
-              >linkedin</a
-            >
-          </li>
-          <li style={delay()}>discord @aadishv</li>
-        </ul>
-        <div class="flex flex-col-reverse lg:flex-col space-y-3">
-          <p style={delay()}>
-            {"check out my blog!"}
-            <span class="lg:inline hidden">→</span>
-            <span class="lg:hidden inline">↓</span>
-          </p>
-          <ul class="space-y-3">
-            <p style={delay()}>
-              A few cool projects I've worked on (<a
-                href="/background"
-                target="_blank">here's a more exhaustive list</a
-              >):
+  <main class="mx-auto">
+    <table class="w-full">
+      <tr>
+        <th
+          ><h1
+            class="text-[5rem] -m-[1px] font-medium leading-[3.6rem] tracking-tighter bg-pink-500 p-3 pt-4 text-white"
+          >
+            aadish<br />verma
+          </h1></th
+        >
+        <th class="px-4 flex flex-col font-normal text-lg text-start">
+          <p class="">
+            I’m a programmer and freshman at Stanford Online High School,
+            located in the Bay Area. I'm currently working as a founding
+            developer at <a href="https://www.jvcopilot.ai/" target="_blank"
+              >JV Copilot</a
+            >.
+
+            <p class="flex gap-1.5">
+              <a href="mailto:mail@aadishv.dev">email</a>
+              •
+              <a href="https://github.com/aadishv" target="_blank">github</a>
+              •
+              <a href="https://x.com/aadishvdotdev" target="_blank"
+                >twitter (views my own)</a
+              >
+              •
+              <a href="https://www.linkedin.com/in/aadishv/" target="_blank"
+                >linkedin</a
+              >
+              •
+              <span>discord @aadishv</span>
             </p>
-            {
-              projects.map((project) => (
-                <div
-                  style={delay()}
-                  class="w-full border rounded-xl p-2 flex gap-2 flex-wrap lg:flex-nowrap flex-row"
-                  style={{
-                    ...(project.text ? { color: project.text } : {}),
-                    ...(project.background
-                      ? { backgroundColor: project.background }
-                      : {}),
-                  }}
-                >
-                  <img
-                    src={project.image}
-                    style={{
-                      height: project.height ?? "4rem",
-                      width: project.width ?? "4rem",
-                    }}
-                    class="my-auto rounded-xl"
-                  />
-                  <p class="w-full my-auto pr-4">
-                    <b>{project.name + ": "}</b>
-                    {project.desc}
-                  </p>
-                  {project.icons.map((icon) => (
-                    <a
-                      href={icon.href}
-                      target="_blank"
-                      class="p-1 border border-border rounded-lg mt-auto aadish-none"
-                    >
-                      <icon.icon size={32} />
-                    </a>
-                  ))}
-                </div>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
-      <ul class="space-y-6 w-full mt-0 pb-10">
+          </p>
+        </th>
         {
           entries.map((entry) => (
-            <div style={delay()} class="flex">
-              <a
-                href={"/" + getSlugFromPath(entry.filePath ?? "")}
-                class="underline hover:decoration-none text-xl"
-                transition:name={entry.id}
-              >
-                {entry.data.title}
-              </a>
-              <time
-                datetime={parseISO(entry.data.date).toString()}
-                class="text-sm ml-auto my-auto"
-              >
-                {format(parseISO(entry.data.date), "LLLL d, yyyy")}
-              </time>
-            </div>
+            <tr class="border-t border-gray-400/20">
+              <td class="align-baseline flex">
+                <time
+                  datetime={parseISO(entry.data.date).toString()}
+                  class="mr-2 font-mono ml-auto"
+                >
+                  {format(parseISO(entry.data.date), "MM.dd.yy")}
+                </time>
+              </td>
+              <td class="align-baseline">
+                <h1 class="mb-4 px-3">
+                  <a
+                    href={"/" + getSlugFromPath(entry.filePath ?? "")}
+                    class="underline hover:decoration-none text-[2rem] tracking-tight"
+                    transition:name={entry.id}
+                  >
+                    {entry.data.title}
+                  </a>
+                </h1>
+              </td>
+            </tr>
           ))
         }
-      </ul>
-    </div>
+      </tr>
+
+      <!-- <div class="flex flex-col lg:flex-row text-aadish border-b-2">
+      <div class="text-xl mb-auto text-foreground">
+        <ul class="flex flex-col gap-6 w-full mt-0">
+
+        </ul>
+      </div>
+    </div> -->
+    </table>
   </main>
 </Layout>
