@@ -160,7 +160,7 @@
     text-decoration: var(--shiki-dark-text-decoration) !important;
   }
   a:not(.aadish-none) {
-    @apply /*underline hover:no-underline text-aadish */ no-underline hover:text-pink-500 transition-all    ;
+    @apply /*underline hover:no-underline text-aadish */ font-medium no-underline hover:text-pink-500 transition-all    ;
   }
 
   p,
