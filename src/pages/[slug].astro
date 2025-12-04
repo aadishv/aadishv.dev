@@ -8,7 +8,6 @@ import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import ConvexComments from "@/components/ConvexProvider";
 
-
 export async function getStaticPaths({}: GetStaticPathsOptions) {
   const allContent = await getCollection("posts");
   const paths = allContent.map((post) => {
@@ -16,7 +15,7 @@ export async function getStaticPaths({}: GetStaticPathsOptions) {
     return {
       params: {
         slug: slug,
-        id: post.id
+        id: post.id,
       },
       props: { post, slug },
     };
@@ -35,7 +34,7 @@ const { headings, Content } = await render(post);
 
 const date: Date = parseISO(post.data.date);
 const formatted: string =
-  post.data.date == "<top>" ? "" : format(date, "LLLL d, yyyy");
+  post.data.date == "<top>" ? "" : format(date, "MM.dd.yy");
 
 const isProject =
   post.data.categories && post.data.categories.includes("project");
@@ -43,7 +42,9 @@ const isProject =
 const dom = new JSDOM(`
     <!doctype html><html><body>${post.rendered?.html}</body></html>
 `);
-const desc = Array.from(dom.window.document.querySelectorAll("p")).map(i => i.textContent).filter(Boolean)[0];
+const desc = Array.from(dom.window.document.querySelectorAll("p"))
+  .map((i) => i.textContent)
+  .filter(Boolean)[0];
 
 const baseUrl = import.meta.env.DEV
   ? "http://localhost:4321"
@@ -51,57 +52,122 @@ const baseUrl = import.meta.env.DEV
 const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 ---
 
-<Layout title={post.data.title} description={desc} image={ogImage}>
-  <article class="mx-auto max-w-[750px] leading-8 py-10">
-    {
-      post.data.image && (
-        <div>
-          <img
-            src={post.data.image}
-            alt={post.data.title}
-            class="w-full h-auto max-h-[400px] object-contain mx-auto"
-          />
-        </div>
-      )
-    }
-    <main>
-      <div class="text-xl">
-        <a
-          href={post.data.link ?? `/${getSlugFromPath(post.filePath ?? "")}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="!no-underline aadish-none"
-          transition:name={post.id}
-        >
-          <h1>{post.data.title}</h1>
-        </a>
-        <h4>
-          <time datetime={date.toString()}>{formatted}</time>
+<Layout title={post.data.title} description={desc} image={ogImage} hideName>
+  <main class="mt-2">
+    <article class="flex gap-1 px-3">
+      <table>
+        <tr>
+          <th
+            class="!w-[500px] text-muted-foreground text-end pr-3 flex flex-col align-baseline"
+          >
+            <div class="">
+              <h4 class="font-normal">
+                <time datetime={date.toString()}>{formatted}</time>
 
-          {
-            post.body && (
-              <span>
-                ・<em>{`${post.body.split(" ").length} words`}</em>
-              </span>
-            )
-          }
-        </h4>
-      </div>
+                {
+                  post.body && (
+                    <span>• {`${post.body.split(" ").length} words`}</span>
+                  )
+                }
+              </h4>
 
-      {
-        isProject && post.data.link && (
-          <div class="my-4">
-            <a href={post.data.link} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline">View Live Project / Tool</Button>
+              {
+                isProject && post.data.link && (
+                  <span>
+                    •
+                    <a
+                      href={post.data.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      live demo
+                    </a>
+                  </span>
+                )
+              }
+            </div>
+            <div class="flex-1"></div>
+          </th>
+          <th class="text-start align-baseline">
+            <a
+              href={`/${getSlugFromPath(post.filePath ?? "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-aadish !font-normal tracking-tighter"
+              transition:name={post.id}
+            >
+              <h1>{post.data.title}</h1>
             </a>
-          </div>
-        )
-      }
+          </th>
+        </tr>
+        <tr>
+          <td
+            class="flex flex-col sticky top-3 [&_.toc-active]:text-aadish/70 text-end pr-4 align-baseline"
+          >
+            {
+              headings.map((heading) => (
+                <a
+                  class="!font-normal toc"
+                  style={{ marginLeft: `${(heading.depth - 2) / 2}rem` }}
+                  href={`#${heading.slug}`}
+                >
+                  {heading.text.slice(0, -1)}
+                </a>
+              ))
+            }
+            <script is:inline>
+            console.log("hi")
+              document.addEventListener("DOMContentLoaded", () => {
+                // 1. Select all the sections we want to track
+                const toc = Array.from(document.querySelectorAll(".toc"));
+                const sections = document.querySelectorAll(
+                  "#content > h1, #content > h2, #content > h3",
+                );
 
-      <div class="">
-        <Content />
-      </div>
-      <ConvexComments slug={slug} client:only="react" />
-    </main>
-  </article>
+                // 2. Options for the IntersectionObserver
+                const observerOptions = {
+                  root: null, // use the viewport
+                  rootMargin: "0px",
+                  threshold: 0,
+                };
+
+                console.log(toc, sections);
+
+                // 3. Create the observer
+                const observer = new IntersectionObserver((entries) => {
+                  entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                      const id = entry.target.id;
+                      const nav = toc.filter(c => c.href.includes(id));
+                      document.querySelector(".toc-active")?.classList.toggle("toc-active");
+                      nav[0].classList.add("toc-active")
+                      // // Remove 'active' class from ALL links
+                      // navLinks.forEach(link => {
+                      //     link.classList.remove('active');
+
+                      //     // Add 'active' class ONLY to the matching link
+                      //     if (link.getAttribute('href').includes(currentId)) {
+                      //         link.classList.add('active');
+                      //     }
+                      // });
+                    }
+                  });
+                }, observerOptions);
+
+                // 4. Tell the observer to watch each section
+                sections.forEach((section) => {
+                  observer.observe(section);
+                });
+              });
+            </script>
+            <div class="flex-1">&nbsp;</div>
+          </td>
+          <td class="leading-8 align-baseline" id="content">
+            <Content />
+            <ConvexComments slug={slug} client:only="react" />
+          </td>
+        </tr>
+      </table>
+    </article>
+  </main>
 </Layout>

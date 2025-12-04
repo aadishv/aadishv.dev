@@ -20,7 +20,7 @@
     border-color: black; /* or a hex like #94a3b8 */
   }
   :root {
-    --aadish: 0 0% 0%;
+    --aadish: 330 81 60;
 
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -130,13 +130,13 @@
   h4,
   h5,
   h6 {
-    @apply mt-2;
+    @apply mt-2 tracking-tighter;
   }
   hr {
     @apply my-2;
   }
   img:not(.aadish-none) {
-    @apply w-[30rem] mx-auto;
+    @apply w-full;
   }
   pre {
     @apply mt-3 p-3 border-gray-200 border rounded;

@@ -55,9 +55,12 @@ const { title, tool, hideName, description, image } = Astro.props;
     ></script>
     <style is:inline>
       /* for rehype */
+      .anchor-link:not(.anchor-link:hover) {
+        color: gray;
+      }
       .anchor-link {
-        color: gray !important;
-        float: right;
+          float: right;
+          font-weight: 300 !important;
       }
     </style>
   </head>
@@ -81,7 +84,7 @@ const { title, tool, hideName, description, image } = Astro.props;
         )
       }
     </div>
-    <script lang="ts">
+    <!-- <script lang="ts">
       function run() {
         // t: light | dark
         const setHtmlTheme = (t) => {
@@ -145,7 +148,7 @@ const { title, tool, hideName, description, image } = Astro.props;
       }
       document.addEventListener('astro:page-load', run);
       run();
-    </script>
+    </script> -->
     {
       (
         <div class={tool ? "" : "pt-8"}>
