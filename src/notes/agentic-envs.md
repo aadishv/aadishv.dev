@@ -1,3 +1,7 @@
+---
+date: 2025-12-03T14:57:07-08:00
+---
+
 I've recently been slowly ramping up my use of agents. The last time I tried to use agentic coding, it [spun into a mess of vibed coding](/llm-1), so I tried my best to avoid it this time. I'd previously been using the "fast iteration" models, notably Grok Code Fast 1 and sometimes OpenCode's Big Pickle (which is GLM-4.6), to do smaller tasks like
 
 * Refactor this function to use this helper.

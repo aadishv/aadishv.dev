@@ -12,6 +12,7 @@ import rehypeShiki from "@shikijs/rehype";
 import { format } from 'date-fns';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from 'convex/_generated/api';
+import matter from 'gray-matter';
 
 const client = new ConvexHttpClient("https://diligent-moose-714.convex.cloud");
 
@@ -48,10 +49,13 @@ const pipeline = unified()
 const notes = await Promise.all(fs.readdirSync(dirPath).map(async file => {
   if (file.endsWith('.md')) {
     const filePath = path.join(dirPath, file);
-    const date = fs.statSync(filePath).birthtime
+    const rawContent = fs.readFileSync(filePath, 'utf-8');
+    const { data, content: mdContent } = matter(rawContent);
+    const date = new Date(data.date);
+    console.log(date, filePath)
     const content = `
       <div id="${file.replace('.md', '')}">
-        <div style="margin-bottom: 1rem;">${await pipeline.process(fs.readFileSync(filePath, 'utf-8'))}</div>
+        <div style="margin-bottom: 1rem;">${await pipeline.process(mdContent)}</div>
         <span>
         <a href="#${file.replace('.md', '')}">#</a>,
         <time

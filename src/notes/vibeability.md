@@ -1,3 +1,6 @@
+---
+date: 2025-11-21T14:57:26-08:00
+---
 I've recently been using the idea of **vibeability** to decide whether or not to pursue specific ideas or tasks. It goes something like this: *could an AI agent complete this task within a reasonable timeframe?* If so, then it's vibeable!
 
 The specifics of the agent aren't really important. I generally go with the defaults I use, which is gpt-5-mini or grok-code-fast-1 (gpt-5-codex for hard problems) with the Zed agent. I don't use custom rules, AGENTS.md, or any of that, simply because I don't use agents heavily enough for it to be worth it to do. Of course, if you have the perfect agent setup, with a state-of-the-art model, a [Ralph Wiggum loop](https://ghuntley.com/ralph/), and a perfectly tuned system prompt, a good agent can do crazy things -- give it a few months and [it will make a programming language](https://cursed-lang.org/). But I don't care much about that.

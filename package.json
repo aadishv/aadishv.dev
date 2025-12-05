@@ -55,6 +55,7 @@
     "fast-myers-diff": "^3.2.0",
     "fuse.js": "^7.1.0",
     "github-calendar": "^2.3.4",
+    "gray-matter": "^4.0.3",
     "hanzi-writer": "^3.7.3",
     "html2canvas": "^1.4.1",
     "jsdom": "^27.1.0",

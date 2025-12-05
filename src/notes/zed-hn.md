@@ -1,3 +1,6 @@
+---
+date: 2025-11-28T14:57:39-08:00
+--- 
 I just commented on [this Hacker News post](https://news.ycombinator.com/item?id=45916196) about a new Zed blog post:
 
 > There is a lot of complaints about Zed in the comments here. I don't think that they are "hate", per se; they all definitely care about Zed and want it to succeed.
