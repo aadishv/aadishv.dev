@@ -36,75 +36,61 @@ const entries = allEntries
   hideName={true}
   description="A freshman and avid programmer"
 >
-  <main class="mx-auto">
+  <main class="lg:m-20 m-5">
     <table class="w-full">
-      <tr>
-        <th
-          ><h1
-            class="text-[5rem] -m-[1px] font-medium leading-[3.6rem] tracking-tighter bg-pink-500 p-3 pt-4 text-white"
-          >
-            aadish<br />verma
-          </h1></th
-        >
-        <th class="px-4 flex flex-col font-normal text-lg text-start">
-          <p class="">
+      <tr class="flex w-full mb-6">
+          <th class="flex-0 w-[9ch]">&nbsp;</th>
+        <th class="flex-1 !font-normal text-start">
+          <h1 class="font-medium tracking-tight text-red-600">Aadish Verma</h1>
+          <p class="w-[70%]">
             I’m a programmer and freshman at Stanford Online High School,
             located in the Bay Area. I'm currently working as a founding
             developer at <a href="https://www.jvcopilot.ai/" target="_blank"
               >JV Copilot</a
             >.
+          </p>
 
-            <p class="flex gap-1.5">
-              <a href="mailto:mail@aadishv.dev">email</a>
-              •
-              <a href="https://github.com/aadishv" target="_blank">github</a>
-              •
-              <a href="https://x.com/aadishvdotdev" target="_blank"
-                >twitter (views my own)</a
-              >
-              •
-              <a href="https://www.linkedin.com/in/aadishv/" target="_blank"
-                >linkedin</a
-              >
-              •
-              <span>discord @aadishv</span>
-            </p>
+          <p class="flex flex-wrap w-[70%] gap-1.5">
+            <a href="mailto:mail@aadishv.dev">email</a>
+            •
+            <a href="https://github.com/aadishv" target="_blank">github</a>
+            •
+            <a href="https://x.com/aadishvdotdev" target="_blank"
+              >twitter (views my own)</a
+            >
+            •
+            <a href="https://www.linkedin.com/in/aadishv/" target="_blank"
+              >linkedin</a
+            >
+            •
+            <span>discord @aadishv</span>
           </p>
         </th>
-        {
-          entries.map((entry) => (
-            <tr class="border-t border-gray-400/20">
-              <td class="align-baseline flex">
-                <time
-                  datetime={parseISO(entry.data.date).toString()}
-                  class="mr-2 font-mono ml-auto"
-                >
-                  {format(parseISO(entry.data.date), "MM.dd.yy")}
-                </time>
-              </td>
-              <td class="align-baseline">
-                <h1 class="mb-4 px-3">
-                  <a
-                    href={"/" + getSlugFromPath(entry.filePath ?? "")}
-                    class="underline hover:decoration-none text-[2rem] !font-normal tracking-tight"
-                    transition:name={entry.id}
-                  >
-                    {entry.data.title}
-                  </a>
-                </h1>
-              </td>
-            </tr>
-          ))
-        }
       </tr>
-
-      <!-- <div class="flex flex-col lg:flex-row text-aadish border-b-2">
-      <div class="text-xl mb-auto text-foreground">
-        <ul class="flex flex-col gap-6 w-full mt-0">
-
-        </ul>
-      </div>
-    </div> -->
+      {
+        entries.map((entry) => (
+          <tr class="flex mb-1">
+            <td class="text-lg !font-normal w-[9ch] translate-x-1.5">
+              <time
+                datetime={parseISO(entry.data.date).toString()}
+                class="ml-auto text-muted-foreground w-[8ch] flex"
+              >
+                {format(parseISO(entry.data.date), "MM.dd.yy")}
+                <span class="ml-auto text-aadish">/</span>
+              </time>
+            </td>
+            <td class="text-lg !font-normal flex-1 ml-1.5">
+              <a
+                href={"/" + getSlugFromPath(entry.filePath ?? "")}
+                class="ml-2 aadish-none hover:text-aadish"
+                transition:name={entry.id}
+              >
+                {entry.data.title}
+              </a>
+            </td>
+          </tr>
+        ))
+      }
     </table>
   </main>
 </Layout>
