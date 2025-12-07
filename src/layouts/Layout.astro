@@ -32,19 +32,15 @@ const { title, tool, hideName, description, image } = Astro.props;
       title="Aadish Verma RSS Feed"
       href="/rss.xml"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <meta
       name="google-site-verification"
       content="-e3sQUiyjUpdegTe0TMDBOnz5Z34OHkikLI87igRFro"
     />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
-      rel="stylesheet"
-    />
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link
       rel="preload"
       href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
@@ -59,9 +55,12 @@ const { title, tool, hideName, description, image } = Astro.props;
     ></script>
     <style is:inline>
       /* for rehype */
+      .anchor-link:not(.anchor-link:hover) {
+        color: gray;
+      }
       .anchor-link {
-        color: gray !important;
-        float: right;
+          float: right;
+          font-weight: 300 !important;
       }
     </style>
   </head>
@@ -79,7 +78,7 @@ const { title, tool, hideName, description, image } = Astro.props;
               }
             <div class="mx-auto">{""}</div>
             <div class="ml-auto">
-                <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" aria-label="Toggle theme" id="theme-button">Loading...</button>
+                <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 -mb-10 px-4 py-2" aria-label="Toggle theme" id="theme-button">Loading...</button>
             </div>
           </>
         )
@@ -127,11 +126,14 @@ const { title, tool, hideName, description, image } = Astro.props;
         const button = document.getElementById("theme-button");
         const updateButton = () => {
           if (theme == "dark") {
-            button.innerHTML = "🌙 Dark";
+            button.innerHTML = "🌙";
+            button.title = "Dark";
           } else if (theme == "light") {
-            button.innerHTML = "☀️ Light";
+            button.innerHTML = "☀️";
+            button.title = "Light";
           } else {
-            button.innerHTML = "⚙️ System";
+            button.innerHTML = "⚙️";
+            button.title = "System";
           }
         }
         updateButton();
