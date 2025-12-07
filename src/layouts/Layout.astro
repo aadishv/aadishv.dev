@@ -78,13 +78,13 @@ const { title, tool, hideName, description, image } = Astro.props;
               }
             <div class="mx-auto">{""}</div>
             <div class="ml-auto">
-                <!-- <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" aria-label="Toggle theme" id="theme-button">Loading...</button> -->
+                <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 -mb-10 px-4 py-2" aria-label="Toggle theme" id="theme-button">Loading...</button>
             </div>
           </>
         )
       }
     </div>
-    <!-- <script lang="ts">
+    <script lang="ts">
       function run() {
         // t: light | dark
         const setHtmlTheme = (t) => {
@@ -126,11 +126,14 @@ const { title, tool, hideName, description, image } = Astro.props;
         const button = document.getElementById("theme-button");
         const updateButton = () => {
           if (theme == "dark") {
-            button.innerHTML = "🌙 Dark";
+            button.innerHTML = "🌙";
+            button.title = "Dark";
           } else if (theme == "light") {
-            button.innerHTML = "☀️ Light";
+            button.innerHTML = "☀️";
+            button.title = "Light";
           } else {
-            button.innerHTML = "⚙️ System";
+            button.innerHTML = "⚙️";
+            button.title = "System";
           }
         }
         updateButton();
@@ -148,7 +151,7 @@ const { title, tool, hideName, description, image } = Astro.props;
       }
       document.addEventListener('astro:page-load', run);
       run();
-    </script> -->
+    </script>
     {
       (
         <div class={tool ? "" : "pt-8"}>

@@ -54,9 +54,9 @@
   }
 
   .dark {
-    --aadish: 271 91% 65%;
+    --aadish: 0 84 65;
 
-    --background: 271, 91%, 2%;
+    --background: 0 0% 100%;
     --foreground: 210 40% 98%;
 
     --background: 0 0% 0%;
@@ -162,12 +162,15 @@
   a:not(.aadish-none) {
     @apply underline hover:no-underline text-aadish font-medium transition-all;
   }
+  code {
+      font-size-adjust: 0.5;
+  }
 
   p,
   li,
   ul {
-    @apply font-sans mt-3;
-  }
+    @apply font-sans mt-3 tracking-[0.015rem];
+}
   li {
     /* add the bullet point */
     @apply list-disc ml-6 mt-3;

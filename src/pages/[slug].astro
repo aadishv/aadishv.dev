@@ -58,19 +58,18 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
       <table>
         <tr>
           <th
-            class="min-w-[200px] text-muted-foreground text-end pr-3 flex flex-col align-baseline"
+            class="w-[300px] text-muted-foreground px-3 flex align-baseline"
           >
-            <div class="">
+              <!-- <div class="flex-1 h-1 border" /> -->
               <h4 class="font-normal">
                 <time datetime={date.toString()}>{formatted}</time>
 
                 {
                   post.body && (
-                    <span>•{`${post.body.split(" ").length} words`}</span>
+                    <span>{`• ${post.body.split(" ").length} words`}</span>
                   )
                 }
               </h4>
-            </div>
           </th>
           <th class="text-start align-baseline w-full">
             <a
@@ -86,7 +85,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
         </tr>
         <tr>
           <td
-            class="flex flex-col sticky top-3 [&_.toc-active]:text-aadish pr-4 align-baseline"
+            class="w-[300px] flex flex-col sticky top-3 [&_.toc-active]:!text-aadish pr-4 align-baseline"
           >
             {
               isProject && post.data.link && (
@@ -102,12 +101,12 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
               )
             }
             {
-              headings.filter(heading => (heading.depth < 4)).map((heading) => (
+              headings.filter(heading => (heading.depth < 5)).map((heading) => (
                 <a
-                  class="!font-normal toc pr-2 my-1"
+                  class="toc pr-2 my-1 !text-muted-foreground/70 text-ellipsis text-nowrap overflow-hidden whitespace-nowrap"
                   href={`#${heading.slug}`}
                 >
-                    <span class="text-muted-foreground/70 font-mono">{'#'.repeat(heading.depth)}</span> {heading.text.slice(0, -1)}
+                    <span class="opacity-0">{'#'.repeat(heading.depth - 1)}</span>{heading.text.slice(0 , -1)}
                 </a>
               ))
             }
@@ -131,16 +130,10 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 
                 // 3. Create the observer
                 const observer = new IntersectionObserver((entries) => {
-                  entries.forEach((entry) => {
+                  let thing = null;
+                  entries.toReversed().forEach((entry) => {
                     if (entry.isIntersecting) {
-                      const id = entry.target.id;
-                      const nav = toc.filter((c) => c.href.includes(id));
-                      document
-                        .querySelector(".toc-active")
-                        ?.classList.toggle("toc-active");
-                      if (nav.length > 0) {
-                        nav[0].classList.add("toc-active");
-                      }
+                      thing = entry.target.id;
                       // // Remove 'active' class from ALL links
                       // navLinks.forEach(link => {
                       //     link.classList.remove('active');
@@ -152,6 +145,15 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
                       // });
                     }
                   });
+                  if (thing) {
+                    const nav = toc.filter((c) => c.href.includes(thing));
+                    if (nav.length > 0) {
+                      document
+                        .querySelector(".toc-active")
+                        ?.classList.toggle("toc-active");
+                      nav[0].classList.add("toc-active");
+                    }
+                  }
                 }, observerOptions);
 
                 // 4. Tell the observer to watch each section
