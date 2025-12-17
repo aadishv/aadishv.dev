@@ -15,7 +15,7 @@ export default {
       fontFamily: {
         sans: ["Inter Tight", "helvetica", "sans-serif"],
         serif: ["Charter", "serif"],
-        mono: ["Geist Mono", "monospace"],
+        mono: ["Google Sans Code", "monospace"],
       },
       keyframes: {
         "accordion-down": {
