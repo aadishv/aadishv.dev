@@ -3,39 +3,37 @@ import { OGImageRoute } from "astro-og-canvas";
 import { getCollection } from "astro:content";
 import { getSlugFromPath } from "../[slug].astro";
 
-const pages = await (async () => {
+const { pages, posts } = await (async () => {
   const posts = await getCollection("posts");
-  let pages: Record<string, { title: string, description: string }> = {};
+  let pages: Record<string, { title: string, description?: string }> = {};
   for (const post of posts) {
     pages[getSlugFromPath(post.filePath ?? '')] = {
       title: post.data.title || "Default title",
     };
   }
-  return pages;
+  return { pages, posts };
 })();
-console.log(pages);
 
 export const { getStaticPaths, GET } = OGImageRoute({
-    param: "route",
-
-  // Generate OG images for all blog posts
-  // Replace "blog" with your collection name
+  param: "route",
   pages,
 
   // Basic template for our OG images
   getImageOptions: (path, page) => ({
     title: page.title,
-    bgImage: {
-      path: "./src/pages/open-graph/bg.jpeg",
+    logo: {
+      path: "./src/pages/open-graph/logo.png",
+      size: [400, undefined]
     },
+    bgGradient: [[0, 0, 0] as const, [241, 91, 91] as const],
     font: {
       title: {
-        families: ["Georgia", "serif"],
-        weight: "SemiBold",
-        color: [0, 0, 0],
+        families: ["Google Sans", "sans-serif"],
+        weight: "SemiBold" as const,
+        color: [255, 255, 255] as const,
       }
     },
-    fonts: ["./src/pages/open-graph/georgia.ttf"]
+    fonts: ["./src/pages/open-graph/geist.ttf", "./src/pages/open-graph/GoogleSans-Regular.ttf"]
   }),
 });
 console.log("TESTING")
