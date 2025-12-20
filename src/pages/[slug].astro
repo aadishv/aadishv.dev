@@ -55,7 +55,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 <Layout title={post.data.title} description={desc} image={ogImage} hideName>
     <table>
       <tr>
-        <th class="w-[300px] hidden lg:flex text-muted-foreground px-3 align-baseline">
+        <th class="w-[300px] hidden lg:flex text-muted-foreground mr-[10px] align-baseline px-3">
           <h4 class="font-normal">
             <time datetime={date.toString()}>{formatted}</time>
 
@@ -66,7 +66,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
             }
           </h4>
         </th>
-        <th class="w-screen lg:w-[calc(100vw-300px)] text-start align-baseline flex-1 px-3">
+        <th class="w-screen lg:w-[calc(100vw-300px)] text-start align-baseline flex-1">
           <a
             href={`/${getSlugFromPath(post.filePath ?? "")}`}
             target="_blank"
@@ -80,7 +80,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
       </tr>
       <tr>
         <td
-          class="w-[300px] hidden lg:flex flex-col sticky top-3 [&_.toc-active]:!text-aadish pr-4 align-baseline"
+          class="w-[300px] mr-[10px] hidden lg:flex flex-col sticky top-3 [&_.toc-active]:!text-aadish pr-4 align-baseline"
         >
           {
             isProject && post.data.link && (
@@ -113,7 +113,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
               // 1. Select all the sections we want to track
               const toc = Array.from(document.querySelectorAll(".toc"));
               const sections = document.querySelectorAll(
-                "#content > h1, #content > h2, #content > h3, #content > h4, #content > h5, #content > h6",
+                "#content > h1, #content > h2, #content > h3, #content > h4, #content > h5, #content > h6, #footnote-label",
               );
 
               const observerOptions = {
@@ -147,11 +147,10 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
           </script>
         </td>
         <td
-          class="w-screen lg:w-[calc(100vw-300px)] ![&>*]:text-wrap align-baseline px-3 flex-1"
+          class="w-screen lg:w-[calc(100vw-300px)] [&>*]:!text-wrap [&>*]:!w-full lg:[&_img]:max-w-[50vw] [&_img]:max-w-[90vw]  [&_img]:mx-auto align-baseline flex-1"
           id="content"
         >
           <Content />
-          <ConvexComments slug={slug} client:only="react" />
         </td>
       </tr>
     </table>

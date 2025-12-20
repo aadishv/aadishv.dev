@@ -223,7 +223,7 @@ This likely isn't how the native animations work (more on this later) but is goo
 
 I made a few more tweaks and have put up a demo [here](/tools/music/):
 
-<iframe src="/tools/music/" class="w-full h-[42rem] my-auto mx-auto mt-2"></iframe>
+<iframe src="/tools/music/" class="h-[42rem] my-auto mx-auto mt-2"></iframe>
 
 The demo was actually built with Solid, making this my first ever Solid project. It was a quite interesting development experience; I ran into a few weird issues with the stores that led me to just use regular signals, which I think is a result of me not having the full intuition for Solid's mental model, but it was overall very nice! Getting Astro to play nice in a project with both React and Solid was not fun but I managed to get it to work.
 
