@@ -1,72 +1,153 @@
-import { useEffect, useRef, useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { Button } from "./ui/button";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { toast, Toaster } from "sonner";
 import useTheme from "./theme/useTheme";
-import { Input } from "./ui/input";
 
 interface CommentsProps {
   slug: string;
 }
 
-interface CaptchaProps {
-  onVerifyToken: (token: string | null) => void;
-}
-
 export default function Comments({ slug }: CommentsProps) {
   const [body, setBody] = useState("");
   const [token, setToken] = useState<string | null>(null);
+  const [showCaptcha, setShowCaptcha] = useState(false);
   const comments = useQuery(api.comments.getComments, { slug });
   const addComment = useAction(api.comments.addComment);
   const { isDark } = useTheme();
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const captchaRef = useRef<HCaptcha>(null);
+
+  const handleSubmitClick = () => {
+    if (!body.trim()) return;
+    if (token) {
+      submitComment();
+    } else {
+      setShowCaptcha(true);
+    }
+  };
+
+  const submitComment = async () => {
     if (body.trim() && token) {
       const error = await addComment({ slug, body, token });
       if (error) {
         toast.error(error.error);
       }
       setBody("");
+      setToken(null);
+      setShowCaptcha(false);
+      captchaRef.current?.resetCaptcha();
     }
+  };
+
+  const handleVerify = (captchaToken: string) => {
+    setToken(captchaToken);
+  };
+
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    const yy = String(date.getFullYear()).slice(-2);
+    return `${mm}.${dd}.${yy}`;
   };
 
   return (
     <>
       <Toaster richColors />
-      <hr />
-      <h3>Comments</h3>
-      <div className="flex flex-col gap-4">
-        {comments?.map((comment) => (
-          <div key={comment._id}>
-            <p>{comment.body}</p>
-            <small className="text-muted-foreground">
-              {new Date(comment._creationTime).toLocaleString()}
-            </small>
-          </div>
-        ))}
-        <form onSubmit={handleSubmit} className="flex gap-3 h-15 mt-4">
-          <Input
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            placeholder="write a comment!"
-            className="!h-[4.75rem]"
-          />
-          <HCaptcha
-            sitekey="8f643442-c6fa-4714-9888-52d4a11e7378"
-            size="normal"
-            theme={isDark ? "dark" : "light"}
-            onVerify={setToken}
-          />
-          <Button
-            type="submit"
-            disabled={!body.trim() || !token}
-            className="!h-[4.75rem]"
+      {showCaptcha && (
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setShowCaptcha(false)}
+        >
+          <div
+            className="bg-background border border-border p-6 flex flex-col gap-4"
+            onClick={(e) => e.stopPropagation()}
           >
-            Submit
-          </Button>
-        </form>
+            <p className="text-base m-0">verify you're human</p>
+            <HCaptcha
+              ref={captchaRef}
+              sitekey="8f643442-c6fa-4714-9888-52d4a11e7378"
+              size="normal"
+              theme={isDark ? "dark" : "light"}
+              onVerify={handleVerify}
+            />
+            <button
+              type="button"
+              onClick={submitComment}
+              disabled={!token}
+              className="px-4 py-2 text-base font-medium bg-transparent border border-border hover:border-aadish hover:text-aadish disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              submit
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="mt-12 border-t border-border pt-6">
+        <table className="w-full">
+          <tbody>
+            <tr className="flex w-full mb-4">
+              <td className="flex-0 w-[9ch]">&nbsp;</td>
+              <td className="flex-1 text-start">
+                <h3 className="font-medium tracking-tight text-aadish m-0" id="comment-component">
+                  Comments
+                </h3>
+              </td>
+            </tr>
+            {comments?.map((comment) => (
+              <tr key={comment._id} className="flex mb-3">
+                <td className="text-base !font-normal w-[9ch]">
+                  <span className="flex font-medium align-baseline">
+                    <span className="ml-auto">{formatDate(comment._creationTime)}</span>
+                  </span>
+                </td>
+                <td className="text-base !font-normal flex-1 ml-1.5 align-baseline">
+                  {comment.body}
+                </td>
+              </tr>
+            ))}
+            {comments?.length === 0 && (
+              <tr className="flex mb-2">
+                <td className="text-base !font-normal w-[9ch]">&nbsp;</td>
+                <td className="text-base !font-normal flex-1 ml-1.5 pl-2 text-muted-foreground">
+                  no comments yet
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        <div className="mt-6">
+          <table className="w-full">
+            <tbody>
+              <tr className="flex">
+                <td className="flex-0 w-[9ch]">&nbsp;</td>
+                <td className="flex-1 flex gap-3 pr-3 pb-3">
+                  <input
+                    type="text"
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    placeholder="write a comment..."
+                    className="flex-1 bg-transparent border border-border px-3 py-2 text-base placeholder:text-muted-foreground focus:outline-none focus:border-aadish transition-colors"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleSubmitClick();
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSubmitClick}
+                    disabled={!body.trim()}
+                    className="px-4 py-2 text-base font-medium bg-transparent border border-border hover:border-aadish hover:text-aadish disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    submit
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

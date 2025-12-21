@@ -151,6 +151,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
           id="content"
         >
           <Content />
+          <ConvexComments client:load slug={slug} />
         </td>
       </tr>
     </table>
