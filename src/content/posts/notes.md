@@ -24,6 +24,8 @@ I think if I was to summarize my experience with the coding agents:
 * Pi is the underdog, incredibly tiny but still powerful. The minimalness is overwhelming attracting and the UI is super intuitive. Using scrollback allows it to be faster on my aging laptop and feel a tiny bit more native, and also have cool goodies like native image rendering. Also pretty extensible, but I don't think as much as OpenCode. TL;DR: extremely opinionated but extensible, scrollback CLI is nice, massive potential
 * Claude Code was the first real TUI coding agent and somehow still the biggest closed-source one. I love its look and feel but don't have many other praises to sing. It's also neither as unopinionated/extensible as OpenCode, nor as minimal/opinionated as Pi, putting it in an awkward middle ground. TL;DR: closed source -> Bad™, doesn't have the benefits of Pi or OpenCode, but I really love the look
 
+[Mario](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) and [Peter Steinberger](https://steipete.me/posts/2025/signature-flicker) both have interesting takes into the alt mode vs. scrollback debate, both of which I found very helpful as well.
+
 I hope to continue contributing to OpenCode and Pi in the future. Both seem very promising as the future of agentic coding!
 
 [^no-antigravity-sub-young]: I didn't have one previously because, even though I am in a Google One family with Google AI Pro, Google arbitrarily decided that people under the age 18 can't access half of their coolest AI products. Luckily I'm now using the "burner" account of a family member so I can get all of the perks of AI Pro.
