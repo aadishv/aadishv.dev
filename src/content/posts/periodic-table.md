@@ -1,16 +1,16 @@
 ---
 date: "2025-03-15"
 title: "Periodic Table"
-link: "/tools/periodic"
+link: "https://tools.aadishv.dev/periodic"
 image: "/projects/periodic/thumbnail.png"
 categories: ["project", "webdev"]
 ---
 
 ## Demo
 
-<a href="/tools/periodic">Open this in a new tab to play around with</a>
+<a href="https://tools.aadishv.dev/periodic">Open this in a new tab to play around with</a>
 
-<iframe src="/tools/periodic" class="w-full h-[42rem] my-auto mx-auto mt-2"></iframe>
+<iframe src="https://tools.aadishv.dev/periodic" class="w-full h-[42rem] my-auto mx-auto mt-2"></iframe>
 
 This started off as a simple project to try out web technologies, Tailwind CSS, and JS best practices by porting a small SwiftUI app I'd made -- and to fulfill my dire need for an actually well-designed periodic table. It eventually grew quite a bit, with many more features than initially imagined and several of my classmates at OHS using it.
 
@@ -37,7 +37,7 @@ This started off as a simple project to try out web technologies, Tailwind CSS, 
 - My website stack (coming soon!)
 - Data collected using a custom scraper script combining data from the Google periodic table, a GitHub repository, and the Pearson periodic table
 
-## [Code!](https://github.com/aadishv/aadishv.dev/blob/main/src/tools/periodic)
+## [Code!](https://github.com/aadishv/tools.aadishv.dev/tree/main/src/tools/periodic)
 
 This went through around four major iterations:
 

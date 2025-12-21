@@ -2,10 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import { getCollection } from "astro:content";
-import { Badge } from "@/components/ui/badge";
 import { parseISO, format } from "date-fns";
-import { Chrome, FileText, Github, Globe } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const getSlugFromPath = (path: string): string => {
   const parts = path.split("/");

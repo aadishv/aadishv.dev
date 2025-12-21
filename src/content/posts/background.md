@@ -13,7 +13,7 @@ description: ""
 - Led winning teams for the OHS Labor Day Hackathon in 2024 and 2025. Worked on student-focused projects; [a tech issue diagnosis software with integrated AI](https://github.com/aadishv/doleofdoves) [[demo](https://drive.google.com/file/d/1tY9xYQxgWX8BaUuugb8C5ZvrLzII6VSt/view?usp=sharing)] and [AI-powered fact checker to verify social media posts](https://github.com/aadishv/fluorine/) [[demo](https://drive.google.com/file/d/1g-JFRpFuEvoKB7rdCtDtvEMDrhfKEs8_/view?usp=sharing)]. 1st place both years.
 - Developed and maintain [OHS AC Utilities](https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne) [[code](https://github.com/aadishv/ohs-ac-utils)] (100+ users). Offers useful download utility and AI assistant for OHS students accessing class recordings via Adobe Connect.
 - Volunteer in the OHS student government's Board of Communications; [wrote code to massively speed up the operations of the board](/ekudos). Also reverse-engineered and reimplemented in TypeScript the API of a chat app we use, leveraging AI to build a "Bulletin Bard" which summarizes school events for the upcoming month [[code](https://github.com/aadishv/pronto-stugov)].
-- [Built](/tools/chinese/) [several](/tools/periodic/) [tools](/tools/om013/) to help students in a variety of classes understand course content.
+- [Built](https://tools.aadishv.dev/chinese/) [several](https://tools.aadishv.dev/periodic/) [tools](https://tools.aadishv.dev/om013/) to help students in a variety of classes understand course content.
 
 **VEX Robotics**
 

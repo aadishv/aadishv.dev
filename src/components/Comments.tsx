@@ -2,12 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery, useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Button } from "./ui/button";
-import { Textarea } from "./ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Input } from "./ui/input";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { toast, Toaster } from "sonner";
 import useTheme from "./theme/useTheme";
+import { Input } from "./ui/input";
 
 interface CommentsProps {
   slug: string;
