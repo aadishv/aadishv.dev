@@ -51,5 +51,7 @@ export default defineConfig({
   site: "https://www.aadishv.dev",
   base: "",
   output: "static",
-  adapter: vercel(),
+  adapter: vercel({
+    imageService: true,
+  }),
 });
