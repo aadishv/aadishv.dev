@@ -5,17 +5,12 @@ import rehypeSlug from "rehype-slug";
 import mdx from "@astrojs/mdx";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import sitemap from "@astrojs/sitemap";
-import solidJs from "@astrojs/solid-js";
 import vercel from "@astrojs/vercel";
 // https://astro.build/config
 export default defineConfig({
   integrations: [
-    solidJs({
-      include: ["src/solid/music-solid/*"],
-    }),
     react({
       // include: ["**/*/react/*"],
-      exclude: ["src/solid/music-solid/*"],
     }),
     tailwind({
       applyBaseStyles: false,
