@@ -161,8 +161,8 @@
   p > code {
     @apply !text-aadish;
   }
-  p > code::before,
-  p > code::after {
+  p code::before,
+  p code::after {
     content: "`";
   }
 }
