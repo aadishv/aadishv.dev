@@ -165,4 +165,7 @@
   p code::after {
     content: "`";
   }
+  pre {
+    @apply bg-muted rounded-md p-4 border;
+  }
 }

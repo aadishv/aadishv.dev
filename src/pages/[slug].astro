@@ -52,25 +52,22 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 ---
 
 <Layout title={post.data.title} description={desc} image={ogImage} hideName>
-    <table>
+    <table class="mt-24">
       <tr>
-        <th class="w-[300px] hidden lg:flex text-muted-foreground mr-[10px] align-baseline px-3">
-          <h4 class="font-normal">
+        <th class="w-[16rem] ml-[6rem] hidden lg:block font-normal text-muted-foreground mr-[10px] align-baseline pr-3 text-start">
             <time datetime={date.toString()}>{formatted}</time>
-
             {
               post.body && (
                 <span>{`• ${post.body.split(" ").length} words`}</span>
               )
             }
-          </h4>
         </th>
-        <th class="w-screen lg:w-[calc(100vw-300px)] text-start align-baseline flex-1">
+        <th class="w-screen pr-[6rem] text-start align-baseline flex-1">
           <a
             href={`/${getSlugFromPath(post.filePath ?? "")}`}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-aadish !font-normal tracking-tighter"
+            class="text-aadish !font-medium tracking-tight"
             transition:name={post.id}
           >
             <h1>{post.data.title}</h1>
@@ -79,7 +76,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
       </tr>
       <tr>
         <td
-          class="w-[300px] mr-[10px] hidden lg:flex flex-col sticky top-3 [&_.toc-active]:!text-aadish pr-4 align-baseline"
+          class="w-[16rem] ml-[6rem] hidden lg:flex pr-3 flex-col sticky top-3 [&_.toc-active]:!text-aadish align-baseline"
         >
           {
             isProject && post.data.link && (
@@ -102,7 +99,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
                   class="toc pr-2 my-1 !text-muted-foreground/70 text-ellipsis text-nowrap overflow-hidden whitespace-nowrap"
                   href={`#${heading.slug}`}
                 >
-                  <span class="opacity-0">{"#".repeat(heading.depth - 1) + " "}</span>
+                  <span class="opacity-0">{"#".repeat(heading.depth - 2) + " "}</span>
                   {heading.text.slice(0, -1)}
                 </a>
               ))
@@ -146,7 +143,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
           </script>
         </td>
         <td
-          class="w-screen lg:w-[calc(100vw-300px)] [&>*]:!text-wrap [&>*]:!w-full lg:[&_img]:max-w-[50vw] [&_img]:max-w-[90vw]  [&_img]:mx-auto align-baseline flex-1"
+          class="w-screen pr-[6rem] [&>*]:!text-wrap [&>*]:!w-full lg:[&_img]:max-w-[50vw] [&_img]:max-w-[90vw]  [&_img]:mx-auto align-baseline flex-1"
           id="content"
         >
           <Content />

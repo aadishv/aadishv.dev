@@ -33,13 +33,16 @@ const entries = allEntries
   hideName={true}
   description="A freshman and avid programmer"
 >
-  <main class="lg:m-10 m-5">
+    <div class="fixed lg:w-[10rem] w-5 h-screen bg-blue-500/20 left-0 top-0"></div>
+    <div class="fixed lg:w-[16rem] w-[7.25rem] h-screen bg-green-500/50 left-0 top-0"></div>
+  <main class="lg:mx-[10rem] mx-5 mt-24">
+
     <table class="w-full">
       <tr class="flex w-full mb-6">
-        <th class="flex-0 w-[9ch]">&nbsp;</th>
-        <th class="flex-1 !font-normal text-start">
+        <th class="flex-0 w-24">&nbsp;</th>
+        <th class="flex-1 !font-normal text-start max-w-[60rem]">
           <h1 class="font-medium tracking-tight text-aadish">Aadish Verma</h1>
-          <p class="w-[70%]">
+          <p>
             I’m a programmer and freshman at Stanford Online High School,
             located in the Bay Area. I'm currently working as a founding
             developer at <a href="https://www.jvcopilot.ai/" target="_blank"
@@ -47,7 +50,7 @@ const entries = allEntries
             >.
           </p>
 
-          <p class="flex flex-wrap w-[70%] gap-1.5">
+          <p class="flex flex-wrap gap-1.5">
             <a href="mailto:mail@aadishv.dev">email</a>
             •
             <a href="https://github.com/aadishv" target="_blank">github</a>
@@ -70,16 +73,16 @@ const entries = allEntries
       {
         entries.map((entry) => (
           <tr class="flex mb-1">
-            <td class="text-lg !font-normal w-[9ch] translate-x-1.5">
+            <td class="text-lg !font-normal w-24 border-2">
               <time
                 datetime={parseISO(entry.data.date).toString()}
-                class="ml-auto text-muted-foreground w-[8ch] flex"
+                class="text-muted-foreground flex"
               >
-                {format(parseISO(entry.data.date), "MM.dd.yy")}
-                <span class="ml-auto text-aadish">/</span>
+                  <span class="ml-auto mr-2">{format(parseISO(entry.data.date), "MM.dd.yy")}</span>
+                <span class="text-aadish">/</span>
               </time>
             </td>
-            <td class="text-lg !font-normal flex-1 ml-1.5">
+            <td class="text-lg !font-normal flex-1 ">
               <a
                 href={"/" + getSlugFromPath(entry.filePath ?? "")}
                 class="ml-2 aadish-none hover:text-aadish"
