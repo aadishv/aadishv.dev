@@ -33,11 +33,11 @@ const entries = allEntries
   hideName={true}
   description="A freshman and avid programmer"
 >
-  <main class="lg:mx-[16rem] mx-5 mt-24">
+  <main class="lg:px-[16rem] px-5 pt-24 w-screen [&_*]:text-wrap">
     <table class="w-full">
-      <tr class="flex w-full mb-6">
+      <tr class="flex max-w-full mb-6">
         <th class="flex-0 w-24">&nbsp;</th>
-        <th class="flex-1 !font-normal text-start max-w-[60rem]">
+        <th class="flex-1 !font-normal text-start lg:max-w-[60rem]">
           <h1 class="font-medium tracking-tight text-aadish">Aadish Verma</h1>
           <p>
             I’m a programmer and freshman at Stanford Online High School,
@@ -72,7 +72,7 @@ const entries = allEntries
       </tr>
       {
         entries.map((entry) => (
-          <tr class="flex mb-1">
+          <tr class="flex mb-1 max-w-full">
             <td class="text-lg !font-normal w-24">
               <time
                 datetime={parseISO(entry.data.date).toString()}
@@ -85,7 +85,7 @@ const entries = allEntries
                 <span class="text-aadish">/</span>
               </time>
             </td>
-            <td class="text-lg !font-normal flex-1 ">
+            <td class="text-lg !font-normal flex-1">
               <a
                 href={"/" + getSlugFromPath(entry.filePath ?? "")}
                 class="ml-2 aadish-none hover:text-aadish"

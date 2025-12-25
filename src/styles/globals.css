@@ -96,7 +96,7 @@
   }
   /* decrease font size on desktop */
   :root {
-    font-size: 20px;
+    font-size: 14px;
   }
   @media (min-width: 1024px) {
     :root {
