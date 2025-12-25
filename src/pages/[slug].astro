@@ -52,103 +52,109 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 ---
 
 <Layout title={post.data.title} description={desc} image={ogImage} hideName>
-    <table class="mt-24">
-      <tr>
-        <th class="w-[16rem] ml-[6rem] hidden lg:block font-normal text-muted-foreground mr-[10px] align-baseline pr-3 text-start">
-            <time datetime={date.toString()}>{formatted}</time>
-            {
-              post.body && (
-                <span>{`• ${post.body.split(" ").length} words`}</span>
-              )
-            }
-        </th>
-        <th class="w-screen pr-[6rem] text-start align-baseline flex-1">
-          <a
-            href={`/${getSlugFromPath(post.filePath ?? "")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-aadish !font-medium tracking-tight"
-            transition:name={post.id}
-          >
-            <h1>{post.data.title}</h1>
-          </a>
-        </th>
-      </tr>
-      <tr>
-        <td
-          class="w-[16rem] ml-[6rem] hidden lg:flex pr-3 flex-col sticky top-3 [&_.toc-active]:!text-aadish align-baseline"
+  <table class="mt-5 lg:mt-24">
+    <tr>
+      <th
+        class="w-[16rem] ml-[6rem] hidden lg:block font-normal text-muted-foreground mr-[10px] align-baseline pr-3 text-start"
+      >
+        <time datetime={date.toString()} transition:name={`date-${post.id}`}
+          >{formatted}</time
         >
-          {
-            isProject && post.data.link && (
-              <p>
-                <a
-                  href={post.data.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  live demo
-                </a>
-              </p>
-            )
-          }
-          {
-            headings
-              .filter((heading) => heading.depth < 5)
-              .map((heading) => (
-                <a
-                  class="toc pr-2 my-1 !text-muted-foreground/70 text-ellipsis text-nowrap overflow-hidden whitespace-nowrap"
-                  href={`#${heading.slug}`}
-                >
-                  <span class="opacity-0">{"#".repeat(heading.depth - 2) + " "}</span>
-                  {heading.text.slice(0, -1)}
-                </a>
-              ))
-          }
-          <script is:inline>
-            document.addEventListener("DOMContentLoaded", () => {
-              // 1. Select all the sections we want to track
-              const toc = Array.from(document.querySelectorAll(".toc"));
-              const sections = document.querySelectorAll(
-                "#content > h1, #content > h2, #content > h3, #content > h4, #content > h5, #content > h6, #footnote-label",
-              );
+        {post.body && <span>{`• ${post.body.split(" ").length} words`}</span>}
+      </th>
+      <th class="lg:pr-[6rem] px-5 lg:mx-0 text-start align-baseline flex-1">
+        <a
+          href={`/${getSlugFromPath(post.filePath ?? "")}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-aadish !font-medium tracking-tight !no-underline"
+          transition:name={post.id}
+        >
+          <h1>{post.data.title}</h1>
+        </a>
+      </th>
+    </tr>
+    <tr>
+      <td
+        class="w-[16rem] ml-[6rem] hidden lg:flex pr-3 flex-col sticky top-3 [&_.toc-active]:!text-aadish align-baseline"
+      >
+        {
+          isProject && post.data.link && (
+            <p>
+              <a
+                href={post.data.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                live demo
+              </a>
+            </p>
+          )
+        }
+        {
+          headings
+            .filter((heading) => heading.depth < 5)
+            .map((heading) => (
+              <a
+                class="toc pr-2 my-1 !text-muted-foreground/70 text-ellipsis text-nowrap overflow-hidden whitespace-nowrap"
+                href={`#${heading.slug}`}
+              >
+                <span class="opacity-0">
+                  {"#".repeat(heading.depth - 2) + " "}
+                </span>
+                {heading.text.slice(0, -1)}
+              </a>
+            ))
+        }
+        <script is:inline>
+          document.addEventListener("DOMContentLoaded", () => {
+            // 1. Select all the sections we want to track
+            const toc = Array.from(document.querySelectorAll(".toc"));
+            const sections = document.querySelectorAll(
+              "#content > h1, #content > h2, #content > h3, #content > h4, #content > h5, #content > h6, #footnote-label",
+            );
 
-              const observerOptions = {
-                root: null, // use the viewport
-                rootMargin: "0px",
-                threshold: 0,
-              };
+            const observerOptions = {
+              root: null, // use the viewport
+              rootMargin: "0px",
+              threshold: 0,
+            };
 
-              const observer = new IntersectionObserver((entries) => {
-                let thing = null;
-                entries.toReversed().forEach((entry) => {
-                  if (entry.isIntersecting) {
-                    thing = entry.target.id;
-                  }
-                });
-                if (thing) {
-                  const nav = toc.filter((c) => c.href.includes(thing));
-                  if (nav.length > 0) {
-                    document
-                      .querySelector(".toc-active")
-                      ?.classList.toggle("toc-active");
-                    nav[0].classList.add("toc-active");
-                  }
+            const observer = new IntersectionObserver((entries) => {
+              let thing = null;
+              entries.toReversed().forEach((entry) => {
+                if (entry.isIntersecting) {
+                  thing = entry.target.id;
                 }
-              }, observerOptions);
-
-              sections.forEach((section) => {
-                observer.observe(section);
               });
+              if (thing) {
+                const nav = toc.filter((c) => c.href.includes(thing));
+                if (nav.length > 0) {
+                  document
+                    .querySelector(".toc-active")
+                    ?.classList.toggle("toc-active");
+                  nav[0].classList.add("toc-active");
+                }
+              }
+            }, observerOptions);
+
+            sections.forEach((section) => {
+              observer.observe(section);
             });
-          </script>
-        </td>
-        <td
-          class="w-screen pr-[6rem] [&>*]:!text-wrap [&>*]:!w-full lg:[&_img]:max-w-[50vw] [&_img]:max-w-[90vw]  [&_img]:mx-auto align-baseline flex-1"
-          id="content"
+          });
+        </script>
+      </td>
+      <td
+        class="lg:pr-[6rem] pt-2 px-5 lg:mx-0 align-baseline flex-1"
+        id="content"
+      >
+        <div
+          class="!w-full [&_*]:text-wrap [&_a]:!break-all lg:[&_img]:max-w-[50%] [&_img]:mx-auto"
         >
           <Content />
-          <ConvexComments client:load slug={slug} />
-        </td>
-      </tr>
-    </table>
+        </div>
+        <ConvexComments client:load slug={slug} />
+      </td>
+    </tr>
+  </table>
 </Layout>

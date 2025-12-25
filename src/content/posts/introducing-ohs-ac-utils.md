@@ -45,7 +45,7 @@ categories: ["project", "webdev"]
     }
 </style>
 
-*Hi, I'm Aadish. I'm a freshman here at Stanford Online High School.*
+_Hi, I'm Aadish. I'm a freshman here at Stanford Online High School._
 
 I'm excited to show you a new tool I've been working on for OHS students. It's called OHS Adobe Connect Utilities (OHS AC Utils for short), and I've built it from the ground up to improve students' experience when accessing class recordings.
 
@@ -67,7 +67,7 @@ Here's a lecture I had for my English class a week or two ago. My professor ment
 
 <video src="/ohs-ac-intro.md/ohs-ac-live-demo.mp4" style="width: 100%" controls></video>
 
-*Sorry that the video is so heavily edited. I had to be extra careful to avoid leaking footage of my classmates without their consent!*
+_Sorry that the video is so heavily edited. I had to be extra careful to avoid leaking footage of my classmates without their consent!_
 
 It's truly magical. Another fun example I did recently was asking the assistant to find pictures of my teacher's dogs in biology class -- I was sure that my teacher had a slide with the pictures, but I had no idea where they were. The assistant carefully checked frames every 30 seconds, and after a few minutes of searching, it had successfully hunted down the frame with the pictures. I can't show a demo here due to privacy concerns, unfortunately.
 
@@ -75,5 +75,5 @@ If you have privacy concerns, the extension is [a fully open source project, bui
 
 Download the extension today. I hope you love using OHS AC Utils as much as I do, and please consider leaving a review on the Chrome Web Store if you do!
 
-* [Web Store link](https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne)
-* [Privacy Policy](https://aadishv.github.io/ohs-ac-privacy)
+- [Web Store link](https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne)
+- [Privacy Policy](https://aadishv.github.io/ohs-ac-privacy)

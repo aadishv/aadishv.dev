@@ -60,7 +60,7 @@ Eventually, you have to start fresh with a new codebase. This is what I did with
 - I made Claude port my old code to this codebase. I had an old version of Dotlist which I published as a tool on my website; it was a tiny React app which saved to localstorage. For the initial prompt, I just had Claude port the entire app (only ~600 LOC of TypeScript) to our new Convex + Vite foundation. The key idea of this is that I already understood the code, having worked on the old app for a while, so there is a very low chance of having any garbage code show up in the process. This already had the vast majority of features I needed.
 - I tuned microinteractions myself. If I didn't like a font choice or animation speed, I looked at the Tailwind classes and changed them. This is important to build up knowledge of what goes where in the codebase.
 - When I wanted to update a feature, I always asked Claude to do it. I'd review the code and test it out. If a specific part had a problem, I'd ask Claude to "simplify" and remove that part, then rewrite it myself.
- 
+
 In conclusion, vibe coding is good. Until it's not. I still think the biggest advantage of vibe coding is to get an idea out super quickly -- PMs can vibe code a prototype of certain functionality instead of trying to describe it to engineers, etc. The issues start emerging when using vibe coding to actually write the majority of a production grade application.
 
 If you're looking for a simple todo app, check out Dotlist! It is still a great choice even if it's vibe coded and the team is working hard to fix our issues with the AI-generated base.

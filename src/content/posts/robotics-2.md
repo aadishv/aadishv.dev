@@ -59,9 +59,6 @@ Typically, these binaries are built and uploaded through VEX’s proprietary IDE
 - IDE integration. While PROS has a recommended VSCode plugin, its extensible CLI means you can code in it from everywhere (including [Zed](https://zed.dev), my favorite code editor). VEXcode can only be used from their proprietary app or VSCode extension. Also, VEXcode has _very_ weird code structure, while PROS’ is just regular C++ with cpp and header files.
 - PROS is open-source! All of VEXCode’s APIs and protocols are closed-source (although the SIGbots team got access to it under a NDA to develop PROS) while every single bit of PROS is open-source and on [Github](https://github.com/purduesigbots/pros). This has enabled the community to do a bunch of cool things. The coolest of these, in my opinion, is [vexide](https://vexide.dev/), which is a runtime like PROS for the V5, with two major differences. 1) It supports async. But wait, C++ doesn’t have async[^misrep]. And then we have 2) _It’s written in Rust!_
 
-
-
-
 This is hopefully enough to convice anyone to switch to PROS! Time to go one abstraction level higher.
 
 ### VOSS<!-- {"fold":true} -->

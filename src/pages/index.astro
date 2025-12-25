@@ -33,10 +33,7 @@ const entries = allEntries
   hideName={true}
   description="A freshman and avid programmer"
 >
-    <div class="fixed lg:w-[10rem] w-5 h-screen bg-blue-500/20 left-0 top-0"></div>
-    <div class="fixed lg:w-[16rem] w-[7.25rem] h-screen bg-green-500/50 left-0 top-0"></div>
-  <main class="lg:mx-[10rem] mx-5 mt-24">
-
+  <main class="lg:mx-[16rem] mx-5 mt-24">
     <table class="w-full">
       <tr class="flex w-full mb-6">
         <th class="flex-0 w-24">&nbsp;</th>
@@ -66,19 +63,25 @@ const entries = allEntries
             <span>discord @aadishv</span>
           </p>
           <p>
-              I sometimes have shower thoughts that aren't interesting enough to end up in a blog post; you'll find such ramblings <a href="/notes">here</a>.
+            I sometimes have shower thoughts that aren't interesting enough to
+            end up in a blog post; you'll find such ramblings <a href="/notes"
+              >here</a
+            >.
           </p>
         </th>
       </tr>
       {
         entries.map((entry) => (
           <tr class="flex mb-1">
-            <td class="text-lg !font-normal w-24 border-2">
+            <td class="text-lg !font-normal w-24">
               <time
                 datetime={parseISO(entry.data.date).toString()}
                 class="text-muted-foreground flex"
+                transition:name={`date-${entry.id}`}
               >
-                  <span class="ml-auto mr-2">{format(parseISO(entry.data.date), "MM.dd.yy")}</span>
+                <span class="ml-auto mr-2">
+                  {format(parseISO(entry.data.date), "MM.dd.yy")}
+                </span>
                 <span class="text-aadish">/</span>
               </time>
             </td>

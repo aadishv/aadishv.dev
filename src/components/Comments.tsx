@@ -89,7 +89,10 @@ export default function Comments({ slug }: CommentsProps) {
             <tr className="flex w-full mb-4">
               <td className="flex-0 w-[9ch]">&nbsp;</td>
               <td className="flex-1 text-start">
-                <h3 className="font-medium tracking-tight text-aadish m-0" id="comment-component">
+                <h3
+                  className="font-medium tracking-tight text-aadish m-0"
+                  id="comment-component"
+                >
                   Comments
                 </h3>
               </td>
@@ -98,10 +101,12 @@ export default function Comments({ slug }: CommentsProps) {
               <tr key={comment._id} className="flex mb-3">
                 <td className="text-base !font-normal w-[9ch]">
                   <span className="flex font-medium align-baseline">
-                    <span className="ml-auto">{formatDate(comment._creationTime)}</span>
+                    <span className="ml-auto mr-1.5">
+                      {formatDate(comment._creationTime)}
+                    </span>
                   </span>
                 </td>
-                <td className="text-base !font-normal flex-1 ml-1.5 align-baseline">
+                <td className="ml-0.5 text-base !font-normal flex-1 align-baseline">
                   {comment.body}
                 </td>
               </tr>
