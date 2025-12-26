@@ -149,7 +149,7 @@
   p,
   li,
   ul {
-    @apply font-sans mt-3 tracking-[0.015rem] leading-8;
+    @apply font-sans mt-3 tracking-[0.04rem] leading-8;
   }
   li {
     /* add the bullet point */
