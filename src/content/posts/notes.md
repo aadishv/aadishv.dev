@@ -4,6 +4,24 @@ title: "Notes, shower thoughts, ramblings, etc."
 hidden: true
 ---
 
+made gemini do some back-of-the-napkin math
+
+tl;dr google has a AI code editor called antigravity which provides access to a bunch of models. Pro users for $20/month get really high rate limits on models with a 5 hour refresh window
+
+I fed in the rate limits in and asked it to calculate the worst-case possible request for each model -- e.g. the one that has the longest input, longest output etc. then multiply that by the corresponding rate limit. then sum across all models.
+
+I got that google will pay $4,266.23 every 5 hours if you perfectly abuse their rate limits. This is over half a million dollars per month. However, this was calculated using API pricing. Google is serving the models itself on Google Cloud so it doesn't need to pay the margins (lol). Assuming they a 50% margin (which they probably have a lower margin), Google pays $311,641.70 per month of inference costs for the worst case user. This user still pays $20/month.
+
+Obviously this is nothing but a thought experiment as actually getting this level of usage is practically impossible, but this is a good proof that AI companies are extremely heavily subsidizing access to frontier models, to the benefit of their customers.
+
+I'm sure even I have spent more than $20 of inference on antigravity so far even though I haven't used it much
+
+double checked the numbers by running the same prompt again w/ gemini 3 pro & 3 flash thinking and got the same result, so I'm pretty sure its not hallucinating.
+
+[link to chat](https://gemini.google.com/share/484f3a99c6f9)
+
+---
+
 **Some random babbling about terminal coding agents**
 
 I've recently gotten more into terminal coding agents such as Anthropic's Claude Code, OpenAI's Codex CLI, and Google's Gemini CLI. Until a few days ago, I primarily had used OpenCode (and a bit of the Gemini CLI), which uses "alt-mode" rendering where it basically creates a whole new viewport in order to run the TUI. This allows for less flickering but prevents native terminal features such as "regular" scrolling and copy/paste etc.
