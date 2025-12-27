@@ -25,6 +25,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@vercel/blob": "^2.0.0",
     "astro": "5.9.3",
     "astro-og-canvas": "^0.7.2",
     "class-variance-authority": "^0.7.1",
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@types/jsdom": "^27.0.0",
     "prettier-plugin-astro": "^0.14.1",
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "vercel": "^50.1.3"
   }
 }

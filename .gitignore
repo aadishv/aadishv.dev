@@ -17,3 +17,5 @@ node_modules/
 
 src/content/personal
 *.lock
+.vercel
+.env*.local
