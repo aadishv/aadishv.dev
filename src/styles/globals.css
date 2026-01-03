@@ -156,7 +156,7 @@
     @apply list-disc ml-6 mt-3;
   }
   blockquote {
-    @apply border-l-4 pl-4 italic border-gray-400;
+    @apply border-l-4 pl-4 italic border-border;
   }
   p > code {
     @apply !text-aadish;
@@ -166,6 +166,6 @@
     content: "`";
   }
   pre {
-    @apply bg-muted rounded-md p-4 border;
+    @apply bg-muted rounded-md p-4 border border-border;
   }
 }

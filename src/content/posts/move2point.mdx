@@ -153,8 +153,8 @@ That's annoying to tune, and also not fast; turning, driving, stopping, turning 
 
 ```rust
 fn driveArcade(straight, turn) {
-    moveLeftSide(straight - turn);
-    moveRightSide(straight + turn);
+    moveLeftSide(straight + turn);
+    moveRightSide(straight - turn);
 }
 ```
 
@@ -224,8 +224,8 @@ The change looks like this:
 
 ```rust
 fn driveArcade(straight, turn) {
-    let left = straight - turn;
-    let right = straight + turn;
+    let left = straight + turn;
+    let right = straight - turn;
     let max = max(abs(left), abs(right));
     if max > MAXIMUM_MOTOR_POWER {
         left *= MAXIMUM_MOTOR_POWER / max;
