@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import { getCollection } from "astro:content";
 import { parseISO, format } from "date-fns";
+import ChapterBadge from "@/components/ui/ChapterBadge";
 
 const getSlugFromPath = (path: string): string => {
   const parts = path.split("/");
@@ -93,6 +94,7 @@ const entries = allEntries
               >
                 {entry.data.title}
               </a>
+              {entry.data.chapter && <ChapterBadge chapter={entry.data.chapter} />}
             </td>
           </tr>
         ))

@@ -10,5 +10,6 @@ const posts = defineCollection({
     description: z.string().optional(),
     hidden: z.boolean().optional(),
     image: z.string().optional(),
+    chapter: z.string().optional(),
   }),
 });

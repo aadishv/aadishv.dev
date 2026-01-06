@@ -6,6 +6,7 @@ import { parseISO, format } from "date-fns";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import ConvexComments from "@/components/ConvexProvider";
+import ChapterBadge from "@/components/ui/ChapterBadge";
 
 export async function getStaticPaths({}: GetStaticPathsOptions) {
   const allContent = await getCollection("posts");
@@ -45,6 +46,23 @@ const desc = Array.from(dom.window.document.querySelectorAll("p"))
   .map((i) => i.textContent)
   .filter(Boolean)[0];
 
+let chapterPosts = [];
+let prevPost = null;
+let nextPost = null;
+if (post.data.chapter) {
+  const allPosts = await getCollection("posts");
+  chapterPosts = allPosts
+    .filter((p) => p.data.chapter === post.data.chapter && p.data.hidden !== true)
+    .sort((a, b) => new Date(a.data.date).valueOf() - new Date(b.data.date).valueOf());
+  const currentIndex = chapterPosts.findIndex((p) => p.id === post.id);
+  if (currentIndex > 0) {
+    prevPost = chapterPosts[currentIndex - 1];
+  }
+  if (currentIndex < chapterPosts.length - 1) {
+    nextPost = chapterPosts[currentIndex + 1];
+  }
+}
+
 const baseUrl = import.meta.env.DEV
   ? "http://localhost:4321"
   : new URL(Astro.request.url).origin;
@@ -61,6 +79,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
           >{formatted}</time
         >
         {post.body && <span>{`• ${post.body.split(" ").length} words`}</span>}
+        {post.data.chapter && <div class="mt-2"><ChapterBadge chapter={post.data.chapter} /></div>}
       </th>
       <th class="lg:pr-[6rem] px-5 lg:mx-0 text-start align-baseline flex-1">
         <a
@@ -153,6 +172,26 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
         >
           <Content />
         </div>
+        {(prevPost || nextPost) && (
+          <div class="flex justify-between mt-8 pt-4 border-t border-muted-foreground/20">
+            {prevPost && (
+              <a
+                href={`/${getSlugFromPath(prevPost.filePath ?? "")}`}
+                class="text-aadish hover:text-aadish/80 text-sm"
+              >
+                ← Previous in chapter: {prevPost.data.title}
+              </a>
+            )}
+            {nextPost && (
+              <a
+                href={`/${getSlugFromPath(nextPost.filePath ?? "")}`}
+                class="text-aadish hover:text-aadish/80 text-sm ml-auto"
+              >
+                Next in chapter: {nextPost.data.title} →
+              </a>
+            )}
+          </div>
+        )}
         <ConvexComments client:load slug={slug} />
       </td>
     </tr>
