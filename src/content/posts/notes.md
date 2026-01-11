@@ -4,6 +4,27 @@ title: "Notes, shower thoughts, ramblings, etc."
 hidden: true
 ---
 
+I recently watched [this youtube video](https://www.youtube.com/watch?v=8Kb5NBAMaGw), which focused on cult-like behavior of people engaged in AI psychosis. I generally agree with the video's claims, but some of the auxilliary facts it uses rubbed me off the wrong way. No hate on the creator -- the video itself is very well produced and I love the content!
+
+The key claims which I (somewhat) disagree with, or at least find contentious or not definitely true are:
+1. AI is sentient
+2. AI regurgitates patterns
+3. AI is a bubble
+4. AI is different from other technological advancements
+
+Here are my initial rebuttals to these:
+1. i currently don't believe that AI is sentient, but I don't believe that humans are sentient either, "sentient" itself means practically nothing. if by "sentient" you mean "able to perceive or feel things" (which is the google definition) then yeah AI can currently perceive the state of the world, trivially even.
+  <omitted name 1> made an interesting argument a bit ago. tl;dr <omitted name 2> said smth like "LLMs arae just matmuls", but <omitted name 1> said that the same could be said of humans: that they are just cells
+2. saying that AI just regurgitates patterns is the same thing as saying that humans just propragate electrochemical impulses or that computers just perform binary algebra. sure, technically true, but the end result is significantly greater than the simple components.
+3. I firmly do not believe AI is a bubble. integrating AI into everything is dumb but AI is here to stay. and it will change the world, in a non-cringe way.
+4. the video posits that AI is different from other technologies because it's not the old people who are the most opposed. i find this patently false -- there are still only a small number of early adopters who understand how AI works and what its capabilities are. the vast number of AI skeptics are skeptical solely because they haven't used AI enough (which sounds really stupid/cult like but i do believe it)
+
+To be clear, I'm not saying "LLMs are humans too," or that it's psychologically sound to have an AI girlfriend. All I'm saying is that the claim "LLMs are conscious/sentient" isn't really something that has a definitive answer, and is best left to the philosophers of the world. 
+
+_This note originated as a Discord dump_
+
+---
+
 made gemini do some back-of-the-napkin math
 
 tl;dr google has a AI code editor called antigravity which provides access to a bunch of models. Pro users for $20/month get really high rate limits on models with a 5 hour refresh window
