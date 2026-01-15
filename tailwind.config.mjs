@@ -13,7 +13,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter Tight", "helvetica", "sans-serif"],
+        sans: ["DM Sans", "sans-serif"],
         serif: ["Charter", "serif"],
         mono: ["Google Sans Code", "monospace"],
       },

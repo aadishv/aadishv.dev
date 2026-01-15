@@ -6,12 +6,6 @@ image: "/projects/periodic/thumbnail.png"
 categories: ["project", "webdev"]
 ---
 
-## Demo
-
-<a href="https://tools.aadishv.dev/periodic">Open this in a new tab to play around with</a>
-
-<iframe src="https://tools.aadishv.dev/periodic" class="w-full h-[42rem] my-auto mx-auto mt-2"></iframe>
-
 This started off as a simple project to try out web technologies, Tailwind CSS, and JS best practices by porting a small SwiftUI app I'd made -- and to fulfill my dire need for an actually well-designed periodic table. It eventually grew quite a bit, with many more features than initially imagined and several of my classmates at OHS using it.
 
 ## Features

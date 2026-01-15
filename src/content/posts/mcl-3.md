@@ -13,6 +13,12 @@ description: ""
             filter: invert(1) hue-rotate(180deg) contrast(1) brightness(1);
         }
     }
+    @media (prefers-color-scheme: light) {
+        img[alt~="discord"] {
+            -webkit-filter: invert(1) hue-rotate(180deg) contrast(1) brightness(1);
+            filter: invert(1) hue-rotate(180deg) contrast(1) brightness(1);
+        }
+    }
 </style>
 
 ## Motivation
@@ -23,10 +29,11 @@ Most of my knowledge about MCL comes from implementing it myself. In this blog, 
 
 ## Background
 
+When I started planning 3151A's high-level architecture for the VEX AI High Stakes season, I knew practically nothing about how the competition and technology worked. I thus wrote a very elaborate plan for how we would orchestrate the robots:
 
+![initial, overcomplicated plan for VEX AI High Stakes](assets/mcl-3/2.png)
 
-
-
+![discord](assets/mcl-3/1.png)
 
 
 [^1]: funnily enough, I barely knew Rust at the time. All of my knowledge was from doing [Advent of Code problems](/aoc) in it, and I had no idea how the borrow checker etc. worked. I really only got a good intuition for borrowing in ~October 2025. Luckily, 2654E had code examples that were extremely easy to understand. I highly recommend their [notebook](https://www.vexforum.com/t/2654e-engineering-notebook-explanation-video-release/136688) as additional reading!

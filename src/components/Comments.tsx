@@ -90,7 +90,7 @@ export default function Comments({ slug }: CommentsProps) {
               <td className="flex-0 w-[9ch]">&nbsp;</td>
               <td className="flex-1 text-start">
                 <h3
-                  className="font-medium tracking-tight text-aadish m-0"
+                  className="font-medium text-aadish m-0"
                   id="comment-component"
                 >
                   Comments

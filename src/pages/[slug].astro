@@ -6,7 +6,7 @@ import { parseISO, format } from "date-fns";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import ConvexComments from "@/components/ConvexProvider";
-import ChapterBadge from "@/components/ui/ChapterBadge";
+import readingTime from "reading-time";
 
 export async function getStaticPaths({}: GetStaticPathsOptions) {
   const allContent = await getCollection("posts");
@@ -45,23 +45,9 @@ const dom = new JSDOM(`
 const desc = Array.from(dom.window.document.querySelectorAll("p"))
   .map((i) => i.textContent)
   .filter(Boolean)[0];
+const text = dom.window.document.body.textContent ?? "";
 
-let chapterPosts = [];
-let prevPost = null;
-let nextPost = null;
-if (post.data.chapter) {
-  const allPosts = await getCollection("posts");
-  chapterPosts = allPosts
-    .filter((p) => p.data.chapter === post.data.chapter && p.data.hidden !== true)
-    .sort((a, b) => new Date(a.data.date).valueOf() - new Date(b.data.date).valueOf());
-  const currentIndex = chapterPosts.findIndex((p) => p.id === post.id);
-  if (currentIndex > 0) {
-    prevPost = chapterPosts[currentIndex - 1];
-  }
-  if (currentIndex < chapterPosts.length - 1) {
-    nextPost = chapterPosts[currentIndex + 1];
-  }
-}
+const timeToRead = readingTime(text);
 
 const baseUrl = import.meta.env.DEV
   ? "http://localhost:4321"
@@ -78,19 +64,19 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
         <time datetime={date.toString()} transition:name={`date-${post.id}`}
           >{formatted}</time
         >
-        {post.body && <span>{`• ${post.body.split(" ").length} words`}</span>}
-        {post.data.chapter && <div class="mt-2"><ChapterBadge chapter={post.data.chapter} /></div>}
+        {` • ${Math.ceil(timeToRead.minutes)} min read`}
       </th>
       <th class="lg:pr-[6rem] px-5 lg:mx-0 text-start align-baseline flex-1">
         <a
           href={`/${getSlugFromPath(post.filePath ?? "")}`}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-aadish !font-medium tracking-tight !no-underline"
+          class="text-aadish !font-medium !no-underline"
           transition:name={post.id}
         >
           <h1>{post.data.title}</h1>
         </a>
+        <i class="font-normal">from the blog of <a href="/">Aadish Verma</a></i>
       </th>
     </tr>
     <tr>
@@ -172,26 +158,6 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
         >
           <Content />
         </div>
-        {(prevPost || nextPost) && (
-          <div class="flex justify-between mt-8 pt-4 border-t border-muted-foreground/20">
-            {prevPost && (
-              <a
-                href={`/${getSlugFromPath(prevPost.filePath ?? "")}`}
-                class="text-aadish hover:text-aadish/80 text-sm"
-              >
-                ← Previous in chapter: {prevPost.data.title}
-              </a>
-            )}
-            {nextPost && (
-              <a
-                href={`/${getSlugFromPath(nextPost.filePath ?? "")}`}
-                class="text-aadish hover:text-aadish/80 text-sm ml-auto"
-              >
-                Next in chapter: {nextPost.data.title} →
-              </a>
-            )}
-          </div>
-        )}
         <ConvexComments client:load slug={slug} />
       </td>
     </tr>
