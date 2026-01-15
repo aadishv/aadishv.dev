@@ -132,7 +132,7 @@ export default function Comments({ slug }: CommentsProps) {
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                     placeholder="write a comment..."
-                    className="flex-1 bg-transparent border border-border px-3 py-2 text-base placeholder:text-muted-foreground focus:outline-none focus:border-aadish transition-colors"
+                    className="flex-1 bg-transparent border border-border px-3 py-2 text-base placeholder:text-muted-foreground focus:outline-hidden focus:border-aadish transition-colors"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
