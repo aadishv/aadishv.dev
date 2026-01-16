@@ -19,7 +19,7 @@ export const { getStaticPaths, GET } = OGImageRoute({
   pages,
 
   // Basic template for our OG images
-  getImageOptions: (_ , page) => ({
+  getImageOptions: (_, page) => ({
     title: page.title,
     logo: {
       path: "./src/pages/open-graph/logo.png",
@@ -32,9 +32,7 @@ export const { getStaticPaths, GET } = OGImageRoute({
         color: [255, 255, 255] as const,
       },
     },
-    fonts: [
-      "./src/pages/open-graph/InterTight.ttf",
-    ],
+    fonts: ["./src/pages/open-graph/InterTight.ttf"],
   }),
 });
 console.log("TESTING");

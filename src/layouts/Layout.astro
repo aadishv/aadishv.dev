@@ -11,18 +11,22 @@ const { title, tool, hideName, description, image } = Astro.props;
     <ClientRouter />
     <meta property="og:title" content={title} />
     {
-    description && (
-    <meta property="og:description" content={description} />
-    <meta name="description" content={description} />
-    )
+      description && (
+        <>
+          <meta property="og:description" content={description} />
+          <meta name="description" content={description} />
+        </>
+      )
     }
     <meta property="og:image" content={image ?? "https://aadishv.dev/og.png"} />
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:image" content={image ?? "https://aadishv.dev/og.png"} />
+    <meta
+      property="twitter:image"
+      content={image ?? "https://aadishv.dev/og.png"}
+    />
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
 
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -33,12 +37,24 @@ const { title, tool, hideName, description, image } = Astro.props;
       href="/rss.xml"
     />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Noto+Serif+SC:wght@200..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..80;1,300..800&family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Noto+Serif+SC:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..80;1,300..800&family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
 
     <meta
       name="google-site-verification"
@@ -62,15 +78,15 @@ const { title, tool, hideName, description, image } = Astro.props;
         color: gray;
       }
       .anchor-link {
-          float: right;
-          margin-right: 0.75rem;
-          font-weight: 300 !important;
+        float: right;
+        margin-right: 0.75rem;
+        font-weight: 300 !important;
       }
     </style>
   </head>
   <body>
-      <!-- you asked for it -->
-      <!--
+    <!-- you asked for it -->
+    <!--
       <script>
       if (navigator.brave && navigator.brave.isBrave) {
         navigator.brave.isBrave().then(function(isBravePromise) {

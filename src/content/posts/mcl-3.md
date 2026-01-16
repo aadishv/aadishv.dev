@@ -36,5 +36,4 @@ When I started planning 3151A's high-level architecture for the VEX AI High Stak
 
 ![discord](assets/mcl-3/1.png)
 
-
 [^1]: funnily enough, I barely knew Rust at the time. All of my knowledge was from doing [Advent of Code problems](/aoc) in it, and I had no idea how the borrow checker etc. worked. I really only got a good intuition for borrowing in ~October 2025. Luckily, 2654E had code examples that were extremely easy to understand. I highly recommend their [notebook](https://www.vexforum.com/t/2654e-engineering-notebook-explanation-video-release/136688) as additional reading!
