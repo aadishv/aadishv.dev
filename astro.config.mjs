@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 import rehypeSlug from "rehype-slug";
 import mdx from "@astrojs/mdx";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -8,12 +8,12 @@ import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 // https://astro.build/config
 export default defineConfig({
+  vite: {
+    plugins: [tailwindcss()],
+  },
   integrations: [
     react({
       // include: ["**/*/react/*"],
-    }),
-    tailwind({
-      applyBaseStyles: false,
     }),
     mdx(),
     sitemap(),

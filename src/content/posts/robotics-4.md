@@ -3,6 +3,7 @@ date: "2025-08-03"
 title: "Robotics 4: 3151A (the first competition)"
 categories: ["robotics"]
 description: ""
+chapter: Robotics
 ---
 
 This is the fourth part of what will eventually be a five-part series. This focuses on my work on 3151A’s tech stack for the period of the season leading up to our first competition. Just one more post about VAIRC after this(!!)

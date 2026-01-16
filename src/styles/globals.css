@@ -1,6 +1,101 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss" source("..");
+@plugin "tailwindcss-animate";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Helvetica Nueue", "IBM Plex Sans", sans-serif;
+  --font-serif: "Charter", serif;
+  --font-mono: "Google Sans Code", monospace;
+
+  --color-aadish: hsl(var(--aadish));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@utility dark-invert {
+  filter: invert(var(--inversion));
+}
+
+@utility container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+@layer utilities {
+  @media (width >= 640px) {
+    .container {
+      max-width: 640px;
+    }
+  }
+
+  @media (width >= 768px) {
+    .container {
+      max-width: 768px;
+    }
+  }
+
+  @media (width >= 1024px) {
+    .container {
+      max-width: 1024px;
+    }
+  }
+
+  @media (width >= 1280px) {
+    .container {
+      max-width: 1280px;
+    }
+  }
+
+  @media (width >= 1400px) {
+    .container {
+      max-width: 1400px;
+    }
+  }
+}
 
 @keyframes appear {
   from {
@@ -16,10 +111,12 @@
 @layer base {
   /* light theme */
   :root {
+    --inversion: 0%;
+
     --aadish: 0 72% 51%;
 
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222.2 84% 0%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -51,10 +148,12 @@
   /* dark theme */
   @media (prefers-color-scheme: dark) {
     :root {
-      --aadish: 0 84 65;
+      --inversion: 100%;
+
+      --aadish: 0 84 72;
 
       --background: 0 0% 100%;
-      --foreground: 210 40% 98%;
+      --foreground: 210 40% 100%;
 
       --background: 0 0% 0%;
       --card-foreground: 210 40% 98%;
@@ -96,7 +195,7 @@
   }
   /* decrease font size on desktop */
   :root {
-    font-size: 14px;
+    font-size: 18px;
   }
   @media (min-width: 1024px) {
     :root {
@@ -104,9 +203,6 @@
     }
   }
   /* basics */
-  * {
-    word-wrap: break-word !important;
-  }
   body {
     @apply bg-background text-foreground;
   }
@@ -132,7 +228,7 @@
   h4,
   h5,
   h6 {
-    @apply mt-2 tracking-tight;
+    @apply mt-2;
   }
   hr {
     @apply my-2;
@@ -149,11 +245,14 @@
   p,
   li,
   ul {
-    @apply font-sans mt-3 tracking-[0.04rem] leading-8;
+    @apply font-sans mt-3 leading-8;
   }
   li {
     /* add the bullet point */
     @apply list-disc ml-6 mt-3;
+  }
+  ol > li {
+    @apply list-decimal;
   }
   blockquote {
     @apply border-l-4 pl-4 italic border-border;
@@ -167,5 +266,11 @@
   }
   pre {
     @apply bg-muted rounded-md p-4 border border-border;
+  }
+  details *:not(summary) {
+    @apply ml-4;
+  }
+  * {
+    letter-spacing: -0.3px;
   }
 }
