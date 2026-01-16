@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "DM Sans", sans-serif;
+  --font-sans: "Helvetica Nueue", "IBM Plex Sans", sans-serif;
   --font-serif: "Charter", serif;
   --font-mono: "Google Sans Code", monospace;
 
@@ -53,6 +53,10 @@
       height: 0;
     }
   }
+}
+
+@utility dark-invert {
+  filter: invert(var(--inversion));
 }
 
 @utility container {
@@ -107,10 +111,12 @@
 @layer base {
   /* light theme */
   :root {
+    --inversion: 0%;
+
     --aadish: 0 72% 51%;
 
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222.2 84% 0%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -142,10 +148,12 @@
   /* dark theme */
   @media (prefers-color-scheme: dark) {
     :root {
+      --inversion: 100%;
+
       --aadish: 0 84 72;
 
       --background: 0 0% 100%;
-      --foreground: 210 40% 98%;
+      --foreground: 210 40% 100%;
 
       --background: 0 0% 0%;
       --card-foreground: 210 40% 98%;
@@ -187,7 +195,7 @@
   }
   /* decrease font size on desktop */
   :root {
-    font-size: 14px;
+    font-size: 18px;
   }
   @media (min-width: 1024px) {
     :root {
@@ -255,5 +263,8 @@
   }
   pre {
     @apply bg-muted rounded-md p-4 border border-border;
+  }
+  * {
+    letter-spacing: -0.3px;
   }
 }
