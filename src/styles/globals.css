@@ -251,6 +251,9 @@
     /* add the bullet point */
     @apply list-disc ml-6 mt-3;
   }
+  ol > li {
+    @apply list-decimal;
+  }
   blockquote {
     @apply border-l-4 pl-4 italic border-border;
   }
@@ -263,6 +266,9 @@
   }
   pre {
     @apply bg-muted rounded-md p-4 border border-border;
+  }
+  details *:not(summary) {
+    @apply ml-4;
   }
   * {
     letter-spacing: -0.3px;

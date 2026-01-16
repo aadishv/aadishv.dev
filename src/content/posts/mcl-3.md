@@ -3,6 +3,7 @@ date: "2026-01-01"
 title: "MCL 3: GPU-accelerated Monte Carlo Localization using LiDAR"
 categories: ["robotics"]
 description: ""
+hidden: true
 ---
 
 <!-- since its mostly tldraw -->
