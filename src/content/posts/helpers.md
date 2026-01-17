@@ -2,7 +2,6 @@
 date: "2025-08-04"
 hidden: true
 title: "helpers for usacow"
-categories: ["note"]
 description: ""
 ---
 

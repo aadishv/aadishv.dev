@@ -2,7 +2,6 @@
 date: "2025-11-09"
 title: "Reverse engineering Apple Music's background gradient"
 link: "https://tools.aadishv.dev/music"
-categories: ["webdev", "reverse-engineering", "gpu"]
 ---
 
 ## Motivation

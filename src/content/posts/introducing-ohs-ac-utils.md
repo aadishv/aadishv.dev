@@ -2,7 +2,6 @@
 date: "2025-10-10"
 title: "Introducing OHS AC Utilities"
 link: "https://chromewebstore.google.com/detail/ohs-ac-utilities/mcnjeemajaoopeejjbfiieaepibmbjne"
-categories: ["project", "webdev"]
 ---
 
 <table style="margin-left: auto; margin-right: auto">

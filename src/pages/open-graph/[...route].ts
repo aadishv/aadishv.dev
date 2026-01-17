@@ -3,18 +3,15 @@ import { OGImageRoute } from "astro-og-canvas";
 import { getCollection } from "astro:content";
 import { getSlugFromPath } from "../[slug].astro";
 
-const { pages, posts } = await (async () => {
-  const posts = await getCollection("posts");
-  let pages: Record<string, { title: string; description?: string }> = {};
-  for (const post of posts) {
-    pages[getSlugFromPath(post.filePath ?? "")] = {
-      title: post.data.title || "!",
-    };
-  }
-  return { pages, posts };
-})();
+const posts = await getCollection("posts");
+const pages: Record<string, { title: string; description?: string }> = {};
+for (const post of posts) {
+  pages[getSlugFromPath(post.filePath ?? "")] = {
+    title: post.data.title || "!",
+  };
+}
 
-export const { getStaticPaths, GET } = OGImageRoute({
+export const { getStaticPaths, GET } = await OGImageRoute({
   param: "route",
   pages,
 
@@ -35,5 +32,3 @@ export const { getStaticPaths, GET } = OGImageRoute({
     fonts: ["./src/pages/open-graph/InterTight.ttf"],
   }),
 });
-console.log("TESTING");
-console.log(getStaticPaths({ paginate: (...stuff) => [] }));

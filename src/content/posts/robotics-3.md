@@ -1,9 +1,7 @@
 ---
 date: "2025-07-09"
 title: "Robotics 3: 3151A (what makes VAIRC difficult?)"
-categories: ["robotics"]
 description: ""
-chapter: Robotics
 ---
 
 This is the third part of what will eventually be a four- or five-part series. This third part is about my time on 3151A for the High Stakes season. I will be writing at least two more posts as there is just so much stuff to go over.

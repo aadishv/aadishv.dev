@@ -2,7 +2,6 @@
 date: "1970-01-01"
 hidden: true
 title: "no!"
-categories: ["note"]
 description: ""
 ---
 

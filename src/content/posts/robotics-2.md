@@ -1,9 +1,7 @@
 ---
 date: "2025-03-23"
 title: "Robotics 2: 315P (High Stakes)"
-categories: ["robotics"]
 description: ""
-chapter: Robotics
 ---
 
 **🚨THIS IS A TECHNICAL POST🚨**

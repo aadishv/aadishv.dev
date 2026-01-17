@@ -2,7 +2,6 @@
 date: "2025-09-08"
 hidden: true
 title: "My background"
-categories: ["note"]
 description: ""
 ---
 

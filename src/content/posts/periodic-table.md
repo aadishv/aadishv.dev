@@ -3,7 +3,6 @@ date: "2025-03-15"
 title: "Periodic Table"
 link: "https://tools.aadishv.dev/periodic"
 image: "/projects/periodic/thumbnail.png"
-categories: ["project", "webdev"]
 ---
 
 This started off as a simple project to try out web technologies, Tailwind CSS, and JS best practices by porting a small SwiftUI app I'd made -- and to fulfill my dire need for an actually well-designed periodic table. It eventually grew quite a bit, with many more features than initially imagined and several of my classmates at OHS using it.

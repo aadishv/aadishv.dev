@@ -1,7 +1,6 @@
 ---
 date: "2025-09-10"
 title: "Using Github Copilot models in Raycast AI"
-categories: ["TIL", "ai"]
 description: ""
 ---
 

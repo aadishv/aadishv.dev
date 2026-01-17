@@ -36,8 +36,7 @@ const date: Date = parseISO(post.data.date);
 const formatted: string =
   post.data.date == "<top>" ? "" : format(date, "MM.dd.yy");
 
-const isProject =
-  post.data.categories && post.data.categories.includes("project");
+const hasLink = !!post.data.link;
 
 const dom = new JSDOM(`
     <!doctype html><html><body>${post.rendered?.html}</body></html>
@@ -84,7 +83,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
         class="w-[16rem] ml-[6rem] hidden lg:flex pr-3 flex-col sticky top-3 [&_.toc-active]:!text-aadish align-baseline"
       >
         {
-          isProject && post.data.link && (
+          hasLink && (
             <p>
               <a
                 href={post.data.link}

@@ -1,7 +1,6 @@
 ---
 date: "2025-06-24"
 title: "DishPy: better Python development for VEX V5"
-categories: ["robotics", "project"]
 description: ""
 ---
 

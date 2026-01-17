@@ -1,7 +1,6 @@
 ---
 date: "2025-04-10"
 title: "Using Aadish's Chinese practice"
-categories: ["project", "webdev"]
 ---
 
 _Aadish's Chinese practice_ is a little tool I've created to help me practice my Chinese.
