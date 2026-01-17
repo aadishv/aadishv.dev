@@ -11,7 +11,6 @@ interface CommentsProps {
 
 export default function Comments({ slug }: CommentsProps) {
   const [body, setBody] = useState("");
-  const [token, setToken] = useState<string | null>(null);
   const [showCaptcha, setShowCaptcha] = useState(false);
   const comments = useQuery(api.comments.getComments, { slug });
   const addComment = useAction(api.comments.addComment);
@@ -20,28 +19,21 @@ export default function Comments({ slug }: CommentsProps) {
 
   const handleSubmitClick = () => {
     if (!body.trim()) return;
-    if (token) {
-      submitComment();
-    } else {
+    else {
       setShowCaptcha(true);
     }
   };
 
-  const submitComment = async () => {
+  const submitComment = async (token: string) => {
     if (body.trim() && token) {
       const error = await addComment({ slug, body, token });
       if (error) {
         toast.error(error.error);
       }
       setBody("");
-      setToken(null);
       setShowCaptcha(false);
       captchaRef.current?.resetCaptcha();
     }
-  };
-
-  const handleVerify = (captchaToken: string) => {
-    setToken(captchaToken);
   };
 
   const formatDate = (timestamp: number) => {
@@ -60,27 +52,15 @@ export default function Comments({ slug }: CommentsProps) {
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
           onClick={() => setShowCaptcha(false)}
         >
-          <div
-            className="bg-background border border-border p-6 flex flex-col gap-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="text-base m-0">verify you're human</p>
-            <HCaptcha
-              ref={captchaRef}
-              sitekey="8f643442-c6fa-4714-9888-52d4a11e7378"
-              size="normal"
-              theme={isDark ? "dark" : "light"}
-              onVerify={handleVerify}
-            />
-            <button
-              type="button"
-              onClick={submitComment}
-              disabled={!token}
-              className="px-4 py-2 text-base font-medium bg-transparent border border-border hover:border-aadish hover:text-aadish disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              submit
-            </button>
-          </div>
+          <HCaptcha
+            ref={captchaRef}
+            sitekey="8f643442-c6fa-4714-9888-52d4a11e7378"
+            size="normal"
+            theme={isDark ? "dark" : "light"}
+            onVerify={(token) => {
+              submitComment(token);
+            }}
+          />
         </div>
       )}
       <div className="mt-12 border-t border-border pt-6">

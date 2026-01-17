@@ -3,24 +3,12 @@ import Layout from "../layouts/Layout.astro";
 import "@/styles/globals.css";
 import { getCollection } from "astro:content";
 import { parseISO, format } from "date-fns";
-import { Github, Globe, Newspaper } from "lucide-react";
 
 const getSlugFromPath = (path: string): string => {
   const parts = path.split("/");
   const filename = parts.pop() || "";
   return filename.replace(".md", "");
 };
-function formatDate(dateString: string) {
-  try {
-    return new Date(dateString).toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  } catch {
-    return dateString;
-  }
-}
 let allEntries = await getCollection("posts");
 const entries = allEntries
   .sort(

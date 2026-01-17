@@ -1,5 +1,4 @@
 import { ConvexReactClient, ConvexProvider } from "convex/react";
-import type { JSX, FunctionComponent } from "react";
 import Comments from "./Comments";
 
 const client = new ConvexReactClient(

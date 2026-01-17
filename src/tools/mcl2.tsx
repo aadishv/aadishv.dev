@@ -17,7 +17,7 @@ const offset = 0.7 / 14;
 export function ParticlesVertical() {
   return (
     <div className="flex flex-col gap-3">
-      {data.map((d, i) => (
+      {data.map((d) => (
         <div className="flex gap-3" key={d.color}>
           <div
             className={`h-7 border-5 opacity-75 rounded-full text-center pt-0.5 ${d.color}`}
@@ -32,7 +32,7 @@ export function ParticlesVertical() {
 export function ParticlesPercent() {
   return (
     <div className="flex">
-      {data.map((d, i) => (
+      {data.map((d) => (
         <div
           className="flex gap-3 flex-col text-center"
           key={d.color}
@@ -62,7 +62,7 @@ export function ParticlesLines() {
         ))}
       </div>
       <div className="flex">
-        {data.map((d, i) => (
+        {data.map((d) => (
           <div
             className="flex gap-3 flex-col text-center"
             key={d.color}
@@ -99,7 +99,7 @@ export function ParticlesLines2() {
         ))}
       </div>
       <div className="flex">
-        {data.map((d, i) => (
+        {data.map((d) => (
           <div
             className="flex gap-3 flex-col text-center"
             key={d.color}
