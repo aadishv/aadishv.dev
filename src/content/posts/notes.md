@@ -3,6 +3,7 @@ date: "0001-01-01"
 title: "Notes, shower thoughts, ramblings, etc."
 hidden: true
 ---
+<div class="no-katex">
 
 Here's a cost breakdown of a massive feature I just implemented solely using AI tools. I basically created a plan with Opus, refined on it until I was happy with the architecture, implemented it autonomously with GPT-5.2-Codex XHigh, and then fixing up the typecheck with Opus and Gemini 3 Flash. TL;DR I optimized my usage for cost savings, leading to my usage being ~50x subsidized (and the subscriptions are free in reality to me thanks to a variety of discounts).
 
@@ -198,3 +199,5 @@ Now take [Venice](https://venice.fibn.cc/), the repo whose PR I used as an earli
 It would choke on the first step. Yet this is only a fraction of the work we need to make Venice a usable Python runtime for the brain. This, and many other examples, lead me to the Second Rule of Vibeability: **interesting tasks are not vibeable.** I can hear you screaming "gpt-5-codex can solve plenty of interesting tasks!" and yes, it can, but when I envision an interesting task, I don't just mean a task that involves writing or testing code. I mean one that involves doing hours of research, designing an architecture, iterating on prototypes, and polishing the final product. Software is truly art; saying that AI has already replaced coders is akin to saying that the art industry has been replaced by Etch-A-Sketches. I have a bit more to say on how agents aren't great yet at interesting tasks, but that's for another note.
 
 TL;DR: if a task is vibeable in your opinion, either don't do it, or just make an agent do it.
+
+</div>

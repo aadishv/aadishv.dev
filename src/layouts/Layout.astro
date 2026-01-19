@@ -67,10 +67,10 @@ const { title, tool, hideName, description, image } = Astro.props;
       onload="this.onload=null;this.rel='stylesheet'"
     />
     <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
     ></script>
     <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js"
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     ></script>
     <style is:inline>
       /* for rehype */
@@ -107,6 +107,8 @@ const { title, tool, hideName, description, image } = Astro.props;
       // KaTeX
       document.addEventListener("DOMContentLoaded", () => {
         renderMathInElement(document.body, {
+          // ignoredClasses: ["no-katex"],
+          // ignoredTags: ["div"],
           delimiters: [
             { left: "$$", right: "$$", display: true },
             { left: "\\[", right: "\\]", display: true },
