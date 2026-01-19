@@ -4,6 +4,26 @@ title: "Notes, shower thoughts, ramblings, etc."
 hidden: true
 ---
 
+Here's a cost breakdown of a massive feature I just implemented solely using AI tools. I basically created a plan with Opus, refined on it until I was happy with the architecture, implemented it autonomously with GPT-5.2-Codex XHigh, and then fixing up the typecheck with Opus and Gemini 3 Flash. TL;DR I optimized my usage for cost savings, leading to my usage being ~50x subsidized (and the subscriptions are free in reality to me thanks to a variety of discounts).
+
+Total costs:
+* (G3F/Opus) Fixing GPT-5.2-Codex's work & typecheck: $3.2439 ($0.00 real via Antigravity)
+* (5.2-Codex-Xhigh) Implementation: $8.7304 ($0.16 real via Copilot)
+* (Opus) Working on plan more: $0.3785 ($0.00 real via Antigravity)
+* (Opus) Initial planning: $1.8730 ($0.00 real via Antigravity)
+
+Let's try to estimate the Antigravity costs. I used my full Opus quota for the 5h window and literally 0% of any other quotas, including G3F. Even if we assume the Claude quota is the "most valuable" resource provided by Antigravity, I think it's fair to say my utilization was at maximum 75% of the 5 hour quotas. Then, the cost from my sub was $20/mo * 5h = $0.14. The total cost incurred to me was then $0.30. 
+
+This is only at the limits of the subs btw, as I really spent $0 for Antigravity (we get the sub for free through a Pixel promo) and $0 for Copilot (within 300 PRs + free student plan). Even using the way-too-high $0.30 number, the total API cost of $14.23 was subsidized by about 50x by Google and Microsoft combined. Insane stuff.
+
+Summary: I just cost Google and Microsoft $14.23 without spending a dime myself (and, if I didn't have the advantanges that I did, I still would've only spent $0.30). If we carry over this level of subsidization to a $200 plan, then one could get around $9500 of inference from $200. Insanity. I'd hypothesized these numbers previously, but seeing them show up in day-to-day use is crazy to me. 
+
+Of course, this had particular properties that enabled me to leverage the subsidization. Importantly, I only sent 4 user messages for the most costly part: the implementation by GPT-5.2-Codex. Copilot, unlike any of the other providers, bills premium requests by user messages; if they had billed by requests which everyone else does, I would've been billed for a full 419 requests(!). By getting GPT-5.2-Codex to run for an hour autonomously without stopping, I managed to get ~6 dollars of inference from a single premium request. I also intentionally used GPT-5.2-Codex over Opus 4.5 for implementation because Opus 4.5 via Copilot costs 3 premium requests per user message -- GPT-5.2-Codex only 1.
+
+This is also the longest practical end-to-end use of AI I've had so far. With minor babysitting, the entire ordeal lasted from 10:45 pm to 12:15 am -- 90 minutes of autonomous agentic coding!
+
+---
+
 I recently watched [this youtube video](https://www.youtube.com/watch?v=8Kb5NBAMaGw), which focused on cult-like behavior of people engaged in AI psychosis. I generally agree with the video's claims, but some of the auxilliary facts it uses rubbed me off the wrong way. No hate on the creator -- the video itself is very well produced and I love the content!
 
 The key claims which I (somewhat) disagree with, or at least find contentious or not definitely true are:
