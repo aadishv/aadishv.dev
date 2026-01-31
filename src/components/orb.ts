@@ -4,7 +4,7 @@ async function main() {
   const canvas = document.querySelector("#orb") as HTMLCanvasElement;
   const gl = canvas.getContext("webgl2")!;
 
-  const size = 300;
+  const size = 267;
   
   canvas.width = size;
   canvas.height = size;
