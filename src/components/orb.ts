@@ -21,17 +21,6 @@ async function main() {
     }
   `.trim();
 
-  const fragPassthrough = glsl`
-    #version 300 es
-    precision highp float;
-    in vec2 v_uv;
-    out vec4 fragColor;
-    uniform vec2 resolution;
-    void main() {
-      fragColor = vec4(v_uv, 0.0, 1.0);
-    }
-  `.trim();
-
   const fragDither = glsl`
     #version 300 es
     precision highp float;
@@ -96,14 +85,13 @@ async function main() {
     gl.shaderSource(fragShader, fragSrc);
     gl.compileShader(fragShader);
 
-    const program = gl.createProgram()!;
-    gl.attachShader(program, vertShader);
-    gl.attachShader(program, fragShader);
-    gl.linkProgram(program);
-    return program;
+    const blurProgram = gl.createProgram()!;
+    gl.attachShader(blurProgram, vertShader);
+    gl.attachShader(blurProgram, fragShader);
+    gl.linkProgram(blurProgram);
+    return blurProgram;
   }
 
-  const passthroughProgram = createProgram(fragPassthrough);
   const blurProgram = createProgram(fragDither);
 
   // Full-screen quad
@@ -112,62 +100,46 @@ async function main() {
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
   gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
 
-  let blurEnabled = true;
   let center = [0.5, 0.5];
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
   function render() {
-    const program = blurEnabled ? blurProgram : passthroughProgram;
-    gl.useProgram(program);
+	canvas.style.opacity = 1;
+    gl.useProgram(blurProgram);
 
-    const posLoc = gl.getAttribLocation(program, "a_position");
+    const posLoc = gl.getAttribLocation(blurProgram, "a_position");
     gl.enableVertexAttribArray(posLoc);
     gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
 
-    const resolutionLoc = gl.getUniformLocation(program, "resolution");
+    const resolutionLoc = gl.getUniformLocation(blurProgram, "resolution");
     gl.uniform2f(resolutionLoc, size, size);
 
-    if (blurEnabled) {
-      const texelSizeLoc = gl.getUniformLocation(program, "u_texelSize");
+      const texelSizeLoc = gl.getUniformLocation(blurProgram, "u_texelSize");
       if (texelSizeLoc !== -1) {
         gl.uniform2f(texelSizeLoc, 1 / size, 1 / size);
       }
   
-      const centerLoc = gl.getUniformLocation(program, "center");
+      const centerLoc = gl.getUniformLocation(blurProgram, "center");
       if (centerLoc !== -1) {
         gl.uniform2f(centerLoc, center[0]!, center[1]!);
       }
 
-      const lightDarkLoc = gl.getUniformLocation(program, "lightDark");
+      const lightDarkLoc = gl.getUniformLocation(blurProgram, "lightDark");
       gl.uniform1i(lightDarkLoc, mediaQuery.matches ? 1 : 0);
-    }
 
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
-  render();
-
-  // Toggle with spacebar
-  document.addEventListener("keydown", (e) => {
-    if (e.code === "Space") {
-      e.preventDefault();
-      blurEnabled = !blurEnabled;
-      render();
-    }
-  });
-
   const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
   document.addEventListener('mousemove', (event) => {
-    const realWidth = canvas.getBoundingClientRect().width;
-    const realHeight = canvas.getBoundingClientRect().height;
-    
-    const offsetX = clamp(event.clientX - canvas.getBoundingClientRect().left, 0, realWidth);
-    const offsetY = clamp(event.clientY - canvas.getBoundingClientRect().top, 0, realHeight);
+    const offsetX = clamp(event.clientX - canvas.getBoundingClientRect().left, 0, size);
+    const offsetY = clamp(event.clientY - canvas.getBoundingClientRect().top, 0, size);
+      let x = (offsetX / size) - 0.5;
+      let y = (offsetY / size) - 0.5;
 
-      let x = (offsetX / realWidth) - 0.5;
-      let y = (offsetY / realHeight) - 0.5;
+      
 
       const distanceFromCenter = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
       const MAX = 0.4;
