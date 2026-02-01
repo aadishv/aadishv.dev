@@ -26,8 +26,8 @@ const entries = allEntries
   <!-- <main class="lg:px-[8rem] px-5 p t-24 w-screen [&_*]:text-wrap"> -->
   <main class="max-w-4xl mx-auto py-10 px-4 [&_*]:text-wrap">
     <table class="w-full">
-      <tr class="flex max-w-full">
-        <th class="flex-0 w-24">&nbsp;</th>
+      <tr class="flex flex-col lg:flex-row max-w-full">
+        <th class="flex-0 lg:w-24 lg:shrink-0">&nbsp;</th>
         <th class="flex-1 !font-normal text-start">
           <div class="flex md:flex-row flex-col">
             <div class="flex-1 my-auto">
@@ -39,46 +39,45 @@ const entries = allEntries
                   >JV Copilot</a
                 > and (as usual) playing with computers.
               </p>
+              <p class="flex flex-wrap gap-1.5">
+                <a href="mailto:mail@aadishv.dev">email</a>
+                •
+                <a href="https://github.com/aadishv" target="_blank">github</a>
+                •
+                <a href="https://x.com/aadishvdotdev" target="_blank"
+                  >twitter (views my own)</a
+                >
+                •
+                <a href="https://www.linkedin.com/in/aadishv/" target="_blank"
+                  >linkedin</a
+                >
+                •
+                <span>discord @aadishv</span>
+              </p>
+              <p>
+                I sometimes have shower thoughts that aren't interesting enough
+                to end up in a blog post; you'll find such ramblings <a
+                  href="/notes">here</a
+                >.
+              </p>
+              <a href="/resume.pdf" class="!text-foreground duration-0 invert"
+                >resume</a
+              >
             </div>
             <Orb />
           </div>
-
-          <p class="flex flex-wrap gap-1.5">
-            <a href="mailto:mail@aadishv.dev">email</a>
-            •
-            <a href="https://github.com/aadishv" target="_blank">github</a>
-            •
-            <a href="https://x.com/aadishvdotdev" target="_blank"
-              >twitter (views my own)</a
-            >
-            •
-            <a href="https://www.linkedin.com/in/aadishv/" target="_blank"
-              >linkedin</a
-            >
-            •
-            <span>discord @aadishv</span>
-          </p>
-          <p>
-            I sometimes have shower thoughts that aren't interesting enough to
-            end up in a blog post; you'll find such ramblings <a href="/notes"
-              >here</a
-            >.
-          </p>
-          <a href="/resume.pdf" class="!text-foreground duration-0 invert"
-            >resume</a
-          >
         </th>
       </tr>
       {
         entries.map((entry) => (
           <tr class="flex flex-col lg:flex-row mb-1 max-w-full">
-            <td class="text-lg !font-normal flex">
+            <td class="text-lg !font-normal flex lg:w-24 lg:shrink-0">
               <time
                 datetime={parseISO(entry.data.date).toString()}
-                class="text-muted-foreground flex"
+                class="text-muted-foreground flex w-full"
                 transition:name={`date-${entry.id}`}
               >
-                <span class="ml-auto mr-2">
+                <span class="ml-auto mr-2 tabular-nums">
                   {format(parseISO(entry.data.date), "MM.dd.yy")}
                 </span>
                 <span class="text-aadish">/</span>

@@ -1,11 +1,17 @@
 const glsl = String.raw;
 
+const clamp = (num: number, min: number, max: number) =>
+  Math.min(Math.max(num, min), max);
+
 async function main() {
   const canvas = document.querySelector("#orb") as HTMLCanvasElement;
+  if (!canvas) return;
+
   const gl = canvas.getContext("webgl2")!;
+  if (!gl) return;
 
   const size = 267;
-  
+
   canvas.width = size;
   canvas.height = size;
   gl.viewport(0, 0, size, size);
@@ -85,11 +91,11 @@ async function main() {
     gl.shaderSource(fragShader, fragSrc);
     gl.compileShader(fragShader);
 
-    const blurProgram = gl.createProgram()!;
-    gl.attachShader(blurProgram, vertShader);
-    gl.attachShader(blurProgram, fragShader);
-    gl.linkProgram(blurProgram);
-    return blurProgram;
+    const program = gl.createProgram()!;
+    gl.attachShader(program, vertShader);
+    gl.attachShader(program, fragShader);
+    gl.linkProgram(program);
+    return program;
   }
 
   const blurProgram = createProgram(fragDither);
@@ -100,11 +106,11 @@ async function main() {
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
   gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
 
-  let center = [0.5, 0.5];
+  let center = (window as any)._lastOrbCenter || [0.5, 0.5];
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
   function render() {
-	canvas.style.opacity = 1;
+    canvas.style.opacity = "1";
     gl.useProgram(blurProgram);
 
     const posLoc = gl.getAttribLocation(blurProgram, "a_position");
@@ -114,49 +120,68 @@ async function main() {
     const resolutionLoc = gl.getUniformLocation(blurProgram, "resolution");
     gl.uniform2f(resolutionLoc, size, size);
 
-      const texelSizeLoc = gl.getUniformLocation(blurProgram, "u_texelSize");
-      if (texelSizeLoc !== -1) {
-        gl.uniform2f(texelSizeLoc, 1 / size, 1 / size);
-      }
-  
-      const centerLoc = gl.getUniformLocation(blurProgram, "center");
-      if (centerLoc !== -1) {
-        gl.uniform2f(centerLoc, center[0]!, center[1]!);
-      }
+    const texelSizeLoc = gl.getUniformLocation(blurProgram, "u_texelSize");
+    if (texelSizeLoc !== -1) {
+      gl.uniform2f(texelSizeLoc, 1 / size, 1 / size);
+    }
 
-      const lightDarkLoc = gl.getUniformLocation(blurProgram, "lightDark");
-      gl.uniform1i(lightDarkLoc, mediaQuery.matches ? 1 : 0);
+    const centerLoc = gl.getUniformLocation(blurProgram, "center");
+    if (centerLoc !== -1) {
+      gl.uniform2f(centerLoc, center[0]!, center[1]!);
+    }
+
+    const lightDarkLoc = gl.getUniformLocation(blurProgram, "lightDark");
+    gl.uniform1i(lightDarkLoc, mediaQuery.matches ? 1 : 0);
 
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
-  const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
-  document.addEventListener('mousemove', (event) => {
-    const offsetX = clamp(event.clientX - canvas.getBoundingClientRect().left, 0, size);
-    const offsetY = clamp(event.clientY - canvas.getBoundingClientRect().top, 0, size);
-      let x = (offsetX / size) - 0.5;
-      let y = (offsetY / size) - 0.5;
+  const onMouseMove = (event: MouseEvent) => {
+    const rect = canvas.getBoundingClientRect();
+    const offsetX = clamp(event.clientX - rect.left, 0, size);
+    const offsetY = clamp(event.clientY - rect.top, 0, size);
+    let x = offsetX / size - 0.5;
+    let y = offsetY / size - 0.5;
 
-      
+    const distanceFromCenter = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    const MAX = 0.4;
+    let newDistance = Math.pow(distanceFromCenter, 1.5);
+    if (newDistance > MAX) {
+      newDistance = MAX;
+    }
 
-      const distanceFromCenter = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-      const MAX = 0.4;
-      let newDistance = Math.pow(distanceFromCenter, 1.5);
-      if (newDistance > MAX) {
-          newDistance = MAX;
-      }
-
-      x = x * newDistance / distanceFromCenter;
-      y = y * newDistance / distanceFromCenter;
-      center = [x + 0.5, y + 0.5];
-      render();
-  });
-
-  mediaQuery.addEventListener("change", (e) => {
+    x = (x * newDistance) / (distanceFromCenter || 1);
+    y = (y * newDistance) / (distanceFromCenter || 1);
+    center = [x + 0.5, y + 0.5];
+    (window as any)._lastOrbCenter = center;
     render();
-  }); 
+  };
+
+  document.addEventListener("mousemove", onMouseMove);
+
+  const onThemeChange = () => {
+    render();
+  };
+  mediaQuery.addEventListener("change", onThemeChange);
+
+  // Initial render
+  render();
+
+  // Cleanup when navigating away
+  document.addEventListener(
+    "astro:before-swap",
+    () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      mediaQuery.removeEventListener("change", onThemeChange);
+    },
+    { once: true },
+  );
 }
 
-main().catch(console.error);
+// Support Astro's View Transitions
+document.addEventListener("astro:page-load", () => {
+  main().catch(console.error);
+});
+

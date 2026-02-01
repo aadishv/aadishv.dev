@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Helvetica Nueue", "IBM Plex Sans", sans-serif;
+  --font-sans: "Inter Variable", "Inter", sans-serif;
   --font-serif: "Charter", serif;
   --font-mono: "Google Sans Code", monospace;
 
@@ -272,5 +272,6 @@
   }
   * {
     letter-spacing: -0.3px;
+    font-optical-sizing: auto;
   }
 }
