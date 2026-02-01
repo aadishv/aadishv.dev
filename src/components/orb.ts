@@ -16,6 +16,9 @@ async function main() {
   canvas.height = size;
   gl.viewport(0, 0, size, size);
 
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
   const vertSrc = glsl`
     #version 300 es
     in vec2 a_position;
@@ -38,11 +41,6 @@ async function main() {
     uniform bool lightDark;
     float random(vec2 c) {
       return fract(sin(dot(c.xy, vec2(12.9898, 78.233))) * 43758.5453);
-    }
-
-    vec3 handleTheme(float value) {
-      vec3 bg = lightDark ? vec3(0.0) : vec3(1.0);
-      return mix(u_accent, bg, value);
     }
 
     float orderedDither(vec2 uv, float lum) {
@@ -71,12 +69,13 @@ async function main() {
       float xc = (v_uv.x - 0.5) * resolution.x / resolution.y;
       float yc = v_uv.y - 0.5;
       if (!(xc * xc + yc * yc < 0.5 * 0.5)) {
-        fragColor = vec4(handleTheme(1.0), 1.0);
+        fragColor = vec4(0.0);
         return;
       }
       vec2 toCenter = (v_uv - center) * vec2(resolution.x / resolution.y, 1.0);
       float dist = length(toCenter) / 0.5;
-      fragColor = vec4(handleTheme(orderedDither(v_uv, dist * dist)), 1.0);
+      float dither = orderedDither(v_uv, dist * dist);
+      fragColor = vec4(u_accent, 1.0 - dither);
     }
   `.trim();
 
@@ -153,7 +152,7 @@ async function main() {
     const lightDarkLoc = gl.getUniformLocation(blurProgram, "lightDark");
     gl.uniform1i(lightDarkLoc, mediaQuery.matches ? 1 : 0);
 
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
