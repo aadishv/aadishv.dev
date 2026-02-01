@@ -34,17 +34,15 @@ async function main() {
     out vec4 fragColor;
     uniform vec2 resolution;
     uniform vec2 center;
+    uniform vec3 u_accent;
     uniform bool lightDark;
     float random(vec2 c) {
       return fract(sin(dot(c.xy, vec2(12.9898, 78.233))) * 43758.5453);
     }
 
     vec3 handleTheme(float value) {
-      if (!lightDark) {
-        return vec3(value);
-      } else {
-        return vec3(1.0 - value);
-      }
+      vec3 bg = lightDark ? vec3(0.0) : vec3(1.0);
+      return mix(u_accent, bg, value);
     }
 
     float orderedDither(vec2 uv, float lum) {
@@ -109,6 +107,25 @@ async function main() {
   let center = (window as any)._lastOrbCenter || [0.5, 0.5];
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
+  let cachedAccent = [1, 0, 0];
+  function updateAccentCache() {
+    const temp = document.createElement("div");
+    temp.style.color = "var(--color-aadish)";
+    document.body.appendChild(temp);
+    const color = getComputedStyle(temp).color;
+    document.body.removeChild(temp);
+
+    const matches = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (matches) {
+      cachedAccent = [
+        parseInt(matches[1]) / 255,
+        parseInt(matches[2]) / 255,
+        parseInt(matches[3]) / 255,
+      ];
+    }
+  }
+  updateAccentCache();
+
   function render() {
     canvas.style.opacity = "1";
     gl.useProgram(blurProgram);
@@ -129,6 +146,9 @@ async function main() {
     if (centerLoc !== -1) {
       gl.uniform2f(centerLoc, center[0]!, center[1]!);
     }
+
+    const accentLoc = gl.getUniformLocation(blurProgram, "u_accent");
+    gl.uniform3f(accentLoc, cachedAccent[0], cachedAccent[1], cachedAccent[2]);
 
     const lightDarkLoc = gl.getUniformLocation(blurProgram, "lightDark");
     gl.uniform1i(lightDarkLoc, mediaQuery.matches ? 1 : 0);
@@ -162,6 +182,7 @@ async function main() {
   document.addEventListener("mousemove", onMouseMove);
 
   const onThemeChange = () => {
+    updateAccentCache();
     render();
   };
   mediaQuery.addEventListener("change", onThemeChange);
