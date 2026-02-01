@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
@@ -20,7 +19,7 @@ export function ParticlesVertical() {
       {data.map((d) => (
         <div className="flex gap-3" key={d.color}>
           <div
-            className={`h-7 border-5 opacity-75 rounded-full text-center pt-0.5 ${d.color}`}
+            className={`h-7 opacity-75 rounded-full text-center pt-0.5 ${d.color}`}
             style={{ width: `${d.value * 10}%` }}
           ></div>
           weight: {d.value}
@@ -39,7 +38,7 @@ export function ParticlesPercent() {
           style={{ width: `${(100 * d.value) / sum}%` }}
         >
           <div
-            className={`h-7 border-5 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+            className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
           ></div>
           {`${((100 * d.value) / sum).toFixed(0)}%`}
         </div>
@@ -69,7 +68,7 @@ export function ParticlesLines() {
             style={{ width: `${(100 * d.value) / sum}%` }}
           >
             <div
-              className={`h-7 border-5 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+              className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
             ></div>
             {`${((100 * d.value) / sum).toFixed(0)}%`}
           </div>
@@ -106,7 +105,7 @@ export function ParticlesLines2() {
             style={{ width: `${(100 * d.value) / sum}%` }}
           >
             <div
-              className={`h-7 border-5 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+              className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
             ></div>
             {`${((100 * d.value) / sum).toFixed(0)}%`}
           </div>
@@ -144,7 +143,7 @@ export function ParticlesLines3() {
             style={{ width: `${(100 * d.value) / sum}%` }}
           >
             <div
-              className={`h-7 border-5 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+              className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
             ></div>
             {`${((100 * d.value) / sum).toFixed(0)}%`}
           </div>
@@ -349,7 +348,7 @@ export function StepThrough() {
                 style={{ width: `${(100 * d.value) / sum}%` }}
               >
                 <div
-                  className={`h-7 border-5 transition-all ${i === state.particle ? `opacity-100 ring-[2.5px]` : `opacity-75`} rounded-lg text-center pt-0.5 ${d.color}`}
+                  className={`h-7 transition-all ${i === state.particle ? `opacity-100 ring-[2.5px]` : `opacity-75`} rounded-lg text-center pt-0.5 ${d.color}`}
                 ></div>
                 {`${((100 * d.value) / sum).toFixed()}%`}
               </div>
@@ -361,23 +360,23 @@ export function StepThrough() {
         </p>
       </div>
       <p className="text-lg text-foreground/70 mx-auto flex w-full">
-        <Button
-          variant="outline"
+        <button
+          className="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
           disabled={step == 0}
           onClick={() => setStep(step - 1)}
         >
           <ArrowLeft />
-        </Button>
+        </button>
         <span className="my-auto mx-auto font-bold text-center">
           {state.message}
         </span>
-        <Button
-          variant="outline"
+        <button
+          className="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
           disabled={step == steps.length - 1}
           onClick={() => setStep(step + 1)}
         >
           <ArrowRight />
-        </Button>
+        </button>
       </p>
       <div className="transition-all mx-auto flex gap-2">
         <span className="my-auto">new particle list:</span>
