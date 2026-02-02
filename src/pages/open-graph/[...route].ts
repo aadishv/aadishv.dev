@@ -3,6 +3,7 @@ import { OGImageRoute } from "astro-og-canvas";
 import { getCollection } from "astro:content";
 import { getSlugFromPath } from "../[slug].astro";
 import fs from "node:fs";
+import cssContent from "@/styles/globals.css?raw";
 
 const posts = await getCollection("posts");
 const pages: Record<string, { title: string; description?: string }> = {};
@@ -12,10 +13,6 @@ for (const post of posts) {
   };
 }
 
-const cssContent = fs.readFileSync(
-  new URL("../../styles/globals.css", import.meta.url),
-  "utf-8",
-);
 const aadishMatch = cssContent.match(/--aadish:\s*(\d+)\s+(\d+)%\s+(\d+)%/);
 const [h, s, l] = aadishMatch
   ? (aadishMatch.slice(1).map(Number) as [number, number, number])
