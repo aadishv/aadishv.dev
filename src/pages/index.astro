@@ -4,6 +4,8 @@ import "@/styles/globals.css";
 import { getCollection } from "astro:content";
 import { parseISO, format } from "date-fns";
 import Orb from "../components/Orb.astro";
+import { Image } from "astro:assets";
+import avatar from "../assets/avatar.webp";
 
 const getSlugFromPath = (path: string): string => {
   const parts = path.split("/");
@@ -31,7 +33,14 @@ const entries = allEntries
         <th class="flex-1 !font-normal text-start">
           <div class="flex md:flex-row flex-col">
             <div class="flex-1 my-auto">
-              <h1 class="font-medium text-aadish">Aadish Verma</h1>
+              <div class="flex items-center gap-2.5 mb-4">
+                <Image
+                  src={avatar}
+                  alt="Aadish Verma"
+                  class="w-10 h-10 rounded-full my-auto"
+                />
+                <h1 class="font-medium text-aadish my-auto">Aadish Verma</h1>
+              </div>
               <p>
                 I’m a programmer and freshman at Stanford Online High School,
                 located in the Bay Area. I'm currently working as a founding
