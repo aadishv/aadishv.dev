@@ -204,4 +204,3 @@ async function main() {
 document.addEventListener("astro:page-load", () => {
   main().catch(console.error);
 });
-

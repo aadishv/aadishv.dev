@@ -128,7 +128,9 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
               entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                   const id = entry.target.id;
-                  const nav = toc.find((c) => c.getAttribute("href") === `#${id}`);
+                  const nav = toc.find(
+                    (c) => c.getAttribute("href") === `#${id}`,
+                  );
                   if (nav) {
                     document
                       .querySelector(".toc-active")

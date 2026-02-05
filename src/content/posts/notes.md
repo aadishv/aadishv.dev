@@ -3,43 +3,46 @@ date: "0001-01-01"
 title: "Notes, shower thoughts, ramblings, etc."
 hidden: true
 ---
+
 <div class="no-katex">
 
 The way GitHub Copilot prices requests when using their coding agent (or using their models in a provider like OpenCode or Pi) is extremely weird and nontraditional compared to the approach taken by, Claude Max. I end up explaining it 2-3 times a week, so I figured I'd just write it down once here for future reference.
 
 > its a bit weird. copilot bills by user messages, so if you say "fix typecheck", the model goes and calls 20 tools, comes back, you say "there is one more error", then the model calls another 100 tools, you're billed for 2 user messages.
-> 
-> the premium requests expended are equal to (# of user messages)*(model multiplier), so if you use a free model like gpt-4.1, no premium requests. for a cheap model like haiku 4.5 (0.33x multiplier), this would cost 0.66 premium requests.
-> 
+>
+> the premium requests expended are equal to (# of user messages)\*(model multiplier), so if you use a free model like gpt-4.1, no premium requests. for a cheap model like haiku 4.5 (0.33x multiplier), this would cost 0.66 premium requests.
+>
 > most good models have a model multiplier of 1, so the above interaction would cost 2 premium requests. opus is special in that it has model multiplier of 3, so the above interaction would cost 6 premium requests
 >
-> i generally recommend using gpt-5.2-codex on copilot since 1) only 1x multiplier, 2) its really good at just going off and doing an insane amount of work/tokens for a singular user message. 
-> 
+> i generally recommend using gpt-5.2-codex on copilot since 1) only 1x multiplier, 2) its really good at just going off and doing an insane amount of work/tokens for a singular user message.
+>
 > i assume you're coming from a $100/$200 claude max sub, in which case I think you'll also want to get a $125 or the $20 google sub for Antigravity (in addition to copilot). Antigravity bills on regular requests (so each tool call is also a request), which makes it better-suited for back-and-forth. Opus is a model that loves back-and-forth, which makes it ill-suited for Copilot. if you have a conversation with it about planning, and send 10 messages, then boom 30 premium requests gone. antigravity will only count 10 requests (and they have a quota of like 250 requests/5 hours or smth), which makes it really good for conversations with the model.
-> 
+>
 > however, that's also not good when you're doing a big task, like one where the model goes off for an hour and makes ~500 tool calls. this makes copilot better-suited for those tasks since if you're smart it will only count as one user message even for an hour of work.
-> 
+>
 > happy to elaborate if you want to know a bit more but that's my experience.
 
 In general, my current use of models goes something like this:
-* (sl)opus/gemini 3 flash on antigravity for tasks like planning or fixing errors which require a lot of back-and-forth
-* gpt-5.2-codex on copilot for extremely long/autonomous tasks where it's like implementing a whole plan
+
+- (sl)opus/gemini 3 flash on antigravity for tasks like planning or fixing errors which require a lot of back-and-forth
+- gpt-5.2-codex on copilot for extremely long/autonomous tasks where it's like implementing a whole plan
 
 ---
 
 Here's a cost breakdown of a massive feature I just implemented solely using AI tools. I basically created a plan with Opus, refined on it until I was happy with the architecture, implemented it autonomously with GPT-5.2-Codex XHigh, and then fixing up the typecheck with Opus and Gemini 3 Flash. TL;DR I optimized my usage for cost savings, leading to my usage being ~50x subsidized (and the subscriptions are free in reality to me thanks to a variety of discounts).
 
 Total costs:
-* (G3F/Opus) Fixing GPT-5.2-Codex's work & typecheck: $3.2439 ($0.00 real via Antigravity)
-* (5.2-Codex-Xhigh) Implementation: $8.7304 ($0.16 real via Copilot)
-* (Opus) Working on plan more: $0.3785 ($0.00 real via Antigravity)
-* (Opus) Initial planning: $1.8730 ($0.00 real via Antigravity)
 
-Let's try to estimate the Antigravity costs. I used my full Opus quota for the 5h window and literally 0% of any other quotas, including G3F. Even if we assume the Claude quota is the "most valuable" resource provided by Antigravity, I think it's fair to say my utilization was at maximum 75% of the 5 hour quotas. Then, the cost from my sub was $20/mo * 5h = $0.14. The total cost incurred to me was then $0.30. 
+- (G3F/Opus) Fixing GPT-5.2-Codex's work & typecheck: $3.2439 ($0.00 real via Antigravity)
+- (5.2-Codex-Xhigh) Implementation: $8.7304 ($0.16 real via Copilot)
+- (Opus) Working on plan more: $0.3785 ($0.00 real via Antigravity)
+- (Opus) Initial planning: $1.8730 ($0.00 real via Antigravity)
+
+Let's try to estimate the Antigravity costs. I used my full Opus quota for the 5h window and literally 0% of any other quotas, including G3F. Even if we assume the Claude quota is the "most valuable" resource provided by Antigravity, I think it's fair to say my utilization was at maximum 75% of the 5 hour quotas. Then, the cost from my sub was $20/mo \* 5h = $0.14. The total cost incurred to me was then $0.30.
 
 This is only at the limits of the subs btw, as I really spent $0 for Antigravity (we get the sub for free through a Pixel promo) and $0 for Copilot (within 300 PRs + free student plan). Even using the way-too-high $0.30 number, the total API cost of $14.23 was subsidized by about 50x by Google and Microsoft combined. Insane stuff.
 
-Summary: I just cost Google and Microsoft $14.23 without spending a dime myself (and, if I didn't have the advantanges that I did, I still would've only spent $0.30). If we carry over this level of subsidization to a $200 plan, then one could get around $9500 of inference from $200. Insanity. I'd hypothesized these numbers previously, but seeing them show up in day-to-day use is crazy to me. 
+Summary: I just cost Google and Microsoft $14.23 without spending a dime myself (and, if I didn't have the advantanges that I did, I still would've only spent $0.30). If we carry over this level of subsidization to a $200 plan, then one could get around $9500 of inference from $200. Insanity. I'd hypothesized these numbers previously, but seeing them show up in day-to-day use is crazy to me.
 
 Of course, this had particular properties that enabled me to leverage the subsidization. Importantly, I only sent 4 user messages for the most costly part: the implementation by GPT-5.2-Codex. Copilot, unlike any of the other providers, bills premium requests by user messages; if they had billed by requests which everyone else does, I would've been billed for a full 419 requests(!). By getting GPT-5.2-Codex to run for an hour autonomously without stopping, I managed to get ~6 dollars of inference from a single premium request. I also intentionally used GPT-5.2-Codex over Opus 4.5 for implementation because Opus 4.5 via Copilot costs 3 premium requests per user message -- GPT-5.2-Codex only 1.
 
