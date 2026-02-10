@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { RotateCw } from "lucide-react";
+import RotateCw from "lucide-react/dist/esm/icons/rotate-cw";
 
 interface Point {
   x: number;

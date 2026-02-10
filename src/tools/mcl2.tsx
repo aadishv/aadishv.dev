@@ -1,4 +1,5 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import ArrowLeft from "lucide-react/dist/esm/icons/arrow-left";
+import ArrowRight from "lucide-react/dist/esm/icons/arrow-right";
 import { useState } from "react";
 
 const data = [
