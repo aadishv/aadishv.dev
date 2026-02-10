@@ -4,7 +4,7 @@ import Layout from "@/layouts/Layout.astro";
 import { parseISO, format } from "date-fns";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
-import ConvexComments from "@/components/ConvexProvider";
+import Comments from "@/components/Comments.astro";
 import readingTime from "reading-time";
 
 export async function getStaticPaths({}: GetStaticPathsOptions) {
@@ -154,7 +154,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
         >
           <Content />
         </div>
-        <ConvexComments client:load slug={slug} />
+        <Comments slug={slug} />
       </td>
     </tr>
   </table>

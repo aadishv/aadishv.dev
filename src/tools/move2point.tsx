@@ -404,20 +404,23 @@ export function DesmosSide() {
   useEffect(() => {
     if (!ref.current) return;
     let calculator: any;
-    (async () => {
-      // @ts-ignore - @types/desmos declares globals instead of a module; silence module-type error and treat import as any
-      const DesmosModule: any = await import("desmos");
-      calculator = DesmosModule.default
-        ? DesmosModule.default.GraphingCalculator(ref.current, {
-            expressions: false,
-            lockViewport: true,
-          })
-        : DesmosModule.GraphingCalculator(ref.current, {
-            expressions: false,
-            lockViewport: true,
-          });
+    const init = () => {
+      const Desmos = (window as any).Desmos;
+      if (!Desmos) return;
+      calculator = Desmos.GraphingCalculator(ref.current, {
+        expressions: false,
+        lockViewport: true,
+      });
       calculator.setState(calcState);
-    })();
+    };
+    if ((window as any).Desmos) {
+      init();
+    } else {
+      const script = document.createElement("script");
+      script.src = "https://www.desmos.com/api/v1.10/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6";
+      script.onload = init;
+      document.head.appendChild(script);
+    }
     return () => {
       if (calculator && calculator.destroy) calculator.destroy();
     };
