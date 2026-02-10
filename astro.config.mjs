@@ -5,7 +5,6 @@ import rehypeSlug from "rehype-slug";
 import mdx from "@astrojs/mdx";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/vercel";
 // https://astro.build/config
 export default defineConfig({
   vite: {
@@ -20,7 +19,7 @@ export default defineConfig({
   ],
 
   markdown: {
-    syntaxHighlight: "shiki", // or 'prism'
+    syntaxHighlight: "shiki",
     shikiConfig: {
       themes: {
         light: "github-light",
@@ -51,7 +50,4 @@ export default defineConfig({
   site: "https://www.aadishv.dev",
   base: "",
   output: "static",
-  adapter: vercel({
-    imageService: true,
-  }),
 });
