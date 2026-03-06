@@ -4,7 +4,7 @@ import Layout from "@/layouts/Layout.astro";
 import { parseISO, format } from "date-fns";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
-import Comments from "@/components/Comments.astro";
+import Comments from "@/components/Comments";
 import readingTime from "reading-time";
 
 export async function getStaticPaths({}: GetStaticPathsOptions) {
@@ -147,7 +147,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
         >
           <Content />
         </div>
-        <Comments slug={slug} />
+        <Comments slug={slug} client:only="solid-js" />
       </td>
     </tr>
   </table>

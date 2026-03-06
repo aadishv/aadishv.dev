@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
+import solidJs from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
 import rehypeSlug from "rehype-slug";
 import mdx from "@astrojs/mdx";
@@ -11,9 +12,8 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   integrations: [
-    react({
-      // include: ["**/*/react/*"],
-    }),
+    react({ include: ["**/tools/**"] }),
+    solidJs({ include: ["**/components/**"] }),
     mdx(),
     sitemap(),
   ],
