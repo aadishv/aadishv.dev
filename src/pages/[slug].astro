@@ -1,11 +1,10 @@
 ---
 import type { GetStaticPathsOptions } from "astro";
 import Layout from "@/layouts/Layout.astro";
-import { JSDOM } from "jsdom";
 import { parseISO, format } from "date-fns";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
-import ConvexComments from "@/components/ConvexProvider";
+import Comments from "@/components/Comments";
 import readingTime from "reading-time";
 
 export async function getStaticPaths({}: GetStaticPathsOptions) {
@@ -38,15 +37,7 @@ const formatted: string =
 
 const hasLink = !!post.data.link;
 
-const dom = new JSDOM(`
-    <!doctype html><html><body>${post.rendered?.html}</body></html>
-`);
-const desc = Array.from(dom.window.document.querySelectorAll("p"))
-  .map((i) => i.textContent)
-  .filter(Boolean)[0];
-const text = dom.window.document.body.textContent ?? "";
-
-const timeToRead = readingTime(text);
+const timeToRead = readingTime(post.body ?? "");
 
 const baseUrl = import.meta.env.DEV
   ? "http://localhost:4321"
@@ -54,7 +45,7 @@ const baseUrl = import.meta.env.DEV
 const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 ---
 
-<Layout title={post.data.title} description={desc} image={ogImage} hideName>
+<Layout title={post.data.title} image={ogImage} hideName>
   <table class="mt-5 lg:mt-24">
     <tr>
       <th
@@ -156,7 +147,7 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
         >
           <Content />
         </div>
-        <ConvexComments client:load slug={slug} />
+        <Comments slug={slug} client:only="solid-js" />
       </td>
     </tr>
   </table>

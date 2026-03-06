@@ -187,7 +187,7 @@ Suppose we have a robot that's facing about 90 degrees away from the target poin
 
 This may sound arbitrary, but it makes sense when you consider the behavior of the cosine function: when the input (a.k.a. angular error) is near 0, cosine is near 1, so when the robot is pointing pretty close to the target, the lateral error is higher and it can start driving forward faster. If the input is closer to 90º, cosine is near 0, so the robot will slow down if it needs to turn.
 
-<CosineViz client:only="react" />
+<CosineViz client:only="solid-js" />
 
 Note that, if the angular error is obtuse, the cosine is negative. This is unintended as it will negate the lateral error, leading to the robot driving backward. A key guarantee of LemLib's `moveToPoint` implementation is that it only ever moves forward (unless the `reversed` flag is set, of course), so we just set lateralError is 0 if the angular error is negative -- in other words, we don't start driving forward until we are at most facing 90 degrees away from the target.
 
@@ -423,7 +423,7 @@ prevSide = side;
 
 That `prevSide` variable we previously discussed comes into play here. The equation on the second line is quite complex -- I've added a Desmos visualization below to help visualize the inequality. I've set `params.earlyExit` to `1` -- it would typically be `0`, meaning the line of the inequality goes through the target point.
 
-<DesmosSide client:only="react" />
+<DesmosSide client:only="solid-js" />
 
 The rest of the code is relatively simple logic: if we've switched sides (i.e., crossed the line), that's an indicator it's time to stop, so we break out of the loop. This makes sense intuitively; if we've crossed the line, that means we're `params.earlyExit` inches or closer to the target point, so it's a good time to stop. (It might also be that we've overshot the target point, in which case it is also a good time to stop.)
 

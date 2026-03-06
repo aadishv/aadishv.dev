@@ -1,25 +1,27 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { createSignal } from "solid-js";
+import ArrowLeft from "lucide-solid/icons/arrow-left";
+import ArrowRight from "lucide-solid/icons/arrow-right";
 
 const data = [
-  { color: "bg-red-500", value: 7 }, // Red
-  { color: "bg-orange-500", value: 3 }, // Orange
-  { color: "bg-yellow-400", value: 6 }, // Yellow
-  { color: "bg-green-500", value: 2 }, // Green
-  { color: "bg-blue-500", value: 5 }, // Blue
-  { color: "bg-indigo-700", value: 4 }, // Indigo
-  { color: "bg-violet-500", value: 1 }, // Violet
+  { color: "bg-red-500", value: 7 },
+  { color: "bg-orange-500", value: 3 },
+  { color: "bg-yellow-400", value: 6 },
+  { color: "bg-green-500", value: 2 },
+  { color: "bg-blue-500", value: 5 },
+  { color: "bg-indigo-700", value: 4 },
+  { color: "bg-violet-500", value: 1 },
 ];
 const lines = [0, 1 / 7, 2 / 7, 3 / 7, 4 / 7, 5 / 7, 6 / 7];
 const sum = 28;
 const offset = 0.7 / 14;
+
 export function ParticlesVertical() {
   return (
-    <div className="flex flex-col gap-3">
+    <div class="flex flex-col gap-3">
       {data.map((d) => (
-        <div className="flex gap-3" key={d.color}>
+        <div class="flex gap-3">
           <div
-            className={`h-7 opacity-75 rounded-full text-center pt-0.5 ${d.color}`}
+            class={`h-7 opacity-75 rounded-full text-center pt-0.5 ${d.color}`}
             style={{ width: `${d.value * 10}%` }}
           ></div>
           weight: {d.value}
@@ -28,17 +30,17 @@ export function ParticlesVertical() {
     </div>
   );
 }
+
 export function ParticlesPercent() {
   return (
-    <div className="flex">
+    <div class="flex">
       {data.map((d) => (
         <div
-          className="flex gap-3 flex-col text-center"
-          key={d.color}
+          class="flex gap-3 flex-col text-center"
           style={{ width: `${(100 * d.value) / sum}%` }}
         >
           <div
-            className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+            class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
           ></div>
           {`${((100 * d.value) / sum).toFixed(0)}%`}
         </div>
@@ -46,29 +48,25 @@ export function ParticlesPercent() {
     </div>
   );
 }
+
 export function ParticlesLines() {
   return (
-    <div className="flex flex-col">
-      <div className="flex relative mb-5 w-full">
+    <div class="flex flex-col">
+      <div class="flex relative mb-5 w-full">
         {lines.map((l) => (
-          <div
-            key={l}
-            className="absolute translate-x-1/4"
-            style={{ left: `${100 * l}%` }}
-          >
+          <div class="absolute translate-x-1/4" style={{ left: `${100 * l}%` }}>
             ↓
           </div>
         ))}
       </div>
-      <div className="flex">
+      <div class="flex">
         {data.map((d) => (
           <div
-            className="flex gap-3 flex-col text-center"
-            key={d.color}
+            class="flex gap-3 flex-col text-center"
             style={{ width: `${(100 * d.value) / sum}%` }}
           >
             <div
-              className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+              class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
             ></div>
             {`${((100 * d.value) / sum).toFixed(0)}%`}
           </div>
@@ -77,35 +75,31 @@ export function ParticlesLines() {
     </div>
   );
 }
+
 export function ParticlesLines2() {
   return (
-    <div className="flex flex-col">
-      <div className="flex relative mb-5 w-full">
+    <div class="flex flex-col">
+      <div class="flex relative mb-5 w-full">
         <div
-          className="h-3 absolute translate-y-1/2 border-r border-l border-foreground/60"
+          class="h-3 absolute translate-y-1/2 border-r border-l border-foreground/60"
           style={{ width: `${100 * offset}%` }}
         >
-          <div className="h-0.5 bg-foreground/60 w-full mt-[0.3125rem]"></div>
+          <div class="h-0.5 bg-foreground/60 w-full mt-[0.3125rem]"></div>
         </div>
         {lines.map((l) => (
-          <div
-            key={l}
-            className="absolute"
-            style={{ left: `${100 * (l + offset)}%` }}
-          >
+          <div class="absolute" style={{ left: `${100 * (l + offset)}%` }}>
             ↓
           </div>
         ))}
       </div>
-      <div className="flex">
+      <div class="flex">
         {data.map((d) => (
           <div
-            className="flex gap-3 flex-col text-center"
-            key={d.color}
+            class="flex gap-3 flex-col text-center"
             style={{ width: `${(100 * d.value) / sum}%` }}
           >
             <div
-              className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+              class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
             ></div>
             {`${((100 * d.value) / sum).toFixed(0)}%`}
           </div>
@@ -114,36 +108,34 @@ export function ParticlesLines2() {
     </div>
   );
 }
-const colorFor = (l: any) => {
+
+const colorFor = (l: number) => {
   let s = 0;
   for (const d of data) {
     s += d.value / 28;
-    if (s > l) {
-      return d.color;
-    }
+    if (s > l) return d.color;
   }
 };
+
 export function ParticlesLines3() {
   return (
-    <div className="flex flex-col">
-      <div className="flex relative mb-5 w-full">
+    <div class="flex flex-col">
+      <div class="flex relative mb-5 w-full">
         {lines.map((l) => (
           <div
-            key={l}
-            className={`absolute aspect-square h-4 rounded-full ${colorFor(l)}`}
+            class={`absolute aspect-square h-4 rounded-full ${colorFor(l)}`}
             style={{ left: `${100 * (l + offset)}%` }}
           ></div>
         ))}
       </div>
-      <div className="flex">
+      <div class="flex">
         {data.map((d) => (
           <div
-            className="flex gap-3 flex-col text-center"
-            key={d.color}
+            class="flex gap-3 flex-col text-center"
             style={{ width: `${(100 * d.value) / sum}%` }}
           >
             <div
-              className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+              class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
             ></div>
             {`${((100 * d.value) / sum).toFixed(0)}%`}
           </div>
@@ -152,14 +144,16 @@ export function ParticlesLines3() {
     </div>
   );
 }
+
 const sumFor = (n: number) =>
   data.slice(0, n).reduce((acc, d) => acc + (d.value / sum) * 100, 0);
+
 const steps = [
   {
     sum: 0,
     line: 0,
     lineForList: 0,
-    particle: null,
+    particle: null as number | null,
     message: "Basic setup of particles, lines, and current line",
   },
   {
@@ -310,83 +304,86 @@ const steps = [
   },
   {
     sum: sumFor(7),
-    line: null,
+    line: null as number | null,
     lineForList: 7,
-    particle: null,
+    particle: null as number | null,
     message:
       "But wait, there is no next line! Voila - we've now successfully associated each line to its respective particle, and thus determined our list of new particles.",
   },
 ];
+
 export function StepThrough() {
-  const [step, setStep] = useState(0);
-  const state = steps[step];
+  const [step, setStep] = createSignal(0);
+  const state = () => steps[step()];
+
   return (
-    <div className="flex flex-col">
-      <div className="flex">
-        <div className="flex flex-col w-full">
-          <div className="relative mb-8">
+    <div class="flex flex-col">
+      <div class="flex">
+        <div class="flex flex-col w-full">
+          <div class="relative mb-8">
             {lines.map((l, i) => (
               <div
-                key={l}
-                className="absolute -translate-x-1/2 transition-all flex flex-col text-center -translate-y-6"
+                class="absolute -translate-x-1/2 transition-all flex flex-col text-center -translate-y-6"
                 style={{ left: `${100 * (l + offset)}%` }}
               >
-                <span className="text-foreground/50">{`${(100 * (l + offset)).toFixed()}%`}</span>
+                <span class="text-foreground/50">{`${(100 * (l + offset)).toFixed()}%`}</span>
                 <span
-                  className={`${i === state.line ? "bg-foreground/20 px-2 py-0 rounded-full" : ""}`}
+                  class={
+                    i === state().line
+                      ? "bg-foreground/20 px-2 py-0 rounded-full"
+                      : ""
+                  }
                 >
                   ↓
                 </span>
               </div>
             ))}
           </div>
-          <div className="flex gap-1">
+          <div class="flex gap-1">
             {data.map((d, i) => (
               <div
-                className="flex gap-1 flex-col text-center text-sm"
-                key={d.color}
+                class="flex gap-1 flex-col text-center text-sm"
                 style={{ width: `${(100 * d.value) / sum}%` }}
               >
                 <div
-                  className={`h-7 transition-all ${i === state.particle ? `opacity-100 ring-[2.5px]` : `opacity-75`} rounded-lg text-center pt-0.5 ${d.color}`}
+                  class={`h-7 transition-all ${i === state().particle ? "opacity-100 ring-[2.5px]" : "opacity-75"} rounded-lg text-center pt-0.5 ${d.color}`}
                 ></div>
                 {`${((100 * d.value) / sum).toFixed()}%`}
               </div>
             ))}
           </div>
         </div>
-        <p className="font-mono text-lg w-40 pl-5 my-auto transition-all">
-          sum = {state.sum.toFixed()}%
+        <p class="font-mono text-lg w-40 pl-5 my-auto transition-all">
+          sum = {state().sum.toFixed()}%
         </p>
       </div>
-      <p className="text-lg text-foreground/70 mx-auto flex w-full">
+      <p class="text-lg text-foreground/70 mx-auto flex w-full">
         <button
-          className="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
-          disabled={step == 0}
-          onClick={() => setStep(step - 1)}
+          class="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
+          disabled={step() === 0}
+          onClick={() => setStep(step() - 1)}
         >
           <ArrowLeft />
         </button>
-        <span className="my-auto mx-auto font-bold text-center">
-          {state.message}
+        <span class="my-auto mx-auto font-bold text-center">
+          {state().message}
         </span>
         <button
-          className="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
-          disabled={step == steps.length - 1}
-          onClick={() => setStep(step + 1)}
+          class="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
+          disabled={step() === steps.length - 1}
+          onClick={() => setStep(step() + 1)}
         >
           <ArrowRight />
         </button>
       </p>
-      <div className="transition-all mx-auto flex gap-2">
-        <span className="my-auto">new particle list:</span>
-        {state.lineForList
+      <div class="transition-all mx-auto flex gap-2">
+        <span class="my-auto">new particle list:</span>
+        {state().lineForList
           ? lines
-              .slice(0, state.lineForList)
+              .slice(0, state().lineForList)
               .map((l) => (
                 <div
-                  key={l}
-                  className={`${colorFor(l)} w-4 h-4 rounded-full my-auto opacity-90 transition-all`}
+                  class={`${colorFor(l)} w-4 h-4 rounded-full my-auto opacity-90 transition-all`}
                 ></div>
               ))
           : "[empty]"}
