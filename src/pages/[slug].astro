@@ -6,6 +6,7 @@ import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import Comments from "@/components/Comments.astro";
 import readingTime from "reading-time";
+import { parse } from "node-html-parser";
 
 export async function getStaticPaths({}: GetStaticPathsOptions) {
   const allContent = await getCollection("posts");
@@ -38,11 +39,9 @@ const formatted: string =
 const hasLink = !!post.data.link;
 
 const html = post.rendered?.html ?? "";
-// Extract first <p> content without JSDOM overhead
-const pMatch = html.match(/<p[^>]*>([\s\S]*?)<\/p>/);
-const desc = pMatch ? pMatch[1].replace(/<[^>]*>/g, "").trim() : undefined;
-// Strip all HTML tags for reading time calculation
-const text = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+const root = parse(html);
+const desc = root.querySelector("p")?.text.trim() || undefined;
+const text = root.text.replace(/\s+/g, " ").trim();
 
 const timeToRead = readingTime(text);
 
