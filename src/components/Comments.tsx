@@ -17,7 +17,9 @@ function fmtDate(ts: number) {
 
 export default function Comments(props: { slug: string }) {
   const client = new ConvexClient(import.meta.env.PUBLIC_CONVEX_URL);
-  const [comments, setComments] = createSignal<Comment[] | undefined>(undefined);
+  const [comments, setComments] = createSignal<Comment[] | undefined>(
+    undefined,
+  );
   const [body, setBody] = createSignal("");
   const [submitting, setSubmitting] = createSignal(false);
   const [showCaptcha, setShowCaptcha] = createSignal(false);
@@ -98,7 +100,9 @@ export default function Comments(props: { slug: string }) {
                   <tr class="flex mb-3">
                     <td class="text-base !font-normal w-[9ch]">
                       <span class="flex font-medium align-baseline">
-                        <span class="ml-auto mr-1.5">{fmtDate(c._creationTime)}</span>
+                        <span class="ml-auto mr-1.5">
+                          {fmtDate(c._creationTime)}
+                        </span>
                       </span>
                     </td>
                     <td class="ml-0.5 text-base !font-normal flex-1 align-baseline">

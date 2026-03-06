@@ -5,6 +5,7 @@
 Reduced Astro build time by **~46%** (34s → 18.3s locally, projected ~25s on Vercel, down from ~50s).
 
 Five optimizations applied:
+
 1. **Replaced JSDOM with regex-based HTML parsing** (-4.3s)
 2. **Removed `@astrojs/vercel` adapter** (-2.5s), moving the sole SSR route to a standalone Vercel API function
 3. **Replaced React comment system with vanilla JS + Convex HTTP actions** (-3s client build)
@@ -18,12 +19,12 @@ Vite client modules reduced from **1,799** to **54** — a **97% reduction**.
 
 All benchmarks: clean build (`rm -rf dist .astro`) each run.
 
-| Configuration | Mean (s) | Runs | vs Baseline |
-|:---|---:|---:|---:|
-| Baseline (original) | 33.760 ± 0.354 | 5 | 1.00x |
-| Phase 1: JSDOM→regex only | 29.499 ± 0.122 | 5 | 1.14x faster |
-| Phase 1: JSDOM→regex + no adapter | 27.003 ± 0.329 | 5 | 1.25x faster |
-| Phase 2: + vanilla comments + CDN Desmos | 24.103 ± 0.284 | 3 | 1.40x faster |
+| Configuration                            |           Mean (s) |  Runs |      vs Baseline |
+| :--------------------------------------- | -----------------: | ----: | ---------------: |
+| Baseline (original)                      |     33.760 ± 0.354 |     5 |            1.00x |
+| Phase 1: JSDOM→regex only                |     29.499 ± 0.122 |     5 |     1.14x faster |
+| Phase 1: JSDOM→regex + no adapter        |     27.003 ± 0.329 |     5 |     1.25x faster |
+| Phase 2: + vanilla comments + CDN Desmos |     24.103 ± 0.284 |     3 |     1.40x faster |
 | **Phase 3: + lucide-react deep imports** | **18.291 ± 0.117** | **3** | **1.85x faster** |
 
 ## Root Cause Analysis
@@ -32,15 +33,16 @@ All benchmarks: clean build (`rm -rf dist .astro`) each run.
 
 The build had heavy **fixed overhead** that doesn't scale with content:
 
-| Build Phase | Before | After | Saved |
-|:---|---:|---:|---:|
-| Vite client build | ~10s (1,799 modules) | ~0.9s (54 modules) | **~9s** |
-| Vite server entrypoints (Shiki) | ~6s | ~6s | 0s |
-| Static route generation | ~7s | ~3.5s | ~3.5s |
-| Content sync + types + overhead | ~4s | ~4s | 0s |
-| Vercel adapter bundling | ~2.5s | 0s | 2.5s |
+| Build Phase                     |               Before |              After |   Saved |
+| :------------------------------ | -------------------: | -----------------: | ------: |
+| Vite client build               | ~10s (1,799 modules) | ~0.9s (54 modules) | **~9s** |
+| Vite server entrypoints (Shiki) |                  ~6s |                ~6s |      0s |
+| Static route generation         |                  ~7s |              ~3.5s |   ~3.5s |
+| Content sync + types + overhead |                  ~4s |                ~4s |      0s |
+| Vercel adapter bundling         |                ~2.5s |                 0s |    2.5s |
 
 The 1,799 Vite modules came from the client-side dependency tree:
+
 - **`lucide-react` barrel import** (1,672 modules!) — **replaced with deep imports** (3 modules)
 - `convex` (43MB in node_modules, 125kB bundled) — **removed from client**
 - `react` + `react-dom` (183kB bundled) — **now only loaded on 2 MDX pages**
@@ -54,6 +56,7 @@ Importing `{ RotateCw } from "lucide-react"` forces Vite to **transform all 1,67
 ### Markdown rendering was NOT the bottleneck
 
 Tested and confirmed:
+
 - Disabling Shiki entirely: only -2s (-6%)
 - Limiting Shiki to only used languages: no measurable effect (lazy-loads)
 - Shiki `defaultColor: false`: no effect (overhead is in WASM tokenizer)
@@ -73,12 +76,14 @@ The one SSR route (`/s/[id]`) was migrated to `api/s/[id].ts` as a standalone Ve
 ### 3. Replace React comments with vanilla JS (`src/components/Comments.astro`)
 
 The React-based Convex comment system (`ConvexProvider.tsx` + `Comments.tsx`) loaded on every page:
+
 - `convex/react` (ConvexReactClient, useQuery, useAction)
 - `@hcaptcha/react-hcaptcha`
 - `sonner` (toast notifications)
 - Full React hydration runtime
 
 Replaced with:
+
 - **Convex HTTP actions** (`convex/http.ts`) — GET/POST endpoints with the same validation, rate limiting, and hCaptcha verification
 - **Pure Astro component** (`src/components/Comments.astro`) — ~60 lines of inline vanilla JS
 - **hCaptcha loaded from CDN** (`https://js.hcaptcha.com/1/api.js`) instead of bundled React wrapper
@@ -102,11 +107,11 @@ This alone reduced the client build from **~7s** (1,719 modules) to **~0.9s** (5
 
 ## Approaches Tested That Didn't Work
 
-| Approach | Result | Why |
-|:---|:---|:---|
+| Approach                               | Result    | Why                                                |
+| :------------------------------------- | :-------- | :------------------------------------------------- |
 | Limit Shiki languages (`langs: [...]`) | No effect | Shiki v3 lazy-loads; only used langs loaded anyway |
-| Shiki `defaultColor: false` | No effect | Overhead is in WASM tokenizer |
-| `vite.build.target: "esnext"` | No effect | Already targeting modern browsers |
-| `react({ include: [...] })` | No effect | React file detection isn't the bottleneck |
-| Remove OG image generation | -0.3s | Images cached after first build |
-| `imageService: false` on adapter | No effect | Not what makes the adapter slow |
+| Shiki `defaultColor: false`            | No effect | Overhead is in WASM tokenizer                      |
+| `vite.build.target: "esnext"`          | No effect | Already targeting modern browsers                  |
+| `react({ include: [...] })`            | No effect | React file detection isn't the bottleneck          |
+| Remove OG image generation             | -0.3s     | Images cached after first build                    |
+| `imageService: false` on adapter       | No effect | Not what makes the adapter slow                    |

@@ -20,7 +20,10 @@ export function ParticlesVertical() {
     <div class="flex flex-col gap-3">
       {data.map((d) => (
         <div class="flex gap-3">
-          <div class={`h-7 opacity-75 rounded-full text-center pt-0.5 ${d.color}`} style={{ width: `${d.value * 10}%` }}></div>
+          <div
+            class={`h-7 opacity-75 rounded-full text-center pt-0.5 ${d.color}`}
+            style={{ width: `${d.value * 10}%` }}
+          ></div>
           weight: {d.value}
         </div>
       ))}
@@ -32,8 +35,13 @@ export function ParticlesPercent() {
   return (
     <div class="flex">
       {data.map((d) => (
-        <div class="flex gap-3 flex-col text-center" style={{ width: `${(100 * d.value) / sum}%` }}>
-          <div class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}></div>
+        <div
+          class="flex gap-3 flex-col text-center"
+          style={{ width: `${(100 * d.value) / sum}%` }}
+        >
+          <div
+            class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+          ></div>
           {`${((100 * d.value) / sum).toFixed(0)}%`}
         </div>
       ))}
@@ -46,13 +54,20 @@ export function ParticlesLines() {
     <div class="flex flex-col">
       <div class="flex relative mb-5 w-full">
         {lines.map((l) => (
-          <div class="absolute translate-x-1/4" style={{ left: `${100 * l}%` }}>↓</div>
+          <div class="absolute translate-x-1/4" style={{ left: `${100 * l}%` }}>
+            ↓
+          </div>
         ))}
       </div>
       <div class="flex">
         {data.map((d) => (
-          <div class="flex gap-3 flex-col text-center" style={{ width: `${(100 * d.value) / sum}%` }}>
-            <div class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}></div>
+          <div
+            class="flex gap-3 flex-col text-center"
+            style={{ width: `${(100 * d.value) / sum}%` }}
+          >
+            <div
+              class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+            ></div>
             {`${((100 * d.value) / sum).toFixed(0)}%`}
           </div>
         ))}
@@ -65,17 +80,27 @@ export function ParticlesLines2() {
   return (
     <div class="flex flex-col">
       <div class="flex relative mb-5 w-full">
-        <div class="h-3 absolute translate-y-1/2 border-r border-l border-foreground/60" style={{ width: `${100 * offset}%` }}>
+        <div
+          class="h-3 absolute translate-y-1/2 border-r border-l border-foreground/60"
+          style={{ width: `${100 * offset}%` }}
+        >
           <div class="h-0.5 bg-foreground/60 w-full mt-[0.3125rem]"></div>
         </div>
         {lines.map((l) => (
-          <div class="absolute" style={{ left: `${100 * (l + offset)}%` }}>↓</div>
+          <div class="absolute" style={{ left: `${100 * (l + offset)}%` }}>
+            ↓
+          </div>
         ))}
       </div>
       <div class="flex">
         {data.map((d) => (
-          <div class="flex gap-3 flex-col text-center" style={{ width: `${(100 * d.value) / sum}%` }}>
-            <div class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}></div>
+          <div
+            class="flex gap-3 flex-col text-center"
+            style={{ width: `${(100 * d.value) / sum}%` }}
+          >
+            <div
+              class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+            ></div>
             {`${((100 * d.value) / sum).toFixed(0)}%`}
           </div>
         ))}
@@ -97,13 +122,21 @@ export function ParticlesLines3() {
     <div class="flex flex-col">
       <div class="flex relative mb-5 w-full">
         {lines.map((l) => (
-          <div class={`absolute aspect-square h-4 rounded-full ${colorFor(l)}`} style={{ left: `${100 * (l + offset)}%` }}></div>
+          <div
+            class={`absolute aspect-square h-4 rounded-full ${colorFor(l)}`}
+            style={{ left: `${100 * (l + offset)}%` }}
+          ></div>
         ))}
       </div>
       <div class="flex">
         {data.map((d) => (
-          <div class="flex gap-3 flex-col text-center" style={{ width: `${(100 * d.value) / sum}%` }}>
-            <div class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}></div>
+          <div
+            class="flex gap-3 flex-col text-center"
+            style={{ width: `${(100 * d.value) / sum}%` }}
+          >
+            <div
+              class={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
+            ></div>
             {`${((100 * d.value) / sum).toFixed(0)}%`}
           </div>
         ))}
@@ -116,27 +149,167 @@ const sumFor = (n: number) =>
   data.slice(0, n).reduce((acc, d) => acc + (d.value / sum) * 100, 0);
 
 const steps = [
-  { sum: 0, line: 0, lineForList: 0, particle: null as number | null, message: "Basic setup of particles, lines, and current line" },
-  { sum: 0, line: 0, lineForList: 0, particle: 0, message: "Start iterating through particles, starting with the first (red)." },
-  { sum: sumFor(1), line: 0, lineForList: 0, particle: 0, message: "Add particle weight to sum" },
-  { sum: sumFor(1), line: 0, lineForList: 1, particle: 0, message: "Since the current line's value is less than the running sum, we copy the current particle to our new list and move to the next line." },
-  { sum: sumFor(1), line: 1, lineForList: 2, particle: 0, message: "The second line's value is still less than the running sum, so we repeat." },
-  { sum: sumFor(1), line: 2, lineForList: 2, particle: 0, message: "The third line's value is more than the running sum, so we move on to the next particle." },
-  { sum: sumFor(2), line: 2, lineForList: 2, particle: 1, message: "Update our running sum for the second particle." },
-  { sum: sumFor(2), line: 2, lineForList: 3, particle: 1, message: "Now the third line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line." },
-  { sum: sumFor(2), line: 3, lineForList: 3, particle: 1, message: "The fourth line's value is more than the running sum, so we move on to the next particle." },
-  { sum: sumFor(3), line: 3, lineForList: 3, particle: 2, message: "Update our running sum for the third particle." },
-  { sum: sumFor(3), line: 3, lineForList: 4, particle: 2, message: "Now the fourth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line." },
-  { sum: sumFor(3), line: 4, lineForList: 4, particle: 2, message: "The fifth line's value is more than the running sum, so we move on to the next particle." },
-  { sum: sumFor(3), line: 4, lineForList: 4, particle: 3, message: "Update our running sum for the fourth particle." },
-  { sum: sumFor(4), line: 4, lineForList: 5, particle: 3, message: "Now the fifth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line." },
-  { sum: sumFor(4), line: 5, lineForList: 5, particle: 3, message: "The sixth line's value is more than the running sum, so we move on to the next particle." },
-  { sum: sumFor(4), line: 5, lineForList: 5, particle: 4, message: "Update our running sum for the fifth particle." },
-  { sum: sumFor(5), line: 5, lineForList: 6, particle: 4, message: "Now the sixth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line." },
-  { sum: sumFor(5), line: 6, lineForList: 6, particle: 4, message: "The seventh line's value is more than the running sum, so we move on to the next particle." },
-  { sum: sumFor(6), line: 6, lineForList: 6, particle: 5, message: "Update our running sum for the sixth particle." },
-  { sum: sumFor(6), line: 6, lineForList: 7, particle: 5, message: "Now the seventh line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line." },
-  { sum: sumFor(7), line: null as number | null, lineForList: 7, particle: null as number | null, message: "But wait, there is no next line! Voila - we've now successfully associated each line to its respective particle, and thus determined our list of new particles." },
+  {
+    sum: 0,
+    line: 0,
+    lineForList: 0,
+    particle: null as number | null,
+    message: "Basic setup of particles, lines, and current line",
+  },
+  {
+    sum: 0,
+    line: 0,
+    lineForList: 0,
+    particle: 0,
+    message:
+      "Start iterating through particles, starting with the first (red).",
+  },
+  {
+    sum: sumFor(1),
+    line: 0,
+    lineForList: 0,
+    particle: 0,
+    message: "Add particle weight to sum",
+  },
+  {
+    sum: sumFor(1),
+    line: 0,
+    lineForList: 1,
+    particle: 0,
+    message:
+      "Since the current line's value is less than the running sum, we copy the current particle to our new list and move to the next line.",
+  },
+  {
+    sum: sumFor(1),
+    line: 1,
+    lineForList: 2,
+    particle: 0,
+    message:
+      "The second line's value is still less than the running sum, so we repeat.",
+  },
+  {
+    sum: sumFor(1),
+    line: 2,
+    lineForList: 2,
+    particle: 0,
+    message:
+      "The third line's value is more than the running sum, so we move on to the next particle.",
+  },
+  {
+    sum: sumFor(2),
+    line: 2,
+    lineForList: 2,
+    particle: 1,
+    message: "Update our running sum for the second particle.",
+  },
+  {
+    sum: sumFor(2),
+    line: 2,
+    lineForList: 3,
+    particle: 1,
+    message:
+      "Now the third line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
+  },
+  {
+    sum: sumFor(2),
+    line: 3,
+    lineForList: 3,
+    particle: 1,
+    message:
+      "The fourth line's value is more than the running sum, so we move on to the next particle.",
+  },
+  {
+    sum: sumFor(3),
+    line: 3,
+    lineForList: 3,
+    particle: 2,
+    message: "Update our running sum for the third particle.",
+  },
+  {
+    sum: sumFor(3),
+    line: 3,
+    lineForList: 4,
+    particle: 2,
+    message:
+      "Now the fourth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
+  },
+  {
+    sum: sumFor(3),
+    line: 4,
+    lineForList: 4,
+    particle: 2,
+    message:
+      "The fifth line's value is more than the running sum, so we move on to the next particle.",
+  },
+  {
+    sum: sumFor(3),
+    line: 4,
+    lineForList: 4,
+    particle: 3,
+    message: "Update our running sum for the fourth particle.",
+  },
+  {
+    sum: sumFor(4),
+    line: 4,
+    lineForList: 5,
+    particle: 3,
+    message:
+      "Now the fifth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
+  },
+  {
+    sum: sumFor(4),
+    line: 5,
+    lineForList: 5,
+    particle: 3,
+    message:
+      "The sixth line's value is more than the running sum, so we move on to the next particle.",
+  },
+  {
+    sum: sumFor(4),
+    line: 5,
+    lineForList: 5,
+    particle: 4,
+    message: "Update our running sum for the fifth particle.",
+  },
+  {
+    sum: sumFor(5),
+    line: 5,
+    lineForList: 6,
+    particle: 4,
+    message:
+      "Now the sixth line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
+  },
+  {
+    sum: sumFor(5),
+    line: 6,
+    lineForList: 6,
+    particle: 4,
+    message:
+      "The seventh line's value is more than the running sum, so we move on to the next particle.",
+  },
+  {
+    sum: sumFor(6),
+    line: 6,
+    lineForList: 6,
+    particle: 5,
+    message: "Update our running sum for the sixth particle.",
+  },
+  {
+    sum: sumFor(6),
+    line: 6,
+    lineForList: 7,
+    particle: 5,
+    message:
+      "Now the seventh line's value is less than the running sum, so we copy the current particle to our new list and move on to the next line.",
+  },
+  {
+    sum: sumFor(7),
+    line: null as number | null,
+    lineForList: 7,
+    particle: null as number | null,
+    message:
+      "But wait, there is no next line! Voila - we've now successfully associated each line to its respective particle, and thus determined our list of new particles.",
+  },
 ];
 
 export function StepThrough() {
@@ -149,38 +322,70 @@ export function StepThrough() {
         <div class="flex flex-col w-full">
           <div class="relative mb-8">
             {lines.map((l, i) => (
-              <div class="absolute -translate-x-1/2 transition-all flex flex-col text-center -translate-y-6" style={{ left: `${100 * (l + offset)}%` }}>
+              <div
+                class="absolute -translate-x-1/2 transition-all flex flex-col text-center -translate-y-6"
+                style={{ left: `${100 * (l + offset)}%` }}
+              >
                 <span class="text-foreground/50">{`${(100 * (l + offset)).toFixed()}%`}</span>
-                <span class={i === state().line ? "bg-foreground/20 px-2 py-0 rounded-full" : ""}>↓</span>
+                <span
+                  class={
+                    i === state().line
+                      ? "bg-foreground/20 px-2 py-0 rounded-full"
+                      : ""
+                  }
+                >
+                  ↓
+                </span>
               </div>
             ))}
           </div>
           <div class="flex gap-1">
             {data.map((d, i) => (
-              <div class="flex gap-1 flex-col text-center text-sm" style={{ width: `${(100 * d.value) / sum}%` }}>
-                <div class={`h-7 transition-all ${i === state().particle ? "opacity-100 ring-[2.5px]" : "opacity-75"} rounded-lg text-center pt-0.5 ${d.color}`}></div>
+              <div
+                class="flex gap-1 flex-col text-center text-sm"
+                style={{ width: `${(100 * d.value) / sum}%` }}
+              >
+                <div
+                  class={`h-7 transition-all ${i === state().particle ? "opacity-100 ring-[2.5px]" : "opacity-75"} rounded-lg text-center pt-0.5 ${d.color}`}
+                ></div>
                 {`${((100 * d.value) / sum).toFixed()}%`}
               </div>
             ))}
           </div>
         </div>
-        <p class="font-mono text-lg w-40 pl-5 my-auto transition-all">sum = {state().sum.toFixed()}%</p>
+        <p class="font-mono text-lg w-40 pl-5 my-auto transition-all">
+          sum = {state().sum.toFixed()}%
+        </p>
       </div>
       <p class="text-lg text-foreground/70 mx-auto flex w-full">
-        <button class="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors" disabled={step() === 0} onClick={() => setStep(step() - 1)}>
+        <button
+          class="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
+          disabled={step() === 0}
+          onClick={() => setStep(step() - 1)}
+        >
           <ArrowLeft />
         </button>
-        <span class="my-auto mx-auto font-bold text-center">{state().message}</span>
-        <button class="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors" disabled={step() === steps.length - 1} onClick={() => setStep(step() + 1)}>
+        <span class="my-auto mx-auto font-bold text-center">
+          {state().message}
+        </span>
+        <button
+          class="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
+          disabled={step() === steps.length - 1}
+          onClick={() => setStep(step() + 1)}
+        >
           <ArrowRight />
         </button>
       </p>
       <div class="transition-all mx-auto flex gap-2">
         <span class="my-auto">new particle list:</span>
         {state().lineForList
-          ? lines.slice(0, state().lineForList).map((l) => (
-              <div class={`${colorFor(l)} w-4 h-4 rounded-full my-auto opacity-90 transition-all`}></div>
-            ))
+          ? lines
+              .slice(0, state().lineForList)
+              .map((l) => (
+                <div
+                  class={`${colorFor(l)} w-4 h-4 rounded-full my-auto opacity-90 transition-all`}
+                ></div>
+              ))
           : "[empty]"}
       </div>
     </div>
