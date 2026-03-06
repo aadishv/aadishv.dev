@@ -6,7 +6,6 @@ import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import Comments from "@/components/Comments.astro";
 import readingTime from "reading-time";
-import { parse } from "node-html-parser";
 
 export async function getStaticPaths({}: GetStaticPathsOptions) {
   const allContent = await getCollection("posts");
@@ -38,12 +37,7 @@ const formatted: string =
 
 const hasLink = !!post.data.link;
 
-const html = post.rendered?.html ?? "";
-const root = parse(html);
-const desc = root.querySelector("p")?.text.trim() || undefined;
-const text = root.text.replace(/\s+/g, " ").trim();
-
-const timeToRead = readingTime(text);
+const timeToRead = readingTime(post.body ?? "");
 
 const baseUrl = import.meta.env.DEV
   ? "http://localhost:4321"
@@ -51,7 +45,7 @@ const baseUrl = import.meta.env.DEV
 const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 ---
 
-<Layout title={post.data.title} description={desc} image={ogImage} hideName>
+<Layout title={post.data.title} image={ogImage} hideName>
   <table class="mt-5 lg:mt-24">
     <tr>
       <th
