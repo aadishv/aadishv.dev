@@ -13,14 +13,10 @@ export async function getStaticPaths({}: GetStaticPathsOptions) {
   const paths = allContent.map((post) => {
     const slug = getSlugFromPath(post.filePath ?? "");
     return {
-      params: {
-        slug: slug,
-        id: post.id,
-      },
+      params: { slug, id: post.id },
       props: { post, slug },
     };
   });
-
   return paths;
 }
 
@@ -29,135 +25,366 @@ export const getSlugFromPath = (path: string): string => {
 };
 
 const { post, slug } = Astro.props;
-
 const { headings, Content } = await render(post);
 
 const date: Date = parseISO(post.data.date);
 const formatted: string =
-  post.data.date == "<top>" ? "" : format(date, "MM.dd.yy");
-
+  post.data.date === "<top>" ? "" : format(date, "MMM d, yyyy");
 const hasLink = !!post.data.link;
 
-const dom = new JSDOM(`
-    <!doctype html><html><body>${post.rendered?.html}</body></html>
-`);
+const dom = new JSDOM(`<!doctype html><html><body>${post.rendered?.html}</body></html>`);
 const desc = Array.from(dom.window.document.querySelectorAll("p"))
   .map((i) => i.textContent)
   .filter(Boolean)[0];
 const text = dom.window.document.body.textContent ?? "";
-
-const timeToRead = readingTime(text);
+const mins = Math.ceil(readingTime(text).minutes);
 
 const baseUrl = import.meta.env.DEV
   ? "http://localhost:4321"
   : new URL(Astro.request.url).origin;
 const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
+
+const filteredHeadings = headings.filter((h) => h.depth < 5);
+const hasToc = filteredHeadings.length > 0;
+
+const navLinks = [
+  { label: "résumé", href: "/resume.pdf" },
+  { label: "background", href: "/background" },
+  { label: "notes", href: "/notes" },
+  { label: "github", href: "https://github.com/aadishv" },
+  { label: "email", href: "mailto:mail@aadishv.dev" },
+];
 ---
 
 <Layout title={post.data.title} description={desc} image={ogImage} hideName>
-  <table class="mt-5 lg:mt-24">
-    <tr>
-      <th
-        class="w-[16rem] ml-[6rem] hidden lg:block font-normal text-muted-foreground mr-[10px] align-baseline pr-3 text-start"
-      >
-        <time datetime={date.toString()} transition:name={`date-${post.id}`}
-          >{formatted}</time
-        >
-        {` • ${Math.ceil(timeToRead.minutes)} min read`}
-      </th>
-      <th class="lg:pr-[6rem] px-5 lg:mx-0 text-start align-baseline flex-1">
-        <a
-          href={`/${getSlugFromPath(post.filePath ?? "")}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-aadish !font-medium !no-underline"
-          transition:name={post.id}
-        >
-          <h1>{post.data.title}</h1>
-        </a>
-        <i class="font-normal">from the blog of <a href="/">Aadish Verma</a></i>
-      </th>
-    </tr>
-    <tr>
-      <td
-        class="w-[16rem] ml-[6rem] hidden lg:flex pr-3 flex-col sticky top-3 [&_.toc-active]:!text-aadish align-baseline"
-      >
-        {
-          hasLink && (
-            <p>
-              <a
-                href={post.data.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                live demo
-              </a>
-            </p>
-          )
-        }
-        {
-          headings
-            .filter((heading) => heading.depth < 5)
-            .map((heading) => (
-              <a
-                class="toc pr-2 my-1 !text-muted-foreground/70 text-ellipsis text-nowrap overflow-hidden whitespace-nowrap"
-                href={`#${heading.slug}`}
-              >
-                <span class="opacity-0">
-                  {"#".repeat(heading.depth - 2) + " "}
-                </span>
-                {heading.text.slice(0, -1)}
-              </a>
-            ))
-        }
-        <script is:inline>
-          const setupToc = () => {
-            const toc = Array.from(document.querySelectorAll(".toc"));
-            const sections = document.querySelectorAll(
-              "#content h1, #content h2, #content h3, #content h4, #content h5, #content h6, #footnote-label",
-            );
+  <main class="post-page">
 
-            if (toc.length === 0 || sections.length === 0) return;
+    <header class="header">
+      <a href="/" class="header-name">Aadish Verma</a>
+      <nav>
+        {navLinks.map((link, i) => (
+          <>
+            <a
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+            >{link.label}</a>{i < navLinks.length - 1 && <span class="sep" aria-hidden="true"> / </span>}
+          </>
+        ))}
+      </nav>
+    </header>
 
-            const observerOptions = {
-              rootMargin: "-5% 0px -85% 0px",
-              threshold: 0,
+    <div class="post-header">
+      <h1 class="post-title" transition:name={post.id}>{post.data.title}</h1>
+      <p class="post-meta">
+        {formatted && (
+          <time datetime={date.toISOString()} transition:name={`date-${post.id}`}>
+            {formatted}
+          </time>
+        )}
+        {formatted && <span aria-hidden="true"> · </span>}
+        <span>{mins} min read</span>
+        {hasLink && (
+          <>
+            <span aria-hidden="true"> · </span>
+            <a href={post.data.link} target="_blank" rel="noreferrer">live demo</a>
+          </>
+        )}
+      </p>
+    </div>
+
+    <div class:list={["post-shell", hasToc && "with-toc"]}>
+      {hasToc && (
+        <aside class="toc" aria-label="Table of contents">
+          {filteredHeadings.map((heading) => (
+            <a
+              class="toc-link"
+              href={`#${heading.slug}`}
+              style={`padding-left: ${(heading.depth - 1) * 0.55}rem`}
+            >
+              {heading.text.replace(/#$/, "").trim()}
+            </a>
+          ))}
+          <script is:inline>
+            const setupToc = () => {
+              const links = Array.from(document.querySelectorAll(".toc-link"));
+              const sections = document.querySelectorAll(
+                "#content h1, #content h2, #content h3, #content h4, #content h5, #content h6, #footnote-label"
+              );
+              if (!links.length || !sections.length) return;
+              const observer = new IntersectionObserver(
+                (entries) => {
+                  entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                      document.querySelector(".toc-link.active")?.classList.remove("active");
+                      links.find((l) => l.getAttribute("href") === `#${entry.target.id}`)
+                        ?.classList.add("active");
+                    }
+                  });
+                },
+                { rootMargin: "-5% 0px -85% 0px" }
+              );
+              sections.forEach((s) => observer.observe(s));
             };
+            document.addEventListener("astro:page-load", setupToc);
+          </script>
+        </aside>
+      )}
 
-            const observer = new IntersectionObserver((entries) => {
-              entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                  const id = entry.target.id;
-                  const nav = toc.find(
-                    (c) => c.getAttribute("href") === `#${id}`,
-                  );
-                  if (nav) {
-                    document
-                      .querySelector(".toc-active")
-                      ?.classList.remove("toc-active");
-                    nav.classList.add("toc-active");
-                  }
-                }
-              });
-            }, observerOptions);
-
-            sections.forEach((section) => observer.observe(section));
-          };
-
-          document.addEventListener("astro:page-load", setupToc);
-        </script>
-      </td>
-      <td
-        class="lg:pr-[6rem] pt-2 px-5 lg:mx-0 align-baseline flex-1"
-        id="content"
-      >
+      <div class="post-body">
         <div
-          class="!w-full [&_*]:text-wrap [&_a]:!break-anywhere lg:[&_img]:max-w-[50%] [&_img]:mx-auto"
+          class="prose"
+          id="content"
         >
-          <Content />
+          <div class="[&_*]:text-wrap [&_a]:break-anywhere lg:[&_img]:max-w-[50%] [&_img]:mx-auto">
+            <Content />
+          </div>
+          <ConvexComments client:load slug={slug} />
         </div>
-        <ConvexComments client:load slug={slug} />
-      </td>
-    </tr>
-  </table>
+      </div>
+    </div>
+
+  </main>
 </Layout>
+
+<style>
+  :global(body) {
+    background: #fff;
+    color: #111;
+  }
+
+  .post-page {
+    --plex: "IBM Plex Sans", ui-sans-serif, sans-serif;
+    --charter: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
+    --fg: #111;
+    --muted: rgba(17, 17, 17, 0.48);
+    --rule: rgba(17, 17, 17, 0.14);
+    --content-w: 54rem;
+    --toc-w: 11rem;
+    padding: 0 2rem 5rem;
+    font-family: var(--plex);
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--fg);
+  }
+
+  .header,
+  .post-header {
+    max-width: var(--content-w);
+    margin: 0 auto;
+  }
+
+  .post-page :is(p, li, ul, a, time, span, nav, h1, h2, h3, h4, h5, h6) {
+    color: inherit;
+  }
+
+  /* ── header (identical to index) ── */
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--plex);
+  }
+
+  .header-name {
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .header-name:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.14em;
+  }
+
+  .header nav {
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-align: right;
+    font-family: var(--plex);
+  }
+
+  .header nav a {
+    color: inherit;
+    text-decoration: none;
+    font-family: var(--plex);
+  }
+
+  .header nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.14em;
+  }
+
+  .sep {
+    color: var(--muted);
+  }
+
+  /* ── post header ── */
+  .post-header {
+    padding: 1.75rem 0 1.25rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .post-title {
+    font-family: var(--plex);
+    font-size: 1.55rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    margin: 0;
+  }
+
+  .post-meta {
+    margin-top: 0.35rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-family: var(--plex);
+  }
+
+  .post-meta a {
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 0.14em;
+  }
+
+  .post-meta a:hover {
+    color: var(--fg);
+  }
+
+  /* ── body layout ── */
+  .post-shell {
+    max-width: var(--content-w);
+    margin: 0 auto;
+    padding-top: 1.75rem;
+  }
+
+  .post-shell.with-toc {
+    max-width: calc(var(--content-w) + (var(--toc-w) * 2) + 6rem);
+    display: grid;
+    grid-template-columns: var(--toc-w) 3rem var(--content-w) 3rem var(--toc-w);
+    align-items: start;
+  }
+
+  .post-shell.with-toc .post-body {
+    grid-column: 3;
+  }
+
+  .post-body {
+    max-width: var(--content-w);
+    margin: 0 auto;
+  }
+
+  /* ── toc ── */
+  .toc {
+    grid-column: 1;
+    position: sticky;
+    top: 1.75rem;
+    width: var(--toc-w);
+    display: flex;
+    flex-direction: column;
+    gap: 0.08rem;
+    padding-top: 0.1rem;
+    justify-self: end;
+  }
+
+  .toc-link {
+    display: block;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--muted);
+    opacity: 0.75;
+    text-decoration: none;
+    font-family: var(--plex);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: opacity 120ms ease, color 120ms ease;
+  }
+
+  .toc-link:hover,
+  .toc-link.active {
+    color: var(--fg);
+    opacity: 1;
+  }
+
+  .toc-link.active {
+    font-weight: 500;
+  }
+
+  /* ── prose content ── */
+  .prose {
+    font-family: var(--charter);
+    font-size: 1rem;
+    line-height: 1.7;
+    min-width: 0;
+    max-width: var(--content-w);
+  }
+
+  .prose :global(h1),
+  .prose :global(h2),
+  .prose :global(h3),
+  .prose :global(h4),
+  .prose :global(h5),
+  .prose :global(h6) {
+    font-family: var(--plex);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .prose :global(a:not(.aadish-none)) {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.14em;
+    text-decoration-thickness: 1px;
+    transition: none;
+  }
+
+  .prose :global(a:not(.aadish-none):hover) {
+    text-decoration: none;
+  }
+
+  @media (max-width: 1200px) {
+    .post-shell.with-toc {
+      display: block;
+      max-width: var(--content-w);
+    }
+
+    .toc {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .post-page {
+      padding: 0 1rem 3rem;
+    }
+
+    .header {
+      flex-direction: column;
+      gap: 0.3rem;
+      align-items: flex-start;
+    }
+
+    .header nav {
+      text-align: left;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(body) {
+      background: #0b0b0b;
+      color: #f0f0f0;
+    }
+
+    .post-page {
+      --fg: #f0f0f0;
+      --muted: rgba(240, 240, 240, 0.48);
+      --rule: rgba(240, 240, 240, 0.12);
+    }
+  }
+</style>

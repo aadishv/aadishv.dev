@@ -60,6 +60,38 @@
   }
 }
 
+/* Prose — only apply inside .prose containers (blog post content) */
+.prose p,
+.prose li,
+.prose ul {
+  @apply mt-3 leading-8;
+}
+
+.prose li {
+  @apply list-disc ml-6 mt-3;
+}
+
+.prose ol > li {
+  @apply list-decimal;
+}
+
+.prose blockquote {
+  @apply border-l-4 pl-4 italic border-border;
+}
+
+.prose p > code {
+  color: inherit;
+}
+
+.prose p code::before,
+.prose p code::after {
+  content: "`";
+}
+
+.prose details *:not(summary) {
+  @apply ml-4;
+}
+
 @keyframes appear {
   from {
     filter: blur(2px);
@@ -163,39 +195,8 @@
     font-size-adjust: 0.5;
   }
 
-  p,
-  li,
-  ul {
-    @apply font-sans mt-3 leading-8;
-  }
-
-  li {
-    @apply list-disc ml-6 mt-3;
-  }
-
-  ol > li {
-    @apply list-decimal;
-  }
-
-  blockquote {
-    @apply border-l-4 pl-4 italic border-border;
-  }
-
-  p > code {
-    @apply !text-aadish;
-  }
-
-  p code::before,
-  p code::after {
-    content: "`";
-  }
-
   pre {
     @apply bg-muted rounded-md p-4 border border-border;
-  }
-
-  details *:not(summary) {
-    @apply ml-4;
   }
 
   * {

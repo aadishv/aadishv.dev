@@ -70,7 +70,7 @@ export default function Comments({ slug }: CommentsProps) {
               <td className="flex-0 w-[9ch]">&nbsp;</td>
               <td className="flex-1 text-start">
                 <h3
-                  className="font-medium text-aadish m-0"
+                  className="font-medium m-0"
                   id="comment-component"
                 >
                   Comments
@@ -112,7 +112,7 @@ export default function Comments({ slug }: CommentsProps) {
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                     placeholder="write a comment..."
-                    className="flex-1 bg-transparent border border-border px-3 py-2 text-base placeholder:text-muted-foreground focus:outline-hidden focus:border-aadish transition-colors"
+                    className="flex-1 bg-transparent border border-border px-3 py-2 text-base placeholder:text-muted-foreground focus:outline-hidden focus:border-foreground transition-colors"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
@@ -124,7 +124,7 @@ export default function Comments({ slug }: CommentsProps) {
                     type="button"
                     onClick={handleSubmitClick}
                     disabled={!body.trim()}
-                    className="px-4 py-2 text-base font-medium bg-transparent border border-border hover:border-aadish hover:text-aadish disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 text-base font-medium bg-transparent border border-border hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   >
                     submit
                   </button>
