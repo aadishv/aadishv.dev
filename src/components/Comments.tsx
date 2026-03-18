@@ -1,21 +1,18 @@
-import {
-  createMutation,
-  createQuery,
-  useQueryClient,
-} from "@tanstack/solid-query";
-import { ConvexHttpClient } from "convex/browser";
-import { For, Show, createMemo, createSignal } from "solid-js";
+import { ConvexClient } from "convex/browser";
+import { For, Show, createMemo, createSignal, onCleanup } from "solid-js";
 import { api } from "../../convex/_generated/api";
 import HCaptchaModal from "./HCaptchaModal";
 import useTheme from "./theme/useTheme";
 
+interface Comment {
+  _id: string;
+  _creationTime: number;
+  body: string;
+}
+
 interface CommentsProps {
   slug: string;
 }
-
-const convex = new ConvexHttpClient(import.meta.env.PUBLIC_CONVEX_URL as string);
-
-const commentsQueryKey = (slug: string) => ["comments", slug] as const;
 
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp);
@@ -26,49 +23,36 @@ const formatDate = (timestamp: number) => {
 };
 
 export default function Comments(props: CommentsProps) {
+  const client = new ConvexClient(import.meta.env.PUBLIC_CONVEX_URL as string);
+
+  const [comments, setComments] = createSignal<Comment[] | undefined>(undefined);
+  const [commentsError, setCommentsError] = createSignal<string | null>(null);
   const [body, setBody] = createSignal("");
   const [showCaptcha, setShowCaptcha] = createSignal(false);
   const [errorMessage, setErrorMessage] = createSignal<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = createSignal(false);
 
-  const queryClient = useQueryClient();
   const { isDark } = useTheme();
 
-  const comments = createQuery(() => ({
-    queryKey: commentsQueryKey(props.slug),
-    queryFn: () => convex.query(api.comments.getComments, { slug: props.slug }),
-  }));
-
-  const addComment = createMutation(() => ({
-    mutationFn: async (token: string) => {
-      const nextBody = body().trim();
-      const result = await convex.action(api.comments.addComment, {
-        slug: props.slug,
-        body: nextBody,
-        token,
-      });
-
-      if (result) {
-        throw new Error(result.error);
-      }
+  const unsubscribe = client.onUpdate(
+    api.comments.getComments,
+    { slug: props.slug },
+    (result) => {
+      setComments(result as Comment[]);
+      setCommentsError(null);
     },
-    onSuccess: async () => {
-      setBody("");
-      setErrorMessage(null);
-      setShowCaptcha(false);
-      await queryClient.invalidateQueries({
-        queryKey: commentsQueryKey(props.slug),
-      });
+    (error) => {
+      setCommentsError(error.message);
     },
-    onError: (error: unknown) => {
-      const message =
-        error instanceof Error ? error.message : "Failed to submit comment.";
-      setErrorMessage(message);
-      setShowCaptcha(false);
-    },
-  }));
+  );
 
-  const canSubmit = createMemo(() => body().trim().length > 0 && !addComment.isPending);
-  const commentList = createMemo(() => comments.data ?? []);
+  onCleanup(() => {
+    unsubscribe();
+    void client.close();
+  });
+
+  const canSubmit = createMemo(() => body().trim().length > 0 && !isSubmitting());
+  const commentList = createMemo(() => comments() ?? []);
 
   const handleSubmitClick = () => {
     if (!canSubmit()) {
@@ -79,15 +63,47 @@ export default function Comments(props: CommentsProps) {
     setShowCaptcha(true);
   };
 
+  const submitComment = async (token: string) => {
+    const nextBody = body().trim();
+    if (!nextBody) {
+      return;
+    }
+
+    setShowCaptcha(false);
+    setIsSubmitting(true);
+
+    try {
+      const result = await client.action(api.comments.addComment, {
+        slug: props.slug,
+        body: nextBody,
+        token,
+      });
+
+      if (result) {
+        setErrorMessage(result.error);
+        return;
+      }
+
+      setBody("");
+      setErrorMessage(null);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to submit comment.";
+      setErrorMessage(message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <HCaptchaModal
         open={showCaptcha()}
         theme={isDark() ? "dark" : "light"}
-        disabled={addComment.isPending}
+        disabled={isSubmitting()}
         onClose={() => setShowCaptcha(false)}
         onVerify={(token) => {
-          void addComment.mutateAsync(token);
+          void submitComment(token);
         }}
       />
       <div class="mt-12 border-t border-border pt-6">
@@ -101,7 +117,7 @@ export default function Comments(props: CommentsProps) {
                 </h3>
               </td>
             </tr>
-            <Show when={comments.isPending}>
+            <Show when={comments() === undefined && !commentsError()}>
               <tr class="mb-2 flex">
                 <td class="w-[9ch] text-base font-normal">&nbsp;</td>
                 <td class="ml-1.5 flex-1 pl-2 text-base font-normal text-muted-foreground">
@@ -109,13 +125,15 @@ export default function Comments(props: CommentsProps) {
                 </td>
               </tr>
             </Show>
-            <Show when={comments.isError}>
-              <tr class="mb-2 flex">
-                <td class="w-[9ch] text-base font-normal">&nbsp;</td>
-                <td class="ml-1.5 flex-1 pl-2 text-base font-normal text-red-500">
-                  failed to load comments
-                </td>
-              </tr>
+            <Show when={commentsError()}>
+              {(message) => (
+                <tr class="mb-2 flex">
+                  <td class="w-[9ch] text-base font-normal">&nbsp;</td>
+                  <td class="ml-1.5 flex-1 pl-2 text-base font-normal text-red-500">
+                    {message()}
+                  </td>
+                </tr>
+              )}
             </Show>
             <For each={commentList()}>
               {(comment) => (
@@ -135,7 +153,7 @@ export default function Comments(props: CommentsProps) {
             </For>
             <Show
               when={
-                !comments.isPending && !comments.isError && commentList().length === 0
+                comments() !== undefined && !commentsError() && commentList().length === 0
               }
             >
               <tr class="mb-2 flex">
@@ -172,7 +190,7 @@ export default function Comments(props: CommentsProps) {
                     disabled={!canSubmit()}
                     class="px-4 py-2 text-base font-medium bg-transparent border border-border hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   >
-                    <Show when={addComment.isPending} fallback="submit">
+                    <Show when={isSubmitting()} fallback="submit">
                       submitting...
                     </Show>
                   </button>

@@ -21,9 +21,25 @@ interface HCaptchaApi {
   remove: (widgetId?: string | number) => void;
 }
 
+interface DesmosCalculator {
+  setState?: (state: unknown) => void;
+  destroy?: () => void;
+}
+
+interface DesmosApi {
+  GraphingCalculator: (
+    element: HTMLElement,
+    options?: {
+      expressions?: boolean;
+      lockViewport?: boolean;
+    },
+  ) => DesmosCalculator;
+}
+
 declare global {
   interface Window {
     hcaptcha?: HCaptchaApi;
+    Desmos?: DesmosApi;
   }
 }
 

@@ -1,20 +1,30 @@
-// src/pages/open-graph/[...route].ts
 import { OGImageRoute } from "astro-og-canvas";
 import { getCollection } from "astro:content";
 import { getSlugFromPath } from "../[slug].astro";
-import { JSDOM } from "jsdom";
+
+const stripHtml = (html: string) =>
+  html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/\s+/g, " ")
+    .trim();
+
+const getFirstParagraphText = (html: string) => {
+  const match = html.match(/<p\b[^>]*>([\s\S]*?)<\/p>/i);
+  return match ? stripHtml(match[1]) : undefined;
+};
 
 const posts = await getCollection("posts");
 const pages: Record<string, { title: string; description?: string }> = {};
 
 for (const post of posts) {
   const slug = getSlugFromPath(post.filePath ?? "");
-  const dom = new JSDOM(
-    `<!doctype html><html><body>${post.rendered?.html ?? ""}</body></html>`,
-  );
-  const firstParagraph = Array.from(dom.window.document.querySelectorAll("p"))
-    .map((node) => node.textContent?.trim())
-    .find(Boolean);
+  const firstParagraph = getFirstParagraphText(post.rendered?.html ?? "");
 
   pages[slug] = {
     title: post.data.title || "Aadish Verma",

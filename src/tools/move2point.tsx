@@ -1,9 +1,54 @@
-import { RotateCw } from "lucide-solid";
+import RotateCw from "lucide-solid/icons/rotate-cw";
 import { createMemo, createSignal, onCleanup, onMount } from "solid-js";
 
 interface Point {
   x: number;
   y: number;
+}
+
+const DESMOS_SCRIPT_SRC =
+  "https://www.desmos.com/api/v1.10/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6";
+
+let desmosScriptPromise: Promise<void> | null = null;
+
+function loadDesmosScript() {
+  if (typeof window === "undefined") {
+    return Promise.resolve();
+  }
+
+  if (window.Desmos) {
+    return Promise.resolve();
+  }
+
+  if (desmosScriptPromise) {
+    return desmosScriptPromise;
+  }
+
+  desmosScriptPromise = new Promise((resolve, reject) => {
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${DESMOS_SCRIPT_SRC}"]`,
+    );
+
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(), { once: true });
+      existingScript.addEventListener(
+        "error",
+        () => reject(new Error("Failed to load Desmos.")),
+        { once: true },
+      );
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = DESMOS_SCRIPT_SRC;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("Failed to load Desmos."));
+    document.head.append(script);
+  });
+
+  return desmosScriptPromise;
 }
 
 export function CosineViz() {
@@ -385,23 +430,23 @@ const calcState = {
         type: "expression",
         id: "6",
         color: "#c74440",
-        latex: "a=a_{1}\\cdot\\left\\{t.y<p.y:-1,1\\right\}",
+        latex: "a=a_{1}\\cdot\\left\\{t.y<p.y:-1,1\\right\\}",
       },
       {
         type: "expression",
         id: "3",
         color: "#388c46",
-        latex: "r=\\left\\{0<\\theta<a\\right\}",
+        latex: "r=\\left\\{0<\\theta<a\\right\\}",
         polarDomain: {
           min: "",
-          max: "\\left\\{a\\le0:0,a\\right\}",
+          max: "\\left\\{a\\le0:0,a\\right\\}",
         },
       },
       {
         type: "expression",
         id: "7",
         color: "#388c46",
-        latex: "r=1\\left\\{a<0\\right\}",
+        latex: "r=1\\left\\{a<0\\right\\}",
         polarDomain: {
           min: "-\\pi-a",
           max: "0",
@@ -412,7 +457,7 @@ const calcState = {
         id: "8",
         color: "#2d70b3",
         latex:
-          "y=\\tan\\left(a_{1}\\right)x\\left\\{y>\\left\\{t.y<p.y:-\\infty,0\\right\\}\\right\\}\\left\\{y<\\left\\{t.y<p.y:0,\\infty\\right\\}\\right\}",
+          "y=\\tan\\left(a_{1}\\right)x\\left\\{y>\\left\\{t.y<p.y:-\\infty,0\\right\\}\\right\\}\\left\\{y<\\left\\{t.y<p.y:0,\\infty\\right\\}\\right\\}",
         lineStyle: "DASHED",
       },
       {
@@ -430,23 +475,30 @@ const calcState = {
 
 export function DesmosSide() {
   let ref!: HTMLDivElement;
-  let calculator: { destroy?: () => void; setState?: (state: typeof calcState) => void } | undefined;
+  let calculator:
+    | {
+        destroy?: () => void;
+        setState?: (state: typeof calcState) => void;
+      }
+    | undefined;
   let cancelled = false;
 
   onMount(() => {
-    void import("desmos").then((desmosModule: any) => {
-      if (cancelled) {
-        return;
-      }
+    void loadDesmosScript()
+      .then(() => {
+        if (cancelled || !window.Desmos) {
+          return;
+        }
 
-      const desmosNamespace = desmosModule.default ?? desmosModule;
-
-      calculator = desmosNamespace.GraphingCalculator(ref, {
-        expressions: false,
-        lockViewport: true,
+        calculator = window.Desmos.GraphingCalculator(ref, {
+          expressions: false,
+          lockViewport: true,
+        });
+        calculator.setState?.(calcState);
+      })
+      .catch(() => {
+        // Ignore script load errors; the container will stay empty.
       });
-      calculator.setState?.(calcState);
-    });
   });
 
   onCleanup(() => {

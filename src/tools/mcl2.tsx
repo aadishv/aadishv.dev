@@ -1,4 +1,5 @@
-import { ArrowLeft, ArrowRight } from "lucide-solid";
+import ArrowLeft from "lucide-solid/icons/arrow-left";
+import ArrowRight from "lucide-solid/icons/arrow-right";
 import { For, Show, createMemo, createSignal } from "solid-js";
 
 const data = [

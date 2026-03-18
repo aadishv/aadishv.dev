@@ -1,11 +1,10 @@
 ---
 import type { GetStaticPathsOptions } from "astro";
 import Layout from "@/layouts/Layout.astro";
-import { JSDOM } from "jsdom";
 import { parseISO, format } from "date-fns";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
-import ConvexComments from "@/components/ConvexProvider";
+import Comments from "@/components/Comments";
 import readingTime from "reading-time";
 
 export async function getStaticPaths({}: GetStaticPathsOptions) {
@@ -31,20 +30,10 @@ const date: Date = parseISO(post.data.date);
 const formatted: string =
   post.data.date === "<top>" ? "" : format(date, "MMM d, yyyy");
 const hasLink = !!post.data.link;
+const mins = Math.ceil(readingTime(post.body ?? "").minutes);
 
-const dom = new JSDOM(
-  `<!doctype html><html><body>${post.rendered?.html}</body></html>`,
-);
-const desc = Array.from(dom.window.document.querySelectorAll("p"))
-  .map((i) => i.textContent)
-  .filter(Boolean)[0];
-const text = dom.window.document.body.textContent ?? "";
-const mins = Math.ceil(readingTime(text).minutes);
-
-const baseUrl = import.meta.env.DEV
-  ? "http://localhost:4321"
-  : new URL(Astro.request.url).origin;
-const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
+const siteUrl = Astro.site ?? new URL("https://www.aadishv.dev");
+const ogImage = new URL(`/open-graph/${slug}.png`, siteUrl).toString();
 
 const filteredHeadings = headings.filter((h) => h.depth < 5);
 const hasToc = filteredHeadings.length > 0;
@@ -71,7 +60,7 @@ const navLinks = [
 ];
 ---
 
-<Layout title={post.data.title} description={desc} image={ogImage} hideName>
+<Layout title={post.data.title} image={ogImage} hideName>
   <main class="px-4 pb-12 text-base leading-6 text-foreground sm:px-8 sm:pb-20 font-sans">
     <header class="mx-auto flex max-w-[54rem] flex-col items-start gap-[0.3rem] border-b border-border/70 py-[1.1rem] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
       <a
@@ -204,7 +193,7 @@ const navLinks = [
           id="content"
         >
           <Content />
-          <ConvexComments client:only="solid-js" slug={slug} />
+          <Comments client:only="solid-js" slug={slug} />
         </div>
       </div>
     </div>
