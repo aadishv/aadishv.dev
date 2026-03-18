@@ -1,14 +1,15 @@
-import { ConvexReactClient, ConvexProvider } from "convex/react";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/solid-query";
 import Comments from "./Comments";
 
-const client = new ConvexReactClient(
-  import.meta.env.PUBLIC_CONVEX_URL as string,
-);
+const queryClient = new QueryClient();
 
 export default function ConvexComments({ slug }: { slug: string }) {
   return (
-    <ConvexProvider client={client}>
-      <Comments {...{ slug }} />
-    </ConvexProvider>
+    <QueryClientProvider client={queryClient}>
+      <Comments slug={slug} />
+    </QueryClientProvider>
   );
 }

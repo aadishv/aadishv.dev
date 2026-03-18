@@ -1,159 +1,133 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-solid";
+import { For, Show, createMemo, createSignal } from "solid-js";
 
 const data = [
-  { color: "bg-red-500", value: 7 }, // Red
-  { color: "bg-orange-500", value: 3 }, // Orange
-  { color: "bg-yellow-400", value: 6 }, // Yellow
-  { color: "bg-green-500", value: 2 }, // Green
-  { color: "bg-blue-500", value: 5 }, // Blue
-  { color: "bg-indigo-700", value: 4 }, // Indigo
-  { color: "bg-violet-500", value: 1 }, // Violet
-];
-const lines = [0, 1 / 7, 2 / 7, 3 / 7, 4 / 7, 5 / 7, 6 / 7];
+  { color: "bg-red-500", value: 7 },
+  { color: "bg-orange-500", value: 3 },
+  { color: "bg-yellow-400", value: 6 },
+  { color: "bg-green-500", value: 2 },
+  { color: "bg-blue-500", value: 5 },
+  { color: "bg-indigo-700", value: 4 },
+  { color: "bg-violet-500", value: 1 },
+] as const;
+
+const lines = [0, 1 / 7, 2 / 7, 3 / 7, 4 / 7, 5 / 7, 6 / 7] as const;
 const sum = 28;
 const offset = 0.7 / 14;
+
 export function ParticlesVertical() {
   return (
-    <div className="flex flex-col gap-3">
-      {data.map((d) => (
-        <div className="flex gap-3" key={d.color}>
-          <div
-            className={`h-7 opacity-75 rounded-full text-center pt-0.5 ${d.color}`}
-            style={{ width: `${d.value * 10}%` }}
-          ></div>
-          weight: {d.value}
-        </div>
-      ))}
+    <div class="flex flex-col gap-3">
+      <For each={data}>
+        {(item) => (
+          <div class="flex gap-3">
+            <div
+              class={`h-7 rounded-full pt-0.5 text-center opacity-75 ${item.color}`}
+              style={{ width: `${item.value * 10}%` }}
+            />
+            weight: {item.value}
+          </div>
+        )}
+      </For>
     </div>
   );
 }
+
 export function ParticlesPercent() {
   return (
-    <div className="flex">
-      {data.map((d) => (
-        <div
-          className="flex gap-3 flex-col text-center"
-          key={d.color}
-          style={{ width: `${(100 * d.value) / sum}%` }}
-        >
+    <div class="flex">
+      <For each={data}>
+        {(item) => (
           <div
-            className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
-          ></div>
-          {`${((100 * d.value) / sum).toFixed(0)}%`}
-        </div>
-      ))}
+            class="flex flex-col gap-3 text-center"
+            style={{ width: `${(100 * item.value) / sum}%` }}
+          >
+            <div
+              class={`h-7 rounded-lg pt-0.5 text-center opacity-75 ${item.color}`}
+            />
+            {`${((100 * item.value) / sum).toFixed(0)}%`}
+          </div>
+        )}
+      </For>
     </div>
   );
 }
+
 export function ParticlesLines() {
   return (
-    <div className="flex flex-col">
-      <div className="flex relative mb-5 w-full">
-        {lines.map((l) => (
-          <div
-            key={l}
-            className="absolute translate-x-1/4"
-            style={{ left: `${100 * l}%` }}
-          >
-            ↓
-          </div>
-        ))}
-      </div>
-      <div className="flex">
-        {data.map((d) => (
-          <div
-            className="flex gap-3 flex-col text-center"
-            key={d.color}
-            style={{ width: `${(100 * d.value) / sum}%` }}
-          >
+    <div class="flex flex-col">
+      <div class="relative mb-5 flex w-full">
+        <For each={lines}>
+          {(line) => (
             <div
-              className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
-            ></div>
-            {`${((100 * d.value) / sum).toFixed(0)}%`}
-          </div>
-        ))}
+              class="absolute translate-x-1/4"
+              style={{ left: `${100 * line}%` }}
+            >
+              ↓
+            </div>
+          )}
+        </For>
       </div>
+      <ParticlesPercent />
     </div>
   );
 }
+
 export function ParticlesLines2() {
   return (
-    <div className="flex flex-col">
-      <div className="flex relative mb-5 w-full">
+    <div class="flex flex-col">
+      <div class="relative mb-5 flex w-full">
         <div
-          className="h-3 absolute translate-y-1/2 border-r border-l border-foreground/60"
+          class="absolute h-3 translate-y-1/2 border-r border-l border-foreground/60"
           style={{ width: `${100 * offset}%` }}
         >
-          <div className="h-0.5 bg-foreground/60 w-full mt-[0.3125rem]"></div>
+          <div class="mt-[0.3125rem] h-0.5 w-full bg-foreground/60" />
         </div>
-        {lines.map((l) => (
-          <div
-            key={l}
-            className="absolute"
-            style={{ left: `${100 * (l + offset)}%` }}
-          >
-            ↓
-          </div>
-        ))}
+        <For each={lines}>
+          {(line) => (
+            <div class="absolute" style={{ left: `${100 * (line + offset)}%` }}>
+              ↓
+            </div>
+          )}
+        </For>
       </div>
-      <div className="flex">
-        {data.map((d) => (
-          <div
-            className="flex gap-3 flex-col text-center"
-            key={d.color}
-            style={{ width: `${(100 * d.value) / sum}%` }}
-          >
-            <div
-              className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
-            ></div>
-            {`${((100 * d.value) / sum).toFixed(0)}%`}
-          </div>
-        ))}
-      </div>
+      <ParticlesPercent />
     </div>
   );
 }
-const colorFor = (l: any) => {
-  let s = 0;
-  for (const d of data) {
-    s += d.value / 28;
-    if (s > l) {
-      return d.color;
+
+const colorFor = (line: number) => {
+  let total = 0;
+  for (const item of data) {
+    total += item.value / sum;
+    if (total > line) {
+      return item.color;
     }
   }
+  return "";
 };
+
 export function ParticlesLines3() {
   return (
-    <div className="flex flex-col">
-      <div className="flex relative mb-5 w-full">
-        {lines.map((l) => (
-          <div
-            key={l}
-            className={`absolute aspect-square h-4 rounded-full ${colorFor(l)}`}
-            style={{ left: `${100 * (l + offset)}%` }}
-          ></div>
-        ))}
-      </div>
-      <div className="flex">
-        {data.map((d) => (
-          <div
-            className="flex gap-3 flex-col text-center"
-            key={d.color}
-            style={{ width: `${(100 * d.value) / sum}%` }}
-          >
+    <div class="flex flex-col">
+      <div class="relative mb-5 flex w-full">
+        <For each={lines}>
+          {(line) => (
             <div
-              className={`h-7 opacity-75 rounded-lg text-center pt-0.5 ${d.color}`}
-            ></div>
-            {`${((100 * d.value) / sum).toFixed(0)}%`}
-          </div>
-        ))}
+              class={`absolute aspect-square h-4 rounded-full ${colorFor(line)}`}
+              style={{ left: `${100 * (line + offset)}%` }}
+            />
+          )}
+        </For>
       </div>
+      <ParticlesPercent />
     </div>
   );
 }
-const sumFor = (n: number) =>
-  data.slice(0, n).reduce((acc, d) => acc + (d.value / sum) * 100, 0);
+
+const sumFor = (count: number) =>
+  data.slice(0, count).reduce((acc, item) => acc + (item.value / sum) * 100, 0);
+
 const steps = [
   {
     sum: 0,
@@ -316,80 +290,87 @@ const steps = [
     message:
       "But wait, there is no next line! Voila - we've now successfully associated each line to its respective particle, and thus determined our list of new particles.",
   },
-];
+] as const;
+
 export function StepThrough() {
-  const [step, setStep] = useState(0);
-  const state = steps[step];
+  const [step, setStep] = createSignal(0);
+  const state = createMemo(() => steps[step()]);
+
   return (
-    <div className="flex flex-col">
-      <div className="flex">
-        <div className="flex flex-col w-full">
-          <div className="relative mb-8">
-            {lines.map((l, i) => (
-              <div
-                key={l}
-                className="absolute -translate-x-1/2 transition-all flex flex-col text-center -translate-y-6"
-                style={{ left: `${100 * (l + offset)}%` }}
-              >
-                <span className="text-foreground/50">{`${(100 * (l + offset)).toFixed()}%`}</span>
-                <span
-                  className={`${i === state.line ? "bg-foreground/20 px-2 py-0 rounded-full" : ""}`}
-                >
-                  ↓
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="flex gap-1">
-            {data.map((d, i) => (
-              <div
-                className="flex gap-1 flex-col text-center text-sm"
-                key={d.color}
-                style={{ width: `${(100 * d.value) / sum}%` }}
-              >
+    <div class="flex flex-col">
+      <div class="flex">
+        <div class="flex w-full flex-col">
+          <div class="relative mb-8">
+            <For each={lines}>
+              {(line, index) => (
                 <div
-                  className={`h-7 transition-all ${i === state.particle ? `opacity-100 ring-[2.5px]` : `opacity-75`} rounded-lg text-center pt-0.5 ${d.color}`}
-                ></div>
-                {`${((100 * d.value) / sum).toFixed()}%`}
-              </div>
-            ))}
+                  class="absolute flex -translate-x-1/2 -translate-y-6 flex-col text-center transition-all"
+                  style={{ left: `${100 * (line + offset)}%` }}
+                >
+                  <span class="text-foreground/50">
+                    {`${(100 * (line + offset)).toFixed()}%`}
+                  </span>
+                  <span
+                    class={
+                      index() === state().line
+                        ? "rounded-full bg-foreground/20 px-2 py-0"
+                        : ""
+                    }
+                  >
+                    ↓
+                  </span>
+                </div>
+              )}
+            </For>
+          </div>
+          <div class="flex gap-1">
+            <For each={data}>
+              {(item, index) => (
+                <div
+                  class="flex flex-col gap-1 text-center text-sm"
+                  style={{ width: `${(100 * item.value) / sum}%` }}
+                >
+                  <div
+                    class={`h-7 rounded-lg pt-0.5 text-center transition-all ${index() === state().particle ? "opacity-100 ring-[2.5px]" : "opacity-75"} ${item.color}`}
+                  />
+                  {`${((100 * item.value) / sum).toFixed()}%`}
+                </div>
+              )}
+            </For>
           </div>
         </div>
-        <p className="font-mono text-lg w-40 pl-5 my-auto transition-all">
-          sum = {state.sum.toFixed()}%
+        <p class="my-auto w-40 pl-5 font-mono text-lg transition-all">
+          sum = {state().sum.toFixed()}%
         </p>
       </div>
-      <p className="text-lg text-foreground/70 mx-auto flex w-full">
+      <p class="mx-auto flex w-full text-lg text-foreground/70">
         <button
-          className="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
-          disabled={step == 0}
-          onClick={() => setStep(step - 1)}
+          class="rounded-md border border-border p-2 transition-colors hover:bg-muted disabled:opacity-50"
+          disabled={step() === 0}
+          onClick={() => setStep((current) => current - 1)}
         >
           <ArrowLeft />
         </button>
-        <span className="my-auto mx-auto font-bold text-center">
-          {state.message}
-        </span>
+        <span class="my-auto mx-auto text-center font-bold">{state().message}</span>
         <button
-          className="p-2 border border-border rounded-md hover:bg-muted disabled:opacity-50 transition-colors"
-          disabled={step == steps.length - 1}
-          onClick={() => setStep(step + 1)}
+          class="rounded-md border border-border p-2 transition-colors hover:bg-muted disabled:opacity-50"
+          disabled={step() === steps.length - 1}
+          onClick={() => setStep((current) => current + 1)}
         >
           <ArrowRight />
         </button>
       </p>
-      <div className="transition-all mx-auto flex gap-2">
-        <span className="my-auto">new particle list:</span>
-        {state.lineForList
-          ? lines
-              .slice(0, state.lineForList)
-              .map((l) => (
-                <div
-                  key={l}
-                  className={`${colorFor(l)} w-4 h-4 rounded-full my-auto opacity-90 transition-all`}
-                ></div>
-              ))
-          : "[empty]"}
+      <div class="mx-auto flex gap-2 transition-all">
+        <span class="my-auto">new particle list:</span>
+        <Show when={state().lineForList} fallback="[empty]">
+          <For each={lines.slice(0, state().lineForList)}>
+            {(line) => (
+              <div
+                class={`my-auto h-4 w-4 rounded-full opacity-90 transition-all ${colorFor(line)}`}
+              />
+            )}
+          </For>
+        </Show>
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { createSignal, onCleanup, onMount } from "solid-js";
 
 export default function useTheme() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = createSignal(false);
 
-  useEffect(() => {
+  onMount(() => {
     const checkTheme = () => {
       setIsDark(document.documentElement.classList.contains("dark"));
     };
@@ -16,8 +16,8 @@ export default function useTheme() {
       attributeFilter: ["class"],
     });
 
-    return () => observer.disconnect();
-  }, []);
+    onCleanup(() => observer.disconnect());
+  });
 
   return { isDark };
 }

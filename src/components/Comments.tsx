@@ -1,121 +1,167 @@
-import { useState, useRef } from "react";
-import { useQuery, useAction } from "convex/react";
+import {
+  createMutation,
+  createQuery,
+  useQueryClient,
+} from "@tanstack/solid-query";
+import { ConvexHttpClient } from "convex/browser";
+import { For, Show, createMemo, createSignal } from "solid-js";
 import { api } from "../../convex/_generated/api";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { toast, Toaster } from "sonner";
+import HCaptchaModal from "./HCaptchaModal";
 import useTheme from "./theme/useTheme";
 
 interface CommentsProps {
   slug: string;
 }
 
-export default function Comments({ slug }: CommentsProps) {
-  const [body, setBody] = useState("");
-  const [showCaptcha, setShowCaptcha] = useState(false);
-  const comments = useQuery(api.comments.getComments, { slug });
-  const addComment = useAction(api.comments.addComment);
+const convex = new ConvexHttpClient(import.meta.env.PUBLIC_CONVEX_URL as string);
+
+const commentsQueryKey = (slug: string) => ["comments", slug] as const;
+
+const formatDate = (timestamp: number) => {
+  const date = new Date(timestamp);
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  const yy = String(date.getFullYear()).slice(-2);
+  return `${mm}.${dd}.${yy}`;
+};
+
+export default function Comments(props: CommentsProps) {
+  const [body, setBody] = createSignal("");
+  const [showCaptcha, setShowCaptcha] = createSignal(false);
+  const [errorMessage, setErrorMessage] = createSignal<string | null>(null);
+
+  const queryClient = useQueryClient();
   const { isDark } = useTheme();
-  const captchaRef = useRef<HCaptcha>(null);
+
+  const comments = createQuery(() => ({
+    queryKey: commentsQueryKey(props.slug),
+    queryFn: () => convex.query(api.comments.getComments, { slug: props.slug }),
+  }));
+
+  const addComment = createMutation(() => ({
+    mutationFn: async (token: string) => {
+      const nextBody = body().trim();
+      const result = await convex.action(api.comments.addComment, {
+        slug: props.slug,
+        body: nextBody,
+        token,
+      });
+
+      if (result) {
+        throw new Error(result.error);
+      }
+    },
+    onSuccess: async () => {
+      setBody("");
+      setErrorMessage(null);
+      setShowCaptcha(false);
+      await queryClient.invalidateQueries({
+        queryKey: commentsQueryKey(props.slug),
+      });
+    },
+    onError: (error: unknown) => {
+      const message =
+        error instanceof Error ? error.message : "Failed to submit comment.";
+      setErrorMessage(message);
+      setShowCaptcha(false);
+    },
+  }));
+
+  const canSubmit = createMemo(() => body().trim().length > 0 && !addComment.isPending);
+  const commentList = createMemo(() => comments.data ?? []);
 
   const handleSubmitClick = () => {
-    if (!body.trim()) return;
-    else {
-      setShowCaptcha(true);
+    if (!canSubmit()) {
+      return;
     }
-  };
 
-  const submitComment = async (token: string) => {
-    if (body.trim() && token) {
-      const error = await addComment({ slug, body, token });
-      if (error) {
-        toast.error(error.error);
-      }
-      setBody("");
-      setShowCaptcha(false);
-      captchaRef.current?.resetCaptcha();
-    }
-  };
-
-  const formatDate = (timestamp: number) => {
-    const date = new Date(timestamp);
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-    const yy = String(date.getFullYear()).slice(-2);
-    return `${mm}.${dd}.${yy}`;
+    setErrorMessage(null);
+    setShowCaptcha(true);
   };
 
   return (
     <>
-      <Toaster richColors />
-      {showCaptcha && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          onClick={() => setShowCaptcha(false)}
-        >
-          <HCaptcha
-            ref={captchaRef}
-            sitekey="8f643442-c6fa-4714-9888-52d4a11e7378"
-            size="normal"
-            theme={isDark ? "dark" : "light"}
-            onVerify={(token) => {
-              submitComment(token);
-            }}
-          />
-        </div>
-      )}
-      <div className="mt-12 border-t border-border pt-6">
-        <table className="w-full">
+      <HCaptchaModal
+        open={showCaptcha()}
+        theme={isDark() ? "dark" : "light"}
+        disabled={addComment.isPending}
+        onClose={() => setShowCaptcha(false)}
+        onVerify={(token) => {
+          void addComment.mutateAsync(token);
+        }}
+      />
+      <div class="mt-12 border-t border-border pt-6">
+        <table class="w-full">
           <tbody>
-            <tr className="flex w-full mb-4">
-              <td className="flex-0 w-[9ch]">&nbsp;</td>
-              <td className="flex-1 text-start">
-                <h3
-                  className="font-medium m-0"
-                  id="comment-component"
-                >
+            <tr class="mb-4 flex w-full">
+              <td class="w-[9ch] flex-0">&nbsp;</td>
+              <td class="flex-1 text-start">
+                <h3 class="m-0 font-medium" id="comment-component">
                   Comments
                 </h3>
               </td>
             </tr>
-            {comments?.map((comment) => (
-              <tr key={comment._id} className="flex mb-3">
-                <td className="text-base !font-normal w-[9ch]">
-                  <span className="flex font-medium align-baseline">
-                    <span className="ml-auto mr-1.5">
-                      {formatDate(comment._creationTime)}
-                    </span>
-                  </span>
-                </td>
-                <td className="ml-0.5 text-base !font-normal flex-1 align-baseline">
-                  {comment.body}
+            <Show when={comments.isPending}>
+              <tr class="mb-2 flex">
+                <td class="w-[9ch] text-base font-normal">&nbsp;</td>
+                <td class="ml-1.5 flex-1 pl-2 text-base font-normal text-muted-foreground">
+                  loading comments...
                 </td>
               </tr>
-            ))}
-            {comments?.length === 0 && (
-              <tr className="flex mb-2">
-                <td className="text-base !font-normal w-[9ch]">&nbsp;</td>
-                <td className="text-base !font-normal flex-1 ml-1.5 pl-2 text-muted-foreground">
+            </Show>
+            <Show when={comments.isError}>
+              <tr class="mb-2 flex">
+                <td class="w-[9ch] text-base font-normal">&nbsp;</td>
+                <td class="ml-1.5 flex-1 pl-2 text-base font-normal text-red-500">
+                  failed to load comments
+                </td>
+              </tr>
+            </Show>
+            <For each={commentList()}>
+              {(comment) => (
+                <tr class="mb-3 flex">
+                  <td class="w-[9ch] text-base font-normal">
+                    <span class="flex align-baseline font-medium">
+                      <span class="ml-auto mr-1.5">
+                        {formatDate(comment._creationTime)}
+                      </span>
+                    </span>
+                  </td>
+                  <td class="ml-0.5 flex-1 align-baseline text-base font-normal">
+                    {comment.body}
+                  </td>
+                </tr>
+              )}
+            </For>
+            <Show
+              when={
+                !comments.isPending && !comments.isError && commentList().length === 0
+              }
+            >
+              <tr class="mb-2 flex">
+                <td class="w-[9ch] text-base font-normal">&nbsp;</td>
+                <td class="ml-1.5 flex-1 pl-2 text-base font-normal text-muted-foreground">
                   no comments yet
                 </td>
               </tr>
-            )}
+            </Show>
           </tbody>
         </table>
-        <div className="mt-6">
-          <table className="w-full">
+        <div class="mt-6">
+          <table class="w-full">
             <tbody>
-              <tr className="flex">
-                <td className="flex-0 w-[9ch]">&nbsp;</td>
-                <td className="flex-1 flex gap-3 pr-3 pb-3">
+              <tr class="flex">
+                <td class="w-[9ch] flex-0">&nbsp;</td>
+                <td class="flex flex-1 gap-3 pr-3 pb-3">
                   <input
                     type="text"
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
+                    value={body()}
+                    onInput={(event) => setBody(event.currentTarget.value)}
                     placeholder="write a comment..."
-                    className="flex-1 bg-transparent border border-border px-3 py-2 text-base placeholder:text-muted-foreground focus:outline-hidden focus:border-foreground transition-colors"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
+                    class="flex-1 border border-border bg-transparent px-3 py-2 text-base placeholder:text-muted-foreground transition-colors focus:border-foreground focus:outline-hidden"
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
                         handleSubmitClick();
                       }
                     }}
@@ -123,13 +169,23 @@ export default function Comments({ slug }: CommentsProps) {
                   <button
                     type="button"
                     onClick={handleSubmitClick}
-                    disabled={!body.trim()}
-                    className="px-4 py-2 text-base font-medium bg-transparent border border-border hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                    disabled={!canSubmit()}
+                    class="px-4 py-2 text-base font-medium bg-transparent border border-border hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   >
-                    submit
+                    <Show when={addComment.isPending} fallback="submit">
+                      submitting...
+                    </Show>
                   </button>
                 </td>
               </tr>
+              <Show when={errorMessage()}>
+                {(message) => (
+                  <tr class="flex">
+                    <td class="w-[9ch] flex-0">&nbsp;</td>
+                    <td class="flex-1 text-sm text-red-500">{message()}</td>
+                  </tr>
+                )}
+              </Show>
             </tbody>
           </table>
         </div>

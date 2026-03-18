@@ -36,7 +36,7 @@ This can be taken to the extreme, as the rule (and the corresponding [RECF Code 
 
 ---
 
-Anyways, assuming we have to adhere to rule \<G3> (Use Common Sense), this means that all teams using LemLib need to be able to explain what each of their calls to LemLib does. Like I previously said, however, many teams aren't able to do so! In this blog post, I'll try to explain how most of the LemLib motions work.
+Anyways, assuming we have to adhere to rule `<G3>` (Use Common Sense), this means that all teams using LemLib need to be able to explain what each of their calls to LemLib does. Like I previously said, however, many teams aren't able to do so! In this blog post, I'll try to explain how most of the LemLib motions work.
 
 ## Prelude: a brief overview of PID
 
@@ -187,7 +187,7 @@ Suppose we have a robot that's facing about 90 degrees away from the target poin
 
 This may sound arbitrary, but it makes sense when you consider the behavior of the cosine function: when the input (a.k.a. angular error) is near 0, cosine is near 1, so when the robot is pointing pretty close to the target, the lateral error is higher and it can start driving forward faster. If the input is closer to 90º, cosine is near 0, so the robot will slow down if it needs to turn.
 
-<CosineViz client:only="react" />
+<CosineViz client:only="solid-js" />
 
 Note that, if the angular error is obtuse, the cosine is negative. This is unintended as it will negate the lateral error, leading to the robot driving backward. A key guarantee of LemLib's `moveToPoint` implementation is that it only ever moves forward (unless the `reversed` flag is set, of course), so we just set lateralError is 0 if the angular error is negative -- in other words, we don't start driving forward until we are at most facing 90 degrees away from the target.
 
@@ -292,7 +292,7 @@ This code might not look like any C++ code you've seen or written before. There 
     - `lateralLargeExit` waits until the lateral error is below a large threshold for a large amount of time. This is basically in case, for some reason, the robot get stucks at a particular error; e.g., maybe there is an obstacle preventing it from getting close enough to trigger the `lateralSmallExit`.
     - Finally, `timeout` is a last resort; it's a (generally much larger) time after which, no matter what the error is, the motion exits. This is a safety measure in case something goes terribly wrong during the execution of the motion.
   - `params.earlyExitRange`: this basically says "stop once I'm `earlyExitRange` away from the target." This is commonly used in motion chaining, where multiple motions are executed consecutively with smooth transitions (no stops) between them ([learn more on the LemLib docs](https://lemlib.readthedocs.io/en/stable/tutorials/8_motion_chaining.html)). For regular motions, it is set by default to 0 inches ("only stop if I am exactly at the target, or have overshot it").
-- All speed values are from -127 \<-> 127, since that is what PROS motors natively take as input voltage.
+- All speed values are from `-127 <-> 127`, since that is what PROS motors natively take as input voltage.
 
 ### Setup
 
@@ -423,7 +423,7 @@ prevSide = side;
 
 That `prevSide` variable we previously discussed comes into play here. The equation on the second line is quite complex -- I've added a Desmos visualization below to help visualize the inequality. I've set `params.earlyExit` to `1` -- it would typically be `0`, meaning the line of the inequality goes through the target point.
 
-<DesmosSide client:only="react" />
+<DesmosSide client:only="solid-js" />
 
 The rest of the code is relatively simple logic: if we've switched sides (i.e., crossed the line), that's an indicator it's time to stop, so we break out of the loop. This makes sense intuitively; if we've crossed the line, that means we're `params.earlyExit` inches or closer to the target point, so it's a good time to stop. (It might also be that we've overshot the target point, in which case it is also a good time to stop.)
 
@@ -481,7 +481,7 @@ infoSink()->debug("Angular Out: {}, Lateral Out: {}", angularOut, lateralOut);
   if (close) angularOut = 0;
   ```
   implements the turn disabling we derived in Level 6.
-- We clamp both outputs to the range of `-maxSpeed` \<-> `maxSpeed`. Recall that we also implement settling behavior by setting `maxSpeed`.
+- We clamp both outputs to the range of `-maxSpeed <-> maxSpeed`. Recall that we also implement settling behavior by setting `maxSpeed`.
 - We apply the `slew` function. Its exact purpose and implementation aren't relevant, but it basically prevents sudden acceleration/deceleration. It's disabled for the lateral output when settling (since we already have special behavior, discussed above, for settling).
 - There are a few more modifications to the lateral output:
   - We apply clamping to ensure we're going in the right direction. This is somewhat accomplished in our pseudocode by clamping the lateral error, but that assumes the lateral PID function always returns positive outputs for positive inputs; LemLib's solution is more robust.
