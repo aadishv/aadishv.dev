@@ -32,7 +32,9 @@ const formatted: string =
   post.data.date === "<top>" ? "" : format(date, "MMM d, yyyy");
 const hasLink = !!post.data.link;
 
-const dom = new JSDOM(`<!doctype html><html><body>${post.rendered?.html}</body></html>`);
+const dom = new JSDOM(
+  `<!doctype html><html><body>${post.rendered?.html}</body></html>`,
+);
 const desc = Array.from(dom.window.document.querySelectorAll("p"))
   .map((i) => i.textContent)
   .filter(Boolean)[0];
@@ -47,6 +49,19 @@ const ogImage = new URL(`/open-graph/${slug}.png`, baseUrl).toString();
 const filteredHeadings = headings.filter((h) => h.depth < 5);
 const hasToc = filteredHeadings.length > 0;
 
+const getTocIndentClass = (depth: number) => {
+  switch (depth) {
+    case 2:
+      return "pl-[0.55rem]";
+    case 3:
+      return "pl-[1.1rem]";
+    case 4:
+      return "pl-[1.65rem]";
+    default:
+      return "pl-0";
+  }
+};
+
 const navLinks = [
   { label: "résumé", href: "/resume.pdf" },
   { label: "background", href: "/background" },
@@ -57,334 +72,141 @@ const navLinks = [
 ---
 
 <Layout title={post.data.title} description={desc} image={ogImage} hideName>
-  <main class="post-page">
-
-    <header class="header">
-      <a href="/" class="header-name">Aadish Verma</a>
-      <nav>
-        {navLinks.map((link, i) => (
-          <>
-            <a
-              href={link.href}
-              target={link.href.startsWith("http") ? "_blank" : undefined}
-              rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-            >{link.label}</a>{i < navLinks.length - 1 && <span class="sep" aria-hidden="true"> / </span>}
-          </>
-        ))}
+  <main class="px-4 pb-12 text-base leading-6 text-foreground sm:px-8 sm:pb-20 font-sans">
+    <header class="mx-auto flex max-w-[54rem] flex-col items-start gap-[0.3rem] border-b border-border/70 py-[1.1rem] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+      <a
+        href="/"
+        class="m-0 whitespace-nowrap font-semibold text-inherit no-underline hover:underline hover:underline-offset-[0.14em]"
+      >
+        Aadish Verma
+      </a>
+      <nav class="m-0 text-left text-[0.9rem] text-foreground/50 sm:text-right">
+        {
+          navLinks.map((link, i) => (
+            <>
+              <a
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                class="font-normal text-inherit no-underline hover:underline hover:underline-offset-[0.14em]"
+              >
+                {link.label}
+              </a>
+              {
+                i < navLinks.length - 1 && (
+                  <span class="text-foreground/50" aria-hidden="true"> / </span>
+                )
+              }
+            </>
+          ))
+        }
       </nav>
     </header>
 
-    <div class="post-header">
-      <h1 class="post-title" transition:name={post.id}>{post.data.title}</h1>
-      <p class="post-meta">
-        {formatted && (
-          <time datetime={date.toISOString()} transition:name={`date-${post.id}`}>
-            {formatted}
-          </time>
-        )}
+    <div class="mx-auto max-w-[54rem] border-b border-border/70 py-7 pb-5">
+      <h1
+        class="m-0 text-[1.55rem] leading-[1.25] font-semibold tracking-[-0.025em] font-sans"
+        transition:name={post.id}
+      >
+        {post.data.title}
+      </h1>
+      <p class="mt-[0.35rem] text-[0.88rem] text-foreground/50">
+        {
+          formatted && (
+            <time datetime={date.toISOString()} transition:name={`date-${post.id}`}>
+              {formatted}
+            </time>
+          )
+        }
         {formatted && <span aria-hidden="true"> · </span>}
         <span>{mins} min read</span>
-        {hasLink && (
-          <>
-            <span aria-hidden="true"> · </span>
-            <a href={post.data.link} target="_blank" rel="noreferrer">live demo</a>
-          </>
-        )}
+        {
+          hasLink && (
+            <>
+              <span aria-hidden="true"> · </span>
+              <a
+                href={post.data.link}
+                target="_blank"
+                rel="noreferrer"
+                class="font-normal text-inherit underline underline-offset-[0.14em] hover:no-underline"
+              >
+                live demo
+              </a>
+            </>
+          )
+        }
       </p>
     </div>
 
-    <div class:list={["post-shell", hasToc && "with-toc"]}>
-      {hasToc && (
-        <aside class="toc" aria-label="Table of contents">
-          {filteredHeadings.map((heading) => (
-            <a
-              class="toc-link"
-              href={`#${heading.slug}`}
-              style={`padding-left: ${(heading.depth - 1) * 0.55}rem`}
-            >
-              {heading.text.replace(/#$/, "").trim()}
-            </a>
-          ))}
-          <script is:inline>
-            const setupToc = () => {
-              const links = Array.from(document.querySelectorAll(".toc-link"));
-              const sections = document.querySelectorAll(
-                "#content h1, #content h2, #content h3, #content h4, #content h5, #content h6, #footnote-label"
-              );
-              if (!links.length || !sections.length) return;
-              const observer = new IntersectionObserver(
-                (entries) => {
-                  entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                      document.querySelector(".toc-link.active")?.classList.remove("active");
-                      links.find((l) => l.getAttribute("href") === `#${entry.target.id}`)
-                        ?.classList.add("active");
-                    }
-                  });
-                },
-                { rootMargin: "-5% 0px -85% 0px" }
-              );
-              sections.forEach((s) => observer.observe(s));
-            };
-            document.addEventListener("astro:page-load", setupToc);
-          </script>
-        </aside>
-      )}
+    <div
+      class:list={[
+        "mx-auto max-w-[54rem] pt-7",
+        hasToc &&
+          "xl:grid xl:max-w-[calc(54rem+9rem+9rem+4rem)] xl:grid-cols-[9rem_2rem_54rem_2rem_9rem] xl:items-start",
+      ]}
+    >
+      {
+        hasToc && (
+          <aside
+            class="hidden xl:col-start-1 xl:mt-[0.35rem] xl:flex xl:w-36 xl:justify-self-end"
+            aria-label="Table of contents"
+          >
+            <div class="sticky top-7 flex w-full flex-col gap-[0.08rem]">
+              {
+                filteredHeadings.map((heading) => (
+                  <a
+                    class:list={[
+                      "block overflow-hidden text-ellipsis whitespace-nowrap text-[0.78rem] leading-6 text-foreground/50 opacity-75 no-underline transition-[opacity,color] duration-100 hover:text-foreground hover:opacity-100 aria-[current=true]:font-medium aria-[current=true]:text-foreground aria-[current=true]:opacity-100",
+                      getTocIndentClass(heading.depth),
+                    ]}
+                    href={`#${heading.slug}`}
+                  >
+                    {heading.text.replace(/#$/, "").trim()}
+                  </a>
+                ))
+              }
+            </div>
+            <script is:inline>
+              const setupToc = () => {
+                const links = Array.from(document.querySelectorAll("aside[aria-label='Table of contents'] a"));
+                const sections = document.querySelectorAll(
+                  "#content h1, #content h2, #content h3, #content h4, #content h5, #content h6, #footnote-label",
+                );
 
-      <div class="post-body">
+                if (!links.length || !sections.length) return;
+
+                const observer = new IntersectionObserver(
+                  (entries) => {
+                    entries.forEach((entry) => {
+                      if (entry.isIntersecting) {
+                        links.forEach((link) => link.removeAttribute("aria-current"));
+                        links
+                          .find((link) => link.getAttribute("href") === `#${entry.target.id}`)
+                          ?.setAttribute("aria-current", "true");
+                      }
+                    });
+                  },
+                  { rootMargin: "-5% 0px -85% 0px" },
+                );
+
+                sections.forEach((section) => observer.observe(section));
+              };
+
+              document.addEventListener("astro:page-load", setupToc);
+            </script>
+          </aside>
+        )
+      }
+
+      <div class:list={["mx-auto max-w-[54rem]", hasToc && "xl:col-start-3"]}>
         <div
-          class="prose"
+          class="prose max-w-[54rem] min-w-0 text-base leading-[1.7] font-sans [&>*:first-child]:mt-0 [&_a]:break-anywhere [&_a:not(.aadish-none)]:font-normal [&_a:not(.aadish-none)]:text-inherit [&_a:not(.aadish-none)]:underline [&_a:not(.aadish-none)]:decoration-current [&_a:not(.aadish-none)]:underline-offset-[0.14em] [&_a:not(.aadish-none):hover]:no-underline [&_h1]:font-sans [&_h1]:font-semibold [&_h1]:tracking-[-0.02em] [&_h2]:font-sans [&_h2]:font-semibold [&_h2]:tracking-[-0.02em] [&_h3]:font-sans [&_h3]:font-semibold [&_h3]:tracking-[-0.02em] [&_h4]:font-sans [&_h4]:font-semibold [&_h4]:tracking-[-0.02em] [&_h5]:font-sans [&_h5]:font-semibold [&_h5]:tracking-[-0.02em] [&_h6]:font-sans [&_h6]:font-semibold [&_h6]:tracking-[-0.02em] lg:[&_img]:max-w-[50%] [&_img]:mx-auto"
           id="content"
         >
-          <div class="[&_*]:text-wrap [&_a]:break-anywhere lg:[&_img]:max-w-[50%] [&_img]:mx-auto">
-            <Content />
-          </div>
+          <Content />
           <ConvexComments client:load slug={slug} />
         </div>
       </div>
     </div>
-
   </main>
 </Layout>
-
-<style>
-  :global(body) {
-    background: #fff;
-    color: #111;
-  }
-
-  .post-page {
-    --plex: "IBM Plex Sans", ui-sans-serif, sans-serif;
-    --charter: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
-    --fg: #111;
-    --muted: rgba(17, 17, 17, 0.48);
-    --rule: rgba(17, 17, 17, 0.14);
-    --content-w: 54rem;
-    --toc-w: 11rem;
-    padding: 0 2rem 5rem;
-    font-family: var(--plex);
-    font-size: 1rem;
-    line-height: 1.5;
-    color: var(--fg);
-  }
-
-  .header,
-  .post-header {
-    max-width: var(--content-w);
-    margin: 0 auto;
-  }
-
-  .post-page :is(p, li, ul, a, time, span, nav, h1, h2, h3, h4, h5, h6) {
-    color: inherit;
-  }
-
-  /* ── header (identical to index) ── */
-  .header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 2rem;
-    padding: 1.1rem 0;
-    border-bottom: 1px solid var(--rule);
-    font-family: var(--plex);
-  }
-
-  .header-name {
-    font-weight: 600;
-    white-space: nowrap;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .header-name:hover {
-    text-decoration: underline;
-    text-underline-offset: 0.14em;
-  }
-
-  .header nav {
-    color: var(--muted);
-    font-size: 0.9rem;
-    text-align: right;
-    font-family: var(--plex);
-  }
-
-  .header nav a {
-    color: inherit;
-    text-decoration: none;
-    font-family: var(--plex);
-  }
-
-  .header nav a:hover {
-    text-decoration: underline;
-    text-underline-offset: 0.14em;
-  }
-
-  .sep {
-    color: var(--muted);
-  }
-
-  /* ── post header ── */
-  .post-header {
-    padding: 1.75rem 0 1.25rem;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .post-title {
-    font-family: var(--plex);
-    font-size: 1.55rem;
-    font-weight: 600;
-    line-height: 1.25;
-    letter-spacing: -0.025em;
-    margin: 0;
-  }
-
-  .post-meta {
-    margin-top: 0.35rem;
-    font-size: 0.88rem;
-    color: var(--muted);
-    font-family: var(--plex);
-  }
-
-  .post-meta a {
-    color: var(--muted);
-    text-decoration: underline;
-    text-underline-offset: 0.14em;
-  }
-
-  .post-meta a:hover {
-    color: var(--fg);
-  }
-
-  /* ── body layout ── */
-  .post-shell {
-    max-width: var(--content-w);
-    margin: 0 auto;
-    padding-top: 1.75rem;
-  }
-
-  .post-shell.with-toc {
-    max-width: calc(var(--content-w) + (var(--toc-w) * 2) + 6rem);
-    display: grid;
-    grid-template-columns: var(--toc-w) 3rem var(--content-w) 3rem var(--toc-w);
-    align-items: start;
-  }
-
-  .post-shell.with-toc .post-body {
-    grid-column: 3;
-  }
-
-  .post-body {
-    max-width: var(--content-w);
-    margin: 0 auto;
-  }
-
-  /* ── toc ── */
-  .toc {
-    grid-column: 1;
-    position: sticky;
-    top: 1.75rem;
-    width: var(--toc-w);
-    display: flex;
-    flex-direction: column;
-    gap: 0.08rem;
-    padding-top: 0.1rem;
-    justify-self: end;
-  }
-
-  .toc-link {
-    display: block;
-    font-size: 0.78rem;
-    line-height: 1.5;
-    color: var(--muted);
-    opacity: 0.75;
-    text-decoration: none;
-    font-family: var(--plex);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    transition: opacity 120ms ease, color 120ms ease;
-  }
-
-  .toc-link:hover,
-  .toc-link.active {
-    color: var(--fg);
-    opacity: 1;
-  }
-
-  .toc-link.active {
-    font-weight: 500;
-  }
-
-  /* ── prose content ── */
-  .prose {
-    font-family: var(--charter);
-    font-size: 1rem;
-    line-height: 1.7;
-    min-width: 0;
-    max-width: var(--content-w);
-  }
-
-  .prose :global(h1),
-  .prose :global(h2),
-  .prose :global(h3),
-  .prose :global(h4),
-  .prose :global(h5),
-  .prose :global(h6) {
-    font-family: var(--plex);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
-
-  .prose :global(a:not(.aadish-none)) {
-    color: inherit;
-    font-weight: inherit;
-    text-decoration: underline;
-    text-underline-offset: 0.14em;
-    text-decoration-thickness: 1px;
-    transition: none;
-  }
-
-  .prose :global(a:not(.aadish-none):hover) {
-    text-decoration: none;
-  }
-
-  @media (max-width: 1200px) {
-    .post-shell.with-toc {
-      display: block;
-      max-width: var(--content-w);
-    }
-
-    .toc {
-      display: none;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .post-page {
-      padding: 0 1rem 3rem;
-    }
-
-    .header {
-      flex-direction: column;
-      gap: 0.3rem;
-      align-items: flex-start;
-    }
-
-    .header nav {
-      text-align: left;
-    }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :global(body) {
-      background: #0b0b0b;
-      color: #f0f0f0;
-    }
-
-    .post-page {
-      --fg: #f0f0f0;
-      --muted: rgba(240, 240, 240, 0.48);
-      --rule: rgba(240, 240, 240, 0.12);
-    }
-  }
-</style>

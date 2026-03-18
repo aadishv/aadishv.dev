@@ -2,8 +2,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Inter Variable", "Inter", sans-serif;
-  --font-serif: "Charter", serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: "Google Sans Code", monospace;
 
   --color-aadish: hsl(var(--aadish));
@@ -106,24 +106,24 @@
 @layer base {
   :root {
     --inversion: 0%;
-    --aadish: 215 90% 50%;
-    --background: 210 40% 99%;
-    --foreground: 222.2 84% 5%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --border: 214.3 31.8% 91%;
+    --aadish: 0 0% 8%;
+    --background: 0 0% 99%;
+    --foreground: 0 0% 8%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 42%;
+    --border: 0 0% 88%;
     --radius: 0.5rem;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
       --inversion: 100%;
-      --aadish: 210 100% 70%;
-      --background: 222 47% 11%;
-      --foreground: 210 40% 98%;
-      --muted: 217 32% 17%;
-      --muted-foreground: 215 20% 65%;
-      --border: 217 32% 20%;
+      --aadish: 0 0% 96%;
+      --background: 0 0% 6%;
+      --foreground: 0 0% 96%;
+      --muted: 0 0% 12%;
+      --muted-foreground: 0 0% 58%;
+      --border: 0 0% 18%;
     }
 
     pre.astro-code,
@@ -188,7 +188,7 @@
   }
 
   a:not(.aadish-none) {
-    @apply underline hover:no-underline text-aadish font-medium transition-all;
+    @apply underline hover:no-underline text-inherit font-normal transition-all;
   }
 
   code {

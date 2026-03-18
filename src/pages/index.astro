@@ -30,205 +30,72 @@ const navLinks = [
   hideName={true}
   description="Aadish Verma builds software for robotics, students, and small teams."
 >
-  <main class="page">
-
-    <header class="header">
-      <span class="header-name">Aadish Verma</span>
-      <nav>
-        {navLinks.map((link, i) => (
-          <>
-            <a
-              href={link.href}
-              target={link.href.startsWith("http") ? "_blank" : undefined}
-              rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-            >{link.label}</a>{i < navLinks.length - 1 && <span class="sep" aria-hidden="true"> / </span>}
-          </>
-        ))}
+  <main class="mx-auto max-w-[54rem] px-4 pb-12 text-base leading-6 text-foreground sm:px-8 sm:pb-16 font-sans">
+    <header class="flex flex-col items-start gap-[0.3rem] border-b border-border/70 py-[1.1rem] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+      <span class="m-0 whitespace-nowrap font-semibold">Aadish Verma</span>
+      <nav class="m-0 text-left text-[0.9rem] text-foreground/50 sm:text-right">
+        {
+          navLinks.map((link, i) => (
+            <>
+              <a
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                class="font-normal text-inherit no-underline hover:underline hover:underline-offset-[0.14em]"
+              >
+                {link.label}
+              </a>
+              {
+                i < navLinks.length - 1 && (
+                  <span class="text-foreground/50" aria-hidden="true"> / </span>
+                )
+              }
+            </>
+          ))
+        }
       </nav>
     </header>
 
-    <section class="bio">
-      <p>
+    <section class="max-w-[44rem] py-8">
+      <p class="m-0 text-inherit">
         I'm a freshman at Stanford Online High School in the Bay Area,
-        currently working as a founding engineer at <a href="https://www.jvcopilot.ai/" target="_blank" rel="noreferrer">JV Copilot</a>.
-        <a href="/background">Here's</a> a bit more about me.
+        currently working as a founding engineer at <a
+          href="https://www.jvcopilot.ai/"
+          target="_blank"
+          rel="noreferrer"
+          class="font-normal text-inherit no-underline underline-offset-[0.14em] hover:underline"
+        >JV Copilot</a>. <a
+          href="/background"
+          class="font-normal text-inherit no-underline underline-offset-[0.14em] hover:underline"
+        >Here's</a> a bit more about me.
       </p>
     </section>
 
-    <section class="writing">
-      <ul>
-        {entries.map((entry) => (
-          <li>
-            <a
-              href={`/${getSlugFromPath(entry.filePath ?? "")}`}
-              transition:name={entry.id}
-              class="entry"
-            >
-              <time
-                datetime={parseISO(entry.data.date).toISOString()}
-                transition:name={`date-${entry.id}`}
+    <section>
+      <ul class="m-0 list-none p-0">
+        {
+          entries.map((entry) => (
+            <li class="m-0 list-none p-0">
+              <a
+                href={`/${getSlugFromPath(entry.filePath ?? "")}`}
+                transition:name={entry.id}
+                class="group grid w-full grid-cols-1 items-baseline gap-[0.05rem] py-[0.3rem] font-normal text-inherit no-underline sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:gap-4"
               >
-                {format(parseISO(entry.data.date), "MMM d, yyyy")}
-              </time>
-              <span>{entry.data.title}</span>
-            </a>
-          </li>
-        ))}
+                <time
+                  datetime={parseISO(entry.data.date).toISOString()}
+                  transition:name={`date-${entry.id}`}
+                  class="m-0 whitespace-nowrap text-[0.88rem] text-foreground/50 tabular-nums"
+                >
+                  {format(parseISO(entry.data.date), "MMM d, yyyy")}
+                </time>
+                <span class="m-0 text-[0.95rem] group-hover:underline group-hover:underline-offset-[0.14em]">
+                  {entry.data.title}
+                </span>
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </section>
-
   </main>
 </Layout>
-
-<style>
-  :global(body) {
-    background: #fff;
-    color: #111;
-  }
-
-  .page {
-    --plex: "IBM Plex Sans", ui-sans-serif, sans-serif;
-    --fg: #111;
-    --muted: rgba(17, 17, 17, 0.48);
-    --rule: rgba(17, 17, 17, 0.14);
-    max-width: 54rem;
-    margin: 0 auto;
-    padding: 0 2rem 4rem;
-    font-family: var(--plex);
-    font-size: 1rem;
-    line-height: 1.5;
-    color: var(--fg);
-  }
-
-  .page :is(p, li, ul, a, time, span, nav, h1, h2, h3) {
-    font-family: var(--plex);
-    font-size: inherit;
-    line-height: inherit;
-    color: inherit;
-    margin: 0;
-  }
-
-  .page :global(a:not(.aadish-none)) {
-    color: inherit;
-    font-weight: 400;
-    text-decoration: none;
-  }
-
-  .page :global(a:not(.aadish-none):hover) {
-    text-decoration: underline;
-    text-underline-offset: 0.14em;
-  }
-
-  /* ── header ── */
-  .header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 2rem;
-    padding: 1.1rem 0;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .header-name {
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  .header nav {
-    color: var(--muted);
-    font-size: 0.9rem;
-    text-align: right;
-  }
-
-  .sep {
-    color: var(--muted);
-  }
-
-  /* ── bio ── */
-  .bio {
-    padding: 2rem 0 2rem;
-    max-width: 44rem;
-  }
-
-  .bio p + p {
-    margin-top: 0.6rem;
-  }
-
-  /* ── writing ── */
-  .writing {
-    padding-top: 0;
-  }
-
-
-
-  .writing ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .writing li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .entry {
-    display: grid;
-    grid-template-columns: 7.5rem 1fr;
-    gap: 1rem;
-    align-items: baseline;
-    padding: 0.3rem 0;
-    width: 100%;
-  }
-
-  .entry time {
-    color: var(--muted);
-    font-size: 0.88rem;
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .entry span {
-    font-size: 0.95rem;
-  }
-
-  .entry:hover span {
-    text-decoration: underline;
-    text-underline-offset: 0.14em;
-  }
-
-  @media (max-width: 600px) {
-    .page {
-      padding: 0 1rem 3rem;
-    }
-
-    .header {
-      flex-direction: column;
-      gap: 0.3rem;
-      align-items: flex-start;
-    }
-
-    .header nav {
-      text-align: left;
-    }
-
-    .entry {
-      grid-template-columns: 1fr;
-      gap: 0.05rem;
-    }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :global(body) {
-      background: #0b0b0b;
-      color: #f0f0f0;
-    }
-
-    .page {
-      --fg: #f0f0f0;
-      --muted: rgba(240, 240, 240, 0.48);
-      --rule: rgba(240, 240, 240, 0.12);
-    }
-  }
-</style>
