@@ -16,6 +16,5 @@ node_modules/
 .DS_Store
 
 src/content/personal
-*.lock
 .vercel
 .env*.local
