@@ -2,8 +2,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "Google Sans Code", monospace;
+  --font-serif: "Google Sans Code", monospace;
   --font-mono: "Google Sans Code", monospace;
 
   --color-aadish: hsl(var(--aadish));
@@ -12,6 +12,13 @@
   --color-foreground: hsl(var(--foreground));
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-powerline-blue: hsl(var(--powerline-blue));
+  --color-powerline-green: hsl(var(--powerline-green));
+  --color-powerline-amber: hsl(var(--powerline-amber));
+  --color-powerline-red: hsl(var(--powerline-red));
+  --color-powerline-cyan: hsl(var(--powerline-cyan));
+  --color-powerline-purple: hsl(var(--powerline-purple));
+  --color-powerline-slate: hsl(var(--powerline-slate));
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -68,7 +75,7 @@
 }
 
 .prose li {
-  @apply list-disc ml-6 mt-3;
+  @apply ml-6 mt-3 list-disc;
 }
 
 .prose ol > li {
@@ -76,7 +83,7 @@
 }
 
 .prose blockquote {
-  @apply border-l-4 pl-4 italic border-border;
+  @apply border-l-4 border-border pl-4 italic;
 }
 
 .prose p > code {
@@ -106,24 +113,38 @@
 @layer base {
   :root {
     --inversion: 0%;
-    --aadish: 0 0% 8%;
-    --background: 0 0% 99%;
-    --foreground: 0 0% 8%;
+    --aadish: 0 0% 0%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 42%;
-    --border: 0 0% 88%;
+    --muted-foreground: 0 0% 36%;
+    --border: 0 0% 0%;
+    --powerline-blue: 212 88% 56%;
+    --powerline-green: 145 46% 42%;
+    --powerline-amber: 42 100% 60%;
+    --powerline-red: 8 84% 58%;
+    --powerline-cyan: 191 84% 45%;
+    --powerline-purple: 268 72% 64%;
+    --powerline-slate: 0 0% 92%;
     --radius: 0.5rem;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
       --inversion: 100%;
-      --aadish: 0 0% 96%;
-      --background: 0 0% 6%;
-      --foreground: 0 0% 96%;
-      --muted: 0 0% 12%;
-      --muted-foreground: 0 0% 58%;
-      --border: 0 0% 18%;
+      --aadish: 0 0% 100%;
+      --background: 0 0% 0%;
+      --foreground: 0 0% 100%;
+      --muted: 0 0% 8%;
+      --muted-foreground: 0 0% 68%;
+      --border: 0 0% 100%;
+      --powerline-blue: 212 88% 56%;
+      --powerline-green: 145 46% 42%;
+      --powerline-amber: 42 100% 60%;
+      --powerline-red: 8 84% 58%;
+      --powerline-cyan: 191 84% 45%;
+      --powerline-purple: 268 72% 64%;
+      --powerline-slate: 0 0% 14%;
     }
 
     pre.astro-code,
@@ -188,7 +209,7 @@
   }
 
   a:not(.aadish-none) {
-    @apply underline hover:no-underline text-inherit font-normal transition-all;
+    @apply font-normal text-inherit underline transition-all hover:no-underline;
   }
 
   code {
@@ -196,7 +217,9 @@
   }
 
   pre {
-    @apply bg-muted rounded-md p-4 border border-border;
+    @apply border bg-muted px-3 py-2;
+    border-radius: 0;
+    border-color: hsl(var(--foreground) / 0.22);
   }
 
   * {
@@ -204,3 +227,4 @@
     font-optical-sizing: auto;
   }
 }
+

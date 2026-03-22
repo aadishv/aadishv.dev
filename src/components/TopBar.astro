@@ -1,0 +1,50 @@
+---
+interface NavLink {
+  label: string;
+  href: string;
+  className: string;
+}
+
+interface Props {
+  homeHref?: string;
+  homeLabel?: string;
+  navLinks: NavLink[];
+  class?: string;
+}
+
+const {
+  homeHref = "/",
+  homeLabel = "Aadish Verma",
+  navLinks,
+  class: className,
+} = Astro.props;
+---
+
+<header class:list={[
+  "flex flex-col items-start gap-4 py-[1.1rem] sm:flex-row sm:items-center sm:justify-between sm:gap-8",
+  className,
+]}>
+  <a
+    href={homeHref}
+    class="m-0 inline-flex min-h-8 items-center whitespace-nowrap bg-powerline-blue px-[0.72rem] py-[0.34rem] font-semibold text-white no-underline hover:no-underline"
+  >
+    {homeLabel}
+  </a>
+  <nav class="m-0 flex flex-wrap items-center gap-0 text-left text-[0.9rem] sm:justify-end sm:text-right">
+    {
+      navLinks.map((link) => (
+        <a
+          href={link.href}
+          target={link.href.startsWith("http") ? "_blank" : undefined}
+          rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+          class:list={[
+            "inline-flex min-h-8 items-center whitespace-nowrap px-[0.72rem] py-[0.34rem] no-underline hover:no-underline",
+            link.className,
+          ]}
+        >
+          {link.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>

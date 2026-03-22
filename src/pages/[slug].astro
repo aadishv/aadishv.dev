@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPathsOptions } from "astro";
 import Layout from "@/layouts/Layout.astro";
+import TopBar from "@/components/TopBar.astro";
 import { parseISO, format } from "date-fns";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
@@ -52,54 +53,46 @@ const getTocIndentClass = (depth: number) => {
 };
 
 const navLinks = [
-  { label: "résumé", href: "/resume.pdf" },
-  { label: "background", href: "/background" },
-  { label: "notes", href: "/notes" },
-  { label: "github", href: "https://github.com/aadishv" },
-  { label: "email", href: "mailto:mail@aadishv.dev" },
+  {
+    label: "résumé",
+    href: "/resume.pdf",
+    className: "bg-powerline-blue text-white",
+  },
+  {
+    label: "background",
+    href: "/background",
+    className: "bg-powerline-green text-white",
+  },
+  {
+    label: "notes",
+    href: "/notes",
+    className: "bg-powerline-amber text-black",
+  },
+  {
+    label: "github",
+    href: "https://github.com/aadishv",
+    className: "bg-powerline-purple text-white",
+  },
+  {
+    label: "email",
+    href: "mailto:mail@aadishv.dev",
+    className: "bg-powerline-red text-white",
+  },
 ];
 ---
 
 <Layout title={post.data.title} image={ogImage} hideName>
-  <main class="px-4 pb-12 text-base leading-6 text-foreground sm:px-8 sm:pb-20 font-sans">
-    <header class="mx-auto flex max-w-[54rem] flex-col items-start gap-[0.3rem] border-b border-border/70 py-[1.1rem] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
-      <a
-        href="/"
-        class="m-0 whitespace-nowrap font-semibold text-inherit no-underline hover:underline hover:underline-offset-[0.14em]"
-      >
-        Aadish Verma
-      </a>
-      <nav class="m-0 text-left text-[0.9rem] text-foreground/50 sm:text-right">
-        {
-          navLinks.map((link, i) => (
-            <>
-              <a
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                class="font-normal text-inherit no-underline hover:underline hover:underline-offset-[0.14em]"
-              >
-                {link.label}
-              </a>
-              {
-                i < navLinks.length - 1 && (
-                  <span class="text-foreground/50" aria-hidden="true"> / </span>
-                )
-              }
-            </>
-          ))
-        }
-      </nav>
-    </header>
+  <main class="mx-auto max-w-[54rem] px-4 pb-12 font-mono text-base leading-6 text-foreground sm:px-8 sm:pb-20">
+    <TopBar navLinks={navLinks} />
 
-    <div class="mx-auto max-w-[54rem] border-b border-border/70 py-7 pb-5">
+    <div class="py-7 pb-5">
       <h1
         class="m-0 text-[1.55rem] leading-[1.25] font-semibold tracking-[-0.025em] font-sans"
         transition:name={post.id}
       >
         {post.data.title}
       </h1>
-      <p class="mt-[0.35rem] text-[0.88rem] text-foreground/50">
+      <div class="mt-[0.6rem] flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.82rem] text-foreground/70">
         {
           formatted && (
             <time datetime={date.toISOString()} transition:name={`date-${post.id}`}>
@@ -107,45 +100,35 @@ const navLinks = [
             </time>
           )
         }
-        {formatted && <span aria-hidden="true"> · </span>}
         <span>{mins} min read</span>
         {
           hasLink && (
-            <>
-              <span aria-hidden="true"> · </span>
-              <a
-                href={post.data.link}
-                target="_blank"
-                rel="noreferrer"
-                class="font-normal text-inherit underline underline-offset-[0.14em] hover:no-underline"
-              >
-                live demo
-              </a>
-            </>
+            <a
+              href={post.data.link}
+              target="_blank"
+              rel="noreferrer"
+              class="inline-flex min-h-8 items-center whitespace-nowrap bg-powerline-cyan px-[0.72rem] py-[0.34rem] text-white no-underline hover:no-underline"
+            >
+              live demo
+            </a>
           )
         }
-      </p>
+      </div>
     </div>
 
-    <div
-      class:list={[
-        "mx-auto max-w-[54rem] pt-7",
-        hasToc &&
-          "xl:grid xl:max-w-[calc(54rem+9rem+9rem+4rem)] xl:grid-cols-[9rem_2rem_54rem_2rem_9rem] xl:items-start",
-      ]}
-    >
+    <div class="pt-1 xl:relative">
       {
         hasToc && (
           <aside
-            class="hidden xl:col-start-1 xl:mt-[0.35rem] xl:flex xl:w-36 xl:justify-self-end"
+            class="hidden xl:absolute xl:top-5 xl:right-full xl:mr-10 xl:flex xl:w-44 2xl:w-48"
             aria-label="Table of contents"
           >
-            <div class="sticky top-7 flex w-full flex-col gap-[0.08rem]">
+            <div class="sticky top-7 flex w-full flex-col gap-[0.02rem]">
               {
                 filteredHeadings.map((heading) => (
                   <a
                     class:list={[
-                      "block overflow-hidden text-ellipsis whitespace-nowrap text-[0.78rem] leading-6 text-foreground/50 opacity-75 no-underline transition-[opacity,color] duration-100 hover:text-foreground hover:opacity-100 aria-[current=true]:font-medium aria-[current=true]:text-foreground aria-[current=true]:opacity-100",
+                      "block overflow-hidden text-ellipsis whitespace-nowrap rounded-sm px-2 py-[0.18rem] text-[0.78rem] leading-[1.45] text-foreground/50 opacity-75 no-underline transition-[opacity,color] duration-100 hover:text-foreground hover:opacity-100 aria-[current=true]:font-medium aria-[current=true]:text-foreground aria-[current=true]:opacity-100",
                       getTocIndentClass(heading.depth),
                     ]}
                     href={`#${heading.slug}`}
@@ -187,9 +170,9 @@ const navLinks = [
         )
       }
 
-      <div class:list={["mx-auto max-w-[54rem]", hasToc && "xl:col-start-3"]}>
+      <div>
         <div
-          class="prose max-w-[54rem] min-w-0 text-base leading-[1.7] font-sans [&>*:first-child]:mt-0 [&_a]:break-anywhere [&_a:not(.aadish-none)]:font-normal [&_a:not(.aadish-none)]:text-inherit [&_a:not(.aadish-none)]:underline [&_a:not(.aadish-none)]:decoration-current [&_a:not(.aadish-none)]:underline-offset-[0.14em] [&_a:not(.aadish-none):hover]:no-underline [&_h1]:font-sans [&_h1]:font-semibold [&_h1]:tracking-[-0.02em] [&_h2]:font-sans [&_h2]:font-semibold [&_h2]:tracking-[-0.02em] [&_h3]:font-sans [&_h3]:font-semibold [&_h3]:tracking-[-0.02em] [&_h4]:font-sans [&_h4]:font-semibold [&_h4]:tracking-[-0.02em] [&_h5]:font-sans [&_h5]:font-semibold [&_h5]:tracking-[-0.02em] [&_h6]:font-sans [&_h6]:font-semibold [&_h6]:tracking-[-0.02em] lg:[&_img]:max-w-[50%] [&_img]:mx-auto"
+          class="prose max-w-[54rem] min-w-0 text-base leading-[1.7] font-mono [&>*:first-child]:mt-0 [&_a]:break-anywhere [&_a:not(.aadish-none)]:font-normal [&_a:not(.aadish-none)]:text-inherit [&_a:not(.aadish-none)]:underline [&_a:not(.aadish-none)]:decoration-current [&_a:not(.aadish-none)]:underline-offset-[0.14em] [&_a:not(.aadish-none):hover]:no-underline [&_h1]:font-mono [&_h1]:font-semibold [&_h1]:tracking-[-0.02em] [&_h2]:font-mono [&_h2]:font-semibold [&_h2]:tracking-[-0.02em] [&_h3]:font-mono [&_h3]:font-semibold [&_h3]:tracking-[-0.02em] [&_h4]:font-mono [&_h4]:font-semibold [&_h4]:tracking-[-0.02em] [&_h5]:font-mono [&_h5]:font-semibold [&_h5]:tracking-[-0.02em] [&_h6]:font-mono [&_h6]:font-semibold [&_h6]:tracking-[-0.02em] lg:[&_img]:max-w-[50%] [&_img]:mx-auto"
           id="content"
         >
           <Content />

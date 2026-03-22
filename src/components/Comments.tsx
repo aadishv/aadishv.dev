@@ -106,108 +106,72 @@ export default function Comments(props: CommentsProps) {
           void submitComment(token);
         }}
       />
-      <div class="mt-12 border-t border-border pt-6">
-        <table class="w-full">
-          <tbody>
-            <tr class="mb-4 flex w-full">
-              <td class="w-[9ch] flex-0">&nbsp;</td>
-              <td class="flex-1 text-start">
-                <h3 class="m-0 font-medium" id="comment-component">
-                  Comments
-                </h3>
-              </td>
-            </tr>
-            <Show when={comments() === undefined && !commentsError()}>
-              <tr class="mb-2 flex">
-                <td class="w-[9ch] text-base font-normal">&nbsp;</td>
-                <td class="ml-1.5 flex-1 pl-2 text-base font-normal text-muted-foreground">
-                  loading comments...
-                </td>
-              </tr>
-            </Show>
-            <Show when={commentsError()}>
-              {(message) => (
-                <tr class="mb-2 flex">
-                  <td class="w-[9ch] text-base font-normal">&nbsp;</td>
-                  <td class="ml-1.5 flex-1 pl-2 text-base font-normal text-red-500">
-                    {message()}
-                  </td>
-                </tr>
-              )}
-            </Show>
-            <For each={commentList()}>
-              {(comment) => (
-                <tr class="mb-3 flex">
-                  <td class="w-[9ch] text-base font-normal">
-                    <span class="flex align-baseline font-medium">
-                      <span class="ml-auto mr-1.5">
-                        {formatDate(comment._creationTime)}
-                      </span>
-                    </span>
-                  </td>
-                  <td class="ml-0.5 flex-1 align-baseline text-base font-normal">
-                    {comment.body}
-                  </td>
-                </tr>
-              )}
-            </For>
-            <Show
-              when={
-                comments() !== undefined && !commentsError() && commentList().length === 0
-              }
-            >
-              <tr class="mb-2 flex">
-                <td class="w-[9ch] text-base font-normal">&nbsp;</td>
-                <td class="ml-1.5 flex-1 pl-2 text-base font-normal text-muted-foreground">
-                  no comments yet
-                </td>
-              </tr>
-            </Show>
-          </tbody>
-        </table>
-        <div class="mt-6">
-          <table class="w-full">
-            <tbody>
-              <tr class="flex">
-                <td class="w-[9ch] flex-0">&nbsp;</td>
-                <td class="flex flex-1 gap-3 pr-3 pb-3">
-                  <input
-                    type="text"
-                    value={body()}
-                    onInput={(event) => setBody(event.currentTarget.value)}
-                    placeholder="write a comment..."
-                    class="flex-1 border border-border bg-transparent px-3 py-2 text-base placeholder:text-muted-foreground transition-colors focus:border-foreground focus:outline-hidden"
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") {
-                        event.preventDefault();
-                        handleSubmitClick();
-                      }
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleSubmitClick}
-                    disabled={!canSubmit()}
-                    class="px-4 py-2 text-base font-medium bg-transparent border border-border hover:border-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <Show when={isSubmitting()} fallback="submit">
-                      submitting...
-                    </Show>
-                  </button>
-                </td>
-              </tr>
-              <Show when={errorMessage()}>
-                {(message) => (
-                  <tr class="flex">
-                    <td class="w-[9ch] flex-0">&nbsp;</td>
-                    <td class="flex-1 text-sm text-red-500">{message()}</td>
-                  </tr>
-                )}
-              </Show>
-            </tbody>
-          </table>
+      <section class="mt-12 border-t border-border pt-6">
+        <h3 class="m-0 text-[1.1rem] font-medium" id="comment-component">
+          Comments
+        </h3>
+
+        <div class="mt-6 space-y-4">
+          <Show when={comments() === undefined && !commentsError()}>
+            <p class="m-0 text-base text-muted-foreground">loading comments...</p>
+          </Show>
+
+          <Show when={commentsError()}>
+            {(message) => <p class="m-0 text-base text-red-500">{message()}</p>}
+          </Show>
+
+          <For each={commentList()}>
+            {(comment) => (
+              <div class="grid grid-cols-[7ch_minmax(0,1fr)] items-start gap-x-3 gap-y-1">
+                <div class="text-base font-medium tabular-nums">
+                  {formatDate(comment._creationTime)}
+                </div>
+                <div class="min-w-0 break-words text-base font-normal [overflow-wrap:anywhere]">
+                  {comment.body}
+                </div>
+              </div>
+            )}
+          </For>
+
+          <Show
+            when={
+              comments() !== undefined && !commentsError() && commentList().length === 0
+            }
+          >
+            <p class="m-0 text-base text-muted-foreground">no comments yet</p>
+          </Show>
         </div>
-      </div>
+
+        <div class="mt-6 grid grid-cols-[minmax(0,1fr)_auto] gap-3">
+          <input
+            type="text"
+            value={body()}
+            onInput={(event) => setBody(event.currentTarget.value)}
+            placeholder="write a comment..."
+            class="min-w-0 border border-border bg-transparent px-3 py-2 text-base placeholder:text-muted-foreground transition-colors focus:border-foreground focus:outline-hidden"
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                handleSubmitClick();
+              }
+            }}
+          />
+          <button
+            type="button"
+            onClick={handleSubmitClick}
+            disabled={!canSubmit()}
+            class="border border-border bg-transparent px-4 py-2 text-base font-medium transition-colors hover:border-foreground disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <Show when={isSubmitting()} fallback="submit">
+              submitting...
+            </Show>
+          </button>
+        </div>
+
+        <Show when={errorMessage()}>
+          {(message) => <p class="mt-3 mb-0 text-sm text-red-500">{message()}</p>}
+        </Show>
+      </section>
     </>
   );
 }

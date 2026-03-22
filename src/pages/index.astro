@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import TopBar from "@/components/TopBar.astro";
 import { getCollection } from "astro:content";
 import { parseISO, format } from "date-fns";
 
@@ -17,11 +18,31 @@ const entries = allEntries
   .filter((p) => p.data.hidden !== true);
 
 const navLinks = [
-  { label: "résumé", href: "/resume.pdf" },
-  { label: "background", href: "/background" },
-  { label: "notes", href: "/notes" },
-  { label: "github", href: "https://github.com/aadishv" },
-  { label: "email", href: "mailto:mail@aadishv.dev" },
+  {
+    label: "résumé",
+    href: "/resume.pdf",
+    className: "bg-powerline-blue text-white",
+  },
+  {
+    label: "background",
+    href: "/background",
+    className: "bg-powerline-green text-white",
+  },
+  {
+    label: "notes",
+    href: "/notes",
+    className: "bg-powerline-amber text-black",
+  },
+  {
+    label: "github",
+    href: "https://github.com/aadishv",
+    className: "bg-powerline-purple text-white",
+  },
+  {
+    label: "email",
+    href: "mailto:mail@aadishv.dev",
+    className: "bg-powerline-red text-white",
+  },
 ];
 ---
 
@@ -30,35 +51,12 @@ const navLinks = [
   hideName={true}
   description="Aadish Verma builds software for robotics, students, and small teams."
 >
-  <main class="mx-auto max-w-[54rem] px-4 pb-12 text-base leading-6 text-foreground sm:px-8 sm:pb-16 font-sans">
-    <header class="flex flex-col items-start gap-[0.3rem] border-b border-border/70 py-[1.1rem] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
-      <span class="m-0 whitespace-nowrap font-semibold">Aadish Verma</span>
-      <nav class="m-0 text-left text-[0.9rem] text-foreground/50 sm:text-right">
-        {
-          navLinks.map((link, i) => (
-            <>
-              <a
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                class="font-normal text-inherit no-underline hover:underline hover:underline-offset-[0.14em]"
-              >
-                {link.label}
-              </a>
-              {
-                i < navLinks.length - 1 && (
-                  <span class="text-foreground/50" aria-hidden="true"> / </span>
-                )
-              }
-            </>
-          ))
-        }
-      </nav>
-    </header>
+  <main class="mx-auto max-w-[54rem] px-4 pb-12 font-mono text-base leading-6 text-foreground sm:px-8 sm:pb-16">
+    <TopBar navLinks={navLinks} />
 
     <section class="max-w-[44rem] py-8">
       <p class="m-0 text-inherit">
-        I'm a freshman at Stanford Online High School in the Bay Area,
+        I&apos;m a freshman at Stanford Online High School in the Bay Area,
         currently working as a founding engineer at <a
           href="https://www.jvcopilot.ai/"
           target="_blank"
@@ -67,7 +65,7 @@ const navLinks = [
         >JV Copilot</a>. <a
           href="/background"
           class="font-normal text-inherit underline underline-offset-[0.14em] hover:no-underline"
-        >Here's</a> a bit more about me.
+        >Here&apos;s</a> a bit more about me.
       </p>
     </section>
 
@@ -79,12 +77,12 @@ const navLinks = [
               <a
                 href={`/${getSlugFromPath(entry.filePath ?? "")}`}
                 transition:name={entry.id}
-                class="group grid w-full grid-cols-1 items-baseline gap-[0.05rem] py-[0.3rem] font-normal text-inherit no-underline sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:gap-4"
+                class="group grid w-full grid-cols-1 items-baseline gap-[0.4rem] rounded-md py-[0.45rem] font-normal text-inherit no-underline sm:grid-cols-[8.6rem_minmax(0,1fr)] sm:gap-4"
               >
                 <time
                   datetime={parseISO(entry.data.date).toISOString()}
                   transition:name={`date-${entry.id}`}
-                  class="m-0 whitespace-nowrap text-[0.88rem] text-foreground/50 tabular-nums"
+                  class="m-0 w-fit text-[0.8rem] tabular-nums text-foreground/60"
                 >
                   {format(parseISO(entry.data.date), "MMM d, yyyy")}
                 </time>
