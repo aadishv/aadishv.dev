@@ -1,6 +1,42 @@
-import ArrowLeft from "lucide-solid/icons/arrow-left";
-import ArrowRight from "lucide-solid/icons/arrow-right";
 import { For, Show, createMemo, createSignal } from "solid-js";
+
+function ArrowLeftIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="m12 19-7-7 7-7" />
+      <path d="M19 12H5" />
+    </svg>
+  );
+}
+
+function ArrowRightIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  );
+}
 
 const data = [
   { color: "bg-red-500", value: 7 },
@@ -350,7 +386,7 @@ export function StepThrough() {
           disabled={step() === 0}
           onClick={() => setStep((current) => current - 1)}
         >
-          <ArrowLeft />
+          <ArrowLeftIcon />
         </button>
         <span class="my-auto mx-auto text-center font-bold">{state().message}</span>
         <button
@@ -358,7 +394,7 @@ export function StepThrough() {
           disabled={step() === steps.length - 1}
           onClick={() => setStep((current) => current + 1)}
         >
-          <ArrowRight />
+          <ArrowRightIcon />
         </button>
       </p>
       <div class="mx-auto flex gap-2 transition-all">
