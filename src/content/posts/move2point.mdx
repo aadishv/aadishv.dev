@@ -54,7 +54,7 @@ TL;DR:
   - a component proportional to the derivative (basically the change in error). if the error is increasing quickly, move quicker; if its decreasing rapidly, slow down a bit (to avoid overshooting).
   - a component proportional to the sum. if it's been constant error for a long time (i.e., the error is stuck), integral increases and we slowly build up force.
 
-PIDs are designed to be used in a wide range of systems, so there needs to be some way to tune them for different cases, leading to the constants. There are [easily available guides online](https://renegaderobotics.org/pid-beginners-guide/) to find how to tune them to optimize the speed and accuracy of your PID, but those are beyond the scope of this part.
+PIDs are designed to be used in a wide range of systems, so there needs to be some way to tune them for different cases, leading to the constants. There are easily available guides online to find how to tune them to optimize the speed and accuracy of your PID, but those are beyond the scope of this part.
 
 [LemLib's implementation of PID is actually quite simple to understand](https://github.com/LemLib/LemLib/blob/e6318a9d7180e2e743bb0298860a7a943edd159a/src/lemlib/PID.cpp#L22C1-L43C2) (only 20 lines!); I highly suggest taking a look to better understand how PID is actually implemented.
 
