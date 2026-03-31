@@ -2,7 +2,7 @@
 interface NavLink {
   label: string;
   href: string;
-  className: string;
+  className?: string;
 }
 
 interface Props {
@@ -21,29 +21,33 @@ const {
 ---
 
 <header class:list={[
-  "flex flex-col items-start gap-4 py-[1.1rem] sm:flex-row sm:items-center sm:justify-between sm:gap-8",
+  "flex flex-col items-start gap-[0.3rem] py-[1.1rem] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8",
   className,
 ]}>
   <a
     href={homeHref}
-    class="m-0 inline-flex min-h-8 items-center whitespace-nowrap bg-powerline-blue px-[0.72rem] py-[0.34rem] font-semibold text-white no-underline hover:no-underline"
+    class="m-0 whitespace-nowrap font-medium text-inherit no-underline hover:underline hover:underline-offset-[0.14em]"
   >
     {homeLabel}
   </a>
-  <nav class="m-0 flex flex-wrap items-center gap-0 text-left text-[0.9rem] sm:justify-end sm:text-right">
+  <nav class="m-0 text-left text-[0.9rem] text-foreground/50 sm:text-right">
     {
-      navLinks.map((link) => (
-        <a
-          href={link.href}
-          target={link.href.startsWith("http") ? "_blank" : undefined}
-          rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-          class:list={[
-            "inline-flex min-h-8 items-center whitespace-nowrap px-[0.72rem] py-[0.34rem] no-underline hover:no-underline",
-            link.className,
-          ]}
-        >
-          {link.label}
-        </a>
+      navLinks.map((link, i) => (
+        <>
+          <a
+            href={link.href}
+            target={link.href.startsWith("http") ? "_blank" : undefined}
+            rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+            class="font-normal text-inherit no-underline hover:underline hover:underline-offset-[0.14em]"
+          >
+            {link.label}
+          </a>
+          {
+            i < navLinks.length - 1 && (
+              <span class="text-foreground/50" aria-hidden="true"> / </span>
+            )
+          }
+        </>
       ))
     }
   </nav>

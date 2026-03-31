@@ -53,46 +53,26 @@ const getTocIndentClass = (depth: number) => {
 };
 
 const navLinks = [
-  {
-    label: "résumé",
-    href: "/resume.pdf",
-    className: "bg-powerline-blue text-white",
-  },
-  {
-    label: "background",
-    href: "/background",
-    className: "bg-powerline-green text-white",
-  },
-  {
-    label: "notes",
-    href: "/notes",
-    className: "bg-powerline-amber text-black",
-  },
-  {
-    label: "github",
-    href: "https://github.com/aadishv",
-    className: "bg-powerline-purple text-white",
-  },
-  {
-    label: "email",
-    href: "mailto:mail@aadishv.dev",
-    className: "bg-powerline-red text-white",
-  },
+  { label: "résumé", href: "/resume.pdf" },
+  { label: "background", href: "/background" },
+  { label: "notes", href: "/notes" },
+  { label: "github", href: "https://github.com/aadishv" },
+  { label: "email", href: "mailto:mail@aadishv.dev" },
 ];
 ---
 
 <Layout title={post.data.title} image={ogImage} hideName>
-  <main class="mx-auto max-w-[54rem] px-4 pb-12 font-mono text-base leading-6 text-foreground sm:px-8 sm:pb-20">
-    <TopBar navLinks={navLinks} />
+  <main class="px-4 pb-12 font-sans text-base leading-6 text-foreground sm:px-8 sm:pb-20">
+    <TopBar navLinks={navLinks} class="mx-auto max-w-[54rem]" />
 
-    <div class="py-7 pb-5">
+    <div class="mx-auto max-w-[54rem] py-7 pb-5">
       <h1
-        class="m-0 text-[1.55rem] leading-[1.25] font-semibold tracking-[-0.025em] font-sans"
+        class="m-0 text-4xl leading-[1.1] font-medium tracking-[-0.03em] font-sans sm:text-[2.8rem]"
         transition:name={post.id}
       >
         {post.data.title}
       </h1>
-      <div class="mt-[0.6rem] flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.82rem] text-foreground/70">
+      <p class="mt-[0.35rem] text-[0.88rem] text-foreground/50">
         {
           formatted && (
             <time datetime={date.toISOString()} transition:name={`date-${post.id}`}>
@@ -100,35 +80,45 @@ const navLinks = [
             </time>
           )
         }
+        {formatted && <span aria-hidden="true"> · </span>}
         <span>{mins} min read</span>
         {
           hasLink && (
-            <a
-              href={post.data.link}
-              target="_blank"
-              rel="noreferrer"
-              class="inline-flex min-h-8 items-center whitespace-nowrap bg-powerline-cyan px-[0.72rem] py-[0.34rem] text-white no-underline hover:no-underline"
-            >
-              live demo
-            </a>
+            <>
+              <span aria-hidden="true"> · </span>
+              <a
+                href={post.data.link}
+                target="_blank"
+                rel="noreferrer"
+                class="font-normal text-inherit underline underline-offset-[0.14em] hover:no-underline"
+              >
+                live demo
+              </a>
+            </>
           )
         }
-      </div>
+      </p>
     </div>
 
-    <div class="pt-1 xl:relative">
+    <div
+      class:list={[
+        "mx-auto max-w-[54rem] pt-7",
+        hasToc &&
+          "xl:grid xl:max-w-[calc(54rem+9rem+9rem+4rem)] xl:grid-cols-[9rem_2rem_54rem_2rem_9rem] xl:items-start",
+      ]}
+    >
       {
         hasToc && (
           <aside
-            class="hidden xl:absolute xl:top-5 xl:right-full xl:mr-10 xl:flex xl:w-44 2xl:w-48"
+            class="hidden xl:col-start-1 xl:mt-[0.35rem] xl:flex xl:w-36 xl:justify-self-end"
             aria-label="Table of contents"
           >
-            <div class="sticky top-7 flex w-full flex-col gap-[0.02rem]">
+            <div class="sticky top-7 flex w-full flex-col gap-[0.08rem]">
               {
                 filteredHeadings.map((heading) => (
                   <a
                     class:list={[
-                      "block overflow-hidden text-ellipsis whitespace-nowrap rounded-sm px-2 py-[0.18rem] text-[0.78rem] leading-[1.45] text-foreground/50 opacity-75 no-underline transition-[opacity,color] duration-100 hover:text-foreground hover:opacity-100 aria-[current=true]:font-medium aria-[current=true]:text-foreground aria-[current=true]:opacity-100",
+                      "block overflow-hidden text-ellipsis whitespace-nowrap text-[0.78rem] leading-6 text-foreground/50 opacity-75 no-underline transition-[opacity,color] duration-100 hover:text-foreground hover:opacity-100 aria-[current=true]:font-medium aria-[current=true]:text-foreground aria-[current=true]:opacity-100",
                       getTocIndentClass(heading.depth),
                     ]}
                     href={`#${heading.slug}`}
@@ -170,9 +160,9 @@ const navLinks = [
         )
       }
 
-      <div>
+      <div class:list={["mx-auto max-w-[54rem]", hasToc && "xl:col-start-3"]}>
         <div
-          class="prose max-w-[54rem] min-w-0 text-base leading-[1.7] font-mono [&>*:first-child]:mt-0 [&_a]:break-anywhere [&_a:not(.aadish-none)]:font-normal [&_a:not(.aadish-none)]:text-inherit [&_a:not(.aadish-none)]:underline [&_a:not(.aadish-none)]:decoration-current [&_a:not(.aadish-none)]:underline-offset-[0.14em] [&_a:not(.aadish-none):hover]:no-underline [&_h1]:font-mono [&_h1]:font-semibold [&_h1]:tracking-[-0.02em] [&_h2]:font-mono [&_h2]:font-semibold [&_h2]:tracking-[-0.02em] [&_h3]:font-mono [&_h3]:font-semibold [&_h3]:tracking-[-0.02em] [&_h4]:font-mono [&_h4]:font-semibold [&_h4]:tracking-[-0.02em] [&_h5]:font-mono [&_h5]:font-semibold [&_h5]:tracking-[-0.02em] [&_h6]:font-mono [&_h6]:font-semibold [&_h6]:tracking-[-0.02em] lg:[&_img]:max-w-[50%] [&_img]:mx-auto"
+          class="prose max-w-[54rem] min-w-0 text-base leading-[1.7] font-sans [&>*:first-child]:mt-0 [&_a]:break-anywhere [&_a:not(.aadish-none)]:font-normal [&_a:not(.aadish-none)]:text-inherit [&_a:not(.aadish-none)]:underline [&_a:not(.aadish-none)]:decoration-current [&_a:not(.aadish-none)]:underline-offset-[0.14em] [&_a:not(.aadish-none):hover]:no-underline [&_h1]:text-3xl [&_h1]:font-sans [&_h1]:font-medium [&_h1]:tracking-[-0.02em] [&_h2]:text-2xl [&_h2]:font-sans [&_h2]:font-medium [&_h2]:tracking-[-0.02em] [&_h3]:text-xl [&_h3]:font-sans [&_h3]:font-medium [&_h3]:tracking-[-0.02em] [&_h4]:text-lg [&_h4]:font-sans [&_h4]:font-medium [&_h4]:tracking-[-0.02em] [&_h5]:text-base [&_h5]:font-sans [&_h5]:font-medium [&_h5]:tracking-[-0.02em] [&_h6]:font-sans [&_h6]:font-medium [&_h6]:tracking-[-0.02em] lg:[&_img]:max-w-[50%] [&_img]:mx-auto"
           id="content"
         >
           <Content />

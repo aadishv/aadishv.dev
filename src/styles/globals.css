@@ -2,8 +2,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Google Sans Code", monospace;
-  --font-serif: "Google Sans Code", monospace;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono: "Google Sans Code", monospace;
 
   --color-aadish: hsl(var(--aadish));
@@ -227,4 +227,3 @@
     font-optical-sizing: auto;
   }
 }
-
