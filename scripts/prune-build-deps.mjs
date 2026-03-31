@@ -15,7 +15,10 @@ const CHUNK_SIZE = Number(process.env.CHUNK_SIZE ?? 3);
 const repoRoot = process.cwd();
 const sandboxRoot = mkdtempSync(path.join(tmpdir(), "prune-build-deps-"));
 
-const originalPackageText = readFileSync(path.join(repoRoot, PACKAGE_JSON), "utf8");
+const originalPackageText = readFileSync(
+  path.join(repoRoot, PACKAGE_JSON),
+  "utf8",
+);
 const originalPackage = JSON.parse(originalPackageText);
 
 const prioritizedCandidates = [
@@ -37,7 +40,9 @@ const allPackages = [
   ...Object.keys(originalPackage.devDependencies ?? {}),
 ];
 
-const candidates = [...new Set([...prioritizedCandidates, ...allPackages])].filter(Boolean);
+const candidates = [
+  ...new Set([...prioritizedCandidates, ...allPackages]),
+].filter(Boolean);
 
 let bestPackage = JSON.parse(originalPackageText);
 const removed = [];
@@ -62,7 +67,13 @@ function run(command, args, cwd) {
 }
 
 function copyRepoToSandbox() {
-  const ignored = new Set([".git", ".astro", ".vercel", "dist", "node_modules"]);
+  const ignored = new Set([
+    ".git",
+    ".astro",
+    ".vercel",
+    "dist",
+    "node_modules",
+  ]);
 
   cpSync(repoRoot, sandboxRoot, {
     recursive: true,
@@ -76,11 +87,20 @@ function copyRepoToSandbox() {
 }
 
 function resetSandbox(packageJson) {
-  for (const name of ["node_modules", "dist", ".astro", ".vercel", "bun.lock"]) {
+  for (const name of [
+    "node_modules",
+    "dist",
+    ".astro",
+    ".vercel",
+    "bun.lock",
+  ]) {
     rmSync(path.join(sandboxRoot, name), { recursive: true, force: true });
   }
 
-  writeFileSync(path.join(sandboxRoot, PACKAGE_JSON), toPackageText(packageJson));
+  writeFileSync(
+    path.join(sandboxRoot, PACKAGE_JSON),
+    toPackageText(packageJson),
+  );
 }
 
 function buildWorks(packageJson) {
@@ -134,7 +154,9 @@ if (!baseline.ok) {
 }
 
 console.log(`Sandbox: ${sandboxRoot}`);
-console.log(`Testing ${candidates.length} packages in chunks of ${CHUNK_SIZE}...`);
+console.log(
+  `Testing ${candidates.length} packages in chunks of ${CHUNK_SIZE}...`,
+);
 
 try {
   for (const group of chunk(candidates, CHUNK_SIZE)) {
@@ -146,7 +168,9 @@ try {
       continue;
     }
 
-    console.log(`  chunk failed during ${groupResult.phase}; testing individually...`);
+    console.log(
+      `  chunk failed during ${groupResult.phase}; testing individually...`,
+    );
 
     for (const name of group) {
       const singleResult = attemptRemoval([name]);

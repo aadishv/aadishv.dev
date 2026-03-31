@@ -1,7 +1,4 @@
-declare function renderMathInElement(
-  element: HTMLElement,
-  options?: any,
-): void;
+declare function renderMathInElement(element: HTMLElement, options?: any): void;
 
 interface HCaptchaRenderOptions {
   sitekey: string;

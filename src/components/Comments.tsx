@@ -25,7 +25,9 @@ const formatDate = (timestamp: number) => {
 export default function Comments(props: CommentsProps) {
   const client = new ConvexClient(import.meta.env.PUBLIC_CONVEX_URL as string);
 
-  const [comments, setComments] = createSignal<Comment[] | undefined>(undefined);
+  const [comments, setComments] = createSignal<Comment[] | undefined>(
+    undefined,
+  );
   const [commentsError, setCommentsError] = createSignal<string | null>(null);
   const [body, setBody] = createSignal("");
   const [showCaptcha, setShowCaptcha] = createSignal(false);
@@ -51,7 +53,9 @@ export default function Comments(props: CommentsProps) {
     void client.close();
   });
 
-  const canSubmit = createMemo(() => body().trim().length > 0 && !isSubmitting());
+  const canSubmit = createMemo(
+    () => body().trim().length > 0 && !isSubmitting(),
+  );
   const commentList = createMemo(() => comments() ?? []);
 
   const handleSubmitClick = () => {
@@ -113,7 +117,9 @@ export default function Comments(props: CommentsProps) {
 
         <div class="mt-6 space-y-4">
           <Show when={comments() === undefined && !commentsError()}>
-            <p class="m-0 text-base text-muted-foreground">loading comments...</p>
+            <p class="m-0 text-base text-muted-foreground">
+              loading comments...
+            </p>
           </Show>
 
           <Show when={commentsError()}>
@@ -135,7 +141,9 @@ export default function Comments(props: CommentsProps) {
 
           <Show
             when={
-              comments() !== undefined && !commentsError() && commentList().length === 0
+              comments() !== undefined &&
+              !commentsError() &&
+              commentList().length === 0
             }
           >
             <p class="m-0 text-base text-muted-foreground">no comments yet</p>
@@ -169,7 +177,9 @@ export default function Comments(props: CommentsProps) {
         </div>
 
         <Show when={errorMessage()}>
-          {(message) => <p class="mt-3 mb-0 text-sm text-red-500">{message()}</p>}
+          {(message) => (
+            <p class="mt-3 mb-0 text-sm text-red-500">{message()}</p>
+          )}
         </Show>
       </section>
     </>

@@ -132,7 +132,10 @@ export default function HCaptchaModal(props: HCaptchaModalProps) {
           class="min-h-32 min-w-80 border border-border bg-background p-4 shadow-xl"
           onClick={(event) => event.stopPropagation()}
         >
-          <div ref={containerRef} class="flex min-h-20 items-center justify-center" />
+          <div
+            ref={containerRef}
+            class="flex min-h-20 items-center justify-center"
+          />
           <Show when={!loadError()}>
             <p class="mt-3 text-center text-sm text-muted-foreground">
               Complete the captcha to post your comment.

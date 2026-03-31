@@ -10,7 +10,11 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [solid({ include: ["**/tools/**", "**/components/**"] }), mdx(), sitemap()],
+  integrations: [
+    solid({ include: ["**/tools/**", "**/components/**"] }),
+    mdx(),
+    sitemap(),
+  ],
 
   markdown: {
     syntaxHighlight: "shiki",

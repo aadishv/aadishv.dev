@@ -20,10 +20,12 @@ const {
 } = Astro.props;
 ---
 
-<header class:list={[
-  "flex flex-col items-start gap-[0.3rem] pt-[1.1rem] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8",
-  className,
-]}>
+<header
+  class:list={[
+    "flex flex-col items-start gap-[0.3rem] pt-[1.1rem] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8",
+    className,
+  ]}
+>
   <a
     href={homeHref}
     class="m-0 whitespace-nowrap font-medium text-inherit no-underline hover:underline hover:underline-offset-[0.14em]"
@@ -42,11 +44,12 @@ const {
           >
             {link.label}
           </a>
-          {
-            i < navLinks.length - 1 && (
-              <span class="text-foreground/50" aria-hidden="true"> / </span>
-            )
-          }
+          {i < navLinks.length - 1 && (
+            <span class="text-foreground/50" aria-hidden="true">
+              {" "}
+              /{" "}
+            </span>
+          )}
         </>
       ))
     }

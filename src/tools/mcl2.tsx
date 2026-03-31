@@ -388,7 +388,9 @@ export function StepThrough() {
         >
           <ArrowLeftIcon />
         </button>
-        <span class="my-auto mx-auto text-center font-bold">{state().message}</span>
+        <span class="my-auto mx-auto text-center font-bold">
+          {state().message}
+        </span>
         <button
           class="rounded-md border border-border p-2 transition-colors hover:bg-muted disabled:opacity-50"
           disabled={step() === steps.length - 1}
