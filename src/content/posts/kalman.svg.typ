@@ -3,7 +3,7 @@
   date: "2026-05-11",
   description: "An intuitive derivation of the Kalman filter and Extended Kalman filter.",
 ))<frontmatter>
-
+#show link: it => underline(it)
 #set page(width: 450pt, height: auto, margin: 0pt)
 
 For the final project of the #link("https://onlinehighschool.stanford.edu/courses/2026/school-year/um150")[math course] I am taking this school year, I wrote a brief explanatory paper aiming to provide some intuition for the standard equations used for the Kalman filter and Extended Kalman filter. I have a track record of writing #link("/mcl")[about] #link("/mcl-2")[control] #link("/move2point")[theory], I thought I would publish it here in case it helps anyone.
