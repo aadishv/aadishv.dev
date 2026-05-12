@@ -19,3 +19,6 @@ src/content/personal
 .vercel
 .env*.local
 .rodney/
+
+# pi stuff
+.pi/hf-sessions

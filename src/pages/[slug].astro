@@ -21,11 +21,11 @@ export async function getStaticPaths({}: GetStaticPathsOptions) {
 }
 
 export const getSlugFromPath = (path: string): string => {
-  return path.split("/").at(-1)!.replace(".md", "");
+  return path.split("/").at(-1)!.replace(/(?:\.(?:svg|html))?\.[^.]+$/, "");
 };
 
 const { post, slug } = Astro.props;
-const { headings, Content } = await render(post);
+const { headings = [], Content } = await render(post);
 
 const date: Date = parseISO(post.data.date);
 const formatted: string =
@@ -35,6 +35,7 @@ const mins = Math.ceil(readingTime(post.body ?? "").minutes);
 
 const siteUrl = Astro.site ?? new URL("https://www.aadishv.dev");
 const ogImage = new URL(`/open-graph/${slug}.png`, siteUrl).toString();
+const isTypstSvg = (post.filePath ?? "").endsWith(".svg.typ");
 
 const filteredHeadings = headings.filter((h) => h.depth < 5);
 const hasToc = filteredHeadings.length > 0;
@@ -161,7 +162,9 @@ const navLinks = [
 
       <div class:list={["mx-auto max-w-[54rem]", hasToc && "xl:col-start-3"]}>
         <div
-          class="prose max-w-[54rem] min-w-0 text-base leading-[1.7] font-sans [&>*:first-child]:mt-0 [&_a]:break-anywhere [&_a:not(.aadish-none)]:font-normal [&_a:not(.aadish-none)]:text-inherit [&_a:not(.aadish-none)]:underline [&_a:not(.aadish-none)]:decoration-current [&_a:not(.aadish-none)]:underline-offset-[0.14em] [&_a:not(.aadish-none):hover]:no-underline [&_h1]:text-3xl [&_h1]:font-sans [&_h1]:font-medium [&_h1]:tracking-[-0.02em] [&_h2]:text-2xl [&_h2]:font-sans [&_h2]:font-medium [&_h2]:tracking-[-0.02em] [&_h3]:text-xl [&_h3]:font-sans [&_h3]:font-medium [&_h3]:tracking-[-0.02em] [&_h4]:text-lg [&_h4]:font-sans [&_h4]:font-medium [&_h4]:tracking-[-0.02em] [&_h5]:text-base [&_h5]:font-sans [&_h5]:font-medium [&_h5]:tracking-[-0.02em] [&_h6]:font-sans [&_h6]:font-medium [&_h6]:tracking-[-0.02em] lg:[&_img]:max-w-[50%] [&_img]:mx-auto"
+          class={
+            "prose max-w-216 min-w-0 text-base leading-[1.7] font-sans [&>*:first-child]:mt-0 [&_a]:break-anywhere [&_a:not(.aadish-none)]:font-normal [&_a:not(.aadish-none)]:text-inherit [&_a:not(.aadish-none)]:underline [&_a:not(.aadish-none)]:decoration-current [&_a:not(.aadish-none)]:underline-offset-[0.14em] [&_a:not(.aadish-none):hover]:no-underline [&_h1]:text-3xl [&_h1]:font-sans [&_h1]:font-medium [&_h1]:tracking-[-0.02em] [&_h2]:text-2xl [&_h2]:font-sans [&_h2]:font-medium [&_h2]:tracking-[-0.02em] [&_h3]:text-xl [&_h3]:font-sans [&_h3]:font-medium [&_h3]:tracking-[-0.02em] [&_h4]:text-lg [&_h4]:font-sans [&_h4]:font-medium [&_h4]:tracking-[-0.02em] [&_h5]:text-base [&_h5]:font-sans [&_h5]:font-medium [&_h5]:tracking-[-0.02em] [&_h6]:font-sans [&_h6]:font-medium [&_h6]:tracking-[-0.02em] lg:[&_img]:max-w-[50%] [&_img]:mx-auto"
+          }
           id="content"
         >
           <Content />

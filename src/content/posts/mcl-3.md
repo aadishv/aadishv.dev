@@ -23,7 +23,7 @@ hidden: true
 
 ## Motivation
 
-One of my most popular blog posts is my one on [Monte Carlo Localization](/mcl), which VEX competitors from Australia to Thailand still use to help their understanding of MCL. Even today I routinely get thanks for writing it (and my subsequent [follow-up](/mcl-2x) that went into more detail on resampling).
+One of my most popular blog posts is my one on [Monte Carlo Localization](/mcl), which VEX competitors from Australia to Thailand still use to help their understanding of MCL. Even today I routinely get thanks for writing it (and my subsequent [follow-up](/mcl-2) that went into more detail on resampling).
 
 Most of my knowledge about MCL comes from implementing it myself. In this blog, I'll be focusing on my implementation of an efficient, GPU-accelerated MCL pipeline running on a RPLiDAR A1 and Jetson Orin Nano.
 
