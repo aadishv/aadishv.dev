@@ -208,6 +208,10 @@
     @apply w-full;
   }
 
+  svg.typst-svg {
+    color: hsl(var(--foreground));
+  }
+
   a:not(.aadish-none) {
     @apply font-normal text-inherit underline transition-all hover:no-underline;
   }

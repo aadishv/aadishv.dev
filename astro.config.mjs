@@ -21,6 +21,16 @@ export default defineConfig({
       target: (id) =>
         id.endsWith(".html.typ") || id.includes("/html/") ? "html" : "svg",
       htmlMode: "text",
+      options: {
+        cheerio: {
+          postprocess: ($) => {
+            $("[fill='#000']").attr("fill", "currentColor");
+            $("[stroke='#000']").attr("stroke", "currentColor");
+            $("svg").addClass("typst-svg");
+            return $;
+          },
+        },
+      },
     }),
     sitemap(),
   ],
