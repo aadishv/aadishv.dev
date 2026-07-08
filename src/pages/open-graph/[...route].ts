@@ -23,6 +23,7 @@ const posts = await getCollection("posts");
 const pages: Record<string, { title: string; description?: string }> = {};
 
 for (const post of posts) {
+  if (post.data.redirect) continue;
   const slug = getSlugFromPath(post.filePath ?? "");
   const firstParagraph = getFirstParagraphText(post.rendered?.html ?? "");
 

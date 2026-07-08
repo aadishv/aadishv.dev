@@ -23,7 +23,9 @@ export async function GET(context) {
       title: post.data.title,
       pubDate: new Date(post.data.date),
       description: post.data.description || "",
-      link: `/${getSlugFromPath(post.filePath ?? post.id)}/`,
+      link:
+        post.data.redirect ??
+        `/${getSlugFromPath(post.filePath ?? post.id)}/`,
     })),
     customData: `<language>en-us</language>`,
   });

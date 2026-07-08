@@ -10,6 +10,7 @@ const posts = defineCollection({
     hidden: z.boolean().optional(),
     image: z.string().optional(),
     link: z.string().optional(),
+    redirect: z.string().optional(),
   }),
 });
 

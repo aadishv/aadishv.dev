@@ -10,13 +10,15 @@ import readingTime from "reading-time";
 
 export async function getStaticPaths({}: GetStaticPathsOptions) {
   const allContent = await getCollection("posts");
-  const paths = allContent.map((post) => {
-    const slug = getSlugFromPath(post.filePath ?? "");
-    return {
-      params: { slug, id: post.id },
-      props: { post, slug },
-    };
-  });
+  const paths = allContent
+    .filter((post) => !post.data.redirect)
+    .map((post) => {
+      const slug = getSlugFromPath(post.filePath ?? "");
+      return {
+        params: { slug, id: post.id },
+        props: { post, slug },
+      };
+    });
   return paths;
 }
 
