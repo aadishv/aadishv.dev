@@ -1,8 +1,7 @@
 ---
 import "@/styles/globals.css";
 import { ClientRouter } from "astro:transitions";
-import Analytics from "./Analytics.astro";
-const { title, tool, hideName, description, image } = Astro.props;
+const { title, description, image } = Astro.props;
 ---
 
 <!doctype html>
@@ -76,24 +75,6 @@ const { title, tool, hideName, description, image } = Astro.props;
     </style>
   </head>
   <body>
-    <!-- you asked for it -->
-    <!--
-      <script>
-      if (navigator.brave && navigator.brave.isBrave) {
-        navigator.brave.isBrave().then(function(isBravePromise) {
-          if (isBravePromise) {
-            document.body.innerHTML += `<style>
-              * {
-              font-family: "Lobster" !important;
-              color: blue !important;
-              background-color: red !important;
-              }
-            </style>`
-          }
-        });
-      }
-      </script> -->
-
     <script lang="ts">
       // KaTeX
       document.addEventListener("DOMContentLoaded", () => {
@@ -112,7 +93,22 @@ const { title, tool, hideName, description, image } = Astro.props;
     <slot />
     {
       import.meta.env.PROD ? (
-        <Analytics />
+      <>
+        <!-- 100% privacy-first analytics -->
+        <!-- sorry for the DNT folks :( guess now I'm big tech :sob: -->
+        <script
+          is:inline
+          data-collect-dnt="true"
+          async
+          src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+        <noscript
+          ><img
+            src="https://queue.simpleanalyticscdn.com/noscript.gif?collect-dnt=true"
+            alt=""
+            referrerpolicy="no-referrer-when-downgrade"
+          /></noscript
+        >
+    </>
       ) : (
         (() => {
           console.log("dev deployment; not using analytics.");
